@@ -101,14 +101,49 @@ export async function middleware(request: NextRequest) {
 
 /**
  * Matcher configuration for the middleware
- * Only runs on routes that match these patterns
  * 
- * Using matcher instead of checking pathname in middleware
- * improves performance by preventing unnecessary middleware execution
+ * The matcher array defines which routes trigger the middleware.
+ * Using matcher is more efficient than checking pathname in the middleware function
+ * because it prevents unnecessary middleware execution on routes that don't need protection.
+ * 
+ * Automatically excluded (by Next.js default):
+ * - Static files: /public/* (images, css, js, etc)
+ * - API routes: /api/*
+ * - Next.js internals: /_next/*, /_vercel/*, etc
+ * - favicon, robots.txt, sitemap.xml
+ * 
+ * Patterns:
+ * - '/path' → Exact match
+ * - '/path/:param' → Route with parameter
+ * - '/path/:param*' → Route and all sub-routes (catch-all)
+ * 
+ * Performance Note:
+ * The middleware function runs very quickly (edge runtime), but matcher ensures
+ * we only execute it when necessary. This is especially important for:
+ * - Static assets (CSS, images, fonts)
+ * - API requests
+ * - Public pages (no protection needed)
  */
 export const config = {
   matcher: [
-    // Protect all dashboard routes
+    /**
+     * Protected routes requiring role-based access control
+     * 
+     * /dashboard/:path* matches:
+     * - /dashboard/admin
+     * - /dashboard/writer
+     * - /dashboard/learner
+     * - /dashboard/customer
+     * - Any future /dashboard/* sub-routes
+     */
     '/dashboard/:path*',
+    
+    /**
+     * Future protected routes can be added here:
+     * 
+     * '/admin/:path*'          - Admin-only pages
+     * '/api/protected/:path*'  - Protected API endpoints (if needed)
+     * '/settings/:path*'       - User account settings (authentication required)
+     */
   ],
 }
