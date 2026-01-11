@@ -84,21 +84,36 @@ export const ROLE_DESCRIPTIONS: Record<RoleType, string> = {
 }
 
 /**
- * Route-to-Role Mapping for Middleware Protection
+ * Route-to-Role Mapping for Complete Access Control
  * 
- * Defines which roles can access which dashboard routes
- * Used in middleware.ts to enforce access control
+ * CENTRALIZED ROUTE PERMISSION MAP - Single Source of Truth
+ * 
+ * This map defines all protected routes and their role requirements.
+ * Used for:
+ * - Middleware: Coarse authentication check (is token valid?)
+ * - Page-level guards: Fine-grained authorization (does user have role?)
+ * - UI: Conditional rendering (show link if user has permission?)
+ * - Documentation: Route permission matrix
+ * 
+ * Architecture:
+ * 1. Middleware checks: Is user authenticated? (edge layer)
+ * 2. Server component checks: Does user have required role? (authoritative layer)
+ * 3. UI conditionally renders based on user role
  * 
  * Update this object to:
  * - Add new protected routes
  * - Change role requirements for existing routes
- * - Manage role hierarchy
+ * - Manage role hierarchy and inheritance
  * 
- * @example
- * ROLE_REQUIREMENTS['/dashboard/admin'] = [ROLES.ADMIN]
- * ROLE_REQUIREMENTS['/dashboard/writer'] = [ROLES.WRITER, ROLES.ADMIN]
+ * Format: '/route/path' → [ROLES.REQUIRED, ROLES.SECONDARY]
  */
 export const ROLE_REQUIREMENTS: Record<string, RoleType[]> = {
+  // ==========================================
+  // DASHBOARD ROUTES
+  // ==========================================
+  // Each dashboard is isolated to a specific role
+  // Multiple roles can access same dashboard if needed
+  
   /**
    * Admin Dashboard
    * Restricted to ADMIN role only
@@ -110,6 +125,7 @@ export const ROLE_REQUIREMENTS: Record<string, RoleType[]> = {
    * Writer Dashboard
    * WRITER and ADMIN can access
    * Content creation and management tools
+   * Note: ADMIN can manage all writers' content
    */
   '/dashboard/writer': [ROLES.WRITER, ROLES.ADMIN],
 
@@ -126,6 +142,80 @@ export const ROLE_REQUIREMENTS: Record<string, RoleType[]> = {
    * Order history, purchases, account settings
    */
   '/dashboard/customer': [ROLES.CUSTOMER],
+  
+  // ==========================================
+  // FUTURE ROUTES - Templates for new routes
+  // ==========================================
+  // Uncomment and customize as needed
+  
+  // '/admin/users': [ROLES.ADMIN],
+  // '/admin/analytics': [ROLES.ADMIN],
+  // '/admin/settings': [ROLES.ADMIN],
+  // '/courses/create': [ROLES.WRITER, ROLES.ADMIN],
+  // '/account/settings': [ROLES.ADMIN, ROLES.WRITER, ROLES.LEARNER, ROLES.CUSTOMER],
+}
+
+/**
+ * Route Metadata - Enhanced Route Configuration
+ * 
+ * Provides additional context for each route beyond just role requirements
+ * Useful for:
+ * - Generating navigation menus
+ * - Displaying permission denied messages
+ * - Route documentation
+ * - Breadcrumb generation
+ */
+export interface RouteConfig {
+  path: string
+  roles: RoleType[]
+  label: string // Display name for breadcrumbs, menus
+  description: string // What this route does
+  requiresAuth: boolean // Must user be logged in?
+  public: boolean // Publicly accessible?
+}
+
+/**
+ * Enhanced route configuration with metadata
+ * 
+ * Usage:
+ *   const route = ROUTE_METADATA['/dashboard/admin']
+ *   if (route) {
+ *     console.log(`This route requires: ${route.roles.join(', ')}`)
+ *   }
+ */
+export const ROUTE_METADATA: Record<string, RouteConfig> = {
+  '/dashboard/admin': {
+    path: '/dashboard/admin',
+    roles: [ROLES.ADMIN],
+    label: 'Admin Dashboard',
+    description: 'System administration and analytics',
+    requiresAuth: true,
+    public: false,
+  },
+  '/dashboard/writer': {
+    path: '/dashboard/writer',
+    roles: [ROLES.WRITER, ROLES.ADMIN],
+    label: 'Writer Dashboard',
+    description: 'Content creation and management',
+    requiresAuth: true,
+    public: false,
+  },
+  '/dashboard/learner': {
+    path: '/dashboard/learner',
+    roles: [ROLES.LEARNER],
+    label: 'Learner Dashboard',
+    description: 'Course enrollment and progress',
+    requiresAuth: true,
+    public: false,
+  },
+  '/dashboard/customer': {
+    path: '/dashboard/customer',
+    roles: [ROLES.CUSTOMER],
+    label: 'Customer Dashboard',
+    description: 'Shopping and order management',
+    requiresAuth: true,
+    public: false,
+  },
 }
 
 /**
@@ -238,4 +328,115 @@ export function getRoleDescription(role: RoleType): string {
  */
 export function isValidRole(value: unknown): value is RoleType {
   return ALL_ROLES.includes(value as RoleType)
+}
+
+/**
+ * Get route metadata by path
+ * 
+ * Usage:
+ *   const meta = getRouteMetadata('/dashboard/admin')
+ *   console.log(meta?.label) // "Admin Dashboard"
+ */
+export function getRouteMetadata(path: string): RouteConfig | undefined {
+  return ROUTE_METADATA[path]
+}
+
+/**
+ * Get all roles required for a route
+ * 
+ * Usage:
+ *   const roles = getRouteRoles('/dashboard/writer')
+ *   // Returns: ['WRITER', 'ADMIN']
+ */
+export function getRouteRoles(path: string): RoleType[] {
+  return ROLE_REQUIREMENTS[path] ?? []
+}
+
+/**
+ * Check if a role can access a specific route
+ * (Alternative to canAccessRoute with clearer semantics)
+ * 
+ * Usage:
+ *   if (roleCanAccessRoute(userRole, '/dashboard/admin')) {
+ *     // Show navigation link
+ *   }
+ */
+export function roleCanAccessRoute(role: RoleType, path: string): boolean {
+  return canAccessRoute(path, role)
+}
+
+/**
+ * Get all routes accessible by a specific role
+ * Useful for generating role-specific navigation menus
+ * 
+ * Usage:
+ *   const writerRoutes = getAccessibleRoutes(ROLES.WRITER)
+ *   // Returns: ['/dashboard/writer']
+ */
+export function getAccessibleRoutes(role: RoleType): string[] {
+  return Object.entries(ROLE_REQUIREMENTS)
+    .filter(([_path, roles]) => roles.includes(role))
+    .map(([path]) => path)
+}
+
+/**
+ * Get route display label for breadcrumbs and navigation
+ * 
+ * Usage:
+ *   const label = getRouteLabel('/dashboard/admin')
+ *   // Returns: "Admin Dashboard"
+ */
+export function getRouteLabel(path: string): string {
+  return getRouteMetadata(path)?.label ?? path
+}
+
+/**
+ * Get route description for permission denied messages
+ * 
+ * Usage:
+ *   const desc = getRouteDescription('/dashboard/admin')
+ *   // Returns: "System administration and analytics"
+ */
+export function getRouteDescription(path: string): string {
+  return getRouteMetadata(path)?.description ?? 'Protected resource'
+}
+
+/**
+ * Check if a route requires authentication
+ * 
+ * Usage:
+ *   if (routeRequiresAuth('/dashboard/admin')) {
+ *     // Redirect unauthenticated users to login
+ *   }
+ */
+export function routeRequiresAuth(path: string): boolean {
+  return ROUTE_METADATA[path]?.requiresAuth ?? ROLE_REQUIREMENTS[path] !== undefined
+}
+
+/**
+ * Get all protected routes in the application
+ * Useful for generating documentation or permission matrix
+ * 
+ * Usage:
+ *   const allRoutes = getAllProtectedRoutes()
+ *   // Returns: ['/dashboard/admin', '/dashboard/writer', ...]
+ */
+export function getAllProtectedRoutes(): string[] {
+  return Object.keys(ROLE_REQUIREMENTS)
+}
+
+/**
+ * Generate a permission matrix for documentation
+ * Shows which roles can access which routes
+ * 
+ * Usage:
+ *   const matrix = generatePermissionMatrix()
+ *   // Returns: Map of routes to allowed roles
+ */
+export function generatePermissionMatrix(): Record<string, string[]> {
+  const matrix: Record<string, string[]> = {}
+  for (const [route, roles] of Object.entries(ROLE_REQUIREMENTS)) {
+    matrix[route] = roles
+  }
+  return matrix
 }
