@@ -186,3 +186,59 @@ export async function requireServerAuth(): Promise<Session> {
 
   return session
 }
+
+/**
+ * Check role and throw an error if unauthorized
+ * Useful in server actions, middleware, and server-side logic
+ * where redirecting is not appropriate
+ * 
+ * Usage in server actions:
+ *   'use server'
+ *   import { checkRole } from '@/lib/auth/server-role'
+ * 
+ *   export async function createCourse(data: any) {
+ *     const session = await checkRole('ADMIN')
+ *     // Process with session.user.id, etc.
+ *   }
+ * 
+ * Usage in utilities:
+ *   async function deleteUser(userId: string) {
+ *     const session = await checkRole(['ADMIN', 'MODERATOR'])
+ *     // Only ADMIN or MODERATOR can delete users
+ *     await prisma.user.delete({ where: { id: userId } })
+ *   }
+ * 
+ * @param allowedRoles - Single role or array of roles to allow
+ * @returns Session object if authorized
+ * @throws Error if not authenticated or role insufficient
+ */
+export async function checkRole(
+  allowedRoles: Role | Role[]
+): Promise<Session> {
+  const session = await getServerUserSession()
+
+  // Not authenticated
+  if (!session) {
+    throw new Error('Unauthorized: No active session. Please log in.')
+  }
+
+  const userRole = (session.user as any)?.role
+
+  // No role found
+  if (!userRole) {
+    throw new Error('Unauthorized: User role not found.')
+  }
+
+  // Check if user has required role
+  const roles = Array.isArray(allowedRoles)
+    ? allowedRoles
+    : [allowedRoles]
+
+  if (!roles.includes(userRole)) {
+    throw new Error(
+      `Forbidden: Your role (${userRole}) does not have permission to access this resource. Required: ${roles.join(', ')}`
+    )
+  }
+
+  return session
+}
