@@ -1,7 +1,16 @@
 import { PrismaClient } from '@prisma/client'
 import { hashPassword } from '../lib/auth-helpers'
+import { setupPrismaShutdown } from '../lib/prisma-cleanup'
 
 const prisma = new PrismaClient()
+
+// Set up graceful shutdown handlers
+setupPrismaShutdown(prisma, {
+  logger: {
+    log: (msg: string) => console.log(msg),
+    error: (msg: string) => console.error(msg),
+  },
+})
 
 async function main() {
   console.log('🌱 Starting database seed...')
@@ -242,9 +251,15 @@ async function main() {
 }
 
 main()
-  .catch(e => {
-    console.error(e)
+  .catch((err: unknown) => {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error('🔴 Seed failed:', message)
+    if (err instanceof Error && err.stack) {
+      console.error(err.stack)
+    }
     process.exit(1)
   })
-  .finally(() => prisma.$disconnect())
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
 
