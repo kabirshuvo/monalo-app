@@ -21,6 +21,7 @@ model User {
   level       Int           @default(1) @map("level")
   badge       String        @default("New Light") @db.VarChar(255) @map("badge")
   isVerified  Boolean       @default(false) @map("is_verified")
+  deletedAt   DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamp()
 
@@ -31,9 +32,16 @@ model User {
   lessonProgress UserLessonProgress[] @relation("UserLessonProgress")
   orders       Order[]       @relation("UserOrders")
 
+  @@unique([email, deletedAt]) // Allow email reuse after soft delete
+  @@unique([username, deletedAt]) // Allow username reuse after soft delete
   @@index([email])
   @@index([username])
+  @@index([role])
   @@index([createdAt])
+  @@index([deletedAt]) // For filtering active users
+  @@index([points]) // For leaderboards
+  @@index([email, deletedAt]) // Composite: auth lookups
+  @@index([role, createdAt]) // Composite: user analytics
   @@map("users")
 }
 
@@ -47,16 +55,23 @@ model Product {
   stock       Int      @default(0) @map("stock") // Quantity available
   status      ProductStatus @default(ACTIVE) @map("status") // ACTIVE, INACTIVE, DISCONTINUED
   imageUrl    String?  @db.Text @map("image_url") // Primary image
+  deletedAt   DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
   images      ProductImage[]  @relation("ProductImages")
   orderItems  OrderItem[]     @relation("ProductOrderItems")
 
+  @@unique([slug, deletedAt]) // Allow slug reuse after soft delete
+  @@unique([sku, deletedAt]) // Allow SKU reuse after soft delete
   @@index([name])
   @@index([slug])
   @@index([status])
   @@index([createdAt])
+  @@index([stock]) // For low stock alerts
+  @@index([deletedAt]) // For filtering active products
+  @@index([status, stock]) // Composite: inventory queries
+  @@index([status, createdAt]) // Composite: product listings
   @@map("products")
 }
 
@@ -83,6 +98,7 @@ model Order {
   paymentMethod   String?       @db.VarChar(50) @map("payment_method") // stripe, paypal, etc.
   paymentId       String?       @db.VarChar(255) @map("payment_id") // External payment provider ID
   stripeSessionId String?       @unique @db.VarChar(255) @map("stripe_session_id") // Stripe checkout session
+  deletedAt       DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   
   // Shipping info
   shippingAddress String?       @db.Text @map("shipping_address") // JSON or text
@@ -104,6 +120,10 @@ model Order {
   @@index([paymentStatus])
   @@index([createdAt])
   @@index([paymentId])
+  @@index([deletedAt]) // For filtering active orders
+  @@index([userId, status]) // Composite: user order history
+  @@index([status, createdAt]) // Composite: order reporting
+  @@index([paymentStatus, createdAt]) // Composite: payment reconciliation
   @@map("orders")
 }
 
@@ -132,6 +152,7 @@ model Course {
   price       Int?     @map("price") // Price in cents; null = free, otherwise price in cents
   isPaid      Boolean  @default(false) @map("is_paid")
   imageUrl    String?  @db.Text @map("image_url")
+  deletedAt   DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
@@ -141,6 +162,8 @@ model Course {
   @@index([title])
   @@index([createdAt])
   @@index([isPaid])
+  @@index([deletedAt]) // For filtering active courses
+  @@index([isPaid, createdAt]) // Composite: course listings by type
   @@map("courses")
 }
 
@@ -153,15 +176,18 @@ model Lesson {
   videoUrl    String?  @db.Text @map("video_url")
   order       Int      @map("order") // Position in course sequence
   duration    Int?     @map("duration") // Duration in seconds
+  deletedAt   DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
   course                Course                @relation("CourseLessons", fields: [courseId], references: [id], onDelete: Cascade)
   userProgressRecords   UserLessonProgress[]  @relation("LessonProgress")
 
-  @@unique([courseId, order])
+  @@unique([courseId, order, deletedAt]) // Allow order reuse after soft delete
   @@index([courseId])
   @@index([createdAt])
+  @@index([deletedAt]) // For filtering active lessons
+  @@index([courseId, order]) // Composite: course lesson sequences
   @@map("lessons")
 }
 
@@ -200,6 +226,8 @@ model ActivityLog {
   @@index([userId])
   @@index([timestamp])
   @@index([action])
+  @@index([userId, timestamp]) // Composite: user activity timeline
+  @@index([action, timestamp]) // Composite: action analytics
   @@map("activity_logs")
 }
 
@@ -208,6 +236,7 @@ model Blog {
   title     String   @db.VarChar(255) @map("title")
   content   String   @db.Text @map("content")
   authorId  String?  @map("author_id")
+  deletedAt DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
@@ -215,6 +244,8 @@ model Blog {
 
   @@index([authorId])
   @@index([createdAt])
+  @@index([deletedAt]) // For filtering active posts
+  @@index([authorId, createdAt]) // Composite: author posts timeline
   @@map("blogs")
 }
 
