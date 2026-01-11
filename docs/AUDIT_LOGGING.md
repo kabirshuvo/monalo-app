@@ -2,7 +2,7 @@
 
 Complete guide to the server-side audit logging system for tracking access attempts (both allowed and denied).
 
-## Overview
+## Overview fixed error
 
 The audit logging system provides comprehensive visibility into access control events:
 - **What**: Who tried to access what
@@ -15,6 +15,33 @@ All logs are:
 - ✅ **Non-blocking** — Logged asynchronously without waiting
 - ✅ **Failure-safe** — Logging failures never break the application
 - ✅ **Audit-trail ready** — Includes createdBy, timestamp, deletedAt for compliance
+
+## Security Architecture Rules
+
+⚠️ **Critical security principles that govern this system:**
+
+1. **Middleware = Authentication Only**
+   - Middleware checks if token is valid (not expired, properly signed)
+   - Middleware does NOT check role claims from JWT
+   - Middleware does NOT perform authorization decisions
+   - No logging from middleware
+
+2. **Server Guards = Authorization + Logging**
+   - Server-side guards (requireRole, requireServerRole, checkRole, requireFeature) perform actual authorization
+   - All authorization decisions logged server-side
+   - Role always re-validated from session/database, never from JWT claims alone
+
+3. **Never Trust JWT Role Claims**
+   - JWT claims can be forged or manipulated by user
+   - Always validate role from authenticated session (server-side)
+   - Always validate against source-of-truth database
+   - JWTs used only for authentication, not authorization
+
+4. **Always Log Denied Access**
+   - Every authorization failure logged automatically
+   - Logs include userId, role, route, reason, timestamp
+   - Logs enable security auditing and attack detection
+   - Logs are non-blocking and failure-safe
 
 ## Architecture
 
