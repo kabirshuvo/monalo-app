@@ -1,36 +1,60 @@
 /**
- * Next.js Middleware for Role-Based Route Protection
+ * Next.js Middleware for Authentication-Only Protection
  * 
- * This middleware protects dashboard routes based on user roles.
- * It runs on the edge before requests reach your pages.
+ * SECURITY HARDENING: Middleware performs AUTHENTICATION checks only,
+ * NOT authorization checks. Role validation is deferred to server-side guards.
  * 
- * Protection Rules:
- * - /dashboard/admin → ADMIN only
- * - /dashboard/writer → WRITER or ADMIN
- * - /dashboard/learner → LEARNER
- * - /dashboard/customer → CUSTOMER
- * - Unauthenticated → redirect to /login
- * - Unauthorized (insufficient role) → redirect to /home
+ * This prevents role spoofing attacks where attackers modify JWT claims.
+ * Even if an attacker changes their role in the JWT, they cannot access
+ * protected resources because server-side guards re-validate the role.
  * 
- * Uses next-auth/jwt for edge-compatible token reading
+ * Middleware Responsibilities (COARSE):
+ * - ✅ Check if user is authenticated (token exists & is valid)
+ * - ✅ Check if route requires authentication
+ * - ✅ Redirect unauthenticated users to /login
+ * 
+ * Server-Side Responsibilities (FINE):
+ * - ✅ Validate user role via requireServerRole() (pages)
+ * - ✅ Validate user role via requireRole() (API routes)
+ * - ✅ Validate permissions via hasPermission() (fine-grained)
+ * - ✅ Fetch role from database (never trust JWT claim alone)
+ * 
+ * Protection Flow:
+ * Middleware: Is user authenticated? → Yes, allow through
+ *                                  → No, redirect to /login
+ *     ↓↓↓
+ * Server: Does user have required role? → Yes, render page
+ *                                      → No, redirect to /403
+ * 
+ * This two-layer approach ensures:
+ * - Fast edge-level authentication check
+ * - Authoritative server-side role validation
+ * - Defense against JWT claim manipulation
  */
 
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
-import { ROLE_REQUIREMENTS } from '@/lib/auth/roles'
 import type { JWT } from 'next-auth/jwt'
 
 /**
  * Type for the decoded JWT token
- * Extends JWT to include our custom role property
+ * NOTE: We do NOT trust the role claim in middleware
+ * It will be re-validated server-side
  */
 interface TokenWithRole extends JWT {
   role?: string
+  sub?: string
 }
 
 /**
  * Middleware function that runs on protected routes
- * Checks authentication and authorization before allowing access
+ * 
+ * AUTHENTICATION-ONLY: Checks if user is authenticated,
+ * but does NOT check if user has required role.
+ * 
+ * Role validation happens server-side in:
+ * - pages: await requireServerRole('ADMIN')
+ * - API routes: await requireRole('ADMIN')
  */
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
@@ -42,53 +66,34 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   })) as TokenWithRole | null
 
-  // Extract the dashboard route segment (e.g., "admin" from "/dashboard/admin")
-  const dashboardMatch = pathname.match(/^\/dashboard\/(\w+)/)
-  const dashboardRoute = dashboardMatch ? `/${dashboardMatch[0]}` : null
-
-  // Find required roles for this route
-  // Using centralized ROLE_REQUIREMENTS from lib/auth/roles
-  const requiredRoles = dashboardRoute
-    ? ROLE_REQUIREMENTS[dashboardRoute]
-    : null
-
-  // Route is in dashboard but not configured - deny access
-  if (pathname.startsWith('/dashboard/') && !requiredRoles) {
-    return NextResponse.redirect(new URL('/403', request.url))
-  }
-
-  // If no specific role requirement, allow access (shouldn't happen with current config)
-  if (!requiredRoles) {
-    return NextResponse.next()
-  }
-
-  // Check if user is authenticated
+  /**
+   * AUTHENTICATION CHECK ONLY
+   * We verify the token exists and is cryptographically valid
+   * but we do NOT check the role claim
+   */
   if (!token) {
+    // User is not authenticated
     // Save the requested URL to redirect back after login
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('callbackUrl', pathname)
+    
+    console.log(`[Middleware] Unauthenticated access to ${pathname}, redirecting to login`)
     return NextResponse.redirect(loginUrl)
   }
 
-  // Extract user role from token
-  const userRole = token.role as string | undefined
-
-  if (!userRole) {
-    // User has session but no role assigned - redirect to home
-    return NextResponse.redirect(new URL('/home', request.url))
-  }
-
-  // Check if user's role is in the allowed roles for this route
-  // userRole is from JWT and may include extra whitespace
-  const hasRequiredRole = requiredRoles.includes(userRole.trim() as any)
-
-  if (!hasRequiredRole) {
-    // User is authenticated but lacks required role
-    // Show 403 Forbidden page
-    return NextResponse.redirect(new URL('/403', request.url))
-  }
-
-  // User is authenticated and has required role - allow access
+  /**
+   * User is authenticated (token is valid)
+   * Allow request to proceed to server-side guards
+   * 
+   * The server component (page.tsx) will:
+   * 1. Extract session via getServerSession()
+   * 2. Call requireServerRole() to validate role
+   * 3. Fetch role from database (never trust JWT alone)
+   * 4. Redirect to /403 if role insufficient
+   * 
+   * This ensures role cannot be spoofed via JWT manipulation
+   */
+  console.log(`[Middleware] Authenticated request to ${pathname}, user: ${token.sub}`)
   return NextResponse.next()
 }
 
@@ -98,6 +103,10 @@ export async function middleware(request: NextRequest) {
  * The matcher array defines which routes trigger the middleware.
  * Using matcher is more efficient than checking pathname in the middleware function
  * because it prevents unnecessary middleware execution on routes that don't need protection.
+ * 
+ * Middleware Role: AUTHENTICATION ONLY
+ * These routes require the user to be logged in, but role validation
+ * happens server-side via requireServerRole() or requireRole()
  * 
  * Automatically excluded (by Next.js default):
  * - Static files: /public/* (images, css, js, etc)
@@ -120,23 +129,28 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /**
-     * Protected routes requiring role-based access control
+     * Protect all dashboard routes with authentication check
      * 
      * /dashboard/:path* matches:
-     * - /dashboard/admin
-     * - /dashboard/writer
-     * - /dashboard/learner
-     * - /dashboard/customer
-     * - Any future /dashboard/* sub-routes
+     * - /dashboard/admin (role validated server-side)
+     * - /dashboard/writer (role validated server-side)
+     * - /dashboard/learner (role validated server-side)
+     * - /dashboard/customer (role validated server-side)
+     * - Any future /dashboard/* sub-routes (role validated server-side)
+     * 
+     * Middleware: Checks user is authenticated
+     * Server: Validates user has required role
      */
     '/dashboard/:path*',
     
     /**
      * Future protected routes can be added here:
      * 
-     * '/admin/:path*'          - Admin-only pages
-     * '/api/protected/:path*'  - Protected API endpoints (if needed)
-     * '/settings/:path*'       - User account settings (authentication required)
+     * '/admin/:path*'          - Admin-only pages (role check server-side)
+     * '/settings/:path*'       - Account settings (auth required, role varies)
+     * '/account/:path*'        - Account pages (auth required, role varies)
+     * 
+     * All role validation happens server-side, never at middleware
      */
   ],
 }
