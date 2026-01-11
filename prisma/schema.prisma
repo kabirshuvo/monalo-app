@@ -21,7 +21,10 @@ model User {
   level       Int           @default(1) @map("level")
   badge       String        @default("New Light") @db.VarChar(255) @map("badge")
   isVerified  Boolean       @default(false) @map("is_verified")
+  lastLoginAt DateTime?     @map("last_login_at") @db.Timestamp() // Last successful login
   deletedAt   DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
+  createdBy   String?       @map("created_by") // User ID who created this account (admin registration)
+  updatedBy   String?       @map("updated_by") // User ID who last updated this account
   createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamp()
 
@@ -40,6 +43,7 @@ model User {
   @@index([createdAt])
   @@index([deletedAt]) // For filtering active users
   @@index([points]) // For leaderboards
+  @@index([lastLoginAt]) // For last login tracking
   @@index([email, deletedAt]) // Composite: auth lookups
   @@index([role, createdAt]) // Composite: user analytics
   @@map("users")
@@ -56,6 +60,8 @@ model Product {
   status      ProductStatus @default(ACTIVE) @map("status") // ACTIVE, INACTIVE, DISCONTINUED
   imageUrl    String?  @db.Text @map("image_url") // Primary image
   deletedAt   DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
+  createdBy   String?       @map("created_by") // User ID who created this product
+  updatedBy   String?       @map("updated_by") // User ID who last updated this product
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
@@ -111,6 +117,8 @@ model Order {
   paidAt          DateTime?     @map("paid_at") @db.Timestamp()
   shippedAt       DateTime?     @map("shipped_at") @db.Timestamp()
   deliveredAt     DateTime?     @map("delivered_at") @db.Timestamp()
+  createdBy       String?       @map("created_by") // User ID who created this order
+  updatedBy       String?       @map("updated_by") // User ID who last updated this order
 
   user      User        @relation("UserOrders", fields: [userId], references: [id], onDelete: Cascade)
   items     OrderItem[] @relation("OrderItems")
@@ -153,6 +161,8 @@ model Course {
   isPaid      Boolean  @default(false) @map("is_paid")
   imageUrl    String?  @db.Text @map("image_url")
   deletedAt   DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
+  createdBy   String?       @map("created_by") // User ID who created this course
+  updatedBy   String?       @map("updated_by") // User ID who last updated this course
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
@@ -177,6 +187,8 @@ model Lesson {
   order       Int      @map("order") // Position in course sequence
   duration    Int?     @map("duration") // Duration in seconds
   deletedAt   DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
+  createdBy   String?       @map("created_by") // User ID who created this lesson
+  updatedBy   String?       @map("updated_by") // User ID who last updated this lesson
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
@@ -219,6 +231,7 @@ model ActivityLog {
   userId       String   @map("user_id")
   action       String   @db.VarChar(255) @map("action")
   pointsEarned Int      @default(0) @map("points_earned")
+  createdBy    String?  @map("created_by") // User ID who triggered this action (typically same as userId)
   timestamp    DateTime @default(now()) @map("timestamp") @db.Timestamp()
 
   user         User     @relation("UserActivityLogs", fields: [userId], references: [id], onDelete: Cascade)
@@ -237,6 +250,8 @@ model Blog {
   content   String   @db.Text @map("content")
   authorId  String?  @map("author_id")
   deletedAt DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
+  createdBy String?       @map("created_by") // User ID who created this blog post
+  updatedBy String?       @map("updated_by") // User ID who last updated this blog post
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
@@ -253,6 +268,10 @@ model PointsRule {
   id     String @id @map("id")
   action String @unique @db.VarChar(255) @map("action")
   points Int    @map("points")
+  createdBy String?       @map("created_by") // User ID who created this rule
+  updatedBy String?       @map("updated_by") // User ID who last updated this rule
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime      @updatedAt @map("updated_at") @db.Timestamp()
 
   @@map("points_rules")
 }
