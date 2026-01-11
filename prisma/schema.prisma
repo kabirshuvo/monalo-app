@@ -87,11 +87,13 @@ model ProductImage {
   url       String   @db.Text @map("url")
   alt       String?  @db.VarChar(255) @map("alt")
   order     Int      @default(0) @map("order") // Display order
+  deletedAt DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
 
   product   Product  @relation("ProductImages", fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([productId])
+  @@index([deletedAt]) // For filtering active images
   @@map("product_images")
 }
 
@@ -142,6 +144,7 @@ model OrderItem {
   quantity        Int      @map("quantity")
   priceSnapshot   Int      @map("price_snapshot") // Price in cents at time of order
   subtotal        Int      @map("subtotal") // quantity * priceSnapshot
+  deletedAt       DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp()
 
   order     Order   @relation("OrderItems", fields: [orderId], references: [id], onDelete: Cascade)
@@ -149,6 +152,7 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+  @@index([deletedAt]) // For filtering active items
   @@map("order_items")
 }
 
@@ -211,6 +215,7 @@ model UserLessonProgress {
   completed    Boolean  @default(false) @map("completed")
   completedAt  DateTime? @map("completed_at") @db.Timestamp()
   watchedMinutes Int    @default(0) @map("watched_minutes") // Minutes watched
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
@@ -218,11 +223,12 @@ model UserLessonProgress {
   course  Course  @relation("CourseProgress", fields: [courseId], references: [id], onDelete: Cascade)
   lesson  Lesson  @relation("LessonProgress", fields: [lessonId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, lessonId])
+  @@unique([userId, lessonId, deletedAt]) // Allow reuse after soft delete
   @@index([userId])
   @@index([courseId])
   @@index([lessonId])
   @@index([completed])
+  @@index([deletedAt]) // For filtering active progress
   @@map("user_lesson_progress")
 }
 
@@ -232,6 +238,7 @@ model ActivityLog {
   action       String   @db.VarChar(255) @map("action")
   pointsEarned Int      @default(0) @map("points_earned")
   createdBy    String?  @map("created_by") // User ID who triggered this action (typically same as userId)
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   timestamp    DateTime @default(now()) @map("timestamp") @db.Timestamp()
 
   user         User     @relation("UserActivityLogs", fields: [userId], references: [id], onDelete: Cascade)
@@ -239,6 +246,7 @@ model ActivityLog {
   @@index([userId])
   @@index([timestamp])
   @@index([action])
+  @@index([deletedAt]) // For filtering active logs
   @@index([userId, timestamp]) // Composite: user activity timeline
   @@index([action, timestamp]) // Composite: action analytics
   @@map("activity_logs")
@@ -265,14 +273,16 @@ model Blog {
 }
 
 model PointsRule {
-  id     String @id @map("id")
-  action String @unique @db.VarChar(255) @map("action")
-  points Int    @map("points")
+  id        String @id @map("id")
+  action    String @unique @db.VarChar(255) @map("action")
+  points    Int    @map("points")
+  deletedAt DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   createdBy String?       @map("created_by") // User ID who created this rule
   updatedBy String?       @map("updated_by") // User ID who last updated this rule
   createdAt DateTime      @default(now()) @map("created_at") @db.Timestamp()
   updatedAt DateTime      @updatedAt @map("updated_at") @db.Timestamp()
 
+  @@index([deletedAt]) // For filtering active rules
   @@map("points_rules")
 }
 
