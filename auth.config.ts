@@ -18,13 +18,29 @@ const authConfig: NextAuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            passwordHash: true,
+            image: true,
+            userRoles: {
+              select: {
+                role: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
         })
 
-        if (!user || !user.password) {
+        if (!user || !user.passwordHash) {
           throw new Error('User not found or not registered with password')
         }
 
-        const isPasswordValid = await verifyPassword(credentials.password as string, user.password)
+        const isPasswordValid = await verifyPassword(credentials.password as string, user.passwordHash)
         if (!isPasswordValid) {
           throw new Error('Invalid password')
         }
@@ -33,7 +49,7 @@ const authConfig: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role,
+          role: user.userRoles[0]?.role.name || 'customer',
           image: user.image,
         }
       },
