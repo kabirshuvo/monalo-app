@@ -17,6 +17,7 @@
 
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
+import { ROLE_REQUIREMENTS } from '@/lib/auth/roles'
 import type { JWT } from 'next-auth/jwt'
 
 /**
@@ -25,16 +26,6 @@ import type { JWT } from 'next-auth/jwt'
  */
 interface TokenWithRole extends JWT {
   role?: string
-}
-
-/**
- * Define role requirements for each dashboard route
- */
-const roleRequirements: Record<string, string[]> = {
-  '/dashboard/admin': ['ADMIN'],
-  '/dashboard/writer': ['WRITER', 'ADMIN'],
-  '/dashboard/learner': ['LEARNER'],
-  '/dashboard/customer': ['CUSTOMER'],
 }
 
 /**
@@ -56,8 +47,9 @@ export async function middleware(request: NextRequest) {
   const dashboardRoute = dashboardMatch ? `/${dashboardMatch[0]}` : null
 
   // Find required roles for this route
+  // Using centralized ROLE_REQUIREMENTS from lib/auth/roles
   const requiredRoles = dashboardRoute
-    ? roleRequirements[dashboardRoute]
+    ? ROLE_REQUIREMENTS[dashboardRoute]
     : null
 
   // Route is in dashboard but not configured - deny access
@@ -87,7 +79,8 @@ export async function middleware(request: NextRequest) {
   }
 
   // Check if user's role is in the allowed roles for this route
-  const hasRequiredRole = requiredRoles.includes(userRole)
+  // userRole is from JWT and may include extra whitespace
+  const hasRequiredRole = requiredRoles.includes(userRole.trim() as any)
 
   if (!hasRequiredRole) {
     // User is authenticated but lacks required role
