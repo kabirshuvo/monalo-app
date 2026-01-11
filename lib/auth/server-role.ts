@@ -19,6 +19,7 @@ import authConfig from '@/auth.config'
 import { redirect } from 'next/navigation'
 import type { Role } from '@prisma/client'
 import type { Session } from 'next-auth'
+import { logAccessDenied, logAuthFailure } from '@/lib/auth/audit-logs'
 
 /**
  * Get the current server session without throwing errors
@@ -113,15 +114,31 @@ export async function requireServerRole(
 ): Promise<Session> {
   const session = await getServerUserSession()
 
-  // Not authenticated - redirect to login
+  // Not authenticated - log and redirect to login
   if (!session) {
+    // Log authentication failure (non-blocking)
+    logAuthFailure({
+      userId: 'ANONYMOUS',
+      route: typeof window !== 'undefined' ? window.location.pathname : 'unknown',
+      reason: 'No active session',
+    }).catch(err => console.error('Failed to log auth failure:', err))
+    
     redirect('/login')
   }
 
   const userRole = (session.user as any)?.role
+  const userId = (session.user as any)?.id
 
-  // No role found - redirect to home
+  // No role found - log and redirect to home
   if (!userRole) {
+    // Log role validation failure (non-blocking)
+    logAccessDenied({
+      userId: userId || 'UNKNOWN',
+      userRole: 'UNKNOWN',
+      route: '/dashboard',
+      reason: 'User role not found in session',
+    }).catch(err => console.error('Failed to log access denial:', err))
+    
     redirect('/home')
   }
 
@@ -131,6 +148,14 @@ export async function requireServerRole(
     : [allowedRoles]
 
   if (!roles.includes(userRole)) {
+    // Log insufficient role (non-blocking)
+    logAccessDenied({
+      userId,
+      userRole,
+      route: '/dashboard',
+      reason: `Insufficient role: ${userRole} is not in [${roles.join(', ')}]`,
+    }).catch(err => console.error('Failed to log access denial:', err))
+    
     // Insufficient permissions - redirect to home
     redirect('/home')
   }
@@ -219,13 +244,29 @@ export async function checkRole(
 
   // Not authenticated
   if (!session) {
+    // Log authentication failure (non-blocking)
+    logAuthFailure({
+      userId: 'ANONYMOUS',
+      route: 'server-action',
+      reason: 'No active session for server action',
+    }).catch(err => console.error('Failed to log auth failure:', err))
+    
     throw new Error('Unauthorized: No active session. Please log in.')
   }
 
   const userRole = (session.user as any)?.role
+  const userId = (session.user as any)?.id
 
   // No role found
   if (!userRole) {
+    // Log role not found (non-blocking)
+    logAccessDenied({
+      userId: userId || 'UNKNOWN',
+      userRole: 'UNKNOWN',
+      route: 'server-action',
+      reason: 'User role not found in session',
+    }).catch(err => console.error('Failed to log access denial:', err))
+    
     throw new Error('Unauthorized: User role not found.')
   }
 
@@ -235,6 +276,14 @@ export async function checkRole(
     : [allowedRoles]
 
   if (!roles.includes(userRole)) {
+    // Log insufficient role (non-blocking)
+    logAccessDenied({
+      userId,
+      userRole,
+      route: 'server-action',
+      reason: `Insufficient role: ${userRole} is not in [${roles.join(', ')}]`,
+    }).catch(err => console.error('Failed to log access denial:', err))
+    
     throw new Error(
       `Forbidden: Your role (${userRole}) does not have permission to access this resource. Required: ${roles.join(', ')}`
     )

@@ -29,6 +29,7 @@
 
 import type { RoleType } from './roles'
 import { ROLES } from './roles'
+import { logFeatureDenied } from '@/lib/auth/audit-logs'
 
 /**
  * Feature Flag Constants
@@ -313,13 +314,29 @@ export function isFeatureEnabled(
 export function requireFeature(
   role: RoleType,
   feature: FeatureFlag,
-  message?: string
+  options?: {
+    message?: string
+    userId?: string
+    route?: string
+  }
 ): void {
   if (!hasFeatureAccess(role, feature)) {
-    throw new Error(
-      message ?? 
+    const message =
+      options?.message ?? 
       `Feature not available: ${feature} is not enabled for role ${role}`
-    )
+    
+    // Log feature denial (non-blocking)
+    if (options?.userId) {
+      logFeatureDenied({
+        userId: options.userId,
+        userRole: role,
+        route: options?.route || 'server-action',
+        reason: message,
+        feature: feature,
+      }).catch(err => console.error('Failed to log feature denial:', err))
+    }
+    
+    throw new Error(message)
   }
 }
 

@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth'
 import authConfig from '@/auth.config'
 import { Role } from '@prisma/client'
+import { logAccessDenied, logAuthFailure } from '@/lib/auth/audit-logs'
 
 /**
  * Custom error class for authorization failures
@@ -46,20 +47,36 @@ export async function requireRole(
 
   // Check if user is authenticated
   if (!session || !session.user) {
+    // Log authentication failure (non-blocking)
+    logAuthFailure({
+      userId: 'ANONYMOUS',
+      route: 'api',
+      reason: 'No session found in requireRole',
+    }).catch(err => console.error('Failed to log auth failure:', err))
+    
     throw new AuthorizationError(
       401,
       'Unauthorized: No session found. Please sign in.'
     )
   }
 
-  // Get user role from session
+  // Get user role and ID from session
   const userRole = (session.user as any)?.role
+  const userId = (session.user as any)?.id
 
   // Normalize allowedRoles to array for easier checking
   const rolesArray = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles]
 
   // Check if user has required role
   if (!rolesArray.includes(userRole)) {
+    // Log insufficient role (non-blocking)
+    logAccessDenied({
+      userId: userId || 'UNKNOWN',
+      userRole,
+      route: 'api',
+      reason: `Insufficient role: ${userRole} is not in [${rolesArray.join(', ')}]`,
+    }).catch(err => console.error('Failed to log access denial:', err))
+    
     throw new AuthorizationError(
       403,
       `Forbidden: Your role (${userRole}) does not have access to this resource. ` +
