@@ -29,7 +29,8 @@ export interface UserSession {
 }
 
 export async function getCurrentUser(req: unknown): Promise<UserSession | null> {
-  const token = req?.headers?.authorization?.split(' ')[1]
+  const headers = (req as { headers?: Record<string, string> })?.headers
+  const token = headers?.authorization?.split(' ')[1]
   if (!token) return null
   try {
     const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())

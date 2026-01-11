@@ -1,9 +1,9 @@
-import type { NextAuthConfig } from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from '@/lib/db'
 import { verifyPassword } from '@/lib/auth-helpers'
 
-const authConfig = {
+const authConfig: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -53,12 +53,12 @@ const authConfig = {
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string
+        ;(session.user as { id: string; role: string }).id = token.id as string
         ;(session.user as { id: string; role: string }).role = token.role as string
       }
       return session
     },
   },
-} satisfies NextAuthConfig
+}
 
 export default authConfig
