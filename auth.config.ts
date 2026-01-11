@@ -21,26 +21,17 @@ const authConfig: NextAuthOptions = {
           select: {
             id: true,
             email: true,
-            name: true,
-            passwordHash: true,
-            image: true,
-            userRoles: {
-              select: {
-                role: {
-                  select: {
-                    name: true,
-                  },
-                },
-              },
-            },
+            username: true,
+            password: true,
+            role: true,
           },
         })
 
-        if (!user || !user.passwordHash) {
+        if (!user || !user.password) {
           throw new Error('User not found or not registered with password')
         }
 
-        const isPasswordValid = await verifyPassword(credentials.password as string, user.passwordHash)
+        const isPasswordValid = await verifyPassword(credentials.password as string, user.password)
         if (!isPasswordValid) {
           throw new Error('Invalid password')
         }
@@ -48,9 +39,8 @@ const authConfig: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          name: user.name,
-          role: user.userRoles[0]?.role.name || 'customer',
-          image: user.image,
+          name: user.username,
+          role: user.role || 'GUEST',
         }
       },
     }),
