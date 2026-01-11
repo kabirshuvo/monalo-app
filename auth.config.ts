@@ -1,9 +1,22 @@
 import type { NextAuthOptions } from 'next-auth'
+import type { Session } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@/lib/db'
 import { verifyPassword } from '@/lib/auth-helpers'
+import { Role } from '@prisma/client'
 
 const authConfig: NextAuthOptions = {
+  // Use Prisma adapter for database-backed sessions
+  adapter: PrismaAdapter(prisma),
+  // Database-backed sessions (persisted in DB via adapter)
+  session: {
+    strategy: 'database',
+    // Session expiration: 30 days
+    maxAge: 30 * 24 * 60 * 60,
+    // Update session every 24 hours
+    updateAge: 24 * 60 * 60,
+  },
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -40,7 +53,7 @@ const authConfig: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.username,
-          role: user.role || 'GUEST',
+          role: user.role || Role.CUSTOMER,
         }
       },
     }),
@@ -50,17 +63,32 @@ const authConfig: NextAuthOptions = {
     newUser: '/(auth)/register',
   },
   callbacks: {
-    async jwt({ token, user }) {
+    // Attach role to the JWT token (used if strategy is jwt, not db)
+    async jwt({ token, user, account }) {
+      // On initial login via credentials or OAuth
       if (user) {
         token.id = user.id
-        token.role = (user as { id: string; role: string }).role || 'customer'
+        token.role = (user as { role?: Role }).role || Role.CUSTOMER
+      }
+      // On subsequent session updates, fetch role from DB if needed
+      if (!token.id && token.sub) {
+        token.id = token.sub
+        // For OAuth users created via adapter, fetch role from DB
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.sub },
+          select: { role: true },
+        })
+        if (dbUser) {
+          token.role = dbUser.role
+        }
       }
       return token
     },
+    // Inject role and id into the session object
     async session({ session, token }) {
       if (session.user) {
-        ;(session.user as { id: string; role: string }).id = token.id as string
-        ;(session.user as { id: string; role: string }).role = token.role as string
+        ;(session.user as { id: string; role: Role }).id = token.id as string
+        ;(session.user as { id: string; role: Role }).role = (token.role as Role) || Role.CUSTOMER
       }
       return session
     },
