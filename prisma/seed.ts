@@ -1,17 +1,7 @@
 import { PrismaClient } from '@prisma/client'
-import crypto from 'crypto'
+import { hashPassword } from '../lib/auth-helpers'
 
 const prisma = new PrismaClient()
-
-async function hashPassword(password: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const salt = crypto.randomBytes(16).toString('hex')
-    crypto.pbkdf2(password, salt, 1000, 64, 'sha512', (err, derived) => {
-      if (err) reject(err)
-      resolve(salt + ':' + derived.toString('hex'))
-    })
-  })
-}
 
 async function main() {
   console.log('🌱 Starting database seed...')
@@ -173,9 +163,12 @@ async function main() {
     create: {
       id: 'product-nextjs-handbook',
       name: 'Next.js Developer Handbook',
+      slug: 'nextjs-developer-handbook',
       description:
         'Comprehensive guide covering App Router, API Routes, optimizations, and deployment strategies for modern Next.js applications.',
       price: 2999, // $29.99 in cents
+      stock: 100,
+      status: 'ACTIVE',
       imageUrl: 'https://images.unsplash.com/photo-1633356122544-f134ef2944f1?w=400&h=400&fit=crop',
     },
   })
@@ -187,9 +180,12 @@ async function main() {
     create: {
       id: 'product-typescript-course',
       name: 'TypeScript Mastery Course',
+      slug: 'typescript-mastery-course',
       description:
         'Learn TypeScript from zero to hero. Covers types, interfaces, generics, decorators, and advanced patterns used in production apps.',
       price: 3999, // $39.99 in cents
+      stock: 150,
+      status: 'ACTIVE',
       imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=400&fit=crop',
     },
   })
@@ -201,9 +197,12 @@ async function main() {
     create: {
       id: 'product-devtools-bundle',
       name: 'Modern DevTools Bundle',
+      slug: 'modern-devtools-bundle',
       description:
         'Premium bundle including VSCode extensions, CLI tools, and development utilities to boost your productivity by 10x.',
       price: 4999, // $49.99 in cents
+      stock: 75,
+      status: 'ACTIVE',
       imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=400&fit=crop',
     },
   })

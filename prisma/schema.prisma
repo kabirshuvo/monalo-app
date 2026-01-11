@@ -28,6 +28,8 @@ model User {
   blogs        Blog[]        @relation("UserBlogs")
   accounts     Account[]     @relation("UserAccounts")
   sessions     Session[]     @relation("UserSessions")
+  lessonProgress UserLessonProgress[] @relation("UserLessonProgress")
+  orders       Order[]       @relation("UserOrders")
 
   @@index([email])
   @@index([username])
@@ -38,15 +40,88 @@ model User {
 model Product {
   id          String   @id @default(cuid()) @map("id")
   name        String   @db.VarChar(255) @map("name")
-  price       Float    @map("price")
+  slug        String   @unique @db.VarChar(255) @map("slug") // For URLs
   description String?  @db.Text @map("description")
-  imageUrl    String?  @db.Text @map("image_url")
+  price       Int      @map("price") // Price in cents
+  sku         String?  @unique @db.VarChar(100) @map("sku") // Stock keeping unit
+  stock       Int      @default(0) @map("stock") // Quantity available
+  status      ProductStatus @default(ACTIVE) @map("status") // ACTIVE, INACTIVE, DISCONTINUED
+  imageUrl    String?  @db.Text @map("image_url") // Primary image
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
+  images      ProductImage[]  @relation("ProductImages")
+  orderItems  OrderItem[]     @relation("ProductOrderItems")
+
   @@index([name])
+  @@index([slug])
+  @@index([status])
   @@index([createdAt])
   @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(cuid()) @map("id")
+  productId String   @map("product_id")
+  url       String   @db.Text @map("url")
+  alt       String?  @db.VarChar(255) @map("alt")
+  order     Int      @default(0) @map("order") // Display order
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
+
+  product   Product  @relation("ProductImages", fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_images")
+}
+
+model Order {
+  id              String        @id @default(cuid()) @map("id")
+  userId          String        @map("user_id")
+  status          OrderStatus   @default(PENDING) @map("status") // PENDING, PAID, SHIPPED, DELIVERED, CANCELLED
+  totalAmount     Int           @map("total_amount") // Total in cents
+  paymentStatus   PaymentStatus @default(UNPAID) @map("payment_status") // UNPAID, PAID, REFUNDED
+  paymentMethod   String?       @db.VarChar(50) @map("payment_method") // stripe, paypal, etc.
+  paymentId       String?       @db.VarChar(255) @map("payment_id") // External payment provider ID
+  stripeSessionId String?       @unique @db.VarChar(255) @map("stripe_session_id") // Stripe checkout session
+  
+  // Shipping info
+  shippingAddress String?       @db.Text @map("shipping_address") // JSON or text
+  shippingStatus  String?       @db.VarChar(50) @map("shipping_status") // pending, shipped, delivered
+  trackingNumber  String?       @db.VarChar(100) @map("tracking_number")
+  
+  // Timestamps
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamp()
+  paidAt          DateTime?     @map("paid_at") @db.Timestamp()
+  shippedAt       DateTime?     @map("shipped_at") @db.Timestamp()
+  deliveredAt     DateTime?     @map("delivered_at") @db.Timestamp()
+
+  user      User        @relation("UserOrders", fields: [userId], references: [id], onDelete: Cascade)
+  items     OrderItem[] @relation("OrderItems")
+
+  @@index([userId])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt])
+  @@index([paymentId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id              String   @id @default(cuid()) @map("id")
+  orderId         String   @map("order_id")
+  productId       String   @map("product_id")
+  quantity        Int      @map("quantity")
+  priceSnapshot   Int      @map("price_snapshot") // Price in cents at time of order
+  subtotal        Int      @map("subtotal") // quantity * priceSnapshot
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp()
+
+  order     Order   @relation("OrderItems", fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation("ProductOrderItems", fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
 }
 
 model Course {
@@ -54,12 +129,63 @@ model Course {
   title       String   @db.VarChar(255) @map("title")
   description String?  @db.Text @map("description")
   content     String?  @db.Text @map("content")
+  price       Int?     @map("price") // Price in cents; null = free, otherwise price in cents
+  isPaid      Boolean  @default(false) @map("is_paid")
+  imageUrl    String?  @db.Text @map("image_url")
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
+  lessons              Lesson[]              @relation("CourseLessons")
+  userProgressRecords UserLessonProgress[]  @relation("CourseProgress")
+
   @@index([title])
   @@index([createdAt])
+  @@index([isPaid])
   @@map("courses")
+}
+
+model Lesson {
+  id          String   @id @default(cuid()) @map("id")
+  courseId    String   @map("course_id")
+  title       String   @db.VarChar(255) @map("title")
+  description String?  @db.Text @map("description")
+  content     String?  @db.Text @map("content")
+  videoUrl    String?  @db.Text @map("video_url")
+  order       Int      @map("order") // Position in course sequence
+  duration    Int?     @map("duration") // Duration in seconds
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
+
+  course                Course                @relation("CourseLessons", fields: [courseId], references: [id], onDelete: Cascade)
+  userProgressRecords   UserLessonProgress[]  @relation("LessonProgress")
+
+  @@unique([courseId, order])
+  @@index([courseId])
+  @@index([createdAt])
+  @@map("lessons")
+}
+
+model UserLessonProgress {
+  id           String   @id @default(cuid()) @map("id")
+  userId       String   @map("user_id")
+  courseId     String   @map("course_id")
+  lessonId     String   @map("lesson_id")
+  completed    Boolean  @default(false) @map("completed")
+  completedAt  DateTime? @map("completed_at") @db.Timestamp()
+  watchedMinutes Int    @default(0) @map("watched_minutes") // Minutes watched
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamp()
+
+  user    User    @relation("UserLessonProgress", fields: [userId], references: [id], onDelete: Cascade)
+  course  Course  @relation("CourseProgress", fields: [courseId], references: [id], onDelete: Cascade)
+  lesson  Lesson  @relation("LessonProgress", fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([courseId])
+  @@index([lessonId])
+  @@index([completed])
+  @@map("user_lesson_progress")
 }
 
 model ActivityLog {
@@ -98,6 +224,27 @@ model PointsRule {
   points Int    @map("points")
 
   @@map("points_rules")
+}
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+  DISCONTINUED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
+  FAILED
 }
 
 enum Role {
