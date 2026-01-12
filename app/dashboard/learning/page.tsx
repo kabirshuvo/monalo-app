@@ -14,13 +14,15 @@ export default async function LearnerDashboardPage() {
     redirect('/login')
   }
 
-  if (session.user.role !== 'LEARNER' && session.user.role !== 'ADMIN') {
+  const role = (session.user as any)?.role
+  const level = (session.user as any)?.level ?? 1
+  if (role !== 'LEARNER' && role !== 'ADMIN') {
     redirect('/dashboard')
   }
 
   return (
     <DashboardLayout
-      userRole={session.user.role as 'LEARNER' | 'ADMIN'}
+      userRole={(role as 'LEARNER' | 'ADMIN') || 'LEARNER'}
       userName={session.user.name || 'Learner'}
       userAvatar={session.user.image || undefined}
       currentPath="/dashboard/learning"
@@ -50,7 +52,7 @@ export default async function LearnerDashboardPage() {
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="text-sm text-gray-600 mb-1">Your Level</div>
-            <div className="text-3xl font-bold text-gray-900">{session.user.level || 1}</div>
+            <div className="text-3xl font-bold text-gray-900">{level}</div>
             <p className="text-xs text-gray-500 mt-2">current level</p>
           </div>
         </div>
