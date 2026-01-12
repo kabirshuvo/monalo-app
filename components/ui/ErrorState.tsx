@@ -152,7 +152,7 @@ export default function ErrorState({
           </Button>
         )}
         {onSecondaryAction && secondaryActionLabel && (
-          <Button onClick={onSecondaryAction} variant="outline">
+          <Button onClick={onSecondaryAction} variant="secondary">
             {secondaryActionLabel}
           </Button>
         )}
