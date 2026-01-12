@@ -9,14 +9,15 @@
  *   const session = await auth()
  */
 
-import NextAuth from 'next-auth'
+import { getServerSession } from 'next-auth'
 import authConfig from '@/auth.config'
 
 /**
- * NextAuth handler for server-side session fetching
- * 
- * Call this in server components to get the current session:
+ * Server-side session helper using getServerSession
+ *
+ * Usage in server components:
  *   const session = await auth()
- *   if (!session) redirect('/login')
  */
-export const { auth } = NextAuth(authConfig)
+export async function auth() {
+	return getServerSession(authConfig)
+}
