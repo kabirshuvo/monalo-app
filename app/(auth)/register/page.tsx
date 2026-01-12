@@ -244,9 +244,12 @@ function RegisterForm() {
                 value={formData.role}
                 onChange={(e) => handleChange('role', e.target.value)}
                 options={[
-                  { value: 'CUSTOMER', label: 'Shop for products' },
+                  { value: 'BROWSER', label: 'Join' },
                   { value: 'LEARNER', label: 'Learn and grow' },
-                  { value: 'WRITER', label: 'Share my knowledge' }
+                  { value: 'CUSTOMER', label: 'Shop for products' },
+                  { value: 'SELLER', label: 'Sell my products' },
+                  { value: 'WRITER', label: 'Share my knowledge' },
+                  { value: 'DONOR', label: 'Support and donate' }
                 ]}
                 disabled={isLoading}
                 required

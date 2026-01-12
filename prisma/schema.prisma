@@ -317,6 +317,9 @@ enum Role {
   CUSTOMER
   LEARNER
   WRITER
+  SELLER
+  DONOR
+  BROWSER
 }
 
 // NextAuth models (compatible with NextAuth Prisma Adapter)
