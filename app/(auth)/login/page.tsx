@@ -1,11 +1,11 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Form, FormSection, FormActions, Input, Button, Alert } from '@/components/ui'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { data: session, status } = useSession()
@@ -19,7 +19,7 @@ export default function LoginPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (status === 'authenticated' && session) {
-      const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'
+      const callbackUrl = searchParams?.get('callbackUrl') || '/dashboard'
       router.push(callbackUrl)
     }
   }, [status, session, router, searchParams])
@@ -67,7 +67,7 @@ export default function LoginPage() {
         }
       } else if (result?.ok) {
         // Success - NextAuth will handle the redirect
-        const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'
+        const callbackUrl = searchParams?.get('callbackUrl') || '/dashboard'
         router.push(callbackUrl)
       }
     } catch (err) {
@@ -213,6 +213,21 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Just a moment...</p>
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
 
