@@ -12,14 +12,15 @@ export const metadata = {
   title: 'Order Details - MonAlo',
 }
 
-export default async function OrderDetailPage({ params }: { params: { id: string } }) {
+export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth()
 
   if (!session || !session.user) redirect('/login')
   const role = (session.user as any)?.role
   if (role !== 'CUSTOMER' && role !== 'ADMIN') redirect('/dashboard')
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/orders/${params.id}`, { cache: 'no-store' })
+  const { id } = await params
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/orders/${id}`, { cache: 'no-store' })
   if (res.status === 404) notFound()
   const data = await res.json().catch(() => ({ ok: false }))
   const order: any | undefined = data?.order
