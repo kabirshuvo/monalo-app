@@ -19,4 +19,4 @@ import authConfig from '@/auth.config'
  *   const session = await auth()
  *   if (!session) redirect('/login')
  */
-export const auth = NextAuth(authConfig)
+export const { auth } = NextAuth(authConfig)
