@@ -149,7 +149,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
         password: hashedPassword,
         username: finalUsername,
         name: name || finalUsername,
-        role: userRole,
+        role: userRole as Role,
         isVerified: false,
       },
       select: {
