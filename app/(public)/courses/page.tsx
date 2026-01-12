@@ -31,14 +31,6 @@ const courses: Course[] = [
 ]
 
 export default function CoursesPage() {
-  const handleEnroll = (id: string) => {
-    console.log(`Enroll: ${id}`)
-  }
-
-  const handleContinue = (id: string) => {
-    console.log(`Continue: ${id}`)
-  }
-
   return (
     <PublicLayout>
       <main className="mx-auto max-w-6xl px-4 py-12">
@@ -63,8 +55,6 @@ export default function CoursesPage() {
               <CourseCard
                 key={course.id}
                 course={course}
-                onEnroll={handleEnroll}
-                onContinue={handleContinue}
               />
             ))}
           </div>

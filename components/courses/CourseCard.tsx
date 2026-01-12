@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
@@ -14,11 +15,9 @@ export type Course = {
 
 interface CourseCardProps {
   course: Course
-  onContinue?: (id: string) => void
-  onEnroll?: (id: string) => void
 }
 
-export default function CourseCard({ course, onContinue, onEnroll }: CourseCardProps) {
+export default function CourseCard({ course }: CourseCardProps) {
   const { id, title, summary, level, duration, progress = 0, enrolled } = course
   const isEnrolled = Boolean(enrolled)
   const clampedProgress = Math.min(Math.max(progress, 0), 100)
@@ -48,14 +47,14 @@ export default function CourseCard({ course, onContinue, onEnroll }: CourseCardP
               style={{ width: `${clampedProgress}%` }}
             />
           </div>
-          <Button size="sm" onClick={() => onContinue?.(id)}>
+          <Button size="sm" onClick={() => console.log(`Continue course ${id}`)}>
             Continue learning
           </Button>
         </div>
       ) : (
         <div className="flex items-center justify-between">
           <p className="text-sm text-gray-700">Not enrolled yet</p>
-          <Button size="sm" onClick={() => onEnroll?.(id)}>
+          <Button size="sm" onClick={() => console.log(`Enroll in course ${id}`)}>
             Start this course
           </Button>
         </div>
