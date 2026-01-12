@@ -17,7 +17,7 @@ function RegisterForm() {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'CUSTOMER'
+    role: 'BROWSER'
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -244,7 +244,7 @@ function RegisterForm() {
                 value={formData.role}
                 onChange={(e) => handleChange('role', e.target.value)}
                 options={[
-                  { value: 'BROWSER', label: 'Join' },
+                  { value: 'BROWSER', label: 'Join with you' },
                   { value: 'LEARNER', label: 'Learn and grow' },
                   { value: 'CUSTOMER', label: 'Shop for products' },
                   { value: 'SELLER', label: 'Sell my products' },
