@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui'
 import Button from '@/components/ui/Button'
 import LoadingState from '@/components/ui/LoadingState'
+import CourseProgress from '@/components/courses/CourseProgress'
 import api from '@/lib/api'
 
 interface Lesson {
@@ -26,6 +27,7 @@ export default function LessonViewer({ courseId, lessonId }: LessonViewerProps) 
   const router = useRouter()
   const [lesson, setLesson] = useState<Lesson | null>(null)
   const [allLessons, setAllLessons] = useState<Lesson[]>([])
+  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [trackingProgress, setTrackingProgress] = useState(false)
 
@@ -64,6 +66,9 @@ export default function LessonViewer({ courseId, lessonId }: LessonViewerProps) 
         completed: true,
         watchedMinutes: Math.floor((lesson.duration || 0) / 60)
       })
+      // Mark as completed locally
+      setCompletedLessons((prev) => new Set([...prev, lesson.id]))
+      
       // Move to next lesson if available
       if (nextLesson) {
         router.push(`/dashboard/learning/courses/${courseId}/lessons/${nextLesson.id}`)
@@ -102,6 +107,17 @@ export default function LessonViewer({ courseId, lessonId }: LessonViewerProps) 
 
   return (
     <div className="space-y-6">
+      {/* Course Progress Overview */}
+      <Card>
+        <CardContent>
+          <CourseProgress
+            completed={completedLessons.size}
+            total={allLessons.length}
+            variant="compact"
+          />
+        </CardContent>
+      </Card>
+
       {/* Lesson Header */}
       <Card>
         <CardHeader>
