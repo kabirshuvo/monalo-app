@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import Link from 'next/link'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import { useEnrollment } from '@/hooks/useEnrollment'
@@ -61,9 +62,11 @@ export default function CourseCard({ course }: CourseCardProps) {
               style={{ width: `${clampedProgress}%` }}
             />
           </div>
-          <Button size="sm" onClick={() => console.log(`Continue course ${id}`)}>
-            Continue learning
-          </Button>
+          <Link href={`/dashboard/learning/courses/${id}/lessons/l-001`}>
+            <Button size="sm" fullWidth>
+              Continue learning
+            </Button>
+          </Link>
         </div>
       ) : (
         <div className="flex items-center justify-between">
