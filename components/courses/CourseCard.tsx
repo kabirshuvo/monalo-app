@@ -2,6 +2,8 @@
 import React from 'react'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
+import { useEnrollment } from '@/hooks/useEnrollment'
+import { useToast as useUiToast } from '@/components/ui'
 
 export type Course = {
   id: string
@@ -19,8 +21,20 @@ interface CourseCardProps {
 
 export default function CourseCard({ course }: CourseCardProps) {
   const { id, title, summary, level, duration, progress = 0, enrolled } = course
-  const isEnrolled = Boolean(enrolled)
+  const { mounted, isEnrolled, enroll } = useEnrollment()
+  const { addToast } = useUiToast()
+
+  const actuallyEnrolled = (mounted && isEnrolled(id)) || Boolean(enrolled)
   const clampedProgress = Math.min(Math.max(progress, 0), 100)
+
+  const handleEnroll = () => {
+    const wasAdded = enroll(id)
+    if (wasAdded) {
+      addToast('success', 'You’re enrolled. Take your time and enjoy learning.')
+    } else {
+      addToast('info', 'You’re already enrolled. Pick up where you left off.')
+    }
+  }
 
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
@@ -35,7 +49,7 @@ export default function CourseCard({ course }: CourseCardProps) {
         </div>
       </div>
 
-      {isEnrolled ? (
+      {actuallyEnrolled ? (
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm text-gray-700">
             <span>In progress</span>
@@ -54,7 +68,7 @@ export default function CourseCard({ course }: CourseCardProps) {
       ) : (
         <div className="flex items-center justify-between">
           <p className="text-sm text-gray-700">Not enrolled yet</p>
-          <Button size="sm" onClick={() => console.log(`Enroll in course ${id}`)}>
+          <Button size="sm" onClick={handleEnroll}>
             Start this course
           </Button>
         </div>
