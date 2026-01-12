@@ -145,7 +145,7 @@ function RegisterForm() {
       } else {
         // Registration succeeded but auto-login failed
         router.push('/login?registered=true')
-      !isMounted || }
+      }
     } catch (err) {
       setError("Something went wrong on our end. Please try again.")
     } finally {

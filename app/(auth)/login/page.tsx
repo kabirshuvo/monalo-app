@@ -78,7 +78,7 @@ function LoginForm() {
         // Success - NextAuth will handle the redirect
         const callbackUrl = searchParams?.get('callbackUrl') || '/dashboard'
         router.push(callbackUrl)
-      !isMounted || }
+      }
     } catch (err) {
       setError("Something went wrong on our end. Please try again.")
     } finally {
