@@ -146,11 +146,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     saveCart({ items: [], total: 0 })
   }, [])
 
-  // Prevent hydration mismatch
-  if (!mounted) {
-    return <>{children}</>
-  }
-
   const value: CartContextType = {
     items: cart.items,
     total: cart.total,
