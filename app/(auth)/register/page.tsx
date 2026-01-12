@@ -7,7 +7,9 @@ import { Form, FormSection, FormActions, Input, Button, Alert, Select } from '@/
 
 function RegisterForm() {
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const sessionData = useSession()
+  const session = sessionData?.data
+  const status = sessionData?.status
   
   const [formData, setFormData] = useState({
     name: '',
@@ -20,13 +22,20 @@ function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Set mounted flag for hydration
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   // Redirect if already authenticated
   useEffect(() => {
+    if (!isMounted) return
     if (status === 'authenticated' && session) {
       router.push('/dashboard')
     }
-  }, [status, session, router])
+  }, [status, session, router, isMounted])
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -136,7 +145,7 @@ function RegisterForm() {
       } else {
         // Registration succeeded but auto-login failed
         router.push('/login?registered=true')
-      }
+      !isMounted || }
     } catch (err) {
       setError("Something went wrong on our end. Please try again.")
     } finally {

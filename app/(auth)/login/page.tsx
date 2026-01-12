@@ -8,21 +8,30 @@ import { Form, FormSection, FormActions, Input, Button, Alert } from '@/componen
 function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { data: session, status } = useSession()
+  const sessionData = useSession()
+  const session = sessionData?.data
+  const status = sessionData?.status
   
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Set mounted flag for hydration
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   // Redirect if already authenticated
   useEffect(() => {
+    if (!isMounted) return
     if (status === 'authenticated' && session) {
       const callbackUrl = searchParams?.get('callbackUrl') || '/dashboard'
       router.push(callbackUrl)
     }
-  }, [status, session, router, searchParams])
+  }, [status, session, router, searchParams, isMounted])
 
   const validateForm = () => {
     const errors: { email?: string; password?: string } = {}
@@ -69,7 +78,7 @@ function LoginForm() {
         // Success - NextAuth will handle the redirect
         const callbackUrl = searchParams?.get('callbackUrl') || '/dashboard'
         router.push(callbackUrl)
-      }
+      !isMounted || }
     } catch (err) {
       setError("Something went wrong on our end. Please try again.")
     } finally {
