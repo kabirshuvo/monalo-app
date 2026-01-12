@@ -42,7 +42,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
 
     // Validate role
     const validRoles = ['BROWSER', 'LEARNER', 'CUSTOMER', 'SELLER', 'WRITER', 'DONOR']
-    const userRole = role && validRoles.includes(role) ? (role as Role) : Role.BROWSER
+    const userRole = role && validRoles.includes(role) ? role : 'BROWSER'
 
     // Email validation
     if (!email) {
