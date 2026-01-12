@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth-server'
 import { redirect } from 'next/navigation'
 import DashboardLayout from '@/components/dashboard/Layout'
+import EmptyState from '@/components/ui/EmptyState'
 
 export const metadata = {
   title: 'Learner Dashboard - MonAlo',
@@ -34,40 +35,40 @@ export default async function DashboardLearner() {
       userName={session.user.name || 'Learner'}
       currentPath="/dashboard/learner"
     >
-      <div className="space-y-8">
-        {/* Quick Stats */}
+      <div className="space-y-12">
+        <div className="mb-10">
+          <h1 className="text-4xl font-light text-gray-900">Your learning</h1>
+          <p className="text-gray-600 mt-2 text-lg">Courses, progress, and achievements</p>
+        </div>
+
+        {/* Learning Progress */}
         <section>
-          <h2 className="text-2xl font-semibold mb-4">Your Progress</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <p className="text-sm text-gray-600 mb-2">My Courses</p>
-              <p className="text-3xl font-bold">0</p>
-              <p className="text-xs text-gray-400 mt-1">Enrolled courses</p>
+          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-6">Progress overview</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">Courses enrolled</p>
+              <p className="text-3xl font-bold text-gray-900">0</p>
             </div>
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <p className="text-sm text-gray-600 mb-2">In Progress</p>
-              <p className="text-3xl font-bold">0%</p>
-              <p className="text-xs text-gray-400 mt-1">Average completion</p>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">In progress</p>
+              <p className="text-3xl font-bold text-gray-900">0%</p>
             </div>
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <p className="text-sm text-gray-600 mb-2">Certificates</p>
-              <p className="text-3xl font-bold">0</p>
-              <p className="text-xs text-gray-400 mt-1">Earned</p>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">Certificates</p>
+              <p className="text-3xl font-bold text-gray-900">0</p>
             </div>
           </div>
         </section>
 
-        {/* Learning Path */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Learning Path</h2>
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <ul className="space-y-3 text-sm text-gray-600">
-              <li>📚 My Courses (Coming soon)</li>
-              <li>📖 Course Lessons (Coming soon)</li>
-              <li>✅ Quizzes & Assignments (Coming soon)</li>
-              <li>🏆 Achievements (Coming soon)</li>
-              <li>💬 Discussion Forums (Coming soon)</li>
-            </ul>
+        {/* Next Steps */}
+        <section>Your next steps</h2>
+          <EmptyState
+            variant="generic"
+            title="Start your learning adventure"
+            description="Explore courses when you're ready. There's no rush—pick what interests you most."
+            actionLabel="Browse courses"
+            onAction={() => {}}
+          /l>
           </div>
         </section>
       </div>

@@ -70,45 +70,35 @@ export default async function DashboardAdmin() {
       userName={session.user.name || 'Admin'}
       currentPath="/dashboard/admin"
     >
-      <div className="space-y-8">
-        {/* Quick Stats */}
+      <div className="space-y-12">
+        <div className="mb-10">
+          <h1 className="text-4xl font-light text-gray-900">Platform dashboard</h1>
+          <p className="text-gray-600 mt-2 text-lg">Overview and management tools</p>
+        </div>
+
+        {/* Key Metrics */}
         <section>
-          <h2 className="text-2xl font-semibold mb-4">Platform Overview</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <p className="text-sm text-gray-600 mb-2">Total Users</p>
-              <p className="text-3xl font-bold">—</p>
-              <p className="text-xs text-gray-400 mt-1">Coming soon</p>
+          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-6">At a glance</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">Total users</p>
+              <p className="text-3xl font-bold text-gray-900">—</p>
             </div>
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <p className="text-sm text-gray-600 mb-2">Total Revenue</p>
-              <p className="text-3xl font-bold">$0.00</p>
-              <p className="text-xs text-gray-400 mt-1">Coming soon</p>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">Total revenue</p>
+              <p className="text-3xl font-bold text-gray-900">$0.00</p>
             </div>
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <p className="text-sm text-gray-600 mb-2">Active Orders</p>
-              <p className="text-3xl font-bold">0</p>
-              <p className="text-xs text-gray-400 mt-1">Coming soon</p>
-            </div>
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <p className="text-sm text-gray-600 mb-2">Total Courses</p>
-              <p className="text-3xl font-bold">0</p>
-              <p className="text-xs text-gray-400 mt-1">Coming soon</p>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">Active orders</p>
+              <p className="text-3xl font-bold text-gray-900">0</p>
             </div>
           </div>
         </section>
 
         {/* Users List */}
         <section>
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-2xl font-semibold">People</h2>
-              <p className="text-sm text-gray-600">Who can access MonAlo and what they can do.</p>
-            </div>
-            <Badge variant="info" size="sm">Admin view</Badge>
-          </div>
-
-          <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">People on the platform</h2>
+          <div className="overflow-hidden rounded-lg border border-gray-100 shadow-xs bg-white">
             {users.length > 0 ? (
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -139,8 +129,8 @@ export default async function DashboardAdmin() {
             ) : (
               <EmptyState
                 variant="generic"
-                title="No people yet"
-                description="Invite teammates when you are ready. Roles help you keep access tidy."
+                title="Your team will grow here"
+                description="When you invite team members, they'll appear on this dashboard. No rush—add them when you're ready."
               />
             )}
           </div>
@@ -148,15 +138,25 @@ export default async function DashboardAdmin() {
 
         {/* Admin Tools */}
         <section>
-          <h2 className="text-2xl font-semibold mb-4">Admin Tools</h2>
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <ul className="space-y-3 text-sm text-gray-600">
-              <li>📊 Analytics (Coming soon)</li>
-              <li>👥 User Management (Coming soon)</li>
-              <li>📦 Product Management (Coming soon)</li>
-              <li>📚 Course Management (Coming soon)</li>
-              <li>📋 Order Management (Coming soon)</li>
-              <li>⚙️ System Settings (Coming soon)</li>
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">Platform management</h2>
+          <div className="bg-white rounded-lg p-8 border border-gray-100 shadow-xs">
+            <ul className="space-y-4 text-sm text-gray-600">
+              <li className="flex items-center justify-between">
+                <span>📊 Analytics</span>
+                <span className="text-xs text-gray-400">Coming soon</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>📦 Products</span>
+                <span className="text-xs text-gray-400">Coming soon</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>📚 Courses</span>
+                <span className="text-xs text-gray-400">Coming soon</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>⚙️ Settings</span>
+                <span className="text-xs text-gray-400">Coming soon</span>
+              </li>
             </ul>
           </div>
         </section>

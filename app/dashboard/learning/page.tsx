@@ -45,32 +45,31 @@ export default async function LearnerDashboardPage() {
       currentPath="/dashboard/learning"
     >
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Your Learning Journey</h1>
-          <p className="text-gray-600 mt-2">Continue where you left off</p>
+        <div className="mb-16">
+          <h1 className="text-4xl font-light text-gray-900">Welcome back, {session.user.name?.split(' ')[0]}</h1>
+          <p className="text-gray-600 mt-2 text-lg">Pick up where you left off</p>
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-sm text-gray-600 mb-1">In Progress</div>
-            <div className="text-3xl font-bold text-gray-900">{inProgressCount}</div>
-            <p className="text-xs text-gray-500 mt-2">courses</p>
-          </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-sm text-gray-600 mb-1">Completed</div>
-            <div className="text-3xl font-bold text-gray-900">{completedCount}</div>
-            <p className="text-xs text-gray-500 mt-2">courses</p>
-          </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-sm text-gray-600 mb-1">Total Hours</div>
-            <div className="text-3xl font-bold text-gray-900">{Math.round(totalHours)}h</div>
-            <p className="text-xs text-gray-500 mt-2">learning time</p>
-          </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="text-sm text-gray-600 mb-1">Your Level</div>
-            <div className="text-3xl font-bold text-gray-900">{level}</div>
-            <p className="text-xs text-gray-500 mt-2">current level</p>
+        {/* Progress at a Glance */}
+        <div className="mb-16">
+          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-6">Your progress</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">In Progress</p>
+              <p className="text-3xl font-bold text-gray-900">{inProgressCount}</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">Completed</p>
+              <p className="text-3xl font-bold text-gray-900">{completedCount}</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">Hours spent</p>
+              <p className="text-3xl font-bold text-gray-900">{Math.round(totalHours)}h</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">Your level</p>
+              <p className="text-3xl font-bold text-gray-900">{level}</p>
+            </div>
           </div>
         </div>
 
@@ -93,7 +92,7 @@ export default async function LearnerDashboardPage() {
         ) : (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">Your Courses</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Continue learning</h2>
               <Link href="/courses" className="text-sm text-blue-600 hover:text-blue-800">
                 Browse more →
               </Link>

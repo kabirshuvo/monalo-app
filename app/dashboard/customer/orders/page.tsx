@@ -31,17 +31,24 @@ export default async function CustomerOrdersPage() {
       userName={session.user.name || 'Customer'}
       currentPath="/dashboard/customer/orders"
     >
-      <div className="space-y-6">
-        <h1 className="text-2xl font-semibold">Your Orders</h1>
+      <div className="space-y-10">
+        <div>
+          <h1 className="text-3xl font-light text-gray-900">Your orders</h1>
+          <p className="text-gray-600 mt-2">Review and manage your purchases</p>
+        </div>
 
         {orders.length === 0 ? (
-          <Card>
-            <EmptyState variant="orders" actionLabel="Start shopping" />
-          </Card>
+          <EmptyState
+            variant="orders"
+            title="No orders yet"
+            description="When you make a purchase, it will appear here. Take your time exploring."
+            actionLabel="Start shopping"
+            onAction={() => {}}
+          />
         ) : (
           <Card>
             <CardHeader>
-              <CardTitle>Order History</CardTitle>
+              <CardTitle>All orders</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto -mx-4 sm:mx-0">

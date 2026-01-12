@@ -15,8 +15,8 @@ export function Card({
 }: CardProps) {
   return (
     <div 
-      className={`bg-white rounded-lg border border-gray-200 shadow-sm 
-        ${hover ? 'hover:shadow-md transition-shadow duration-200' : ''} 
+      className={`bg-white rounded-lg border border-gray-100 shadow-xs 
+        ${hover ? 'hover:shadow-sm transition-shadow duration-200' : ''} 
         ${!noPadding ? 'p-6' : ''} 
         ${className}`}
       {...props}

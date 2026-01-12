@@ -7,37 +7,32 @@ export default function HomePage() {
     <PublicLayout currentPath="/home">
       <main className="bg-amber-50">
         {/* Hero Section */}
-        <section className="px-4 py-24 sm:py-32 lg:py-40">
-          <div className="mx-auto max-w-3xl text-center space-y-8">
+        <section className="px-4 py-32 sm:py-40 lg:py-48">
+          <div className="mx-auto max-w-2xl text-center space-y-12">
             <div className="space-y-6">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Light of the mind
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 leading-tight tracking-tight">
+                Learn at your own pace
               </h1>
-              <p className="text-lg sm:text-xl text-gray-700 leading-relaxed">
-                Learning that respects your pace. Courses and resources designed for focused growth, without pressure or distraction.
+              <p className="text-lg sm:text-xl text-gray-600 leading-relaxed font-normal">
+                Thoughtful courses and resources designed for focused learning. No pressure, no distractions—just genuine growth.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <div className="pt-8">
               <Link href="/courses">
                 <Button 
                   variant="primary" 
                   size="lg"
-                  className="bg-purple-500 hover:bg-purple-600 text-white"
+                  className="bg-purple-500 hover:bg-purple-600 text-white px-8"
                 >
                   Explore courses
-                </Button>
-              </Link>
-              <Link href="/shop">
-                <Button variant="secondary" size="lg">
-                  Browse resources
                 </Button>
               </Link>
             </div>
           </div>
         </section>
 
-        {/* Features Section - Light Lavender */}
-        <section className="px-4 py-24 sm:py-32 lg:py-40 bg-purple-50">
+        {/* Features Section */}
+        <section className="px-4 py-24 sm:py-32 lg:py-40 bg-white">
           <div className="mx-auto max-w-4xl space-y-16">
             <div className="text-center space-y-4">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
@@ -48,52 +43,25 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900">Your pace</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-gray-900">Your pace</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  No deadlines, no rushing. You decide when and how fast to learn. Progress is progress, no matter the speed.
+                  No deadlines, no rushing. You decide when and how fast to learn.
                 </p>
               </div>
 
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900">Clear focus</h3>
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-gray-900">Clear focus</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  No gamification, badges, or artificial urgency. Just clear lessons and thoughtful content.
+                  No gamification, badges, or artificial urgency. Just thoughtful content.
                 </p>
               </div>
 
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900">Curated paths</h3>
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-gray-900">Real growth</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  Thoughtfully designed courses from people who know their craft. Learn from the best.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m0 0l-2-1m2 1v2.5M14 4l-2 1m0 0L10 4m2 1v2.5" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900">Track progress</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  See how far you've come. Gentle progress indicators show your journey, not your score.
+                  Curated courses from people who know their craft. Learn from the best.
                 </p>
               </div>
             </div>
