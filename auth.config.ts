@@ -1,6 +1,9 @@
 import type { NextAuthOptions } from 'next-auth'
 import type { Session } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import GoogleProvider from 'next-auth/providers/google'
+import FacebookProvider from 'next-auth/providers/facebook'
+import TwitterProvider from 'next-auth/providers/twitter'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@/lib/db'
 import { verifyPassword } from '@/lib/auth-helpers'
@@ -20,6 +23,30 @@ const authConfig: NextAuthOptions = {
     updateAge: 24 * 60 * 60,
   },
   providers: [
+    // Google OAuth
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      authorization: {
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code'
+        }
+      }
+    }),
+    // Facebook OAuth
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID || '',
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '',
+    }),
+    // X (Twitter) OAuth
+    TwitterProvider({
+      clientId: process.env.TWITTER_CLIENT_ID || '',
+      clientSecret: process.env.TWITTER_CLIENT_SECRET || '',
+      version: '2.0', // Use Twitter OAuth 2.0
+    }),
+    // Email/Password Credentials
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
