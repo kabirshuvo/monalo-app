@@ -26,10 +26,6 @@ const products: Product[] = [
 ]
 
 export default function ShopPage() {
-  const handleAdd = (id: string) => {
-    console.log(`Add to cart: ${id}`)
-  }
-
   return (
     <PublicLayout>
       <main className="mx-auto max-w-6xl px-4 py-12">
@@ -50,7 +46,7 @@ export default function ShopPage() {
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} onAdd={handleAdd} />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}

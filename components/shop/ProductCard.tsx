@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
@@ -13,10 +14,9 @@ export type Product = {
 
 interface ProductCardProps {
   product: Product
-  onAdd?: (id: string) => void
 }
 
-export default function ProductCard({ product, onAdd }: ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
   const { id, name, description, price, badge, image } = product
 
   return (
@@ -41,7 +41,7 @@ export default function ProductCard({ product, onAdd }: ProductCardProps) {
 
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold text-gray-900">{price}</span>
-          <Button size="sm" onClick={() => onAdd?.(id)}>
+          <Button size="sm" onClick={() => console.log(`Add to cart: ${id}`)}>
             Add to cart
           </Button>
         </div>
