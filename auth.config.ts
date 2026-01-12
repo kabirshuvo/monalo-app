@@ -6,6 +6,7 @@ import { prisma } from '@/lib/db'
 import { verifyPassword } from '@/lib/auth-helpers'
 import { getAuthCallbacks } from '@/lib/auth/callbacks'
 import { Role } from '@prisma/client'
+import NextAuth from 'next-auth'
 
 const authConfig: NextAuthOptions = {
   // Use Prisma adapter for database-backed sessions
@@ -66,4 +67,16 @@ const authConfig: NextAuthOptions = {
   callbacks: getAuthCallbacks(),
 }
 
+/**
+ * NextAuth handler function for server-side session fetching
+ * 
+ * Usage in server components:
+ *   import { auth } from '@/auth.config'
+ *   const session = await auth()
+ */
+export const auth = NextAuth(authConfig)
+
+/**
+ * Export configuration as default for API route setup
+ */
 export default authConfig

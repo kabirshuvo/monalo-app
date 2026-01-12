@@ -1,46 +1,66 @@
-import { requireServerRole, getServerUserRole } from '@/lib/auth/server-role'
+import { auth } from '@/lib/auth-server'
+import { redirect } from 'next/navigation'
+import DashboardLayout from '@/components/dashboard/Layout'
+
+export const metadata = {
+  title: 'Learner Dashboard - MonAlo',
+  description: 'Track your courses and learning progress',
+}
 
 /**
  * Learner Dashboard Page
  * 
- * Protected page that only learners can access.
- * Automatically redirects unauthorized users to /home
- * Automatically redirects unauthenticated users to /login
+ * Protected page for learners to view courses, progress, and achievements.
+ * Server-side auth check redirects unauthenticated users to /login
+ * and unauthorized users back to /dashboard
  */
 export default async function DashboardLearner() {
-  // Protect this page - only LEARNER role can access
-  // This will redirect if user is not authenticated or lacks LEARNER role
-  const session = await requireServerRole('LEARNER')
-  const userRole = await getServerUserRole()
+  const session = await auth()
+
+  // Redirect unauthenticated users to login
+  if (!session || !session.user) {
+    redirect('/login')
+  }
+
+  // Only LEARNER and ADMIN roles can access
+  if (session.user.role !== 'LEARNER' && session.user.role !== 'ADMIN') {
+    redirect('/dashboard')
+  }
 
   return (
-    <main className="p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-2">Learner Dashboard</h1>
-        <p className="text-gray-600 mb-6">Welcome, {(session.user as any)?.email}</p>
+    <DashboardLayout
+      userRole={session.user.role as 'LEARNER' | 'ADMIN'}
+      userName={session.user.name || 'Learner'}
+      currentPath="/dashboard/learner"
+    >
+      <div className="space-y-8">
+        {/* Quick Stats */}
+        <section>
+          <h2 className="text-2xl font-semibold mb-4">Your Progress</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <p className="text-sm text-gray-600 mb-2">My Courses</p>
+              <p className="text-3xl font-bold">0</p>
+              <p className="text-xs text-gray-400 mt-1">Enrolled courses</p>
+            </div>
+            <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <p className="text-sm text-gray-600 mb-2">In Progress</p>
+              <p className="text-3xl font-bold">0%</p>
+              <p className="text-xs text-gray-400 mt-1">Average completion</p>
+            </div>
+            <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <p className="text-sm text-gray-600 mb-2">Certificates</p>
+              <p className="text-3xl font-bold">0</p>
+              <p className="text-xs text-gray-400 mt-1">Earned</p>
+            </div>
+          </div>
+        </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          <DashboardCard
-            title="My Courses"
-            value="0"
-            description="Enrolled courses"
-          />
-          <DashboardCard
-            title="In Progress"
-            value="0%"
-            description="Average completion"
-          />
-          <DashboardCard
-            title="Certificates"
-            value="0"
-            description="Earned"
-          />
-        </div>
-
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Learning Path</h2>
-          <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-            <ul className="space-y-3 text-sm">
+        {/* Learning Path */}
+        <section>
+          <h2 className="text-2xl font-semibold mb-4">Learning Path</h2>
+          <div className="bg-white rounded-lg p-6 border border-gray-200">
+            <ul className="space-y-3 text-sm text-gray-600">
               <li>📚 My Courses (Coming soon)</li>
               <li>📖 Course Lessons (Coming soon)</li>
               <li>✅ Quizzes & Assignments (Coming soon)</li>
@@ -48,35 +68,7 @@ export default async function DashboardLearner() {
               <li>💬 Discussion Forums (Coming soon)</li>
             </ul>
           </div>
-        </div>
-
-        <div className="mt-8 p-4 bg-purple-50 border border-purple-200 rounded text-sm text-purple-900">
-          <strong>Session Info:</strong>
-          <ul className="mt-2 space-y-1 font-mono text-xs">
-            <li>Role: {userRole}</li>
-            <li>Email: {(session.user as any)?.email}</li>
-            <li>Session expires: {new Date(session.expires).toLocaleDateString()}</li>
-          </ul>
-        </div>
+        </section>
       </div>
-    </main>
+    </DashboardLayout>
   )
-}
-
-function DashboardCard({
-  title,
-  value,
-  description,
-}: {
-  title: string
-  value: string
-  description: string
-}) {
-  return (
-    <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-      <p className="text-sm text-gray-600 mb-2">{title}</p>
-      <p className="text-3xl font-bold mb-1">{value}</p>
-      <p className="text-xs text-gray-400">{description}</p>
-    </div>
-  )
-}
