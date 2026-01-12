@@ -72,3 +72,4 @@ export default async function DashboardWriter() {
       </div>
     </DashboardLayout>
   )
+}

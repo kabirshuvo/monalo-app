@@ -34,8 +34,6 @@ export default async function DashboardCustomer() {
       currentPath="/dashboard/customer"
     >
       <div className="space-y-8">
-
-        <div className="space-y-8">
         {/* Quick Stats */}
         <section>
           <h2 className="text-2xl font-semibold mb-4">Quick Stats</h2>
@@ -72,3 +70,6 @@ export default async function DashboardCustomer() {
           </div>
         </section>
       </div>
+    </DashboardLayout>
+  )
+}
