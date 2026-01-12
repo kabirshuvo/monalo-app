@@ -61,15 +61,15 @@ export default async function DashboardLearner() {
         </section>
 
         {/* Next Steps */}
-        <section>Your next steps</h2>
+        <section>
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">Your next steps</h2>
           <EmptyState
             variant="generic"
             title="Start your learning adventure"
             description="Explore courses when you're ready. There's no rush—pick what interests you most."
             actionLabel="Browse courses"
             onAction={() => {}}
-          /l>
-          </div>
+          />
         </section>
       </div>
     </DashboardLayout>

@@ -61,15 +61,15 @@ export default async function DashboardWriter() {
         </section>
 
         {/* What You Can Do */}
-        <section>Share your knowledge</h2>
+        <section>
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">Share your knowledge</h2>
           <EmptyState
             variant="courses-instructor"
             title="Ready to create?"
             description="Your first course is an opportunity to share what you know. Take your time building something meaningful."
             actionLabel="Create your first course"
             onAction={() => {}}
-          /l>
-          </div>
+          />
         </section>
       </div>
     </DashboardLayout>

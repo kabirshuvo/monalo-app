@@ -43,41 +43,43 @@ export default async function DashboardCustomer() {
         </div>
 
         {/* Orders Section */}
-        <seEmptyState
+        <section>
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">Orders</h2>
+          <EmptyState
             variant="orders"
             title="Ready to explore?"
             description="When you purchase something, your orders will show up here. No pressure—take your time."
             actionLabel="Browse our shop"
             onAction={() => {}}
-          //div>
-            </div>
-          </div>
+          />
         </section>
 
         {/* Account Overview */}
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-6">Account overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div classNamebg-white rounded-lg p-8 border border-gray-100 shadow-xs space-y-6">
-            <div className="space-y-4">
-              <p className="text-sm text-gray-700 font-medium">Quick stats</p>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total orders</span>
-                  <span className="text-lg font-semibold text-gray-900">0</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Amount spent</span>
-                  <span className="text-lg font-semibold text-gray-900">$0.00</span>
+            <div className="bg-white rounded-lg p-8 border border-gray-100 shadow-xs space-y-6">
+              <div className="space-y-4">
+                <p className="text-sm text-gray-700 font-medium">Quick stats</p>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Total orders</span>
+                    <span className="text-lg font-semibold text-gray-900">0</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Amount spent</span>
+                    <span className="text-lg font-semibold text-gray-900">$0.00</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="border-t border-gray-50 pt-4">
-              <p className="text-sm text-gray-700 font-medium mb-3">More feature
-                <li>💳 Payment methods (Coming soon)</li>
-                <li>📦 Shipping addresses (Coming soon)</li>
-                <li>⚙️ Account settings (Coming soon)</li>
-              </ul>
+              <div className="border-t border-gray-50 pt-4">
+                <p className="text-sm text-gray-700 font-medium mb-3">More features</p>
+                <ul className="space-y-2">
+                  <li className="text-sm text-gray-600">💳 Payment methods (Coming soon)</li>
+                  <li className="text-sm text-gray-600">📦 Shipping addresses (Coming soon)</li>
+                  <li className="text-sm text-gray-600">⚙️ Account settings (Coming soon)</li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
