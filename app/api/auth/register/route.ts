@@ -8,6 +8,8 @@ interface RegisterRequest {
   password?: string
   confirmPassword?: string
   username?: string
+  name?: string
+  role?: string
 }
 
 interface RegisterResponse {
@@ -34,9 +36,13 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
       )
     }
 
-    const { email, password, confirmPassword, username } = body
+    const { email, password, confirmPassword, username, name, role } = body
 
     // ============= Input Validation =============
+
+    // Validate role
+    const validRoles = ['BROWSER', 'LEARNER', 'CUSTOMER', 'SELLER', 'WRITER', 'DONOR']
+    const userRole = role && validRoles.includes(role) ? (role as Role) : Role.BROWSER
 
     // Email validation
     if (!email) {
@@ -142,7 +148,8 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
         email: email.toLowerCase(),
         password: hashedPassword,
         username: finalUsername,
-        role: Role.CUSTOMER, // Default role
+        name: name || finalUsername,
+        role: userRole,
         isVerified: false,
       },
       select: {
