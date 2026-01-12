@@ -1,5 +1,7 @@
 # Frontend Copy — Monalo App
 
+All frontend UI text must follow monaloFrontendCopy.md.
+
 This file contains the prioritized TODO list, integration notes, and developer guidance for the frontend implementation of the Monalo application. It was generated from a review of the backend and project brief on 2026-01-12.
 
 ## Quick overview
@@ -125,6 +127,22 @@ Monalo is a full-featured Next.js app (e-commerce, LMS, CMS) with RBAC and produ
 1. I added this file to the repo (Frontend_Copy.md). Verify its placement and content.
 2. I can now scan the backend routes and generate a formal API contract that maps endpoints to the above pages.
 3. I can open a PR with additional scaffolding (env example, component templates) if you'd like.
+
+## Brand & Copy Reference (Required)
+
+All frontend UI text MUST follow the tone and wording rules defined in:
+
+→ `monaloFrontendCopy.md`
+
+This includes:
+- Button labels
+- Error messages
+- Loading states
+- Empty states
+- Dashboard headings
+- Toast notifications
+
+Avoid technical, corporate, or system-style wording in user-facing UI.
 
 ---
 
