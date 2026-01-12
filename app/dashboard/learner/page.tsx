@@ -23,13 +23,14 @@ export default async function DashboardLearner() {
   }
 
   // Only LEARNER and ADMIN roles can access
-  if (session.user.role !== 'LEARNER' && session.user.role !== 'ADMIN') {
+  const role = (session.user as any)?.role
+  if (role !== 'LEARNER' && role !== 'ADMIN') {
     redirect('/dashboard')
   }
 
   return (
     <DashboardLayout
-      userRole={session.user.role as 'LEARNER' | 'ADMIN'}
+      userRole={(role as 'LEARNER' | 'ADMIN') || 'LEARNER'}
       userName={session.user.name || 'Learner'}
       currentPath="/dashboard/learner"
     >

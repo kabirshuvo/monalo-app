@@ -23,7 +23,8 @@ export default async function DashboardAdmin() {
   }
 
   // Only ADMIN role can access
-  if (session.user.role !== 'ADMIN') {
+  const role = (session.user as any)?.role
+  if (role !== 'ADMIN') {
     redirect('/dashboard')
   }
 

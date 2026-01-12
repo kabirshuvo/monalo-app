@@ -23,13 +23,14 @@ export default async function DashboardWriter() {
   }
 
   // Only WRITER and ADMIN roles can access
-  if (session.user.role !== 'WRITER' && session.user.role !== 'ADMIN') {
+  const role = (session.user as any)?.role
+  if (role !== 'WRITER' && role !== 'ADMIN') {
     redirect('/dashboard')
   }
 
   return (
     <DashboardLayout
-      userRole={session.user.role as 'WRITER' | 'ADMIN'}
+      userRole={(role as 'WRITER' | 'ADMIN') || 'WRITER'}
       userName={session.user.name || 'Writer'}
       currentPath="/dashboard/writer"
     >

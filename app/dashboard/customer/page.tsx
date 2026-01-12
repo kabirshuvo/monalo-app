@@ -23,13 +23,14 @@ export default async function DashboardCustomer() {
   }
 
   // Only CUSTOMER and ADMIN roles can access
-  if (session.user.role !== 'CUSTOMER' && session.user.role !== 'ADMIN') {
+  const role = (session.user as any)?.role
+  if (role !== 'CUSTOMER' && role !== 'ADMIN') {
     redirect('/dashboard')
   }
 
   return (
     <DashboardLayout
-      userRole={session.user.role as 'CUSTOMER' | 'ADMIN'}
+      userRole={(role as 'CUSTOMER' | 'ADMIN') || 'CUSTOMER'}
       userName={session.user.name || 'Customer'}
       currentPath="/dashboard/customer"
     >

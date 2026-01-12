@@ -16,7 +16,7 @@ export default async function DashboardPage() {
   }
 
   // Get user role and redirect to role-specific dashboard
-  const role = session.user.role || 'CUSTOMER'
+  const role = (session.user as any)?.role || 'CUSTOMER'
 
   const roleRoutes: Record<string, string> = {
     ADMIN: '/dashboard/admin',
