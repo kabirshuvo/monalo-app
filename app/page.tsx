@@ -17,54 +17,33 @@ export default function LaunchPage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="max-w-2xl w-full space-y-16">
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+        <div className="max-w-3xl w-full space-y-12 lg:space-y-16">
           
-          {/* Purpose Statement */}
-          <div className="space-y-6">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 leading-tight">
-              Learning that feels right.
+          {/* Hero Headline & Subtext */}
+          <div className="space-y-8">
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 leading-tight tracking-tight">
+              A calm place to learn, create, and grow.
             </h2>
-            <p className="text-lg sm:text-xl text-gray-700 leading-relaxed font-normal max-w-xl">
-              MonAlo is a space for thoughtful learning. No deadlines, no gamification, no artificial pressure. Just you, genuine courses, and the time you need to grow.
+            <p className="text-xl sm:text-2xl text-gray-600 leading-relaxed font-normal max-w-2xl">
+              MonAlo is a quiet digital space for learning, craft, and thoughtful work — built to feel human, not hurried.
             </p>
           </div>
 
-          {/* What You Can Do */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">What you can do</h3>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              Browse courses designed by people who know their craft. Learn from instructors who care about clarity over complexity. Enroll at your own pace, progress without judgment, and discover what genuinely interests you.
-            </p>
-          </div>
-
-          {/* How It Feels */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">How it feels</h3>
-            <p className="text-lg text-gray-700 italic">
-              Calm, focused, and entirely yours.
-            </p>
-          </div>
-
-          {/* CTA */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-8">
-            <Link href="/courses" className="flex-1">
+          {/* Primary CTA + Secondary Link */}
+          <div className="flex flex-col sm:flex-row items-start gap-6 pt-8">
+            <Link href="/courses">
               <Button 
                 variant="primary" 
                 size="lg"
-                className="w-full bg-purple-500 hover:bg-purple-600 text-white"
+                className="bg-purple-500 hover:bg-purple-600 text-white px-8"
               >
-                Explore courses
+                Explore MonAlo
               </Button>
             </Link>
-            <Link href="/home" className="flex-1">
-              <Button 
-                variant="ghost" 
-                size="lg"
-                className="w-full"
-              >
-                Learn more
-              </Button>
+            <Link href="/home" className="flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+              <span className="text-base font-normal">Learn how it works</span>
+              <span className="ml-2">→</span>
             </Link>
           </div>
         </div>
