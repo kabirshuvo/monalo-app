@@ -13,7 +13,7 @@ export default function ForbiddenPage() {
           <h1 className="text-6xl font-bold text-gray-900 mb-4">403</h1>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Forbidden</h2>
           <p className="text-gray-600 mb-6">
-            You don't have permission to access this resource. Your role does not grant you access to this area.
+            You don not have permission to access this resource. Your role does not grant you access to this area.
           </p>
         </div>
 
