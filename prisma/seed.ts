@@ -240,9 +240,9 @@ async function main() {
 	// ============= Summary =============
 	console.log('\n✅ Seed completed successfully!')
 	console.log('\n📊 Summary:')
-	console.log(`  - Users: 3 (1 Admin, 1 Customer, 1 Learner)`)\
-	console.log(`  - Courses: 2 (1 Free, 1 Paid)`)\
-	console.log(`  - Products: 3`)\
+	console.log('  - Users: 3 (1 Admin, 1 Customer, 1 Learner)')
+	console.log('  - Courses: 2 (1 Free, 1 Paid)')
+	console.log('  - Products: 3')
 	console.log(`  - Points Rules: ${pointsRules.length}`)
 	console.log('\n🔐 Test Credentials:')
 	console.log('  Admin: admin@example.com / admin123')
