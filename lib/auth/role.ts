@@ -256,6 +256,21 @@ export const rolePermissions: Record<Role, string[]> = {
     'view:blog',
     'view:courses',
   ],
+  SELLER: [
+    'manage:products',
+    'view:orders',
+    'view:analytics',
+  ],
+  DONOR: [
+    'view:products',
+    'donate:projects',
+    'view:blog',
+  ],
+  BROWSER: [
+    'view:products',
+    'view:blog',
+    'view:courses',
+  ],
 }
 
 /**
