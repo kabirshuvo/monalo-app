@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth'
 import authConfig from '@/auth.config'
-import { Role } from '@prisma/client'
+import { Role as PrismaRole } from '@prisma/client'
 import { logAccessDenied, logAuthFailure } from '@/lib/auth/audit-logs'
 
 /**
@@ -40,7 +40,7 @@ export class AuthorizationError extends Error {
  * const userId = (session.user as any).id
  */
 export async function requireRole(
-  allowedRoles: Role | Role[]
+  allowedRoles: PrismaRole | PrismaRole[]
 ) {
   // Get the session
   const session = await getServerSession(authConfig)
@@ -101,7 +101,7 @@ export async function requireRole(
  *   return NextResponse.json({ error: 'Admin access required' }, { status: 403 })
  * }
  */
-export async function hasRole(allowedRoles: Role | Role[]): Promise<boolean> {
+export async function hasRole(allowedRoles: PrismaRole | PrismaRole[]): Promise<boolean> {
   try {
     await requireRole(allowedRoles)
     return true
@@ -121,7 +121,7 @@ export async function hasRole(allowedRoles: Role | Role[]): Promise<boolean> {
  *   // Show admin features
  * }
  */
-export async function getCurrentRole(): Promise<Role | null> {
+export async function getCurrentRole(): Promise<PrismaRole | null> {
   try {
     const session = await getServerSession(authConfig)
     return (session?.user as any)?.role || null
@@ -185,7 +185,7 @@ export async function getCurrentSession() {
  * })
  */
 export function withRole(
-  allowedRoles: Role | Role[],
+  allowedRoles: PrismaRole | PrismaRole[],
   handler: (request: Request) => Promise<Response>
 ): (request: Request) => Promise<Response> {
   return async (request: Request) => {
@@ -227,7 +227,7 @@ export function withRole(
  * Role permission matrix for fine-grained access control
  * Use this to define what each role can do
  */
-export const rolePermissions: Record<Role, string[]> = {
+export const rolePermissions: Record<PrismaRole, string[]> = {
   ADMIN: [
     'manage:users',
     'manage:products',
@@ -285,7 +285,7 @@ export const rolePermissions: Record<Role, string[]> = {
  *   // User can manage users
  * }
  */
-export function hasPermission(role: Role, permission: string): boolean {
+export function hasPermission(role: PrismaRole, permission: string): boolean {
   return rolePermissions[role]?.includes(permission) ?? false
 }
 
@@ -297,7 +297,7 @@ export function hasPermission(role: Role, permission: string): boolean {
  * @param permission - Permission to check
  * @throws AuthorizationError if permission denied
  */
-export function requirePermission(role: Role, permission: string): void {
+export function requirePermission(role: PrismaRole, permission: string): void {
   if (!hasPermission(role, permission)) {
     throw new AuthorizationError(
       403,
