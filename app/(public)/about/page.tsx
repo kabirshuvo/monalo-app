@@ -17,7 +17,7 @@ export default function AboutPage() {
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">Our Mission</h2>
             <p className="text-gray-700 leading-relaxed max-w-3xl">
-              MonAlo exists to illuminate the path to knowledge. We create learning experiences that are calm, focused, and human-centered. No gamification, no artificial urgency—just genuine growth, one lesson at a time.
+              MonAlo exists to illuminate the path to knowledge, and we create learning experiences that are calm, focused, and human-centered. No gamification, no artificial urgency—just genuine growth, one lesson at a time.
             </p>
           </section>
 
