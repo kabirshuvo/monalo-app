@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
     "seed": "ts-node prisma/seed.ts",
-    "make-admin": "ts-node scripts/make-admin.ts"
+    "make-admin": "ts-node scripts/make-admin.ts",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -39,5 +40,8 @@
     "tailwindcss": "^4.1.18",
     "ts-node": "^10.9.2",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
