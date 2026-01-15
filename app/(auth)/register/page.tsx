@@ -109,6 +109,7 @@ function RegisterForm() {
           username: formData.username,
           email: formData.email,
           password: formData.password,
+          confirmPassword: formData.confirmPassword,
           role: formData.role
         })
       })
