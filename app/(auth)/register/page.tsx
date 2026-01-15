@@ -99,7 +99,7 @@ function RegisterForm() {
     }
 
     setIsLoading(true)
-
+//confirmPassword: formData.confirmPassword, added
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
