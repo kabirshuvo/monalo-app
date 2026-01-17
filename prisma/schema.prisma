@@ -26,6 +26,7 @@ model User {
   userLessonProgress       UserLessonProgress[]  @relation("UserLessonProgress")
   activityLogs             ActivityLog[]         @relation("UserActivityLogs")
   blogs                    Blog[]                @relation("UserBlogs")
+  passwordResetTokens      PasswordResetToken[]  @relation("UserPasswordResetTokens")
   @@map("users")
   @@index([email])
   @@index([phone])
@@ -351,4 +352,31 @@ model VerificationToken {
   @@unique([identifier, token])
   @@index([identifier])
   @@map("verification_tokens")
+}
+
+model PasswordResetToken {
+  id         String   @id @default(cuid()) @map("id")
+  userId     String   @map("user_id")
+  tokenHash  String   @unique @db.VarChar(255) @map("token_hash")
+  method     String?  @db.VarChar(16) @map("method")
+  expiresAt  DateTime @map("expires_at")
+  used       Boolean  @default(false) @map("used")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  usedAt     DateTime? @map("used_at")
+
+  user User @relation("UserPasswordResetTokens", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([method, createdAt])
+  @@map("password_reset_tokens")
+}
+
+model ResetRequest {
+  id        String   @id @default(cuid()) @map("id")
+  ip        String   @db.VarChar(45) @map("ip")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([ip])
+  @@map("password_reset_requests")
 }
