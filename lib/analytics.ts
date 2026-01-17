@@ -92,7 +92,6 @@ function sendToEndpoint(body: string, endpoint: string) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body,
-        // @ts-expect-error: keepalive exists on modern fetch implementations
         keepalive: true,
       }).catch(() => {
         /* swallow errors to avoid UI impact */
