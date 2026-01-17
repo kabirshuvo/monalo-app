@@ -3,7 +3,7 @@ import React, { useState, useEffect, Suspense } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Form, FormSection, FormActions, Input, Button, Alert } from '@/components/ui'
+import { Form, FormSection, FormActions, Input, Button } from '@/components/ui'
 import { logEvent } from '@/lib/analytics'
 
 function RegisterForm() {
@@ -19,7 +19,9 @@ function RegisterForm() {
     password: ''
   })
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [formMessage, setFormMessage] = useState('')
+  const [conflictIdentifier, setConflictIdentifier] = useState<string | null>(null)
+  const [conflictIdentifierType, setConflictIdentifierType] = useState<'email' | 'phone' | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [isMounted, setIsMounted] = useState(false)
 
@@ -92,7 +94,7 @@ function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
+    setFormMessage('')
     
     if (!validateForm()) {
       return
@@ -118,13 +120,19 @@ function RegisterForm() {
         if (response.status === 409) {
           if (data.message?.includes('email')) {
             setFieldErrors(prev => ({ ...prev, email: 'This email is already used. Try signing in instead.' }))
+            setFormMessage('An account already exists for that email. Want to sign in instead?')
+            setConflictIdentifier(formData.email || null)
+            setConflictIdentifierType('email')
           } else if (data.message?.includes('phone')) {
             setFieldErrors(prev => ({ ...prev, phone: 'This phone number is already used. Try signing in instead.' }))
+            setFormMessage('An account already exists for that phone number. Want to sign in instead?')
+            setConflictIdentifier(formData.phone || null)
+            setConflictIdentifierType('phone')
           } else {
-            setError("We couldn’t create your account right now. Please try again.")
+            setFormMessage('We couldn\'t create your account right now.')
           }
         } else {
-          setError("We couldn’t create your account right now. Please try again.")
+          setFormMessage('We couldn\'t create your account right now.')
         }
         return
       }
@@ -141,7 +149,7 @@ function RegisterForm() {
       const query = identifier ? `&identifier=${encodeURIComponent(identifier)}&newUser=1` : '&newUser=1'
       router.push(`/login?registered=true${query}`)
     } catch (err) {
-      setError("Something went wrong on our end. Please try again.")
+      setFormMessage("Something went wrong on our end.")
     } finally {
       setIsLoading(false)
     }
@@ -181,17 +189,7 @@ function RegisterForm() {
 
         {/* Card */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-          {/* Error Alert */}
-          {error && (
-            <Alert 
-              variant="danger" 
-              dismissible 
-              onDismiss={() => setError('')}
-              className="mb-6"
-            >
-              {error}
-            </Alert>
-          )}
+          {/* form messages shown below submit button */}
 
           {/* Form */}
           <Form onSubmit={handleSubmit}>
@@ -258,6 +256,26 @@ function RegisterForm() {
                 {isLoading ? 'Creating your account...' : 'Create your account'}
               </Button>
             </FormActions>
+            {/* Form-level message near submit */}
+            {formMessage && (
+              <div className="mt-4 text-center text-sm text-red-600">
+                <span>{formMessage}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (conflictIdentifier) {
+                      const q = `identifier=${encodeURIComponent(conflictIdentifier)}${conflictIdentifierType ? `&identifierType=${conflictIdentifierType}` : ''}`
+                      router.push(`/login?${q}`)
+                    } else {
+                      router.push('/login')
+                    }
+                  }}
+                  className="ml-2 text-blue-600 hover:text-blue-700 underline"
+                >
+                  Sign in instead
+                </button>
+              </div>
+            )}
           </Form>
 
           {/* Divider */}
