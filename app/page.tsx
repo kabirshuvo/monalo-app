@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Button from '@/components/ui/Button'
+import PublicLayout from '@/components/layouts/PublicLayout'
 
 export const metadata = {
   title: 'MonAlo - Learn at Your Own Pace',
@@ -8,7 +9,8 @@ export const metadata = {
 
 export default function LaunchPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white flex flex-col">
+    <PublicLayout currentPath="">
+      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white flex flex-col">
       {/* Header */}
       <header className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="max-w-6xl mx-auto">
@@ -58,5 +60,6 @@ export default function LaunchPage() {
         </div>
       </footer>
     </div>
+    </PublicLayout>
   )
 }
