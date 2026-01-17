@@ -9,7 +9,7 @@ async function makeAdmin(email: string) {
       data: { role: 'ADMIN' }
     })
     console.log(`✅ Successfully made ${user.email} an admin!`)
-    console.log(`User: ${user.name} (${user.username})`)
+    console.log(`User: ${user.name || user.email}`)
   } catch (error) {
     console.error('❌ Error:', error)
   } finally {

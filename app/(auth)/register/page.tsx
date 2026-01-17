@@ -4,6 +4,7 @@ import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Form, FormSection, FormActions, Input, Button, Alert } from '@/components/ui'
+import { logEvent } from '@/lib/analytics'
 
 function RegisterForm() {
   const router = useRouter()
@@ -128,8 +129,15 @@ function RegisterForm() {
         return
       }
 
-      // Registration successful — redirect to login with identifier (email or phone) and mark as new user
+      // Registration successful — track analytics, then redirect to login with identifier (email or phone) and mark as new user
       const identifier = formData.email ? formData.email : (formData.phone ? formData.phone : '')
+      const identifierType = formData.email ? 'email' : (formData.phone ? 'phone' : 'unknown')
+      try {
+        logEvent('register_success', { identifier: identifier || null, identifierType, method: 'credentials' })
+      } catch (err) {
+        // analytics failure should not block user flow
+      }
+
       const query = identifier ? `&identifier=${encodeURIComponent(identifier)}&newUser=1` : '&newUser=1'
       router.push(`/login?registered=true${query}`)
     } catch (err) {

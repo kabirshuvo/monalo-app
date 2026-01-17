@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
+import { logEvent } from '@/lib/analytics'
 
 export default function LandingHeaderClient() {
   const { data: session, status } = useSession()
@@ -27,6 +28,9 @@ export default function LandingHeaderClient() {
     if (typeof window !== 'undefined') sessionStorage.removeItem('monalo_login_start')
     const email = (session as any)?.user?.email
     const emailParam = email ? `&email=${encodeURIComponent(email)}` : ''
+    try {
+      logEvent('logout', { minutes, email: email || null, method: 'signout' })
+    } catch {}
     await signOut({ callbackUrl: `/see-off?minutes=${minutes}${emailParam}` })
   }
 

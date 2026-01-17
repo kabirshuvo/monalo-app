@@ -1,3 +1,4 @@
+import React, { Suspense } from 'react'
 import PublicLayout from '@/components/layouts/PublicLayout'
 import Link from 'next/link'
 import Button from '@/components/ui/Button'
@@ -7,7 +8,9 @@ export default function HomePage() {
   return (
     <PublicLayout currentPath="/home">
       <main className="bg-amber-50">
-        <WelcomeDetectorClient />
+        <Suspense fallback={null}>
+          <WelcomeDetectorClient />
+        </Suspense>
         {/* Hero Section */}
         <section className="px-4 py-32 sm:py-40 lg:py-48">
           <div className="mx-auto max-w-2xl text-center space-y-12">

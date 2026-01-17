@@ -75,22 +75,19 @@ const authConfig: NextAuthOptions = {
             select: {
               id: true,
               email: true,
-              username: true,
               name: true,
               password: true,
               role: true,
             },
           })
         } else {
-          // Normalize phone to match stored format (remove spaces, dashes, parentheses)
-          const normalizedPhone = identifier.replace(/[\s\-()]/g, '')
-          // Phone is not unique in schema; use findFirst to locate matching phone
+          // Normalize phone to match stored format: keep digits and optional leading +
+          const normalizedPhone = identifier.replace(/(?!^\+)\D/g, '')
           user = await prisma.user.findFirst({
             where: { phone: normalizedPhone },
             select: {
               id: true,
               email: true,
-              username: true,
               name: true,
               password: true,
               role: true,
@@ -110,7 +107,7 @@ const authConfig: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          name: user.name || user.username,
+          name: user.name || user.email,
           role: user.role || Role.CUSTOMER,
         }
       },

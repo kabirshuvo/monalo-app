@@ -30,11 +30,11 @@ export async function handleSignIn(params: {
       return false
     }
 
-    // Update lastLoginAt for the user
+    // Update a stable timestamp on the user record (schema trimmed; use updatedAt)
     await prisma.user.update({
       where: { email: userEmail },
       data: {
-        lastLoginAt: new Date(),
+        updatedAt: new Date(),
       },
     })
 

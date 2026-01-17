@@ -65,16 +65,6 @@ export function validatePassword(password: string): { valid: boolean; error?: st
   return { valid: true }
 }
 
-/**
- * Validate username format
- * @param username - Username to validate
- * @returns true if username is valid
- */
-export function validateUsername(username: string): boolean {
-  // Username: 3-30 chars, alphanumeric and underscores only, no leading/trailing underscore
-  const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/
-  return usernameRegex.test(username) && !username.startsWith('_') && !username.endsWith('_')
-}
 
 export interface UserSession {
   id: string

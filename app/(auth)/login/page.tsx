@@ -4,6 +4,7 @@ import { signIn, useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Form, FormSection, FormActions, Input, Button, Alert } from '@/components/ui'
+import { logEvent } from '@/lib/analytics'
 
 function LoginForm() {
   const router = useRouter()
@@ -81,6 +82,10 @@ function LoginForm() {
 
       if (result?.error) {
         // Friendly authentication messages
+        try {
+          logEvent('login_failed', { identifier: trimmedIdentifier, reason: result.error, method: 'credentials' })
+        } catch {}
+
         if (result.error === 'CredentialsSignin') {
           setError("We couldn’t sign you in with those details")
         } else if (result.error === 'NoAccount' || result.error === 'No user' || result.error === 'No user found') {
@@ -91,6 +96,12 @@ function LoginForm() {
       } else if (result?.ok) {
         // Success - record login start and redirect to callbackUrl (or home)
         try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
+        try {
+          const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)
+          const isPhone = /^\+?\d{10,15}$/.test(trimmedIdentifier)
+          const identifierType = isEmail ? 'email' : (isPhone ? 'phone' : 'unknown')
+          logEvent('login_success', { identifier: trimmedIdentifier, identifierType, method: 'credentials' })
+        } catch {}
         const isNewUser = searchParams?.get('newUser') === '1'
         const callbackUrl = searchParams?.get('callbackUrl') || '/'
         const separator = callbackUrl.includes('?') ? '&' : '?'

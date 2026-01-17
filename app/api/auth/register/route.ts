@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { hashPassword, validateEmail, validatePassword, validateUsername } from '@/lib/auth-helpers'
+import { hashPassword, validateEmail, validatePassword } from '@/lib/auth-helpers'
 import { Role } from '@prisma/client'
 
 interface RegisterRequest {
   email?: string
   phone?: string
   password?: string
-  confirmPassword?: string
-  username?: string
   name?: string
-  role?: string
 }
 
 interface RegisterResponse {
@@ -18,7 +15,7 @@ interface RegisterResponse {
   user?: {
     id: string
     email: string | null
-    username: string
+    name: string | null
     role: Role
   }
   error?: string
@@ -37,16 +34,13 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
       )
     }
 
-    const { email, phone, password, confirmPassword, username, name, role } = body
+    const { email, phone, password, name } = body
 
     // ============= Input Validation =============
 
-    // Validate role
-    const validRoles = ['BROWSER', 'LEARNER', 'CUSTOMER', 'SELLER', 'WRITER', 'DONOR']
-    const userRole = role && validRoles.includes(role) ? role : 'BROWSER'
-
     // Normalize and validate contact info: email optional, phone optional
-    const normalizedPhone = phone ? String(phone).replace(/[\s\-()]/g, '') : null
+    // Keep only digits and an optional leading plus
+    const normalizedPhone = phone ? String(phone).trim().replace(/(?!^\+)\D/g, '') : null
 
     if (email) {
       if (!validateEmail(email)) {
@@ -91,37 +85,6 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
       )
     }
 
-    // Username validation (optional, generate from email if not provided)
-    let finalUsername: string
-    if (!username) {
-      if (email) {
-        // Generate username from email: take part before @, sanitize
-        finalUsername = String(email).split('@')[0].replace(/[^a-zA-Z0-9_]/g, '_').slice(0, 30)
-      } else if (name) {
-        finalUsername = String(name).replace(/[^a-zA-Z0-9_]/g, '_').slice(0, 30)
-      } else if (normalizedPhone) {
-        finalUsername = `user_${String(normalizedPhone).slice(-6)}`
-      } else {
-        finalUsername = `user_${Date.now().toString().slice(-6)}`
-      }
-      // Ensure it starts with alphanumeric
-      if (!/^[a-zA-Z0-9]/.test(finalUsername)) {
-        finalUsername = `user_${Date.now().toString().slice(-6)}`
-      }
-    } else {
-      if (!validateUsername(username)) {
-        return NextResponse.json<RegisterResponse>(
-          {
-            ok: false,
-            error:
-              'Username must be 3-30 characters, alphanumeric and underscores only (no leading/trailing underscores)',
-          },
-          { status: 400 }
-        )
-      }
-      finalUsername = username
-    }
-
     // ============= Duplicate Check =============
     if (email) {
       const existingEmail = await prisma.user.findUnique({
@@ -149,16 +112,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
       }
     }
 
-    const existingUsername = await prisma.user.findUnique({
-      where: { username: finalUsername },
-    })
-
-    if (existingUsername) {
-      return NextResponse.json<RegisterResponse>(
-        { ok: false, error: 'Username already taken' },
-        { status: 409 }
-      )
-    }
+    // No username handling: keep registration focused on name/email/phone/password
 
     // ============= Hash Password =============
 
@@ -171,17 +125,13 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
         email: email ? email.toLowerCase() : undefined,
         phone: normalizedPhone || null,
         password: hashedPassword,
-        username: finalUsername,
-        name: name || finalUsername,
-        role: userRole as Role,
-        isVerified: false,
+        name: name || null,
       },
       select: {
         id: true,
         email: true,
-        username: true,
+        name: true,
         role: true,
-        // Explicitly exclude password from response
       },
     })
 
@@ -193,7 +143,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
         user: {
           id: user.id,
           email: user.email,
-          username: user.username,
+          name: user.name,
           role: user.role,
         },
       },

@@ -11,7 +11,7 @@ async function makeAdmin() {
       data: { role: 'ADMIN' }
     })
     console.log(`✅ Successfully made ${user.email} an admin!`)
-    console.log(`User: ${user.name} (${user.username})`)
+    console.log(`User: ${user.name || user.email}`)
     console.log(`Role: ${user.role}`)
   } catch (error) {
     if (error.code === 'P2025') {

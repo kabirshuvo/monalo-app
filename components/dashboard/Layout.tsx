@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import Button from '../ui/Button'
 import { signOut } from 'next-auth/react'
+import { logEvent } from '@/lib/analytics'
 
 export interface DashboardLayoutProps {
   children: React.ReactNode
@@ -198,6 +199,9 @@ export default function DashboardLayout({
                         minutes = Math.max(0, Math.round(ms / 60000))
                       }
                       sessionStorage.removeItem('monalo_login_start')
+                      try {
+                        logEvent('logout', { minutes, method: 'signout' })
+                      } catch {}
                       await signOut({ callbackUrl: `/see-off?minutes=${minutes}` })
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"

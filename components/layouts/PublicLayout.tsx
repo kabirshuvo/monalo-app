@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Button from '../ui/Button'
 import { useSession, signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
+import { logEvent } from '@/lib/analytics'
 
 export interface PublicLayoutProps {
   children: React.ReactNode
@@ -59,6 +60,9 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     // Sign out and redirect to see-off with minutes
     const email = (session as any)?.user?.email
     const emailParam = email ? `&email=${encodeURIComponent(email)}` : ''
+    try {
+      logEvent('logout', { minutes, email: email || null, method: 'signout' })
+    } catch {}
     await signOut({ callbackUrl: `/see-off?minutes=${minutes}${emailParam}` })
   }
 

@@ -58,6 +58,11 @@ export async function PATCH(request: Request) {
       }
     }
 
+    // Normalize phone if provided: keep digits and optional leading +
+    if (updates.phone) {
+      updates.phone = String(updates.phone).trim().replace(/(?!^\+)\D/g, '')
+    }
+
     // Mock update response
     // In production: update via Prisma
     const updatedProfile = {

@@ -10,44 +10,25 @@ datasource db {
 
 
 model User {
-  id          String        @id @default(cuid()) @map("id")
-  username    String        @unique @db.VarChar(255) @map("username")
-  email       String        @unique @db.VarChar(255) @map("email")
-  password    String        @db.Text @map("password")
-  role        Role          @default(CUSTOMER) @map("role")
-  name        String?       @db.VarChar(255) @map("name")
-  avatar      String?       @db.Text     @map("avatar")
-  phone       String?       @db.VarChar(32) @map("phone")
-  points      Int           @default(0) @map("points")
-  level       Int           @default(1) @map("level")
-  badge       String        @default("New Light") @db.VarChar(255) @map("badge")
-  isVerified  Boolean       @default(false) @map("is_verified")
-  lastLoginAt DateTime?     @map("last_login_at") @db.Timestamp() // Last successful login
-  deletedAt   DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
-  createdBy   String?       @map("created_by") // User ID who created this account (admin registration)
-  updatedBy   String?       @map("updated_by") // User ID who last updated this account
-  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamp()
+  id        String   @id @default(cuid()) @map("id")
+  name      String?  @db.VarChar(255) @map("name")
+  email     String?  @unique @db.VarChar(255) @map("email")
+  phone     String?  @unique @db.VarChar(32) @map("phone")
+  password  String   @db.Text @map("password")
+  role      Role     @default(CUSTOMER) @map("role")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
-  activityLogs ActivityLog[] @relation("UserActivityLogs")
-  blogs        Blog[]        @relation("UserBlogs")
-  accounts     Account[]     @relation("UserAccounts")
-  sessions     Session[]     @relation("UserSessions")
-  lessonProgress UserLessonProgress[] @relation("UserLessonProgress")
-  orders       Order[]       @relation("UserOrders")
-
-  @@unique([email, deletedAt]) // Allow email reuse after soft delete
-  @@unique([username, deletedAt]) // Allow username reuse after soft delete
-  @@index([email])
-  @@index([username])
-  @@index([role])
-  @@index([createdAt])
-  @@index([deletedAt]) // For filtering active users
-  @@index([points]) // For leaderboards
-  @@index([lastLoginAt]) // For last login tracking
-  @@index([email, deletedAt]) // Composite: auth lookups
-  @@index([role, createdAt]) // Composite: user analytics
+  // Relations
+  accounts                 Account[]             @relation("UserAccounts")
+  sessions                 Session[]             @relation("UserSessions")
+  orders                   Order[]               @relation("UserOrders")
+  userLessonProgress       UserLessonProgress[]  @relation("UserLessonProgress")
+  activityLogs             ActivityLog[]         @relation("UserActivityLogs")
+  blogs                    Blog[]                @relation("UserBlogs")
   @@map("users")
+  @@index([email])
+  @@index([phone])
 }
 
 model Product {

@@ -24,13 +24,10 @@ async function main() {
 		update: {},
 		create: {
 			email: 'admin@example.com',
-			username: 'admin',
+			name: 'Admin',
 			password: adminPassword,
 			role: 'ADMIN',
-			isVerified: true,
-			level: 10,
-			points: 5000,
-		},
+		}
 	})
 	console.log(`✓ Admin user: ${admin.email}`)
 
@@ -40,13 +37,10 @@ async function main() {
 		update: {},
 		create: {
 			email: 'customer@example.com',
-			username: 'customer',
+			name: 'Customer',
 			password: customerPassword,
 			role: 'CUSTOMER',
-			isVerified: true,
-			level: 2,
-			points: 120,
-		},
+		}
 	})
 	console.log(`✓ Customer user: ${customer.email}`)
 
@@ -56,13 +50,10 @@ async function main() {
 		update: {},
 		create: {
 			email: 'learner@example.com',
-			username: 'learner',
+			name: 'Learner',
 			password: learnerPassword,
 			role: 'LEARNER',
-			isVerified: true,
-			level: 3,
-			points: 250,
-		},
+		}
 	})
 	console.log(`✓ Learner user: ${learner.email}`)
 

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import welcomeMessages from '../../../welcomeMessages.json'
 import { useToast } from '@/components/ui'
+import { logEvent } from '@/lib/analytics'
 
 export default function WelcomeDetectorClient() {
   const searchParams = useSearchParams()
@@ -53,6 +54,11 @@ export default function WelcomeDetectorClient() {
       // Show a non-blocking toast notification
       try {
         addToast('info', finalMessage, 4000)
+        try {
+          logEvent('welcome_shown', { welcomeType, message: finalMessage })
+        } catch {
+          // analytics failures should not affect UX
+        }
       } catch {
         // swallow if toast isn't available
       }
