@@ -46,28 +46,57 @@ const authConfig: NextAuthOptions = {
       clientSecret: process.env.TWITTER_CLIENT_SECRET || '',
       version: '2.0', // Use Twitter OAuth 2.0
     }),
-    // Email/Password Credentials
+    // Email or Phone / Password Credentials
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' },
+        identifier: { label: 'Email or phone', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        if (!credentials?.identifier || !credentials?.password) {
           throw new Error('Missing credentials')
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string },
-          select: {
-            id: true,
-            email: true,
-            username: true,
-            password: true,
-            role: true,
-          },
-        })
+        const identifier = (credentials.identifier || '').trim()
+
+        // Simple heuristics to detect email vs phone
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)
+        const isPhone = /^\+?[0-9 \-()]{7,20}$/.test(identifier)
+
+        if (!isEmail && !isPhone) {
+          throw new Error('Please provide a valid email or phone number')
+        }
+
+        let user: any | null = null
+        if (isEmail) {
+          user = await prisma.user.findUnique({
+            where: { email: identifier.toLowerCase() },
+            select: {
+              id: true,
+              email: true,
+              username: true,
+              name: true,
+              password: true,
+              role: true,
+            },
+          })
+        } else {
+          // Normalize phone to match stored format (remove spaces, dashes, parentheses)
+          const normalizedPhone = identifier.replace(/[\s\-()]/g, '')
+          // Phone is not unique in schema; use findFirst to locate matching phone
+          user = await prisma.user.findFirst({
+            where: { phone: normalizedPhone },
+            select: {
+              id: true,
+              email: true,
+              username: true,
+              name: true,
+              password: true,
+              role: true,
+            },
+          })
+        }
 
         if (!user || !user.password) {
           throw new Error('User not found or not registered with password')
@@ -81,7 +110,7 @@ const authConfig: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          name: user.username,
+          name: user.name || user.username,
           role: user.role || Role.CUSTOMER,
         }
       },

@@ -12,11 +12,11 @@ function LoginForm() {
   const session = sessionData?.data
   const status = sessionData?.status
   
-  const [email, setEmail] = useState('')
+  const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
+  const [fieldErrors, setFieldErrors] = useState<{ identifier?: string; password?: string }>({})
   const [isMounted, setIsMounted] = useState(false)
 
   // Set mounted flag for hydration
@@ -33,25 +33,30 @@ function LoginForm() {
     }
   }, [status, session, router, searchParams, isMounted])
 
-  // Prefill email if provided (e.g. after registration)
+  // Prefill identifier if provided (e.g. after registration)
   useEffect(() => {
-    const registeredEmail = searchParams?.get('email')
-    if (registeredEmail) setEmail(registeredEmail)
+    const registeredIdentifier = searchParams?.get('identifier') || searchParams?.get('email')
+    if (registeredIdentifier) setIdentifier(registeredIdentifier)
   }, [searchParams])
 
   const validateForm = () => {
-    const errors: { email?: string; password?: string } = {}
-    
-    if (!email) {
-      errors.email = 'Please enter your email address.'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.email = "This email address doesn't look quite right."
+    const errors: { identifier?: string; password?: string } = {}
+
+    const trimmed = identifier.trim()
+    if (!trimmed) {
+      errors.identifier = 'Please enter your email or phone number'
+    } else {
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)
+      const isPhone = /^\+?\d{10,15}$/.test(trimmed)
+      if (!isEmail && !isPhone) {
+        errors.identifier = 'That doesn’t look like a valid email or phone number'
+      }
     }
-    
+
     if (!password) {
-      errors.password = 'Please enter your password.'
+      errors.password = 'Please enter your password'
     }
-    
+
     setFieldErrors(errors)
     return Object.keys(errors).length === 0
   }
@@ -67,27 +72,33 @@ function LoginForm() {
     setIsLoading(true)
 
     try {
+      const trimmedIdentifier = identifier.trim()
       const result = await signIn('credentials', {
-        email,
+        identifier: trimmedIdentifier,
         password,
         redirect: false,
       })
 
       if (result?.error) {
-        // Gentle error messages based on NextAuth error types
+        // Friendly authentication messages
         if (result.error === 'CredentialsSignin') {
-          setError("Please check your email and password.")
+          setError("We couldn’t sign you in with those details")
+        } else if (result.error === 'NoAccount' || result.error === 'No user' || result.error === 'No user found') {
+          setError("We couldn’t find an account with those details")
         } else {
-          setError("We couldn't sign you in right now. Please try again.")
+          setError('Something went wrong. Please try again.')
         }
       } else if (result?.ok) {
-        // Success - record login start and redirect
+        // Success - record login start and redirect to callbackUrl (or home)
         try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
+        const isNewUser = searchParams?.get('newUser') === '1'
         const callbackUrl = searchParams?.get('callbackUrl') || '/'
-        router.push(callbackUrl)
+        const separator = callbackUrl.includes('?') ? '&' : '?'
+        const target = `${callbackUrl}${separator}welcome=${isNewUser ? 'new' : 'back'}`
+        router.push(target)
       }
     } catch (err) {
-      setError("Something went wrong on our end. Please try again.")
+      setError('Something went wrong. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -143,14 +154,14 @@ function LoginForm() {
           <Form onSubmit={handleSubmit}>
             <FormSection>
               <Input
-                label="Email address"
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                error={fieldErrors.email}
+                label="Email or phone"
+                type="text"
+                placeholder="you@example.com or +1 555 555 5555"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                error={fieldErrors.identifier}
                 disabled={isLoading}
-                autoComplete="email"
+                autoComplete="username"
                 required
                 leftIcon={
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

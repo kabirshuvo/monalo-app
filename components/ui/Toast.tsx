@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useContext, useState, useCallback } from 'react'
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react'
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning'
 
@@ -93,9 +93,20 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
     )
   }
   
+  const duration = toast.duration ?? 5000
+  const fadeOutMs = 400
+  const fadeDelay = Math.max(0, duration - fadeOutMs)
+  const [isFading, setIsFading] = useState(false)
+
+  useEffect(() => {
+    // Start fade-out shortly before the toast is removed
+    const t = setTimeout(() => setIsFading(true), fadeDelay)
+    return () => clearTimeout(t)
+  }, [fadeDelay])
+
   return (
     <div 
-      className={`${styles[toast.type]} border rounded-lg p-4 shadow-lg animate-slide-in-right flex items-start gap-3`}
+      className={`${styles[toast.type]} border rounded-lg p-4 shadow-lg flex items-start gap-3 animate-slide-in-right ${isFading ? 'animate-fade-out' : ''}`}
       role="alert"
     >
       <div className="flex-shrink-0">{icons[toast.type]}</div>

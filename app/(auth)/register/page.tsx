@@ -3,7 +3,7 @@ import React, { useState, useEffect, Suspense } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Form, FormSection, FormActions, Input, Button, Alert, Select } from '@/components/ui'
+import { Form, FormSection, FormActions, Input, Button, Alert } from '@/components/ui'
 
 function RegisterForm() {
   const router = useRouter()
@@ -13,11 +13,9 @@ function RegisterForm() {
   
   const [formData, setFormData] = useState({
     name: '',
-    username: '',
     email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'BROWSER'
+    phone: '',
+    password: ''
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -51,41 +49,42 @@ function RegisterForm() {
 
   const validateForm = () => {
     const errors: Record<string, string> = {}
-    
+
     if (!formData.name.trim()) {
-      errors.name = 'Please enter your name.'
+      errors.name = 'Please tell us what we should call you 🙂'
+    } else if (formData.name.trim().length < 2) {
+      errors.name = 'That name looks a bit short'
+    } else if (formData.name.trim().length > 50) {
+      errors.name = 'That name looks a bit long'
     }
-    
-    if (!formData.username.trim()) {
-      errors.username = 'Please choose a username.'
-    } else if (formData.username.length < 3) {
-      errors.username = 'Your username needs at least 3 characters.'
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(formData.username)) {
-      errors.username = 'Username can only contain letters, numbers, dashes, and underscores.'
+
+    // Email is optional but if present must be valid
+    if (formData.email) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        errors.email = 'That email doesn’t look right'
+      }
     }
-    
-    if (!formData.email) {
-      errors.email = 'Please enter your email address.'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = "This email address doesn't look quite right."
+
+    // Phone is optional but if present must be plausible
+    if (formData.phone) {
+      if (!/^\+?[0-9 \-()]{7,20}$/.test(formData.phone)) {
+        errors.phone = 'That phone number doesn’t look right'
+      }
     }
-    
+
+    // Require at least one contact method
+    if (!formData.email && !formData.phone) {
+      const msg = 'Please add an email or a phone number'
+      errors.email = msg
+      errors.phone = msg
+    }
+
     if (!formData.password) {
-      errors.password = 'Please create a password.'
-    } else if (formData.password.length < 8) {
-      errors.password = 'Your password needs at least 8 characters.'
-    } else if (formData.password.length > 128) {
-      errors.password = 'Your password is too long. Please use fewer than 128 characters.'
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      errors.password = 'Your password needs at least one uppercase letter, one lowercase letter, and one number.'
+      errors.password = 'Please create a password'
+    } else if (formData.password.length < 6) {
+      errors.password = 'Password should be at least 6 characters'
     }
-    
-    if (!formData.confirmPassword) {
-      errors.confirmPassword = 'Please confirm your password.'
-    } else if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = "These passwords don't match."
-    }
-    
+
     setFieldErrors(errors)
     return Object.keys(errors).length === 0
   }
@@ -99,55 +98,40 @@ function RegisterForm() {
     }
 
     setIsLoading(true)
-//confirmPassword: formData.confirmPassword, added
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.name,
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          confirmPassword: formData.confirmPassword,
-          role: formData.role
+          email: formData.email || null,
+          phone: formData.phone || null,
+          password: formData.password
         })
       })
 
       const data = await response.json()
 
       if (!response.ok) {
-        // Handle specific error cases with gentle messages
+        // Handle specific API error cases with friendly messages
         if (response.status === 409) {
           if (data.message?.includes('email')) {
-            setFieldErrors(prev => ({ ...prev, email: 'This email is already registered.' }))
-          } else if (data.message?.includes('username')) {
-            setFieldErrors(prev => ({ ...prev, username: 'This username is already taken.' }))
+            setFieldErrors(prev => ({ ...prev, email: 'This email is already used. Try signing in instead.' }))
+          } else if (data.message?.includes('phone')) {
+            setFieldErrors(prev => ({ ...prev, phone: 'This phone number is already used. Try signing in instead.' }))
           } else {
-            setError('An account with these details already exists.')
+            setError("We couldn’t create your account right now. Please try again.")
           }
-        } else if (response.status === 400) {
-          setError('Please check your information and try again.')
         } else {
-          setError("We couldn't create your account right now. Please try again.")
+          setError("We couldn’t create your account right now. Please try again.")
         }
         return
       }
 
-      // Registration successful, sign in automatically
-      const signInResult = await signIn('credentials', {
-        email: formData.email,
-        password: formData.password,
-        redirect: false,
-      })
-
-      if (signInResult?.ok) {
-        try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
-        router.push('/')
-      } else {
-        // Registration succeeded but auto-login failed
-        router.push(`/login?registered=true&email=${encodeURIComponent(formData.email)}`)
-      }
+      // Registration successful — redirect to login with identifier (email or phone) and mark as new user
+      const identifier = formData.email ? formData.email : (formData.phone ? formData.phone : '')
+      const query = identifier ? `&identifier=${encodeURIComponent(identifier)}&newUser=1` : '&newUser=1'
+      router.push(`/login?registered=true${query}`)
     } catch (err) {
       setError("Something went wrong on our end. Please try again.")
     } finally {
@@ -207,7 +191,8 @@ function RegisterForm() {
               <Input
                 label="Your name"
                 type="text"
-                placeholder="Jane Doe"
+                placeholder="What should we call you?"
+                helperText="This name will be shown on MonAlo"
                 value={formData.name}
                 onChange={(e) => handleChange('name', e.target.value)}
                 error={fieldErrors.name}
@@ -217,66 +202,37 @@ function RegisterForm() {
               />
 
               <Input
-                label="Username"
-                type="text"
-                placeholder="janedoe"
-                value={formData.username}
-                onChange={(e) => handleChange('username', e.target.value)}
-                error={fieldErrors.username}
-                helperText="This will be your unique identifier"
-                disabled={isLoading}
-                autoComplete="username"
-                required
-              />
-
-              <Input
-                label="Email address"
+                label="Email address (optional)"
                 type="email"
-                placeholder="your@email.com"
+                placeholder="you@example.com"
                 value={formData.email}
                 onChange={(e) => handleChange('email', e.target.value)}
                 error={fieldErrors.email}
                 disabled={isLoading}
                 autoComplete="email"
-                required
               />
 
-              <Select
-                label="I'm here to"
-                value={formData.role}
-                onChange={(e) => handleChange('role', e.target.value)}
-                options={[
-                  { value: 'BROWSER', label: 'Join with you' },
-                  { value: 'LEARNER', label: 'Learn and grow' },
-                  { value: 'CUSTOMER', label: 'Shop for products' },
-                  { value: 'SELLER', label: 'Sell my products' },
-                  { value: 'WRITER', label: 'Share my knowledge' },
-                  { value: 'DONOR', label: 'Support and donate' }
-                ]}
+              <Input
+                label="Phone number (optional)"
+                type="tel"
+                placeholder="+1 555 555 5555"
+                value={formData.phone}
+                onChange={(e) => handleChange('phone', e.target.value)}
+                error={fieldErrors.phone}
                 disabled={isLoading}
-                required
+                autoComplete="tel"
               />
+
+              
 
               <Input
                 label="Password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="••••••"
                 value={formData.password}
                 onChange={(e) => handleChange('password', e.target.value)}
                 error={fieldErrors.password}
-                helperText="At least 8 characters with uppercase, lowercase, and a number"
-                disabled={isLoading}
-                autoComplete="new-password"
-                required
-              />
-
-              <Input
-                label="Confirm password"
-                type="password"
-                placeholder="••••••••"
-                value={formData.confirmPassword}
-                onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                error={fieldErrors.confirmPassword}
+                helperText="At least 6 characters"
                 disabled={isLoading}
                 autoComplete="new-password"
                 required

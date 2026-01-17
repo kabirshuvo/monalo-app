@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import welcomeMessages from '../../welcomeMessages.json'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -8,6 +9,15 @@ export default function LandingHeroClient() {
   const { data: session, status } = useSession()
   const isAuthenticated = status === 'authenticated'
   const router = useRouter()
+
+  const welcome = React.useMemo(() => {
+    try {
+      if (!Array.isArray(welcomeMessages) || welcomeMessages.length === 0) return null
+      return welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)]
+    } catch {
+      return null
+    }
+  }, [])
 
   const getDashboardPath = () => {
     const role = (session as any)?.user?.role
@@ -42,6 +52,9 @@ export default function LandingHeroClient() {
         <p className="text-xl sm:text-2xl text-gray-600 leading-relaxed font-normal max-w-2xl mx-auto">
           MonAlo is a quiet digital space for learning, craft, and thoughtful work — built to feel human, not hurried.
         </p>
+        {welcome && (
+          <p className="mt-4 text-md text-gray-700 italic max-w-2xl mx-auto">{welcome}</p>
+        )}
       </div>
 
       {/* Primary CTA + Secondary Link */}

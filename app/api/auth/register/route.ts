@@ -5,6 +5,7 @@ import { Role } from '@prisma/client'
 
 interface RegisterRequest {
   email?: string
+  phone?: string
   password?: string
   confirmPassword?: string
   username?: string
@@ -16,7 +17,7 @@ interface RegisterResponse {
   ok: boolean
   user?: {
     id: string
-    email: string
+    email: string | null
     username: string
     role: Role
   }
@@ -36,7 +37,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
       )
     }
 
-    const { email, password, confirmPassword, username, name, role } = body
+    const { email, phone, password, confirmPassword, username, name, role } = body
 
     // ============= Input Validation =============
 
@@ -44,17 +45,32 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
     const validRoles = ['BROWSER', 'LEARNER', 'CUSTOMER', 'SELLER', 'WRITER', 'DONOR']
     const userRole = role && validRoles.includes(role) ? role : 'BROWSER'
 
-    // Email validation
-    if (!email) {
-      return NextResponse.json<RegisterResponse>(
-        { ok: false, error: 'Email is required' },
-        { status: 400 }
-      )
+    // Normalize and validate contact info: email optional, phone optional
+    const normalizedPhone = phone ? String(phone).replace(/[\s\-()]/g, '') : null
+
+    if (email) {
+      if (!validateEmail(email)) {
+        return NextResponse.json<RegisterResponse>(
+          { ok: false, error: 'Invalid email format' },
+          { status: 400 }
+        )
+      }
     }
 
-    if (!validateEmail(email)) {
+    // If phone provided, ensure it's plausible after normalization
+    if (normalizedPhone) {
+      if (!/^\+?[0-9]{7,20}$/.test(normalizedPhone)) {
+        return NextResponse.json<RegisterResponse>(
+          { ok: false, error: 'Invalid phone format' },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Require at least one contact method
+    if (!email && !normalizedPhone) {
       return NextResponse.json<RegisterResponse>(
-        { ok: false, error: 'Invalid email format' },
+        { ok: false, error: 'Please provide an email or phone number' },
         { status: 400 }
       )
     }
@@ -75,26 +91,19 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
       )
     }
 
-    // Password confirmation
-    if (!confirmPassword) {
-      return NextResponse.json<RegisterResponse>(
-        { ok: false, error: 'Password confirmation is required' },
-        { status: 400 }
-      )
-    }
-
-    if (password !== confirmPassword) {
-      return NextResponse.json<RegisterResponse>(
-        { ok: false, error: 'Passwords do not match' },
-        { status: 400 }
-      )
-    }
-
     // Username validation (optional, generate from email if not provided)
     let finalUsername: string
     if (!username) {
-      // Generate username from email: take part before @, sanitize
-      finalUsername = email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '_').slice(0, 30)
+      if (email) {
+        // Generate username from email: take part before @, sanitize
+        finalUsername = String(email).split('@')[0].replace(/[^a-zA-Z0-9_]/g, '_').slice(0, 30)
+      } else if (name) {
+        finalUsername = String(name).replace(/[^a-zA-Z0-9_]/g, '_').slice(0, 30)
+      } else if (normalizedPhone) {
+        finalUsername = `user_${String(normalizedPhone).slice(-6)}`
+      } else {
+        finalUsername = `user_${Date.now().toString().slice(-6)}`
+      }
       // Ensure it starts with alphanumeric
       if (!/^[a-zA-Z0-9]/.test(finalUsername)) {
         finalUsername = `user_${Date.now().toString().slice(-6)}`
@@ -114,16 +123,30 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
     }
 
     // ============= Duplicate Check =============
+    if (email) {
+      const existingEmail = await prisma.user.findUnique({
+        where: { email: email.toLowerCase() },
+      })
 
-    const existingEmail = await prisma.user.findUnique({
-      where: { email: email.toLowerCase() },
-    })
+      if (existingEmail) {
+        return NextResponse.json<RegisterResponse>(
+          { ok: false, error: 'Email already registered' },
+          { status: 409 }
+        )
+      }
+    }
 
-    if (existingEmail) {
-      return NextResponse.json<RegisterResponse>(
-        { ok: false, error: 'Email already registered' },
-        { status: 409 }
-      )
+    if (normalizedPhone) {
+      const existingPhone = await prisma.user.findFirst({
+        where: { phone: normalizedPhone },
+      })
+
+      if (existingPhone) {
+        return NextResponse.json<RegisterResponse>(
+          { ok: false, error: 'Phone already registered' },
+          { status: 409 }
+        )
+      }
     }
 
     const existingUsername = await prisma.user.findUnique({
@@ -145,7 +168,8 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
 
     const user = await prisma.user.create({
       data: {
-        email: email.toLowerCase(),
+        email: email ? email.toLowerCase() : undefined,
+        phone: normalizedPhone || null,
         password: hashedPassword,
         username: finalUsername,
         name: name || finalUsername,

@@ -27,6 +27,7 @@ export { default as Spinner, LoadingScreen } from './Spinner'
 export type { SpinnerProps } from './Spinner'
 export { ToastProvider, useToast } from './Toast'
 export type { Toast, ToastType } from './Toast'
+export { default as WelcomeToast, useWelcomeToast } from './WelcomeToast'
 
 // Overlay Components
 export { default as Modal, ModalFooter } from './Modal'
