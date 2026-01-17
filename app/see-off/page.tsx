@@ -1,12 +1,13 @@
+import React, { Suspense } from 'react'
 import PublicLayout from '@/components/layouts/PublicLayout'
-import dynamic from 'next/dynamic'
-
-const SeeOffClient = dynamic(() => import('./SeeOffClient'), { ssr: false })
+import SeeOffClient from './SeeOffClient'
 
 export default function SeeOffPage() {
   return (
     <PublicLayout currentPath="">
-      <SeeOffClient />
+      <Suspense fallback={<div />}> 
+        <SeeOffClient />
+      </Suspense>
     </PublicLayout>
   )
 }
