@@ -1,7 +1,8 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import Button from '../ui/Button'
+import { signOut } from 'next-auth/react'
 
 export interface DashboardLayoutProps {
   children: React.ReactNode
@@ -110,6 +111,7 @@ export default function DashboardLayout({
   currentPath = ''
 }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const filteredNavItems = navigationItems.filter(item => item.roles.includes(userRole))
 
@@ -156,22 +158,52 @@ export default function DashboardLayout({
                 Back to home
               </Button>
             </Link>
-            <div className="flex items-center gap-3 pl-3 border-l border-gray-200">
+            <div className="flex items-center gap-3 pl-3 border-l border-gray-200 relative">
               <div className="text-right hidden md:block">
                 <p className="text-sm font-medium text-gray-900">{userName}</p>
                 <p className="text-xs text-gray-500">{getRoleLabel(userRole)}</p>
               </div>
-              {userAvatar ? (
-                <img 
-                  src={userAvatar} 
-                  alt={userName}
-                  className="w-9 h-9 rounded-full border-2 border-gray-200"
-                />
-              ) : (
-                <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
-                  <span className="text-sm font-semibold text-blue-600">
-                    {userName.charAt(0).toUpperCase()}
-                  </span>
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="focus:outline-none"
+                aria-haspopup="true"
+                aria-expanded={menuOpen}
+              >
+                {userAvatar ? (
+                  <img 
+                    src={userAvatar} 
+                    alt={userName}
+                    className="w-9 h-9 rounded-full border-2 border-gray-200"
+                  />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-blue-600">
+                      {userName.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                )}
+              </button>
+
+              {menuOpen && (
+                <div className="absolute right-0 top-12 w-40 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-40">
+                  <Link href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Dashboard</Link>
+                  <Link href="/dashboard/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
+                  <button
+                    onClick={async () => {
+                      // compute duration
+                      const start = sessionStorage.getItem('monalo_login_start')
+                      let minutes = 0
+                      if (start) {
+                        const ms = Date.now() - parseInt(start, 10)
+                        minutes = Math.max(0, Math.round(ms / 60000))
+                      }
+                      sessionStorage.removeItem('monalo_login_start')
+                      await signOut({ callbackUrl: `/see-off?minutes=${minutes}` })
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  >
+                    Logout
+                  </button>
                 </div>
               )}
             </div>

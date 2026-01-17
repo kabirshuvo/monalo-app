@@ -142,6 +142,7 @@ function RegisterForm() {
       })
 
       if (signInResult?.ok) {
+        try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
         router.push('/')
       } else {
         // Registration succeeded but auto-login failed

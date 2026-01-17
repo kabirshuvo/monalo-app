@@ -81,7 +81,8 @@ function LoginForm() {
           setError("We couldn't sign you in right now. Please try again.")
         }
       } else if (result?.ok) {
-        // Success - NextAuth will handle the redirect
+        // Success - record login start and redirect
+        try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
         const callbackUrl = searchParams?.get('callbackUrl') || '/'
         router.push(callbackUrl)
       }

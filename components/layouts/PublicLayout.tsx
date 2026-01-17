@@ -1,13 +1,13 @@
 "use client"
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Button from '../ui/Button'
+import { useSession, signOut } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 
 export interface PublicLayoutProps {
   children: React.ReactNode
   currentPath?: string
-  isAuthenticated?: boolean
-  userRole?: 'CUSTOMER' | 'LEARNER' | 'WRITER' | 'ADMIN'
 }
 
 const navigationItems = [
@@ -19,17 +19,53 @@ const navigationItems = [
   { label: 'Contact', href: '/contact' }
 ]
 
-export default function PublicLayout({ 
-  children, 
-  currentPath = '',
-  isAuthenticated = false,
-  userRole
-}: PublicLayoutProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
+export default function PublicLayout({ children, currentPath = '' }: PublicLayoutProps) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { data: session, status } = useSession()
+  const pathname = usePathname()
+  const isAuthenticated = status === 'authenticated'
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  // Ensure we record login start time for session-based analytics
+  useEffect(() => {
+    if (status === 'authenticated') {
+      if (!sessionStorage.getItem('monalo_login_start')) {
+        sessionStorage.setItem('monalo_login_start', Date.now().toString())
+      }
+    }
+    if (status === 'unauthenticated') {
+      // Clear any stale login start when signed out in another tab
+      sessionStorage.removeItem('monalo_login_start')
+    }
+  }, [status])
 
   const getDashboardPath = () => {
-    if (!userRole) return '/dashboard/customer'
-    return `/dashboard/${userRole.toLowerCase()}`
+    const role = (session as any)?.user?.role
+    if (!role) return '/dashboard/customer'
+    return `/dashboard/${(role as string).toLowerCase()}`
+  }
+
+  const handleLogout = async () => {
+    // Compute session duration
+    const start = sessionStorage.getItem('monalo_login_start')
+    let minutes = 0
+    if (start) {
+      const ms = Date.now() - parseInt(start, 10)
+      minutes = Math.max(0, Math.round(ms / 60000))
+    }
+    // Clear start time
+    sessionStorage.removeItem('monalo_login_start')
+
+    // Sign out and redirect to see-off with minutes
+    const email = (session as any)?.user?.email
+    const emailParam = email ? `&email=${encodeURIComponent(email)}` : ''
+    await signOut({ callbackUrl: `/see-off?minutes=${minutes}${emailParam}` })
+  }
+
+  const displayName = () => {
+    const user = (session as any)?.user
+    if (!user) return ''
+    return user.name || (user.username as string) || user.email || ''
   }
 
   return (
@@ -39,8 +75,8 @@ export default function PublicLayout({
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="flex items-center gap-2 text-xl font-semibold text-gray-900 hover:text-gray-700 transition-colors"
             >
               <svg className="w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,8 +92,8 @@ export default function PublicLayout({
                   key={item.href}
                   href={item.href}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
-                    ${currentPath === item.href 
-                      ? 'text-blue-600 bg-blue-50' 
+                    ${currentPath === item.href
+                      ? 'text-blue-600 bg-blue-50'
                       : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                 >
@@ -66,15 +102,35 @@ export default function PublicLayout({
               ))}
             </div>
 
-            {/* Auth Buttons */}
-            <div className="hidden md:flex items-center gap-3">
+            {/* Auth Buttons / Avatar */}
+            <div className="hidden md:flex items-center gap-3 relative">
               {isAuthenticated ? (
                 <>
-                  <Link href={getDashboardPath()}>
-                    <Button variant="secondary" size="sm">
-                      Dashboard
-                    </Button>
-                  </Link>
+                  <button
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    aria-haspopup="true"
+                    aria-expanded={menuOpen}
+                    className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
+                      <span className="text-sm font-semibold text-blue-600">
+                        {displayName().charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  </button>
+
+                  {/* Welcome message on landing page only */}
+                  {pathname === '/' && (
+                    <div className="ml-3 text-sm text-gray-700">Welcome, {displayName()}</div>
+                  )}
+
+                  {menuOpen && (
+                    <div className="absolute right-0 mt-12 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50">
+                      <Link href={getDashboardPath()} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Dashboard</Link>
+                      <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
+                      <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Logout</button>
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
@@ -119,8 +175,8 @@ export default function PublicLayout({
                     key={item.href}
                     href={item.href}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
-                      ${currentPath === item.href 
-                        ? 'text-blue-600 bg-blue-50' 
+                      ${currentPath === item.href
+                        ? 'text-blue-600 bg-blue-50'
                         : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
                       }`}
                     onClick={() => setMobileMenuOpen(false)}
@@ -130,11 +186,18 @@ export default function PublicLayout({
                 ))}
                 <div className="pt-4 border-t border-gray-200 mt-2 flex flex-col gap-2">
                   {isAuthenticated ? (
-                    <Link href={getDashboardPath()}>
-                      <Button variant="secondary" size="sm" fullWidth>
-                        Dashboard
-                      </Button>
-                    </Link>
+                    <>
+                      <Link href={getDashboardPath()}>
+                        <Button variant="secondary" size="sm" fullWidth>
+                          Dashboard
+                        </Button>
+                      </Link>
+                      <button onClick={handleLogout} className="w-full text-left">
+                        <Button variant="ghost" size="sm" fullWidth>
+                          Logout
+                        </Button>
+                      </button>
+                    </>
                   ) : (
                     <>
                       <Link href="/login">
