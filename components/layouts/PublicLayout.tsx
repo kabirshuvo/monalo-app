@@ -40,7 +40,7 @@ export default function PublicLayout({
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link 
-              href="/home" 
+              href="/" 
               className="flex items-center gap-2 text-xl font-semibold text-gray-900 hover:text-gray-700 transition-colors"
             >
               <svg className="w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
