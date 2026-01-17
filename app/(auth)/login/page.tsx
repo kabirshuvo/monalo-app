@@ -17,6 +17,7 @@ function LoginForm() {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [formMessage, setFormMessage] = useState('')
   const [fieldErrors, setFieldErrors] = useState<{ identifier?: string; password?: string }>({})
   const [isMounted, setIsMounted] = useState(false)
 
@@ -65,6 +66,7 @@ function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setFormMessage('')
     
     if (!validateForm()) {
       return
@@ -87,11 +89,17 @@ function LoginForm() {
         } catch {}
 
         if (result.error === 'CredentialsSignin') {
-          setError("We couldn’t sign you in with those details")
+          const msg = "Whoops — that didn’t work. Double-check your email/phone and password and try again."
+          setError(msg)
+          setFormMessage(msg)
         } else if (result.error === 'NoAccount' || result.error === 'No user' || result.error === 'No user found') {
-          setError("We couldn’t find an account with those details")
+          const msg = "We couldn’t find an account for that email or phone. Want to create one?"
+          setError(msg)
+          setFormMessage(msg)
         } else {
-          setError('Something went wrong. Please try again.')
+          const msg = 'Oops — something went wrong. Please try again in a moment.'
+          setError(msg)
+          setFormMessage(msg)
         }
       } else if (result?.ok) {
         // Success - record login start and redirect to callbackUrl (or home)
@@ -109,7 +117,9 @@ function LoginForm() {
         router.push(target)
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.')
+      const msg = 'Oops — something went wrong. Please try again in a moment.'
+      setError(msg)
+      setFormMessage(msg)
     } finally {
       setIsLoading(false)
     }
@@ -198,6 +208,15 @@ function LoginForm() {
                 }
               />
 
+              <div className="mt-2 text-right">
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-blue-600 hover:text-blue-700"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -215,6 +234,9 @@ function LoginForm() {
               </div>
             </FormSection>
 
+            {formMessage && (
+              <div className="mb-4 text-center text-sm text-red-600">{formMessage}</div>
+            )}
             <FormActions>
               <Button 
                 type="submit" 

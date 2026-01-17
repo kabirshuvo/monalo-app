@@ -244,7 +244,26 @@ function RegisterForm() {
                 required
               />
             </FormSection>
-
+{/* Form-level message near submit */}
+            {formMessage && (
+              <div className="mt-4 text-center text-sm text-red-600">
+                <span>{formMessage}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (conflictIdentifier) {
+                      const q = `identifier=${encodeURIComponent(conflictIdentifier)}${conflictIdentifierType ? `&identifierType=${conflictIdentifierType}` : ''}`
+                      router.push(`/login?${q}`)
+                    } else {
+                      router.push('/login')
+                    }
+                  }}
+                  className="ml-2 text-blue-600 hover:text-blue-700 underline"
+                >
+                  Sign in instead
+                </button>
+              </div>
+            )}
             <FormActions>
               <Button 
                 type="submit" 
