@@ -1,11 +1,25 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui'
+import { Form, FormSection, FormActions, Input, Button } from '@/components/ui'
 
 export default function ForgotPasswordPage() {
   const router = useRouter()
+  const [identifier, setIdentifier] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [formMessage, setFormMessage] = useState('')
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setFormMessage('')
+    setIsLoading(true)
+    // Phase-1 placeholder: simulate send and show confirmation message
+    setTimeout(() => {
+      setIsLoading(false)
+      setFormMessage('If an account exists, we’ll send a reset link to that address.')
+    }, 600)
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -18,26 +32,39 @@ export default function ForgotPasswordPage() {
             <span>MonAlo</span>
           </Link>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Forgot your password?</h1>
-          <p className="text-gray-600">No worries — it happens to all of us.</p>
+          <p className="text-gray-600">We’ll help you reset it.</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-          <p className="text-gray-900 text-lg font-medium mb-4">Password recovery is coming soon.</p>
+          <Form onSubmit={handleSubmit}>
+            <FormSection>
+              <Input
+                label="Email or phone number"
+                type="text"
+                placeholder="Enter your email or phone number"
+                helperText={"We’ll send you a password reset link"}
+                value={identifier}
+                onChange={(e) => setIdentifier((e.target as HTMLInputElement).value)}
+                required
+                autoComplete="username"
+              />
+            </FormSection>
 
-          <p className="text-sm text-gray-600 mb-6">
-            We’re currently working on a secure way to reset your password.
-            For now, please try signing in again.
-          </p>
+            {formMessage && (
+              <div className="mb-4 text-center text-sm text-green-600">{formMessage}</div>
+            )}
 
-          <div className="mt-4">
-            <Button
-              type="button"
-              variant="primary"
-              fullWidth
-              onClick={() => router.push('/login')}
-            >
+            <FormActions>
+              <Button type="submit" variant="primary" fullWidth isLoading={isLoading}>
+                Send reset link
+              </Button>
+            </FormActions>
+          </Form>
+
+          <div className="mt-4 text-center">
+            <Link href="/login" className="text-sm text-blue-600 hover:text-blue-700">
               Back to sign in
-            </Button>
+            </Link>
           </div>
         </div>
       </div>
