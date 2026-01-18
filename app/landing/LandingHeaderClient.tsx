@@ -15,6 +15,7 @@ export default function LandingHeaderClient() {
     if (!user) return ''
     return user.name || user.email || ''
   }
+  const user = (session as any)?.user
 
   const handleLogout = async () => {
     setMenuOpen(false)
@@ -65,9 +66,15 @@ export default function LandingHeaderClient() {
                 aria-expanded={menuOpen}
                 className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
-                  <span className="text-sm font-semibold text-blue-600">{displayName().charAt(0).toUpperCase()}</span>
-                </div>
+                {user?.image ? (
+                  // profile image when available
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={user.image} alt={displayName()} className="w-9 h-9 rounded-full object-cover" />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-blue-600">{displayName().charAt(0).toUpperCase()}</span>
+                  </div>
+                )}
               </button>
 
               {menuOpen && (
@@ -79,7 +86,10 @@ export default function LandingHeaderClient() {
               )}
             </div>
           ) : (
-            <div />
+            <div className="flex items-center gap-3">
+              <Link href="/register" className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-500 transition-colors">Get Started</Link>
+              <Link href="/login" className="text-sm text-gray-700 hover:text-gray-900">Log in</Link>
+            </div>
           )}
         </div>
       </div>
