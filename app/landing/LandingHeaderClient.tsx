@@ -1,4 +1,5 @@
 "use client"
+//LandingHeaderClient.tsx 
 import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
@@ -86,9 +87,8 @@ export default function LandingHeaderClient() {
               )}
             </div>
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center">
               <Link href="/register" className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-500 transition-colors">Get Started</Link>
-              <Link href="/login" className="text-sm text-gray-700 hover:text-gray-900">Log in</Link>
             </div>
           )}
         </div>

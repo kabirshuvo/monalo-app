@@ -1,0 +1,25 @@
+{
+  "newUser": [
+    "Welcome to MonAlo.",
+    "We’re glad you joined us.",
+    "Your learning journey starts here.",
+    "Ready when you are.",
+    "Take a moment to explore our courses.",
+    "Small steps lead to steady progress.",
+    "Find a course that sparks your interest.",
+    "Start with something you enjoy.",
+    "We’re here to support your learning.",
+    "Happy to have you with us."
+  ],
+  "returningUser": [
+    "Welcome back.",
+    "Good to see you again.",
+    "Let’s pick up where you left off.",
+    "Glad you returned.",
+    "Continue your learning today.",
+    "Welcome back — keep going.",
+    "Nice to see you again.",
+    "You’re making great progress.",
+    "Back at it — let’s learn."
+  ]
+}

@@ -1,9 +1,10 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
-import welcomeMessages from '../../../welcomeMessages.json'
+import { useSession } from 'next-auth/react'
 import { useToast } from '@/components/ui'
 import { logEvent } from '@/lib/analytics'
+import { getRandomWelcome } from '@/lib/welcome'
 
 export default function WelcomeDetectorClient() {
   const searchParams = useSearchParams()
@@ -12,85 +13,78 @@ export default function WelcomeDetectorClient() {
   const [hasWelcome, setHasWelcome] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const { addToast } = useToast()
+  const { status } = useSession()
 
   useEffect(() => {
     const v = searchParams?.get('welcome')
     if (v !== null && v !== undefined) {
-      // Only show once per session/login: check sessionStorage
-      const STORAGE_KEY = 'monalo_welcome_shown'
+      // Only show when authenticated and when login session exists
+      if (status !== 'authenticated') return
+
+      const LOGIN_KEY = 'monalo_login_start'
+      const SHOWN_KEY = 'monalo_welcome_shown'
+
       try {
-        const already = sessionStorage.getItem(STORAGE_KEY)
-        if (already) {
-          // If we've already shown the toast this session, just remove the param and exit
+        const loginStart = sessionStorage.getItem(LOGIN_KEY)
+        if (!loginStart) {
+          // Not a new login session — skip showing welcome
+          // Remove query param and exit
           try {
             const params = new URLSearchParams(searchParams?.toString() || '')
             params.delete('welcome')
             const newQuery = params.toString()
             const newUrl = newQuery ? `${pathname}?${newQuery}` : pathname
             router.replace(newUrl)
-          } catch {
-            // ignore
-          }
+          } catch {}
+          return
+        }
+
+        const already = sessionStorage.getItem(SHOWN_KEY)
+        if (already) {
+          try {
+            const params = new URLSearchParams(searchParams?.toString() || '')
+            params.delete('welcome')
+            const newQuery = params.toString()
+            const newUrl = newQuery ? `${pathname}?${newQuery}` : pathname
+            router.replace(newUrl)
+          } catch {}
           return
         }
       } catch {
-        // sessionStorage may be unavailable in some environments — fall back to showing once per-page-load
+        // sessionStorage may be unavailable — fall back to existing behavior
       }
-      // Select a random welcome message based on welcome type (new/back)
-      const welcomeType = v // expected values: 'new' | 'back'
-      let selected: string | null = null
-      try {
-        const welcomeData = welcomeMessages as any
-        const messages = welcomeType === 'new' ? welcomeData.newUser || [] : welcomeData.returningUser || []
-        selected = messages.length ? messages[Math.floor(Math.random() * messages.length)] : null
-      } catch {
-        selected = null
-      }
+
+      const welcomeType = v === 'new' ? 'new' : 'returning'
+      const finalMessage = getRandomWelcome(welcomeType === 'new' ? 'new' : 'returning')
 
       setHasWelcome(true)
-      const finalMessage = selected || 'Welcome!'
       setMessage(finalMessage)
 
-      // Show a non-blocking toast notification
       try {
-        addToast('info', finalMessage, 4000)
+        addToast('info', finalMessage, 4500)
         try {
-          logEvent('welcome_shown', { welcomeType, message: finalMessage })
-        } catch {
-          // analytics failures should not affect UX
-        }
-      } catch {
-        // swallow if toast isn't available
-      }
+          logEvent('welcome_shown', { userType: welcomeType })
+        } catch {}
+      } catch {}
 
-      // Mark as shown for this session so refresh won't show it again
       try {
-        sessionStorage.setItem(STORAGE_KEY, '1')
-      } catch {
-        // ignore
-      }
+        sessionStorage.setItem('monalo_welcome_shown', '1')
+      } catch {}
 
-      // Remove the `welcome` query param from the URL without reloading
+      // Remove the welcome param from URL
       try {
         const params = new URLSearchParams(searchParams?.toString() || '')
         params.delete('welcome')
         const newQuery = params.toString()
         const newUrl = newQuery ? `${pathname}?${newQuery}` : pathname
         router.replace(newUrl)
-      } catch {
-        // ignore failures to update URL
-      }
+      } catch {}
     } else {
       setHasWelcome(false)
       setMessage(null)
     }
-  }, [searchParams, addToast, pathname, router])
+  }, [searchParams, addToast, pathname, router, status])
 
-  if (!hasWelcome) return null
-
-  return (
-    <div className="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded p-3 text-center">
-      {message}
-    </div>
-  )
+  // Non-blocking: welcome is shown via toast only. Do not render inline content.
+  return null
 }
