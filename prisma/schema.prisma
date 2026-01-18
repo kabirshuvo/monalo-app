@@ -18,6 +18,7 @@ model User {
   role      Role     @default(BROWSER) @map("role")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
+  lastLoginAt DateTime? @map("last_login_at") @db.Timestamp()
 
   // Relations
   accounts                 Account[]             @relation("UserAccounts")

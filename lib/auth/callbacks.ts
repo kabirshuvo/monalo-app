@@ -30,15 +30,27 @@ export async function handleSignIn(params: {
       return false
     }
 
-    // Update a stable timestamp on the user record (schema trimmed; use updatedAt)
-    await prisma.user.update({
+    // Read existing lastLoginAt to detect first login
+    const dbUser = await prisma.user.findUnique({
       where: { email: userEmail },
-      data: {
-        updatedAt: new Date(),
-      },
+      select: { lastLoginAt: true, id: true },
     })
 
-    console.log(`[Auth] Updated lastLoginAt for user: ${userEmail}`)
+    const isFirstLogin = !dbUser?.lastLoginAt
+
+    // Update lastLoginAt to now on every successful sign-in
+    await prisma.user.update({
+      where: { email: userEmail },
+      data: { lastLoginAt: new Date() },
+    })
+
+    // Attach the isFirstLogin flag to the transient `user` object so it
+    // can be propagated into the JWT in the `jwt` callback.
+    if (user) {
+      ;(user as any).isFirstLogin = isFirstLogin
+    }
+
+    console.log(`[Auth] lastLoginAt updated for user: ${userEmail} (firstLogin=${isFirstLogin})`)
     return true
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -72,11 +84,13 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
      * Called whenever session is checked or modified
      * Injects user role and id into the session
      */
-    async session({ session, user }) {
-      if (session.user && user) {
+    async session({ session, token, user }) {
+      if (session.user) {
         const sessionUser = session.user as any
-        sessionUser.id = user.id
-        sessionUser.role = (user as any).role
+        // Prefer values from the database-backed `user` when available
+        sessionUser.id = user?.id || token.id
+        sessionUser.role = (user as any)?.role || token.role
+        sessionUser.isFirstLogin = (token as any)?.isFirstLogin ?? false
       }
       return session
     },
@@ -88,7 +102,13 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
-        token.role = (user as any).role
+        token.role = (user as any).role || token.role
+        // Propagate isFirstLogin set during signIn handler
+        if ((user as any).isFirstLogin !== undefined) {
+          ;(token as any).isFirstLogin = (user as any).isFirstLogin
+        } else {
+          ;(token as any).isFirstLogin = (token as any).isFirstLogin ?? false
+        }
       }
       return token
     },

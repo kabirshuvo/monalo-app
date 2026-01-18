@@ -3,6 +3,9 @@ import Button from '@/components/ui/Button'
 import LandingHeaderClient from './landing/LandingHeaderClient'
 import LandingHeroClient from './landing/LandingHeroClient'
 
+// Force the root landing page to be statically rendered and public
+export const dynamic = 'force-static'
+
 export const metadata = {
   title: 'MonAlo - Learn at Your Own Pace',
   description: 'A thoughtful learning platform designed for genuine growth. No pressure, no distractions.',
