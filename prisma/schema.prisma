@@ -15,6 +15,7 @@ model User {
   email     String?  @unique @db.VarChar(255) @map("email")
   phone     String?  @unique @db.VarChar(32) @map("phone")
   password  String   @db.Text @map("password")
+  role      Role     @default(BROWSER) @map("role")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
