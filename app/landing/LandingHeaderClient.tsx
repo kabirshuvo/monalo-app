@@ -13,7 +13,7 @@ export default function LandingHeaderClient() {
   const displayName = () => {
     const user = (session as any)?.user
     if (!user) return ''
-    return user.name || (user.username as string) || user.email || ''
+    return user.name || user.email || ''
   }
 
   const handleLogout = async () => {

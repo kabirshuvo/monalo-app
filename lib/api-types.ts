@@ -17,8 +17,7 @@ import type { Role } from '@prisma/client'
 
 export interface User {
   id: string
-  username: string
-  email: string
+  email?: string | null
   role: Role
   name?: string | null
   avatar?: string | null
@@ -254,10 +253,10 @@ export interface PaginatedResponse<T> {
  * User registration payload
  */
 export interface RegisterRequest {
-  email: string
-  username: string
+  email?: string | null
+  phone?: string | null
   password: string
-  role: Role
+  name?: string | null
 }
 
 /**
