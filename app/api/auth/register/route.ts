@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { hashPassword, validateEmail, validatePassword } from '@/lib/auth-helpers'
-import { Prisma, Role } from '@prisma/client'
 
 interface RegisterRequest {
   email?: string
@@ -16,7 +15,6 @@ interface RegisterResponse {
     id: string
     email: string | null
     name: string | null
-    role: Role
   }
   error?: string
 }
@@ -133,7 +131,6 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
           id: true,
           email: true,
           name: true,
-          role: true,
         },
       })
     } catch (err: unknown) {
@@ -164,7 +161,6 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role,
         },
       },
       { status: 201 }

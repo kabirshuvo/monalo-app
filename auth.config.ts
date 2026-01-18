@@ -8,7 +8,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@/lib/db'
 import { verifyPassword } from '@/lib/auth-helpers'
 import { getAuthCallbacks } from '@/lib/auth/callbacks'
-import { Role } from '@prisma/client'
+// Role removed from Prisma schema; use string fallbacks where needed
 import NextAuth from 'next-auth'
 
 const authConfig: NextAuthOptions = {
@@ -77,7 +77,6 @@ const authConfig: NextAuthOptions = {
               email: true,
               name: true,
               password: true,
-              role: true,
             },
           })
         } else {
@@ -90,7 +89,6 @@ const authConfig: NextAuthOptions = {
               email: true,
               name: true,
               password: true,
-              role: true,
             },
           })
         }
@@ -108,7 +106,7 @@ const authConfig: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name || user.email,
-          role: user.role || Role.CUSTOMER,
+          role: (user as any).role || 'CUSTOMER',
         }
       },
     }),

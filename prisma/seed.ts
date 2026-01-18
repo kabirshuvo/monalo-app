@@ -26,7 +26,6 @@ async function main() {
 			email: 'admin@example.com',
 			name: 'Admin',
 			password: adminPassword,
-			role: 'ADMIN',
 		}
 	})
 	console.log(`✓ Admin user: ${admin.email}`)
@@ -39,7 +38,6 @@ async function main() {
 			email: 'customer@example.com',
 			name: 'Customer',
 			password: customerPassword,
-			role: 'CUSTOMER',
 		}
 	})
 	console.log(`✓ Customer user: ${customer.email}`)
@@ -52,7 +50,6 @@ async function main() {
 			email: 'learner@example.com',
 			name: 'Learner',
 			password: learnerPassword,
-			role: 'LEARNER',
 		}
 	})
 	console.log(`✓ Learner user: ${learner.email}`)

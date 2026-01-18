@@ -4,12 +4,15 @@ const prisma = new PrismaClient()
 
 async function makeAdmin(email: string) {
   try {
-    const user = await prisma.user.update({
-      where: { email },
-      data: { role: 'ADMIN' }
-    })
-    console.log(`✅ Successfully made ${user.email} an admin!`)
-    console.log(`User: ${user.name || user.email}`)
+    // The `role` field was removed from the schema; this script no longer
+    // updates roles. Instead, verify the user exists and print a note.
+    const user = await prisma.user.findUnique({ where: { email } })
+    if (!user) {
+      console.error('❌ User not found')
+      return
+    }
+    console.log(`ℹ️  Found user: ${user.email} (${user.name || 'no name'})`)
+    console.log('Note: role management has been removed from the database schema.')
   } catch (error) {
     console.error('❌ Error:', error)
   } finally {
