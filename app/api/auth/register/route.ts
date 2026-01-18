@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { hashPassword, validateEmail, validatePassword } from '@/lib/auth-helpers'
-import { Role } from '@prisma/client'
+import { Prisma, Role } from '@prisma/client'
 
 interface RegisterRequest {
   email?: string
@@ -36,14 +36,15 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
 
     const { email, phone, password, name } = body
 
-    // ============= Input Validation =============
-
-    // Normalize and validate contact info: email optional, phone optional
-    // Keep only digits and an optional leading plus
+    // Normalize optional contact fields to null for consistent DB writes
+    const normalizedEmail = email ? String(email).trim().toLowerCase() : null
     const normalizedPhone = phone ? String(phone).trim().replace(/(?!^\+)\D/g, '') : null
 
-    if (email) {
-      if (!validateEmail(email)) {
+    // ============= Input Validation =============
+
+    // Validate normalized email if present
+    if (normalizedEmail) {
+      if (!validateEmail(normalizedEmail)) {
         return NextResponse.json<RegisterResponse>(
           { ok: false, error: 'Invalid email format' },
           { status: 400 }
@@ -62,7 +63,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
     }
 
     // Require at least one contact method
-    if (!email && !normalizedPhone) {
+    if (!normalizedEmail && !normalizedPhone) {
       return NextResponse.json<RegisterResponse>(
         { ok: false, error: 'Please provide an email or phone number' },
         { status: 400 }
@@ -86,9 +87,9 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
     }
 
     // ============= Duplicate Check =============
-    if (email) {
+    if (normalizedEmail) {
       const existingEmail = await prisma.user.findUnique({
-        where: { email: email.toLowerCase() },
+        where: { email: normalizedEmail },
       })
 
       if (existingEmail) {
@@ -119,21 +120,40 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
     const hashedPassword = await hashPassword(password)
 
     // ============= Create User =============
+    let user
+    try {
+      user = await prisma.user.create({
+        data: {
+          email: normalizedEmail,
+          phone: normalizedPhone,
+          password: hashedPassword,
+          name: name || null,
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+        },
+      })
+    } catch (err: unknown) {
+      // Handle Prisma unique constraint errors gracefully
+      if (
+        err && typeof err === 'object' &&
+        'code' in err && (err as any).code === 'P2002'
+      ) {
+        return NextResponse.json<RegisterResponse>(
+          { ok: false, error: 'Unique constraint violation' },
+          { status: 409 }
+        )
+      }
 
-    const user = await prisma.user.create({
-      data: {
-        email: email ? email.toLowerCase() : undefined,
-        phone: normalizedPhone || null,
-        password: hashedPassword,
-        name: name || null,
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-      },
-    })
+      console.error('[register] prisma.user.create error:', err)
+      return NextResponse.json<RegisterResponse>(
+        { ok: false, error: 'Failed to create user' },
+        { status: 500 }
+      )
+    }
 
     // ============= Return Success Response =============
 

@@ -15,7 +15,6 @@ model User {
   email     String?  @unique @db.VarChar(255) @map("email")
   phone     String?  @unique @db.VarChar(32) @map("phone")
   password  String   @db.Text @map("password")
-  role      Role     @default(CUSTOMER) @map("role")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
 
@@ -27,6 +26,7 @@ model User {
   activityLogs             ActivityLog[]         @relation("UserActivityLogs")
   blogs                    Blog[]                @relation("UserBlogs")
   passwordResetTokens      PasswordResetToken[]  @relation("UserPasswordResetTokens")
+
   @@map("users")
   @@index([email])
   @@index([phone])
