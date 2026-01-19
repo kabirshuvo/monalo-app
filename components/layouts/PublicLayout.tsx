@@ -108,7 +108,13 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
 
             {/* Auth Buttons / Avatar */}
             <div className="hidden md:flex items-center gap-3 relative">
-              {isAuthenticated ? (
+              {status === 'loading' ? (
+                // Minimal UI while session is loading
+                <>
+                  <div className="w-9 h-9 rounded-full bg-gray-200 animate-pulse" />
+                  <div className="h-8 w-20 bg-gray-200 rounded-md animate-pulse" />
+                </>
+              ) : isAuthenticated ? (
                 <>
                   <button
                     onClick={() => setMenuOpen(!menuOpen)}
@@ -136,16 +142,16 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
                     </div>
                   )}
                 </>
-              ) : (
+                  ) : (
                 <>
                   <Link href="/login">
                     <Button variant="ghost" size="sm">
-                      Sign in
+                      Log in
                     </Button>
                   </Link>
                   <Link href="/register">
                     <Button variant="primary" size="sm">
-                      Get started
+                      Get Started
                     </Button>
                   </Link>
                 </>
@@ -189,7 +195,12 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
                   </Link>
                 ))}
                 <div className="pt-4 border-t border-gray-200 mt-2 flex flex-col gap-2">
-                  {isAuthenticated ? (
+                  {status === 'loading' ? (
+                    <>
+                      <div className="h-10 bg-gray-200 rounded-md animate-pulse" />
+                      <div className="h-10 bg-gray-200 rounded-md animate-pulse" />
+                    </>
+                  ) : isAuthenticated ? (
                     <>
                       <Link href={getDashboardPath()}>
                         <Button variant="secondary" size="sm" fullWidth>
@@ -206,12 +217,12 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
                     <>
                       <Link href="/login">
                         <Button variant="ghost" size="sm" fullWidth>
-                          Sign in
+                          Log in
                         </Button>
                       </Link>
                       <Link href="/register">
                         <Button variant="primary" size="sm" fullWidth>
-                          Get started
+                          Get Started
                         </Button>
                       </Link>
                     </>

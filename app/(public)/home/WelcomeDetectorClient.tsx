@@ -1,17 +1,21 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { useToast } from '@/components/ui'
+import { useWelcomeToast } from '@/components/ui'
 import { logEvent } from '@/lib/analytics'
 import { getRandomWelcome } from '@/lib/welcome'
 
 export default function WelcomeDetectorClient() {
-  const { addToast } = useToast()
+  const { showWelcome } = useWelcomeToast()
   const { data: session, status } = useSession()
+  const shownRef = useRef(false)
 
   useEffect(() => {
     // Only proceed when session is ready and user is authenticated
     if (status !== 'authenticated' || !session?.user) return
+
+    // Ensure we only show the toast once per page load (no persistence across reloads)
+    if (shownRef.current) return
 
     // Read the isFirstLogin flag from the server-populated session
     const isFirst = Boolean((session.user as any).isFirstLogin)
@@ -21,13 +25,20 @@ export default function WelcomeDetectorClient() {
 
     // Show a single non-persistent toast. Do NOT persist any client-side flags.
     try {
-      addToast('info', finalMessage, 4500)
+      showWelcome(finalMessage, 4500)
+      shownRef.current = true
     } catch {}
 
     try {
-      logEvent('welcome_shown', { userType: welcomeType })
+      const eventName = isFirst ? 'first_login' : 'login'
+      const role = (session.user as any)?.role
+      const method = (session.user as any)?.provider || (session.user as any)?.authMethod || (session.user as any)?.method
+      const payload: Record<string, any> = { userType: welcomeType }
+      if (role) payload.role = role
+      if (method) payload.method = method
+      logEvent(eventName, payload)
     } catch {}
-  }, [session, status, addToast])
+  }, [session, status, showWelcome])
 
   return null
 }

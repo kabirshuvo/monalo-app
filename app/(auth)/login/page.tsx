@@ -102,7 +102,7 @@ function LoginForm() {
           setFormMessage(msg)
         }
       } else if (result?.ok) {
-        // Success - record login start and redirect to callbackUrl (or home)
+        // Success - record login start and redirect to /home
         try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
         try {
           const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)
@@ -110,11 +110,15 @@ function LoginForm() {
           const identifierType = isEmail ? 'email' : (isPhone ? 'phone' : 'unknown')
           logEvent('login_success', { identifier: trimmedIdentifier, identifierType, method: 'credentials' })
         } catch {}
-        const isNewUser = searchParams?.get('newUser') === '1'
-        const callbackUrl = searchParams?.get('callbackUrl') || '/'
-        const separator = callbackUrl.includes('?') ? '&' : '?'
-        const target = `${callbackUrl}${separator}welcome=${isNewUser ? 'new' : 'back'}`
-        router.push(target)
+
+        // Explicitly redirect to /home for credentials sign-in.
+        // Ensure we never honor a callbackUrl that points to /login for security.
+        const requestedCallback = searchParams?.get('callbackUrl') || ''
+        if (requestedCallback && requestedCallback.includes('/login')) {
+          router.push('/home')
+        } else {
+          router.push('/home')
+        }
       }
     } catch (err) {
       const msg = 'Oops — something went wrong. Please try again in a moment.'

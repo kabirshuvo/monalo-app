@@ -8,11 +8,14 @@ export interface Toast {
   type: ToastType
   message: string
   duration?: number
+  // optional presentation flags
+  noIcon?: boolean
+  neutral?: boolean
 }
 
 interface ToastContextType {
   toasts: Toast[]
-  addToast: (type: ToastType, message: string, duration?: number) => void
+  addToast: (type: ToastType, message: string, duration?: number, opts?: { noIcon?: boolean; neutral?: boolean }) => void
   removeToast: (id: string) => void
 }
 
@@ -29,14 +32,17 @@ export function useToast() {
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([])
   
-  const addToast = useCallback((type: ToastType, message: string, duration = 5000) => {
-    const id = Math.random().toString(36).substr(2, 9)
-    setToasts(prev => [...prev, { id, type, message, duration }])
-    
-    if (duration > 0) {
-      setTimeout(() => removeToast(id), duration)
-    }
-  }, [])
+  const addToast = useCallback(
+    (type: ToastType, message: string, duration = 5000, opts?: { noIcon?: boolean; neutral?: boolean }) => {
+      const id = Math.random().toString(36).substr(2, 9)
+      setToasts(prev => [...prev, { id, type, message, duration, noIcon: opts?.noIcon, neutral: opts?.neutral }])
+      
+      if (duration > 0) {
+        setTimeout(() => removeToast(id), duration)
+      }
+    },
+    []
+  )
   
   const removeToast = useCallback((id: string) => {
     setToasts(prev => prev.filter(toast => toast.id !== id))
@@ -67,7 +73,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
     success: 'bg-green-50 border-green-200 text-green-800',
     error: 'bg-red-50 border-red-200 text-red-800',
     info: 'bg-blue-50 border-blue-200 text-blue-800',
-    warning: 'bg-yellow-50 border-yellow-200 text-yellow-800'
+    warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
   }
   
   const icons = {
@@ -104,12 +110,21 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
     return () => clearTimeout(t)
   }, [fadeDelay])
 
+  const useNeutral = Boolean(toast.neutral)
+  const noIcon = Boolean(toast.noIcon)
+
+  const containerClass = useNeutral
+    ? 'bg-gray-50 border border-gray-200 text-gray-800'
+    : styles[toast.type]
+
   return (
-    <div 
-      className={`${styles[toast.type]} border rounded-lg p-4 shadow-lg flex items-start gap-3 animate-slide-in-right ${isFading ? 'animate-fade-out' : ''}`}
+    <div
+      className={`${containerClass} rounded-lg p-4 shadow-lg flex items-start gap-3 animate-slide-in-right ${isFading ? 'animate-fade-out' : ''}`}
       role="alert"
     >
-      <div className="flex-shrink-0">{icons[toast.type]}</div>
+      {!noIcon && (
+        <div className="flex-shrink-0">{icons[toast.type]}</div>
+      )}
       <p className="flex-1 text-sm font-medium">{toast.message}</p>
       <button
         onClick={() => onRemove(toast.id)}

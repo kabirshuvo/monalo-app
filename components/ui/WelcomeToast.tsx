@@ -10,12 +10,7 @@ export default function WelcomeToast({
   onClose?: () => void
 }) {
   return (
-    <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg p-3 flex items-start gap-3">
-      <div className="flex-shrink-0 mt-0.5">
-        <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 002 0V7zm-1 7a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z" clipRule="evenodd" />
-        </svg>
-      </div>
+    <div className="bg-gray-50 border border-gray-200 text-gray-800 rounded-lg p-3 flex items-start gap-3">
       <div className="flex-1 text-sm font-medium">{message}</div>
       {onClose && (
         <button
@@ -36,7 +31,7 @@ export function useWelcomeToast() {
   const { addToast } = useToast()
 
   const showWelcome = (message: string, duration = 4000) => {
-    addToast('info', message, duration)
+    addToast('info', message, duration, { noIcon: true, neutral: true })
   }
 
   return { showWelcome }
