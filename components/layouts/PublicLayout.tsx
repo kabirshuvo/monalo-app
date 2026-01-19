@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Button from '../ui/Button'
 import { useSession, signOut } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
+// path-based UI logic removed: auth UI must not depend on pathname
 import { logEvent } from '@/lib/analytics'
 
 export interface PublicLayoutProps {
@@ -23,9 +23,21 @@ const navigationItems = [
 export default function PublicLayout({ children, currentPath = '' }: PublicLayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { data: session, status } = useSession()
-  const pathname = usePathname()
-  const isAuthenticated = status === 'authenticated'
   const [menuOpen, setMenuOpen] = useState(false)
+  const isLanding = currentPath === '/'
+
+  /*
+   Auth UI notes:
+   - Drive UI from `status` only: `status` (loading/authenticated/unauthenticated)
+     represents the auth lifecycle and avoids transient rendering when the
+     session object is not yet available.
+   - Do NOT rely on `session` truthiness: reading `session` directly can
+     produce race conditions or stale UI (session may be null during
+     loading or immediately after sign-out in another tab).
+   - Reset menu state on auth transitions to close ephemeral UI so dropdowns
+     or mobile menus don't remain open after login/logout (prevents stale
+     interactive controls that no longer apply).
+  */
 
   // Ensure we record login start time for session-based analytics
   useEffect(() => {
@@ -40,10 +52,34 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     }
   }, [status])
 
-  const getDashboardPath = () => {
-    const role = (session as any)?.user?.role
-    if (!role) return '/dashboard/customer'
-    return `/dashboard/${(role as string).toLowerCase()}`
+  // Reset ephemeral UI (menus) on auth-state changes to avoid stale guest/auth UI
+  useEffect(() => {
+    // Close any open menus when the auth status changes to avoid showing
+    // stale guest/auth UI after login or logout.
+    if (menuOpen) setMenuOpen(false)
+    if (mobileMenuOpen) setMobileMenuOpen(false)
+  }, [status])
+
+  // Dev-only logging to observe navbar auth transitions
+  const _userEmailForLog = (session as any)?.user?.email ?? null
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      try {
+        console.log('[NAVBAR]', { status, email: _userEmailForLog })
+      } catch (e) {}
+    }
+  }, [status, _userEmailForLog])
+
+  const getDashboardPath = (role?: string) => {
+    // If a role is provided, use it. Otherwise, only attempt to read the
+    // session for a role when we're authenticated to avoid touching session
+    // data during loading/unauthenticated states.
+    if (role) return `/dashboard/${role.toLowerCase()}`
+    if (status === 'authenticated') {
+      const roleFromSession = (session as any)?.user?.role
+      if (roleFromSession) return `/dashboard/${roleFromSession.toLowerCase()}`
+    }
+    return '/dashboard/customer'
   }
 
   const handleLogout = async () => {
@@ -58,7 +94,8 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     sessionStorage.removeItem('monalo_login_start')
 
     // Sign out and redirect to see-off with minutes
-    const email = (session as any)?.user?.email
+    // Only read session user data if we're authenticated
+    const email = status === 'authenticated' ? (session as any)?.user?.email : undefined
     const emailParam = email ? `&email=${encodeURIComponent(email)}` : ''
     try {
       logEvent('logout', { minutes, email: email || null, method: 'signout' })
@@ -67,9 +104,95 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
   }
 
   const displayName = () => {
+    // Avoid touching session during loading/unauthenticated states
+    if (status !== 'authenticated') return ''
     const user = (session as any)?.user
     if (!user) return ''
     return user.name || user.email || ''
+  }
+
+  // Centralized auth controls renderer to keep desktop and mobile in sync.
+  const AuthControls = ({ variant }: { variant: 'desktop' | 'mobile' }) => {
+    if (status === 'loading') return null
+
+    if (status === 'authenticated') {
+      // Authenticated UI
+      if (variant === 'desktop') {
+        return (
+          <div className="hidden md:flex items-center gap-3 relative">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-haspopup="true"
+              aria-expanded={menuOpen}
+              className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
+                <span className="text-sm font-semibold text-blue-600">
+                  {String(((session as any)?.user?.name || (session as any)?.user?.email || '')).charAt(0).toUpperCase()}
+                </span>
+              </div>
+            </button>
+
+            {menuOpen && (
+              <div className="absolute right-0 mt-12 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50">
+                <Link href={getDashboardPath((session as any)?.user?.role)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Dashboard</Link>
+                <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
+                <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Logout</button>
+              </div>
+            )}
+          </div>
+        )
+      }
+
+      // Mobile authenticated actions (rendered inside mobile nav container)
+      return (
+        <>
+          <Link href={getDashboardPath((session as any)?.user?.role)}>
+            <Button variant="secondary" size="sm" fullWidth>
+              Dashboard
+            </Button>
+          </Link>
+          <button onClick={handleLogout} className="w-full text-left">
+            <Button variant="ghost" size="sm" fullWidth>
+              Logout
+            </Button>
+          </button>
+        </>
+      )
+    }
+
+    // Unauthenticated UI
+    if (variant === 'desktop') {
+      return (
+        <div className="hidden md:flex items-center gap-3 relative">
+          <Link href="/login">
+            <Button variant="ghost" size="sm">
+              Log in
+            </Button>
+          </Link>
+          <Link href="/register">
+            <Button variant="primary" size="sm">
+              Get Started
+            </Button>
+          </Link>
+        </div>
+      )
+    }
+
+    return (
+      <>
+        <Link href="/login">
+          <Button variant="ghost" size="sm" fullWidth>
+            Log in
+          </Button>
+        </Link>
+        <Link href="/register">
+          <Button variant="primary" size="sm" fullWidth>
+            Get Started
+          </Button>
+        </Link>
+      </>
+    )
   }
 
   return (
@@ -90,7 +213,8 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
+            {!isLanding && (
+              <div className="hidden md:flex items-center gap-1">
               {navigationItems.map((item) => (
                 <Link
                   key={item.href}
@@ -104,62 +228,15 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
                   {item.label}
                 </Link>
               ))}
-            </div>
+              </div>
+            )}
 
-            {/* Auth Buttons / Avatar */}
-            <div className="hidden md:flex items-center gap-3 relative">
-              {status === 'loading' ? (
-                // Minimal UI while session is loading
-                <>
-                  <div className="w-9 h-9 rounded-full bg-gray-200 animate-pulse" />
-                  <div className="h-8 w-20 bg-gray-200 rounded-md animate-pulse" />
-                </>
-              ) : isAuthenticated ? (
-                <>
-                  <button
-                    onClick={() => setMenuOpen(!menuOpen)}
-                    aria-haspopup="true"
-                    aria-expanded={menuOpen}
-                    className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
-                      <span className="text-sm font-semibold text-blue-600">
-                        {displayName().charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                  </button>
-
-                  {/* Welcome message on landing page only */}
-                  {pathname === '/' && (
-                    <div className="ml-3 text-sm text-gray-700">Welcome, {displayName()}</div>
-                  )}
-
-                  {menuOpen && (
-                    <div className="absolute right-0 mt-12 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50">
-                      <Link href={getDashboardPath()} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Dashboard</Link>
-                      <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
-                      <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Logout</button>
-                    </div>
-                  )}
-                </>
-                  ) : (
-                <>
-                  <Link href="/login">
-                    <Button variant="ghost" size="sm">
-                      Log in
-                    </Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button variant="primary" size="sm">
-                      Get Started
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </div>
+            {/* Auth Buttons / Avatar - render exactly one branch per status */}
+            {!isLanding && <AuthControls variant="desktop" />}
 
             {/* Mobile menu button */}
-            <button
+            {!isLanding && (
+              <button
               type="button"
               className="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -173,11 +250,12 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 )}
               </svg>
-            </button>
+              </button>
+            )}
           </div>
 
           {/* Mobile Navigation */}
-          {mobileMenuOpen && (
+          {!isLanding && mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-gray-200">
               <div className="flex flex-col gap-2">
                 {navigationItems.map((item) => (
@@ -195,38 +273,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
                   </Link>
                 ))}
                 <div className="pt-4 border-t border-gray-200 mt-2 flex flex-col gap-2">
-                  {status === 'loading' ? (
-                    <>
-                      <div className="h-10 bg-gray-200 rounded-md animate-pulse" />
-                      <div className="h-10 bg-gray-200 rounded-md animate-pulse" />
-                    </>
-                  ) : isAuthenticated ? (
-                    <>
-                      <Link href={getDashboardPath()}>
-                        <Button variant="secondary" size="sm" fullWidth>
-                          Dashboard
-                        </Button>
-                      </Link>
-                      <button onClick={handleLogout} className="w-full text-left">
-                        <Button variant="ghost" size="sm" fullWidth>
-                          Logout
-                        </Button>
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <Link href="/login">
-                        <Button variant="ghost" size="sm" fullWidth>
-                          Log in
-                        </Button>
-                      </Link>
-                      <Link href="/register">
-                        <Button variant="primary" size="sm" fullWidth>
-                          Get Started
-                        </Button>
-                      </Link>
-                    </>
-                  )}
+                  <AuthControls variant="mobile" />
                 </div>
               </div>
             </div>
