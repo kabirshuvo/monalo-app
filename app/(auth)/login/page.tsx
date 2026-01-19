@@ -83,6 +83,23 @@ function LoginForm() {
         redirect: false,
       })
 
+      // Dev-only diagnostics: log signIn result and check session endpoint
+      if (process.env.NODE_ENV === 'development') {
+        try {
+          console.log('[DEV signIn result]', result)
+        } catch (e) {}
+        try {
+          const resp = await fetch('/api/auth/session', { credentials: 'same-origin' })
+          const json = await resp.json().catch(() => null)
+          console.log('[DEV /api/auth/session]', resp.status, json)
+        } catch (e) {
+          console.log('[DEV /api/auth/session] fetch error', e)
+        }
+        try {
+          console.log('[DEV document.cookie]', typeof document !== 'undefined' ? document.cookie : '<no-document>')
+        } catch (e) {}
+      }
+
       if (result?.error) {
         // Friendly authentication messages
         try {
