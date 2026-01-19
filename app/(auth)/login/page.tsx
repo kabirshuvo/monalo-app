@@ -79,17 +79,11 @@ function LoginForm() {
       const result = await signIn('credentials', {
         identifier: trimmedIdentifier,
         password,
-        // Perform a full redirect so the server reads the Set-Cookie
-        // and the next page render has the authoritative session.
-        redirect: true,
-        callbackUrl: searchParams?.get('callbackUrl') || '/home',
+        // Use SPA sign-in but explicitly revalidate before navigation.
+        redirect: false,
       })
 
-      // When using `redirect: true` a successful sign-in will perform a
-      // full browser redirect and this code will typically not continue
-      // executing. If an error occurs the sign-in flow may redirect to
-      // the error page or return here depending on provider config.
-      if (result && (result as any).error) {
+      if (result?.error) {
         // Friendly authentication messages
         try {
           logEvent('login_failed', { identifier: trimmedIdentifier, reason: result.error, method: 'credentials' })
@@ -108,18 +102,32 @@ function LoginForm() {
           setError(msg)
           setFormMessage(msg)
         }
+      } else if (result?.ok) {
+        // Success - record login start and event
+        try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
+        try {
+          const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)
+          const isPhone = /^\+?\d{10,15}$/.test(trimmedIdentifier)
+          const identifierType = isEmail ? 'email' : (isPhone ? 'phone' : 'unknown')
+          logEvent('login_success', { identifier: trimmedIdentifier, identifierType, method: 'credentials' })
+        } catch {}
+
+        // Ensure the client SessionProvider revalidates and picks up the
+        // new session BEFORE we navigate. `router.refresh()` forces App
+        // Router to re-run data fetching and gives `useSession()` a chance
+        // to see the updated session.
+        try {
+          await router.refresh()
+        } catch (e) {}
+
+        // Now perform client navigation to the callback or /home.
+        const requestedCallback = searchParams?.get('callbackUrl') || ''
+        if (requestedCallback && requestedCallback.includes('/login')) {
+          router.push('/home')
+        } else {
+          router.push(requestedCallback || '/home')
+        }
       }
-      // Note: on success the browser will be redirected by next-auth so
-      // we don't perform an additional `router.push` here. We still record
-      // the login start time in sessionStorage before the redirect above
-      // so logout analytics remain accurate.
-      try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
-      try {
-        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)
-        const isPhone = /^\+?\d{10,15}$/.test(trimmedIdentifier)
-        const identifierType = isEmail ? 'email' : (isPhone ? 'phone' : 'unknown')
-        logEvent('login_success', { identifier: trimmedIdentifier, identifierType, method: 'credentials' })
-      } catch {}
     } catch (err) {
       const msg = 'Oops — something went wrong. Please try again in a moment.'
       setError(msg)
