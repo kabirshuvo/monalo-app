@@ -26,6 +26,16 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
   const [menuOpen, setMenuOpen] = useState(false)
   const isLanding = currentPath === '/'
 
+  // Diagnostic helpers (development only)
+  const _devUserEmail = (session as any)?.user?.email ?? null
+  const renderCountRef = React.useRef(0)
+  renderCountRef.current += 1
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      console.log('[NAVBAR RENDER]', { count: renderCountRef.current, status, email: _devUserEmail, isLanding })
+    } catch (e) {}
+  }
+
   /*
    Auth UI notes:
    - Drive UI from `status` only: `status` (loading/authenticated/unauthenticated)
@@ -60,15 +70,14 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     if (mobileMenuOpen) setMobileMenuOpen(false)
   }, [status])
 
-  // Dev-only logging to observe navbar auth transitions
-  const _userEmailForLog = (session as any)?.user?.email ?? null
+  // Dev-only logging to observe navbar auth transitions (status/email)
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       try {
-        console.log('[NAVBAR]', { status, email: _userEmailForLog })
+        console.log('[NAVBAR]', { status, email: _devUserEmail })
       } catch (e) {}
     }
-  }, [status, _userEmailForLog])
+  }, [status, _devUserEmail])
 
   const getDashboardPath = (role?: string) => {
     // If a role is provided, use it. Otherwise, only attempt to read the
@@ -113,6 +122,9 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
 
   // Centralized auth controls renderer to keep desktop and mobile in sync.
   const AuthControls = ({ variant }: { variant: 'desktop' | 'mobile' }) => {
+    if (process.env.NODE_ENV === 'development') {
+      try { console.log(`[NAVBAR AuthControls] variant=${variant} status=${status}`) } catch (e) {}
+    }
     if (status === 'loading') return null
 
     if (status === 'authenticated') {
@@ -196,7 +208,9 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    // TEMP DIAGNOSTIC: force remount when `status` changes to verify
+    // whether remounting fixes navbar staleness. Remove when debugging is done.
+    <div key={status} className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">

@@ -79,10 +79,17 @@ function LoginForm() {
       const result = await signIn('credentials', {
         identifier: trimmedIdentifier,
         password,
-        redirect: false,
+        // Perform a full redirect so the server reads the Set-Cookie
+        // and the next page render has the authoritative session.
+        redirect: true,
+        callbackUrl: searchParams?.get('callbackUrl') || '/home',
       })
 
-      if (result?.error) {
+      // When using `redirect: true` a successful sign-in will perform a
+      // full browser redirect and this code will typically not continue
+      // executing. If an error occurs the sign-in flow may redirect to
+      // the error page or return here depending on provider config.
+      if (result && (result as any).error) {
         // Friendly authentication messages
         try {
           logEvent('login_failed', { identifier: trimmedIdentifier, reason: result.error, method: 'credentials' })
@@ -101,25 +108,18 @@ function LoginForm() {
           setError(msg)
           setFormMessage(msg)
         }
-      } else if (result?.ok) {
-        // Success - record login start and redirect to /home
-        try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
-        try {
-          const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)
-          const isPhone = /^\+?\d{10,15}$/.test(trimmedIdentifier)
-          const identifierType = isEmail ? 'email' : (isPhone ? 'phone' : 'unknown')
-          logEvent('login_success', { identifier: trimmedIdentifier, identifierType, method: 'credentials' })
-        } catch {}
-
-        // Explicitly redirect to /home for credentials sign-in.
-        // Ensure we never honor a callbackUrl that points to /login for security.
-        const requestedCallback = searchParams?.get('callbackUrl') || ''
-        if (requestedCallback && requestedCallback.includes('/login')) {
-          router.push('/home')
-        } else {
-          router.push('/home')
-        }
       }
+      // Note: on success the browser will be redirected by next-auth so
+      // we don't perform an additional `router.push` here. We still record
+      // the login start time in sessionStorage before the redirect above
+      // so logout analytics remain accurate.
+      try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
+      try {
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)
+        const isPhone = /^\+?\d{10,15}$/.test(trimmedIdentifier)
+        const identifierType = isEmail ? 'email' : (isPhone ? 'phone' : 'unknown')
+        logEvent('login_success', { identifier: trimmedIdentifier, identifierType, method: 'credentials' })
+      } catch {}
     } catch (err) {
       const msg = 'Oops — something went wrong. Please try again in a moment.'
       setError(msg)
