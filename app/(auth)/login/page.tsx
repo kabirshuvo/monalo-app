@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect, Suspense } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn, useSession, getSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Form, FormSection, FormActions, Input, Button, Alert } from '@/components/ui'
@@ -112,12 +112,18 @@ function LoginForm() {
           logEvent('login_success', { identifier: trimmedIdentifier, identifierType, method: 'credentials' })
         } catch {}
 
-        // Ensure the client SessionProvider revalidates and picks up the
-        // new session BEFORE we navigate. `router.refresh()` forces App
-        // Router to re-run data fetching and gives `useSession()` a chance
-        // to see the updated session.
+        // Ensure the client SessionProvider picks up the updated session
+        // BEFORE we navigate. Call `getSession()` and retry briefly if
+        // the session hasn't propagated yet — this avoids the UI race.
         try {
-          await router.refresh()
+          let sess = await getSession()
+          let attempts = 0
+          while (!sess && attempts < 5) {
+            // small backoff
+            await new Promise((r) => setTimeout(r, 200))
+            sess = await getSession()
+            attempts += 1
+          }
         } catch (e) {}
 
         // Now perform client navigation to the callback or /home.
