@@ -18,29 +18,46 @@ export async function handleSignIn(params: {
 
     // Only update lastLoginAt on new session creation (account will be present)
     // Skip if this is a token refresh (account will be null for existing sessions)
-    if (!account || !user?.email) {
+    if (!account) {
       // Token refresh, don't update
       return true
     }
 
-    const userEmail = user.email
+    // Prefer identifying the DB user by user.id; fall back to user.email (lowercased) if id not available
+    const userId = user?.id
+    const userEmail = user?.email ? String(user.email).toLowerCase() : null
 
-    if (!userEmail) {
-      console.warn('[Auth] Sign-in callback: No email found')
-      return false
+    if (!userId && !userEmail) {
+      console.warn('[Auth] Sign-in callback: No id or email found')
+      // Allow sign-in even without id/email to not block authentication
+      return true
     }
 
-    // Read existing lastLoginAt to detect first login
-    const dbUser = await prisma.user.findUnique({
-      where: { email: userEmail },
-      select: { lastLoginAt: true, id: true },
-    })
+    // Lookup db user by id or email to compute isFirstLogin from lastLoginAt
+    let dbUser: { lastLoginAt: Date | null; id: string } | null = null
+    if (userId) {
+      dbUser = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { lastLoginAt: true, id: true },
+      })
+    } else if (userEmail) {
+      dbUser = await prisma.user.findUnique({
+        where: { email: userEmail },
+        select: { lastLoginAt: true, id: true },
+      })
+    }
 
-    const isFirstLogin = !dbUser?.lastLoginAt
+    if (!dbUser) {
+      console.warn('[Auth] Sign-in callback: User not found in database')
+      // Allow sign-in even if user not found to not block authentication
+      return true
+    }
 
-    // Update lastLoginAt to now on every successful sign-in
+    const isFirstLogin = !dbUser.lastLoginAt
+
+    // Update lastLoginAt for the resolved DB id
     await prisma.user.update({
-      where: { email: userEmail },
+      where: { id: dbUser.id },
       data: { lastLoginAt: new Date() },
     })
 
@@ -50,7 +67,8 @@ export async function handleSignIn(params: {
       ;(user as any).isFirstLogin = isFirstLogin
     }
 
-    console.log(`[Auth] lastLoginAt updated for user: ${userEmail} (firstLogin=${isFirstLogin})`)
+    const identifier = userEmail || userId || 'unknown'
+    console.log(`[Auth] lastLoginAt updated for user: ${identifier} (firstLogin=${isFirstLogin})`)
     return true
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -82,7 +100,7 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
 
     /**
      * Called whenever session is checked or modified
-     * Injects user role and id into the session
+     * Injects user role, id, and phone into the session
      */
     async session({ session, token, user }) {
       if (session.user) {
@@ -91,18 +109,24 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
         sessionUser.id = user?.id || token.id
         sessionUser.role = (user as any)?.role || token.role
         sessionUser.isFirstLogin = (token as any)?.isFirstLogin ?? false
+        // Populate phone from token or user
+        sessionUser.phone = (token as any)?.phone || (user as any)?.phone || null
       }
       return session
     },
 
     /**
      * Called when JWT token is created or updated
-     * Preserves user id and role in the JWT
+     * Preserves user id, role, and phone in the JWT
      */
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
         token.role = (user as any).role || token.role
+        // Propagate phone into token when present
+        if ((user as any).phone !== undefined) {
+          ;(token as any).phone = (user as any).phone
+        }
         // Propagate isFirstLogin set during signIn handler
         if ((user as any).isFirstLogin !== undefined) {
           ;(token as any).isFirstLogin = (user as any).isFirstLogin
