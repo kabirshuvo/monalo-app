@@ -1,6 +1,9 @@
 import type { NextAuthOptions } from 'next-auth'
 import { prisma } from '@/lib/db'
 
+// Common select fields for user lookup in handleSignIn
+const USER_LOOKUP_FIELDS = { id: true, lastLoginAt: true }
+
 /**
  * Update user's lastLoginAt timestamp on successful sign-in
  * Only updates on initial sign-in, not on token refresh
@@ -25,19 +28,18 @@ export async function handleSignIn(params: {
 
     // Resolve DB user by user.id (preferred) or user.email (lowercased) as fallback
     let dbUser: { id: string; lastLoginAt: Date | null } | null = null
-    const selectFields = { id: true, lastLoginAt: true }
     
     if (user?.id) {
       // Prefer user.id lookup
       dbUser = await prisma.user.findUnique({
         where: { id: user.id },
-        select: selectFields,
+        select: USER_LOOKUP_FIELDS,
       })
     } else if (user?.email) {
       // Fallback to email lookup (lowercased) for OAuth providers before id is set
       dbUser = await prisma.user.findUnique({
         where: { email: user.email.toLowerCase() },
-        select: selectFields,
+        select: USER_LOOKUP_FIELDS,
       })
     }
 
