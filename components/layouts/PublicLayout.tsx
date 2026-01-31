@@ -117,7 +117,16 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     if (status !== 'authenticated') return ''
     const user = (session as any)?.user
     if (!user) return ''
-    return user.name || user.email || ''
+    return user.name || user.email || user.phone || ''
+  }
+
+  // Helper to get user's initial for avatar
+  const getUserInitial = () => {
+    if (status !== 'authenticated') return ''
+    const user = (session as any)?.user
+    if (!user) return ''
+    const name = user.name || user.email || user.phone || ''
+    return name.charAt(0).toUpperCase()
   }
 
   // Centralized auth controls renderer to keep desktop and mobile in sync.
@@ -140,7 +149,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
             >
               <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
                 <span className="text-sm font-semibold text-blue-600">
-                  {String(((session as any)?.user?.name || (session as any)?.user?.email || '')).charAt(0).toUpperCase()}
+                  {getUserInitial()}
                 </span>
               </div>
             </button>
