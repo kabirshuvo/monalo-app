@@ -76,6 +76,8 @@ const authConfig: NextAuthOptions = {
               id: true,
               email: true,
               name: true,
+              phone: true,
+              role: true,
               password: true,
             },
           })
@@ -88,6 +90,8 @@ const authConfig: NextAuthOptions = {
               id: true,
               email: true,
               name: true,
+              phone: true,
+              role: true,
               password: true,
             },
           })
@@ -105,8 +109,9 @@ const authConfig: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          name: user.name || user.email,
-          role: (user as any).role || 'CUSTOMER',
+          name: user.name || user.email || user.phone,
+          phone: user.phone,
+          role: user.role,
         }
       },
     }),

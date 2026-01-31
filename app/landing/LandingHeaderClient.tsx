@@ -33,7 +33,7 @@ export default function LandingHeaderClient() {
   const displayName = () => {
     const user = (session as any)?.user
     if (!user) return ''
-    return user.name || user.email || ''
+    return user.name || user.email || user.phone || ''
   }
   const user = (session as any)?.user
 
