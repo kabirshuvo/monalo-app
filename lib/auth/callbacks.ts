@@ -27,6 +27,7 @@ export async function handleSignIn(params: {
     const userEmail = user?.email?.toLowerCase() || null
 
     // If neither userId nor userEmail, log a warning and allow sign-in
+    // (authentication already succeeded, we just can't update lastLoginAt)
     if (!userId && !userEmail) {
       console.warn('[Auth] Sign-in callback: No userId or email found')
       return true
