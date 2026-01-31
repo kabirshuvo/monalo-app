@@ -25,25 +25,26 @@ export async function handleSignIn(params: {
 
     // Resolve DB user by user.id (preferred) or user.email (lowercased) as fallback
     let dbUser: { id: string; lastLoginAt: Date | null } | null = null
+    const selectFields = { id: true, lastLoginAt: true }
     
     if (user?.id) {
       // Prefer user.id lookup
       dbUser = await prisma.user.findUnique({
         where: { id: user.id },
-        select: { id: true, lastLoginAt: true },
+        select: selectFields,
       })
     } else if (user?.email) {
-      // Fallback to email lookup (lowercased)
+      // Fallback to email lookup (lowercased) for OAuth providers before id is set
       dbUser = await prisma.user.findUnique({
         where: { email: user.email.toLowerCase() },
-        select: { id: true, lastLoginAt: true },
+        select: selectFields,
       })
     }
 
     if (!dbUser) {
-      // If neither id nor email exist, allow sign-in with warning
-      console.warn('[Auth] Sign-in callback: No user found by id or email, allowing sign-in')
-      return true
+      // If user cannot be resolved, deny sign-in for security
+      console.error('[Auth] Sign-in callback: No user found by id or email, denying sign-in')
+      return false
     }
 
     const isFirstLogin = !dbUser.lastLoginAt
