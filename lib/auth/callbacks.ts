@@ -18,29 +18,39 @@ export async function handleSignIn(params: {
 
     // Only update lastLoginAt on new session creation (account will be present)
     // Skip if this is a token refresh (account will be null for existing sessions)
-    if (!account || !user?.email) {
+    if (!account) {
       // Token refresh, don't update
       return true
     }
 
-    const userEmail = user.email
-
-    if (!userEmail) {
-      console.warn('[Auth] Sign-in callback: No email found')
-      return false
+    // Resolve DB user by user.id (preferred) or user.email (lowercased) as fallback
+    let dbUser: { id: string; lastLoginAt: Date | null } | null = null
+    
+    if (user?.id) {
+      // Prefer user.id lookup
+      dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { id: true, lastLoginAt: true },
+      })
+    } else if (user?.email) {
+      // Fallback to email lookup (lowercased)
+      dbUser = await prisma.user.findUnique({
+        where: { email: user.email.toLowerCase() },
+        select: { id: true, lastLoginAt: true },
+      })
     }
 
-    // Read existing lastLoginAt to detect first login
-    const dbUser = await prisma.user.findUnique({
-      where: { email: userEmail },
-      select: { lastLoginAt: true, id: true },
-    })
+    if (!dbUser) {
+      // If neither id nor email exist, allow sign-in with warning
+      console.warn('[Auth] Sign-in callback: No user found by id or email, allowing sign-in')
+      return true
+    }
 
-    const isFirstLogin = !dbUser?.lastLoginAt
+    const isFirstLogin = !dbUser.lastLoginAt
 
-    // Update lastLoginAt to now on every successful sign-in
+    // Update lastLoginAt to now on every successful sign-in using resolved id
     await prisma.user.update({
-      where: { email: userEmail },
+      where: { id: dbUser.id },
       data: { lastLoginAt: new Date() },
     })
 
@@ -50,7 +60,7 @@ export async function handleSignIn(params: {
       ;(user as any).isFirstLogin = isFirstLogin
     }
 
-    console.log(`[Auth] lastLoginAt updated for user: ${userEmail} (firstLogin=${isFirstLogin})`)
+    console.log(`[Auth] lastLoginAt updated for user id: ${dbUser.id} (firstLogin=${isFirstLogin})`)
     return true
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -90,6 +100,7 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
         // Prefer values from the database-backed `user` when available
         sessionUser.id = user?.id || token.id
         sessionUser.role = (user as any)?.role || token.role
+        sessionUser.phone = (user as any)?.phone || token.phone
         sessionUser.isFirstLogin = (token as any)?.isFirstLogin ?? false
       }
       return session
@@ -103,6 +114,10 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
       if (user) {
         token.id = user.id
         token.role = (user as any).role || token.role
+        // Propagate phone when available
+        if ((user as any).phone !== undefined) {
+          ;(token as any).phone = (user as any).phone
+        }
         // Propagate isFirstLogin set during signIn handler
         if ((user as any).isFirstLogin !== undefined) {
           ;(token as any).isFirstLogin = (user as any).isFirstLogin
