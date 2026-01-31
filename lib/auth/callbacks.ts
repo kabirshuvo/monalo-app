@@ -25,7 +25,7 @@ export async function handleSignIn(params: {
 
     // Prefer identifying the DB user by user.id; fall back to user.email (lowercased) if id not available
     const userId = user?.id
-    const userEmail = user?.email ? String(user.email).toLowerCase() : null
+    const userEmail = user?.email?.toLowerCase() ?? null
 
     if (!userId && !userEmail) {
       console.warn('[Auth] Sign-in callback: No id or email found')
@@ -67,7 +67,7 @@ export async function handleSignIn(params: {
       ;(user as any).isFirstLogin = isFirstLogin
     }
 
-    const identifier = userEmail || userId || 'unknown'
+    const identifier = userEmail ? `email:${userEmail}` : userId ? `id:${userId}` : 'unknown'
     console.log(`[Auth] lastLoginAt updated for user: ${identifier} (firstLogin=${isFirstLogin})`)
     return true
   } catch (error) {
