@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db'
 /**
  * Update user's lastLoginAt timestamp on successful sign-in
  * Only updates on initial sign-in, not on token refresh
+ * Handles phone-only users by resolving by ID when possible
  * @param user - NextAuth user object
  * @param account - NextAuth account object (null for existing sessions)
  * @returns boolean - whether to allow the sign-in
@@ -16,41 +17,55 @@ export async function handleSignIn(params: {
   try {
     const { account, user } = params
 
-    // Only update lastLoginAt on new session creation (account will be present)
-    // Skip if this is a token refresh (account will be null for existing sessions)
-    if (!account || !user?.email) {
-      // Token refresh, don't update
+    // Token refresh - skip update
+    if (!account) {
       return true
     }
 
-    const userEmail = user.email
+    // Determine userId and userEmail
+    const userId = user?.id || null
+    const userEmail = user?.email?.toLowerCase() || null
 
-    if (!userEmail) {
-      console.warn('[Auth] Sign-in callback: No email found')
-      return false
+    // If neither userId nor userEmail, log a warning and allow sign-in
+    // (authentication already succeeded, we just can't update lastLoginAt)
+    if (!userId && !userEmail) {
+      console.warn('[Auth] Sign-in callback: No userId or email found')
+      return true
     }
 
-    // Read existing lastLoginAt to detect first login
-    const dbUser = await prisma.user.findUnique({
-      where: { email: userEmail },
-      select: { lastLoginAt: true, id: true },
-    })
+    // Resolve dbUser by id when possible, otherwise by email
+    let dbUser: { id: string; lastLoginAt: Date | null; email: string | null } | null = null
+    
+    if (userId) {
+      dbUser = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { lastLoginAt: true, id: true, email: true },
+      })
+    } else if (userEmail) {
+      dbUser = await prisma.user.findUnique({
+        where: { email: userEmail },
+        select: { lastLoginAt: true, id: true, email: true },
+      })
+    }
 
     const isFirstLogin = !dbUser?.lastLoginAt
 
-    // Update lastLoginAt to now on every successful sign-in
-    await prisma.user.update({
-      where: { email: userEmail },
-      data: { lastLoginAt: new Date() },
-    })
+    // Update lastLoginAt using dbUser.id if available
+    if (dbUser?.id) {
+      await prisma.user.update({
+        where: { id: dbUser.id },
+        data: { lastLoginAt: new Date() },
+      })
 
-    // Attach the isFirstLogin flag to the transient `user` object so it
-    // can be propagated into the JWT in the `jwt` callback.
-    if (user) {
-      ;(user as any).isFirstLogin = isFirstLogin
+      // Attach the isFirstLogin flag to the transient `user` object so it
+      // can be propagated into the JWT in the `jwt` callback.
+      if (user) {
+        ;(user as any).isFirstLogin = isFirstLogin
+      }
+
+      console.log(`[Auth] lastLoginAt updated for user id: ${dbUser.id} (firstLogin=${isFirstLogin})`)
     }
 
-    console.log(`[Auth] lastLoginAt updated for user: ${userEmail} (firstLogin=${isFirstLogin})`)
     return true
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -82,7 +97,7 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
 
     /**
      * Called whenever session is checked or modified
-     * Injects user role and id into the session
+     * Injects user role, id, and phone into the session
      */
     async session({ session, token, user }) {
       if (session.user) {
@@ -91,18 +106,22 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
         sessionUser.id = user?.id || token.id
         sessionUser.role = (user as any)?.role || token.role
         sessionUser.isFirstLogin = (token as any)?.isFirstLogin ?? false
+        // Propagate phone into session from token or user
+        sessionUser.phone = token.phone || (user as any)?.phone || null
       }
       return session
     },
 
     /**
      * Called when JWT token is created or updated
-     * Preserves user id and role in the JWT
+     * Preserves user id, role, and phone in the JWT
      */
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
         token.role = (user as any).role || token.role
+        // Propagate phone into token when present
+        token.phone = (user as any).phone || token.phone || null
         // Propagate isFirstLogin set during signIn handler
         if ((user as any).isFirstLogin !== undefined) {
           ;(token as any).isFirstLogin = (user as any).isFirstLogin
