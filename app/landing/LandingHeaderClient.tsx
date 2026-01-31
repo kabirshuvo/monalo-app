@@ -33,7 +33,7 @@ export default function LandingHeaderClient() {
   const displayName = () => {
     const user = (session as any)?.user
     if (!user) return ''
-    return user.name || user.email || ''
+    return user.name || user.email || user.phone || ''
   }
   const user = (session as any)?.user
 
@@ -48,9 +48,11 @@ export default function LandingHeaderClient() {
     }
     if (typeof window !== 'undefined') sessionStorage.removeItem('monalo_login_start')
     const email = (session as any)?.user?.email
-    const emailParam = email ? `&email=${encodeURIComponent(email)}` : ''
+    const phone = (session as any)?.user?.phone
+    const identifier = email || phone
+    const emailParam = identifier ? `&email=${encodeURIComponent(identifier)}` : ''
     try {
-      logEvent('logout', { minutes, email: email || null, method: 'signout' })
+      logEvent('logout', { minutes, email: email || null, phone: phone || null, method: 'signout' })
     } catch {}
     await signOut({ callbackUrl: `/see-off?minutes=${minutes}${emailParam}` })
   }
