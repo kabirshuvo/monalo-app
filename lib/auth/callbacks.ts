@@ -29,7 +29,10 @@ export async function handleSignIn(params: {
     const userEmail = user?.email
 
     if (!userId && !userEmail) {
-      console.warn('[Auth] Sign-in callback: No id or email found, allowing sign-in')
+      // OAuth providers should always provide at least one of these.
+      // For credentials provider, we ensure id is always present.
+      // If we reach here, it's likely an edge case - allow sign-in but skip lastLoginAt update
+      console.warn('[Auth] Sign-in callback: No id or email found, skipping lastLoginAt update')
       return true
     }
 
@@ -48,7 +51,9 @@ export async function handleSignIn(params: {
     }
 
     if (!dbUser) {
-      console.warn('[Auth] Sign-in callback: User not found in database, allowing sign-in')
+      // User not found - this can happen with OAuth on first sign-in before adapter creates record.
+      // For credentials provider, this shouldn't happen. Allow sign-in to not break OAuth flow.
+      console.warn('[Auth] Sign-in callback: User not found in database, skipping lastLoginAt update')
       return true
     }
 
