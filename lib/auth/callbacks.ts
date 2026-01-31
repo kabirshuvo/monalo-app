@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db'
 /**
  * Update user's lastLoginAt timestamp on successful sign-in
  * Only updates on initial sign-in, not on token refresh
+ * Robust for phone-only users (no email)
  * @param user - NextAuth user object
  * @param account - NextAuth account object (null for existing sessions)
  * @returns boolean - whether to allow the sign-in
@@ -18,29 +19,49 @@ export async function handleSignIn(params: {
 
     // Only update lastLoginAt on new session creation (account will be present)
     // Skip if this is a token refresh (account will be null for existing sessions)
-    if (!account || !user?.email) {
+    if (!account) {
       // Token refresh, don't update
       return true
     }
 
-    const userEmail = user.email
+    // Prefer identifying user by id; fall back to email if id missing
+    const userId = user?.id
+    const userEmail = user?.email
 
-    if (!userEmail) {
-      console.warn('[Auth] Sign-in callback: No email found')
-      return false
+    if (!userId && !userEmail) {
+      // OAuth providers should always provide at least one of these.
+      // For credentials provider, we ensure id is always present.
+      // If we reach here, it's likely an edge case - allow sign-in but skip lastLoginAt update
+      console.warn('[Auth] Sign-in callback: No id or email found, skipping lastLoginAt update')
+      return true
     }
 
-    // Read existing lastLoginAt to detect first login
-    const dbUser = await prisma.user.findUnique({
-      where: { email: userEmail },
-      select: { lastLoginAt: true, id: true },
-    })
+    // Lookup user by id (preferred) or email (fallback)
+    let dbUser: { lastLoginAt: Date | null; id: string } | null = null
+    if (userId) {
+      dbUser = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { lastLoginAt: true, id: true },
+      })
+    } else if (userEmail) {
+      dbUser = await prisma.user.findUnique({
+        where: { email: userEmail },
+        select: { lastLoginAt: true, id: true },
+      })
+    }
 
-    const isFirstLogin = !dbUser?.lastLoginAt
+    if (!dbUser) {
+      // User not found - this can happen with OAuth on first sign-in before adapter creates record.
+      // For credentials provider, this shouldn't happen. Allow sign-in to not break OAuth flow.
+      console.warn('[Auth] Sign-in callback: User not found in database, skipping lastLoginAt update')
+      return true
+    }
 
-    // Update lastLoginAt to now on every successful sign-in
+    const isFirstLogin = !dbUser.lastLoginAt
+
+    // Update lastLoginAt using the resolved user id
     await prisma.user.update({
-      where: { email: userEmail },
+      where: { id: dbUser.id },
       data: { lastLoginAt: new Date() },
     })
 
@@ -50,7 +71,8 @@ export async function handleSignIn(params: {
       ;(user as any).isFirstLogin = isFirstLogin
     }
 
-    console.log(`[Auth] lastLoginAt updated for user: ${userEmail} (firstLogin=${isFirstLogin})`)
+    const identifier = userEmail || userId
+    console.log(`[Auth] lastLoginAt updated for user: ${identifier} (firstLogin=${isFirstLogin})`)
     return true
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
@@ -82,7 +104,7 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
 
     /**
      * Called whenever session is checked or modified
-     * Injects user role and id into the session
+     * Injects user role, id, and phone into the session
      */
     async session({ session, token, user }) {
       if (session.user) {
@@ -91,18 +113,24 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
         sessionUser.id = user?.id || token.id
         sessionUser.role = (user as any)?.role || token.role
         sessionUser.isFirstLogin = (token as any)?.isFirstLogin ?? false
+        // Propagate phone from token or user
+        sessionUser.phone = (token as any)?.phone || (user as any)?.phone
       }
       return session
     },
 
     /**
      * Called when JWT token is created or updated
-     * Preserves user id and role in the JWT
+     * Preserves user id, role, and phone in the JWT
      */
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
         token.role = (user as any).role || token.role
+        // Propagate phone when present
+        if ((user as any).phone) {
+          ;(token as any).phone = (user as any).phone
+        }
         // Propagate isFirstLogin set during signIn handler
         if ((user as any).isFirstLogin !== undefined) {
           ;(token as any).isFirstLogin = (user as any).isFirstLogin

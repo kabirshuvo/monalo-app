@@ -105,9 +105,11 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     // Sign out and redirect to see-off with minutes
     // Only read session user data if we're authenticated
     const email = status === 'authenticated' ? (session as any)?.user?.email : undefined
-    const emailParam = email ? `&email=${encodeURIComponent(email)}` : ''
+    const phone = status === 'authenticated' ? (session as any)?.user?.phone : undefined
+    const identifier = email || phone
+    const emailParam = identifier ? `&email=${encodeURIComponent(identifier)}` : ''
     try {
-      logEvent('logout', { minutes, email: email || null, method: 'signout' })
+      logEvent('logout', { minutes, email: email || null, phone: phone || null, method: 'signout' })
     } catch {}
     await signOut({ callbackUrl: `/see-off?minutes=${minutes}${emailParam}` })
   }
@@ -117,7 +119,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     if (status !== 'authenticated') return ''
     const user = (session as any)?.user
     if (!user) return ''
-    return user.name || user.email || ''
+    return user.name || user.email || user.phone || ''
   }
 
   // Centralized auth controls renderer to keep desktop and mobile in sync.
@@ -140,7 +142,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
             >
               <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
                 <span className="text-sm font-semibold text-blue-600">
-                  {String(((session as any)?.user?.name || (session as any)?.user?.email || '')).charAt(0).toUpperCase()}
+                  {String(((session as any)?.user?.name || (session as any)?.user?.email || (session as any)?.user?.phone || '')).charAt(0).toUpperCase()}
                 </span>
               </div>
             </button>
