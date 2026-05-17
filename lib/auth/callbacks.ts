@@ -1,6 +1,9 @@
 import type { NextAuthOptions, User } from 'next-auth'
+import type { AdapterUser } from 'next-auth/adapters'
 import type { JWT } from 'next-auth/jwt'
 import { prisma } from '@/lib/db'
+
+type SignInUser = User | AdapterUser
 
 /**
  * Update user's lastLoginAt timestamp on successful sign-in
@@ -10,9 +13,9 @@ import { prisma } from '@/lib/db'
  * @returns boolean - whether to allow the sign-in
  */
 export async function handleSignIn(params: {
-  profile?: Record<string, unknown>
-  account?: Record<string, unknown> | null
-  user?: User
+  profile?: unknown
+  account?: unknown
+  user?: SignInUser
 }): Promise<boolean> {
   try {
     const { account, user } = params
@@ -47,7 +50,7 @@ export async function handleSignIn(params: {
 
     // Attach the isFirstLogin flag to the transient `user` object so it
     // can be propagated into the JWT in the `jwt` callback.
-    if (user) {
+    if (user && 'isFirstLogin' in user) {
       user.isFirstLogin = isFirstLogin
     }
 

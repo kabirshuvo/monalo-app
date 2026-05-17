@@ -24,3 +24,16 @@ declare module 'next-auth/jwt' {
     isFirstLogin?: boolean
   }
 }
+
+/** Adapter rows may omit role in @auth package types; session callback supplies it from Prisma. */
+declare module 'next-auth/adapters' {
+  interface AdapterUser {
+    role?: Role
+  }
+}
+
+declare module '@auth/core/adapters' {
+  interface AdapterUser {
+    role?: Role
+  }
+}

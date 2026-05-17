@@ -120,8 +120,8 @@ const authConfig: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/(auth)/login',
-    newUser: '/(auth)/register',
+    signIn: '/login',
+    newUser: '/register',
   },
   callbacks: getAuthCallbacks(),
 }

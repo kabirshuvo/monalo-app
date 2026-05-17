@@ -41,8 +41,7 @@ import type { JWT } from 'next-auth/jwt'
  * NOTE: We do NOT trust the role claim in middleware
  * It will be re-validated server-side
  */
-interface TokenWithRole extends JWT {
-  role?: string
+interface AuthToken extends JWT {
   sub?: string
 }
 
@@ -64,7 +63,7 @@ export async function middleware(request: NextRequest) {
   const token = (await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
-  })) as TokenWithRole | null
+  })) as AuthToken | null
 
   /**
    * AUTHENTICATION CHECK ONLY

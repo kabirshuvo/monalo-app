@@ -1,0 +1,8 @@
+# Copy to .dev.vars for local `npm run preview` (Workers runtime).
+# Production secrets: set in Cloudflare dashboard or via `wrangler secret put`.
+NEXTJS_ENV=development
+
+DATABASE_URL=postgresql://USER:PASSWORD@HOST/DB?sslmode=require
+NEXTAUTH_SECRET=generate-with-openssl-rand-base64-32
+NEXTAUTH_URL=http://localhost:8788
+NEXT_PUBLIC_APP_URL=http://localhost:8788
