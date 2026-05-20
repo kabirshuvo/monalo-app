@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth-server'
 import { notFound, redirect } from 'next/navigation'
+import { prisma } from '@/lib/db'
 import DashboardLayout from '@/components/dashboard/Layout'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui'
 import Badge from '@/components/ui/Badge'
@@ -20,10 +21,20 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
   if (role !== 'CUSTOMER' && role !== 'ADMIN') redirect('/dashboard')
 
   const { id } = await params
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/orders/${id}`, { cache: 'no-store' })
-  if (res.status === 404) notFound()
-  const data = await res.json().catch(() => ({ ok: false }))
-  const order: any | undefined = data?.order
+  const userId = (session.user as { id?: string }).id
+  const order = await prisma.order.findFirst({
+    where: {
+      id,
+      deletedAt: null,
+      ...(role === 'ADMIN' ? {} : { userId }),
+    },
+    include: {
+      items: {
+        where: { deletedAt: null },
+        include: { product: { select: { name: true } } },
+      },
+    },
+  })
   if (!order) notFound()
 
   return (

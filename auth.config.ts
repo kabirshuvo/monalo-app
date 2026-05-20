@@ -1,15 +1,31 @@
 import type { NextAuthOptions } from 'next-auth'
-import type { Session } from 'next-auth'
+import type { User } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import FacebookProvider from 'next-auth/providers/facebook'
 import TwitterProvider from 'next-auth/providers/twitter'
 import { PrismaAdapter } from '@auth/prisma-adapter'
+import type { Role } from '@prisma/client'
 import { prisma } from '@/lib/db'
 import { verifyPassword } from '@/lib/auth-helpers'
 import { getAuthCallbacks } from '@/lib/auth/callbacks'
-// Role removed from Prisma schema; use string fallbacks where needed
-import NextAuth from 'next-auth'
+
+/** Fields loaded for credentials sign-in — role must come from the database. */
+const credentialsUserSelect = {
+  id: true,
+  email: true,
+  name: true,
+  password: true,
+  role: true,
+} as const
+
+type CredentialsDbUser = {
+  id: string
+  email: string | null
+  name: string | null
+  password: string
+  role: Role
+}
 
 const authConfig: NextAuthOptions = {
   // Use Prisma adapter for database-backed sessions
@@ -68,28 +84,18 @@ const authConfig: NextAuthOptions = {
           throw new Error('Please provide a valid email or phone number')
         }
 
-        let user: any | null = null
+        let user: CredentialsDbUser | null = null
         if (isEmail) {
           user = await prisma.user.findUnique({
             where: { email: identifier.toLowerCase() },
-            select: {
-              id: true,
-              email: true,
-              name: true,
-              password: true,
-            },
+            select: credentialsUserSelect,
           })
         } else {
           // Normalize phone to match stored format: keep digits and optional leading +
           const normalizedPhone = identifier.replace(/(?!^\+)\D/g, '')
           user = await prisma.user.findFirst({
             where: { phone: normalizedPhone },
-            select: {
-              id: true,
-              email: true,
-              name: true,
-              password: true,
-            },
+            select: credentialsUserSelect,
           })
         }
 
@@ -102,18 +108,20 @@ const authConfig: NextAuthOptions = {
           throw new Error('Invalid password')
         }
 
-        return {
+        const authUser: User = {
           id: user.id,
-          email: user.email,
-          name: user.name || user.email,
-          role: (user as any).role || 'CUSTOMER',
+          email: user.email ?? undefined,
+          name: user.name ?? user.email ?? undefined,
+          role: user.role,
         }
+
+        return authUser
       },
     }),
   ],
   pages: {
-    signIn: '/(auth)/login',
-    newUser: '/(auth)/register',
+    signIn: '/login',
+    newUser: '/register',
   },
   callbacks: getAuthCallbacks(),
 }

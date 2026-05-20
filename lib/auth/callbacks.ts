@@ -1,5 +1,9 @@
-import type { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions, User } from 'next-auth'
+import type { AdapterUser } from 'next-auth/adapters'
+import type { JWT } from 'next-auth/jwt'
 import { prisma } from '@/lib/db'
+
+type SignInUser = User | AdapterUser
 
 /**
  * Update user's lastLoginAt timestamp on successful sign-in
@@ -9,9 +13,9 @@ import { prisma } from '@/lib/db'
  * @returns boolean - whether to allow the sign-in
  */
 export async function handleSignIn(params: {
-  profile?: Record<string, any>
-  account?: Record<string, any> | null
-  user?: any
+  profile?: unknown
+  account?: unknown
+  user?: SignInUser
 }): Promise<boolean> {
   try {
     const { account, user } = params
@@ -46,8 +50,8 @@ export async function handleSignIn(params: {
 
     // Attach the isFirstLogin flag to the transient `user` object so it
     // can be propagated into the JWT in the `jwt` callback.
-    if (user) {
-      ;(user as any).isFirstLogin = isFirstLogin
+    if (user && 'isFirstLogin' in user) {
+      user.isFirstLogin = isFirstLogin
     }
 
     console.log(`[Auth] lastLoginAt updated for user: ${userEmail} (firstLogin=${isFirstLogin})`)
@@ -86,11 +90,18 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
      */
     async session({ session, token, user }) {
       if (session.user) {
-        const sessionUser = session.user as any
-        // Prefer values from the database-backed `user` when available
-        sessionUser.id = user?.id || token.id
-        sessionUser.role = (user as any)?.role || token.role
-        sessionUser.isFirstLogin = (token as any)?.isFirstLogin ?? false
+        // Database sessions: `user` is the adapter row (authoritative for id + role).
+        // Credentials / JWT path: fall back to token values set at sign-in.
+        const id = user?.id ?? token.id
+        const role = user?.role ?? token.role
+
+        if (id) {
+          session.user.id = id
+        }
+        if (role) {
+          session.user.role = role
+        }
+        session.user.isFirstLogin = token.isFirstLogin ?? false
       }
       return session
     },
@@ -101,13 +112,15 @@ export function getAuthCallbacks(): NextAuthOptions['callbacks'] {
      */
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.role = (user as any).role || token.role
-        // Propagate isFirstLogin set during signIn handler
-        if ((user as any).isFirstLogin !== undefined) {
-          ;(token as any).isFirstLogin = (user as any).isFirstLogin
+        const jwt = token as JWT
+        jwt.id = user.id
+        if (user.role) {
+          jwt.role = user.role
+        }
+        if (user.isFirstLogin !== undefined) {
+          jwt.isFirstLogin = user.isFirstLogin
         } else {
-          ;(token as any).isFirstLogin = (token as any).isFirstLogin ?? false
+          jwt.isFirstLogin = jwt.isFirstLogin ?? false
         }
       }
       return token

@@ -7,7 +7,7 @@ import { logEvent } from '@/lib/analytics'
 
 export interface DashboardLayoutProps {
   children: React.ReactNode
-  userRole: 'CUSTOMER' | 'LEARNER' | 'WRITER' | 'ADMIN'
+  userRole: 'CUSTOMER' | 'LEARNER' | 'WRITER' | 'ADMIN' | 'SELLER'
   userName?: string
   userAvatar?: string
   currentPath?: string
@@ -17,7 +17,7 @@ interface NavItem {
   label: string
   href: string
   icon: React.ReactNode
-  roles: ('CUSTOMER' | 'LEARNER' | 'WRITER' | 'ADMIN')[]
+  roles: ('CUSTOMER' | 'LEARNER' | 'WRITER' | 'ADMIN' | 'SELLER')[]
 }
 
 const navigationItems: NavItem[] = [
@@ -60,6 +60,16 @@ const navigationItems: NavItem[] = [
       </svg>
     ),
     roles: ['WRITER', 'ADMIN']
+  },
+  {
+    label: 'My Products',
+    href: '/dashboard/seller/products',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+    ),
+    roles: ['SELLER', 'ADMIN']
   },
   {
     label: 'My Orders',
@@ -121,7 +131,8 @@ export default function DashboardLayout({
       CUSTOMER: 'Customer',
       LEARNER: 'Learner',
       WRITER: 'Writer',
-      ADMIN: 'Administrator'
+      ADMIN: 'Administrator',
+      SELLER: 'Seller',
     }
     return labels[role as keyof typeof labels] || role
   }

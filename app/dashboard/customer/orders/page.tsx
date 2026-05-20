@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth-server'
 import { redirect } from 'next/navigation'
+import { prisma } from '@/lib/db'
 import DashboardLayout from '@/components/dashboard/Layout'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui'
 import EmptyState from '@/components/ui/EmptyState'
@@ -21,9 +22,19 @@ export default async function CustomerOrdersPage() {
   const role = (session.user as any)?.role
   if (role !== 'CUSTOMER' && role !== 'ADMIN') redirect('/dashboard')
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/orders`, { cache: 'no-store' })
-  const data = await res.json().catch(() => ({ ok: false }))
-  const orders: any[] = data?.orders || []
+  const userId = (session.user as { id?: string }).id
+  const orders = userId
+    ? await prisma.order.findMany({
+        where: { userId, deletedAt: null },
+        include: {
+          items: {
+            where: { deletedAt: null },
+            include: { product: { select: { name: true } } },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+      })
+    : []
 
   return (
     <DashboardLayout
