@@ -53,6 +53,18 @@ export default async function SellerDashboardPage() {
 
           <Card>
             <CardHeader>
+              <CardTitle>Gallery</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-gray-600">Submit art for the school gallery.</p>
+              <Link href="/dashboard/seller/artworks">
+                <Button>Manage artworks</Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle>Shop</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">

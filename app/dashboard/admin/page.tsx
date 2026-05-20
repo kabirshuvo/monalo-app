@@ -1,8 +1,10 @@
 import { auth } from '@/lib/auth-server'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import DashboardLayout from '@/components/dashboard/Layout'
 import Badge from '@/components/ui/Badge'
 import EmptyState from '@/components/ui/EmptyState'
+import Button from '@/components/ui/Button'
 
 export const metadata = {
   title: 'Admin Dashboard - MonAlo',
@@ -144,6 +146,12 @@ export default async function DashboardAdmin() {
               <li className="flex items-center justify-between">
                 <span>📊 Analytics</span>
                 <span className="text-xs text-gray-400">Coming soon</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>🎨 Gallery review</span>
+                <Link href="/dashboard/admin/artworks">
+                  <Button size="sm" variant="secondary">Review artworks</Button>
+                </Link>
               </li>
               <li className="flex items-center justify-between">
                 <span>📦 Products</span>
