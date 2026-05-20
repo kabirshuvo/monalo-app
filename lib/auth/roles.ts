@@ -21,33 +21,13 @@ import type { Role } from '@prisma/client'
  * Use these constants instead of hardcoding role strings
  */
 export const ROLES = {
-  /**
-   * Administrator
-   * Can access all areas of the application
-   * Highest privilege level
-   */
   ADMIN: 'ADMIN' as const,
-
-  /**
-   * Content Writer/Creator
-   * Can create and manage content (courses, blog posts)
-   * Can access writer dashboard
-   */
   WRITER: 'WRITER' as const,
-
-  /**
-   * Student/Course Learner
-   * Can enroll in courses and view learning content
-   * Can access learner dashboard
-   */
   LEARNER: 'LEARNER' as const,
-
-  /**
-   * Shop Customer
-   * Can browse and purchase products
-   * Can access customer dashboard and order history
-   */
   CUSTOMER: 'CUSTOMER' as const,
+  SELLER: 'SELLER' as const,
+  DONOR: 'DONOR' as const,
+  BROWSER: 'BROWSER' as const,
 } as const
 
 /**
@@ -59,7 +39,8 @@ export const ROLES = {
  *     return Object.values(ROLES).includes(role)
  *   }
  */
-export type RoleType = typeof ROLES[keyof typeof ROLES]
+/** Matches Prisma `Role` enum — keep in sync with schema.prisma */
+export type RoleType = Role
 
 /**
  * All available roles as an array
@@ -76,11 +57,14 @@ export const ALL_ROLES = Object.values(ROLES) as RoleType[]
  * Human-readable descriptions for each role
  * Useful for UI displays and documentation
  */
-export const ROLE_DESCRIPTIONS: Record<RoleType, string> = {
+export const ROLE_DESCRIPTIONS: Record<Role, string> = {
   [ROLES.ADMIN]: 'Administrator - Full system access',
   [ROLES.WRITER]: 'Content Creator - Create and manage content',
   [ROLES.LEARNER]: 'Student - Enroll in courses',
   [ROLES.CUSTOMER]: 'Shopper - Purchase products',
+  [ROLES.SELLER]: 'Seller - Manage craft shop products',
+  [ROLES.DONOR]: 'Donor - Support the school',
+  [ROLES.BROWSER]: 'Visitor - Browse public content',
 }
 
 /**
@@ -141,7 +125,11 @@ export const ROLE_REQUIREMENTS: Record<string, RoleType[]> = {
    * CUSTOMER role only
    * Order history, purchases, account settings
    */
-  '/dashboard/customer': [ROLES.CUSTOMER],
+  '/dashboard/customer': [ROLES.CUSTOMER, ROLES.ADMIN],
+
+  '/dashboard/seller': [ROLES.SELLER, ROLES.ADMIN],
+
+  '/dashboard/learning': [ROLES.LEARNER, ROLES.ADMIN],
   
   // ==========================================
   // FUTURE ROUTES - Templates for new routes
@@ -210,9 +198,25 @@ export const ROUTE_METADATA: Record<string, RouteConfig> = {
   },
   '/dashboard/customer': {
     path: '/dashboard/customer',
-    roles: [ROLES.CUSTOMER],
+    roles: [ROLES.CUSTOMER, ROLES.ADMIN],
     label: 'Customer Dashboard',
     description: 'Shopping and order management',
+    requiresAuth: true,
+    public: false,
+  },
+  '/dashboard/seller': {
+    path: '/dashboard/seller',
+    roles: [ROLES.SELLER, ROLES.ADMIN],
+    label: 'Seller Dashboard',
+    description: 'Craft shop products and sales',
+    requiresAuth: true,
+    public: false,
+  },
+  '/dashboard/learning': {
+    path: '/dashboard/learning',
+    roles: [ROLES.LEARNER, ROLES.ADMIN],
+    label: 'Learning Dashboard',
+    description: 'Courses and lesson progress',
     requiresAuth: true,
     public: false,
   },
@@ -229,7 +233,7 @@ export const ROUTE_METADATA: Record<string, RouteConfig> = {
  *   // Show create course button
  * }
  */
-export const PERMISSIONS: Record<RoleType, string[]> = {
+export const PERMISSIONS: Record<Role, string[]> = {
   [ROLES.ADMIN]: [
     'view_analytics',
     'manage_users',
@@ -265,6 +269,23 @@ export const PERMISSIONS: Record<RoleType, string[]> = {
     'view_orders',
     'track_shipment',
     'manage_wishlist',
+  ],
+
+  [ROLES.SELLER]: [
+    'manage_products',
+    'view_orders',
+    'view_analytics',
+  ],
+
+  [ROLES.DONOR]: [
+    'donate',
+    'view_blog',
+  ],
+
+  [ROLES.BROWSER]: [
+    'view_blog',
+    'view_courses',
+    'browse_products',
   ],
 }
 

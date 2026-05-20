@@ -32,8 +32,7 @@ export default function CheckoutPage() {
         shippingAddress: shippingAddress || undefined
       }
 
-      // Using stub route for now; replace with /api/orders when available
-      const res = await api.post<{ ok: boolean; order: unknown }>("/api/shop", payload)
+      const res = await api.post<{ ok: boolean; order: unknown }>('/api/orders', payload)
 
       if (res?.ok) {
         clear()

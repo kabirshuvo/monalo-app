@@ -27,6 +27,7 @@ model User {
   userLessonProgress       UserLessonProgress[]  @relation("UserLessonProgress")
   activityLogs             ActivityLog[]         @relation("UserActivityLogs")
   blogs                    Blog[]                @relation("UserBlogs")
+  courseEnrollments        CourseEnrollment[]    @relation("UserCourseEnrollments")
   passwordResetTokens      PasswordResetToken[]  @relation("UserPasswordResetTokens")
 
   @@map("users")
@@ -157,6 +158,7 @@ model Course {
 
   lessons              Lesson[]              @relation("CourseLessons")
   userProgressRecords UserLessonProgress[]  @relation("CourseProgress")
+  enrollments          CourseEnrollment[]    @relation("CourseEnrollments")
 
   @@index([title])
   @@index([createdAt])
@@ -242,23 +244,53 @@ model ActivityLog {
   @@map("activity_logs")
 }
 
-model Blog {
-  id        String   @id @map("id")
-  title     String   @db.VarChar(255) @map("title")
-  content   String   @db.Text @map("content")
-  authorId  String?  @map("author_id")
-  deletedAt DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
-  createdBy String?       @map("created_by") // User ID who created this blog post
-  updatedBy String?       @map("updated_by") // User ID who last updated this blog post
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
+model CourseEnrollment {
+  id         String    @id @default(cuid()) @map("id")
+  userId     String    @map("user_id")
+  courseId   String    @map("course_id")
+  enrolledAt DateTime  @default(now()) @map("enrolled_at") @db.Timestamp()
+  deletedAt  DateTime? @map("deleted_at") @db.Timestamp()
 
-  author    User?    @relation("UserBlogs", fields: [authorId], references: [id], onDelete: SetNull)
+  user   User   @relation("UserCourseEnrollments", fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation("CourseEnrollments", fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId, deletedAt])
+  @@index([userId])
+  @@index([courseId])
+  @@map("course_enrollments")
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Blog {
+  id              String     @id @default(cuid()) @map("id")
+  title           String     @db.VarChar(255) @map("title")
+  slug            String     @unique @db.VarChar(255) @map("slug")
+  excerpt         String?    @db.Text @map("excerpt")
+  content         String     @db.Text @map("content")
+  status          BlogStatus @default(DRAFT) @map("status")
+  publishedAt     DateTime?  @map("published_at") @db.Timestamp()
+  metaTitle       String?    @db.VarChar(255) @map("meta_title")
+  metaDescription String?    @db.Text @map("meta_description")
+  coverImageUrl   String?    @db.Text @map("cover_image_url")
+  authorId        String?    @map("author_id")
+  deletedAt       DateTime?  @map("deleted_at") @db.Timestamp()
+  createdBy       String?    @map("created_by")
+  updatedBy       String?    @map("updated_by")
+  createdAt       DateTime   @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt       DateTime   @updatedAt @map("updated_at") @db.Timestamp()
+
+  author User? @relation("UserBlogs", fields: [authorId], references: [id], onDelete: SetNull)
 
   @@index([authorId])
+  @@index([slug])
+  @@index([status])
   @@index([createdAt])
-  @@index([deletedAt]) // For filtering active posts
-  @@index([authorId, createdAt]) // Composite: author posts timeline
+  @@index([deletedAt])
+  @@index([authorId, createdAt])
   @@map("blogs")
 }
 

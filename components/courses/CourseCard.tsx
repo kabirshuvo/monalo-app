@@ -28,12 +28,14 @@ export default function CourseCard({ course }: CourseCardProps) {
   const actuallyEnrolled = (mounted && isEnrolled(id)) || Boolean(enrolled)
   const clampedProgress = Math.min(Math.max(progress, 0), 100)
 
-  const handleEnroll = () => {
-    const wasAdded = enroll(id)
+  const handleEnroll = async () => {
+    const wasAdded = await enroll(id)
     if (wasAdded) {
       addToast('success', 'You’re enrolled. Take your time and enjoy learning.')
-    } else {
+    } else if (actuallyEnrolled) {
       addToast('info', 'You’re already enrolled. Pick up where you left off.')
+    } else {
+      addToast('error', 'Sign in to enroll in this course.')
     }
   }
 

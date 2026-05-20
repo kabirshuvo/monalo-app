@@ -12,12 +12,13 @@ export interface PublicLayoutProps {
 }
 
 const navigationItems = [
-  { label: 'Home', href: '/home' },
-  { label: 'Courses', href: '/courses' },
+  { label: 'School', href: '/home' },
+  { label: 'Learn', href: '/courses' },
   { label: 'Shop', href: '/shop' },
+  { label: 'Gallery', href: '/gallery' },
+  { label: 'Team', href: '/team' },
   { label: 'Blog', href: '/blog' },
   { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' }
 ]
 
 export default function PublicLayout({ children, currentPath = '' }: PublicLayoutProps) {
@@ -80,15 +81,19 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
   }, [status, _devUserEmail])
 
   const getDashboardPath = (role?: string) => {
-    // If a role is provided, use it. Otherwise, only attempt to read the
-    // session for a role when we're authenticated to avoid touching session
-    // data during loading/unauthenticated states.
-    if (role) return `/dashboard/${role.toLowerCase()}`
-    if (status === 'authenticated') {
-      const roleFromSession = (session as any)?.user?.role
-      if (roleFromSession) return `/dashboard/${roleFromSession.toLowerCase()}`
+    const map: Record<string, string> = {
+      ADMIN: '/dashboard/admin',
+      WRITER: '/dashboard/writer',
+      LEARNER: '/dashboard/learning',
+      CUSTOMER: '/dashboard/customer',
+      SELLER: '/dashboard/seller',
     }
-    return '/dashboard/customer'
+    if (role && map[role]) return map[role]
+    if (status === 'authenticated') {
+      const r = (session as { user?: { role?: string } })?.user?.role
+      if (r && map[r]) return map[r]
+    }
+    return '/dashboard'
   }
 
   const handleLogout = async () => {
@@ -321,8 +326,10 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Explore</h3>
               <ul className="space-y-2">
-                <li><Link href="/courses" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Courses</Link></li>
-                <li><Link href="/shop" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Shop</Link></li>
+                <li><Link href="/courses" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Learn</Link></li>
+                <li><Link href="/shop" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Craft shop</Link></li>
+                <li><Link href="/gallery" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Gallery</Link></li>
+                <li><Link href="/team" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Team services</Link></li>
                 <li><Link href="/blog" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Blog</Link></li>
               </ul>
             </div>

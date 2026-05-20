@@ -16,59 +16,53 @@ export default function HomePage() {
           <div className="mx-auto max-w-2xl text-center space-y-12">
             <div className="space-y-6">
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 leading-tight tracking-tight">
-                Learn at your own pace
+                Monalo School
               </h1>
               <p className="text-lg sm:text-xl text-gray-600 leading-relaxed font-normal">
-                Thoughtful courses and resources designed for focused learning. No pressure, no distractions—just genuine growth.
+                An online school supported by craft, art, courses, and a freelancing team — every purchase and project helps students learn.
               </p>
             </div>
-            <div className="pt-8">
+            <div className="pt-8 flex flex-wrap justify-center gap-4">
               <Link href="/courses">
-                <Button 
-                  variant="primary" 
-                  size="lg"
-                  className="bg-purple-500 hover:bg-purple-600 text-white px-8"
-                >
+                <Button variant="primary" size="lg" className="bg-purple-500 hover:bg-purple-600 text-white px-8">
                   Explore courses
                 </Button>
+              </Link>
+              <Link href="/shop">
+                <Button variant="secondary" size="lg">Craft shop</Button>
               </Link>
             </div>
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Surfaces */}
         <section className="px-4 py-24 sm:py-32 lg:py-40 bg-white">
-          <div className="mx-auto max-w-4xl space-y-16">
+          <div className="mx-auto max-w-5xl space-y-16">
             <div className="text-center space-y-4">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-                Why choose MonAlo
-              </h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">One school, many ways to grow</h2>
               <p className="text-gray-700 max-w-2xl mx-auto text-lg">
-                We've designed every detail to support your learning journey.
+                Each surface funds Monalo School programs and student learning.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">Your pace</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  No deadlines, no rushing. You decide when and how fast to learn.
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">Clear focus</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  No gamification, badges, or artificial urgency. Just thoughtful content.
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">Real growth</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  Curated courses from people who know their craft. Learn from the best.
-                </p>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                { href: '/courses', title: 'Learn', desc: 'Courses for students building real skills.' },
+                { href: '/shop', title: 'Craft shop', desc: 'Handmade goods from our community.' },
+                { href: '/gallery', title: 'Gallery', desc: 'Art sales supporting the school.' },
+                { href: '/blog', title: 'Blog', desc: 'Ideas, SEO, and stories from Monalo.' },
+                { href: '/team', title: 'Team', desc: 'Freelance services — dev, design, video, PA.' },
+                { href: '/about', title: 'About', desc: 'Mission, people, and how we work.' },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="block rounded-xl border border-gray-200 p-6 hover:border-blue-300 hover:shadow-md transition-all"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
+                  <p className="text-gray-600 mt-2 text-sm">{item.desc}</p>
+                </Link>
+              ))}
             </div>
           </div>
         </section>

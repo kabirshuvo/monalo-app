@@ -23,8 +23,11 @@ export default async function DashboardPage() {
     WRITER: '/dashboard/writer',
     LEARNER: '/dashboard/learning',
     CUSTOMER: '/dashboard/customer',
+    SELLER: '/dashboard/seller',
+    DONOR: '/home',
+    BROWSER: '/home',
   }
 
-  const destinationRoute = roleRoutes[role] || '/dashboard/customer'
+  const destinationRoute = roleRoutes[role] || '/home'
   redirect(destinationRoute)
 }

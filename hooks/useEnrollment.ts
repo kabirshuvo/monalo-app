@@ -1,56 +1,61 @@
 "use client"
+
 import { useEffect, useState, useCallback } from 'react'
-
-const STORAGE_KEY = 'monalo-enrollments'
-
-function loadEnrolled(): string[] {
-  if (typeof window === 'undefined') return []
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed.filter((x) => typeof x === 'string') : []
-  } catch {
-    return []
-  }
-}
-
-function saveEnrolled(ids: string[]) {
-  if (typeof window === 'undefined') return
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids))
-  } catch {
-    // ignore
-  }
-}
 
 export function useEnrollment() {
   const [enrolledIds, setEnrolledIds] = useState<string[]>([])
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {
-    setEnrolledIds(loadEnrolled())
-    setMounted(true)
+  const refresh = useCallback(async () => {
+    try {
+      const res = await fetch('/api/learning/enrolled')
+      if (res.status === 401) {
+        setEnrolledIds([])
+        return
+      }
+      const data = await res.json()
+      const ids = (data.courses || []).map((c: { id: string }) => c.id)
+      setEnrolledIds(ids)
+    } catch {
+      setEnrolledIds([])
+    }
   }, [])
 
-  const isEnrolled = useCallback((courseId: string) => {
-    return enrolledIds.includes(courseId)
-  }, [enrolledIds])
+  useEffect(() => {
+    refresh().finally(() => setMounted(true))
+  }, [refresh])
 
-  const enroll = useCallback((courseId: string) => {
-    // Avoid duplicates
+  const isEnrolled = useCallback(
+    (courseId: string) => enrolledIds.includes(courseId),
+    [enrolledIds]
+  )
+
+  const enroll = useCallback(async (courseId: string) => {
     if (enrolledIds.includes(courseId)) return false
-    const next = [...enrolledIds, courseId]
-    setEnrolledIds(next)
-    saveEnrolled(next)
-    return true
-  }, [enrolledIds])
+    try {
+      const res = await fetch(`/api/courses/${courseId}/enroll`, { method: 'POST' })
+      if (res.status === 401) {
+        window.location.href = `/login?callbackUrl=/courses`
+        return false
+      }
+      const data = await res.json()
+      if (res.ok && (data.enrolled || data.alreadyEnrolled)) {
+        if (!data.alreadyEnrolled) {
+          setEnrolledIds((prev) => [...prev, courseId])
+        } else {
+          await refresh()
+        }
+        return !data.alreadyEnrolled
+      }
+    } catch {
+      // ignore
+    }
+    return false
+  }, [enrolledIds, refresh])
 
   const unenroll = useCallback((courseId: string) => {
-    const next = enrolledIds.filter((id) => id !== courseId)
-    setEnrolledIds(next)
-    saveEnrolled(next)
-  }, [enrolledIds])
+    setEnrolledIds((prev) => prev.filter((id) => id !== courseId))
+  }, [])
 
-  return { mounted, enrolledIds, isEnrolled, enroll, unenroll }
+  return { mounted, enrolledIds, isEnrolled, enroll, unenroll, refresh }
 }
