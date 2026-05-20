@@ -128,6 +128,8 @@ export const ROLE_REQUIREMENTS: Record<string, RoleType[]> = {
   '/dashboard/customer': [ROLES.CUSTOMER, ROLES.ADMIN],
 
   '/dashboard/seller': [ROLES.SELLER, ROLES.ADMIN],
+  '/dashboard/seller/artworks': [ROLES.SELLER, ROLES.ADMIN],
+  '/dashboard/admin/artworks': [ROLES.ADMIN],
 
   '/dashboard/learning': [ROLES.LEARNER, ROLES.ADMIN],
   

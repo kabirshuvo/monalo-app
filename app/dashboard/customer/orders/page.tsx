@@ -29,7 +29,10 @@ export default async function CustomerOrdersPage() {
         include: {
           items: {
             where: { deletedAt: null },
-            include: { product: { select: { name: true } } },
+            include: {
+              product: { select: { name: true } },
+              artwork: { select: { title: true } },
+            },
           },
         },
         orderBy: { createdAt: 'desc' },

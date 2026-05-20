@@ -31,7 +31,10 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
     include: {
       items: {
         where: { deletedAt: null },
-        include: { product: { select: { name: true } } },
+        include: {
+          product: { select: { name: true } },
+          artwork: { select: { title: true, slug: true } },
+        },
       },
     },
   })
@@ -60,7 +63,12 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
               {order.items?.map((item: any) => (
                 <li key={item.id} className="py-4 flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-gray-900">{item.product?.name || item.productId}</p>
+                    <p className="font-medium text-gray-900">
+                      {item.product?.name || item.artwork?.title || 'Item'}
+                    </p>
+                    {item.artwork?.slug && (
+                      <p className="text-xs text-gray-500">Gallery artwork</p>
+                    )}
                     <p className="text-sm text-gray-600">{formatPrice(item.priceSnapshot)} × {item.quantity}</p>
                   </div>
                   <div className="text-right">

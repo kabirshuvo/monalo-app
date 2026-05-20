@@ -142,6 +142,65 @@ async function main() {
 		console.log(`+ Blog: ${p.title}`)
 	}
 
+	console.log('\n🎨 Seeding gallery artworks...')
+
+	const seller = await db.user.findFirst({ where: { role: 'SELLER' } })
+	if (seller) {
+		await db.artistProfile.upsert({
+			where: { userId: seller.id },
+			create: {
+				userId: seller.id,
+				displayName: 'Monalo Studio Collective',
+				bio: 'Student and community artists creating work to fund Monalo School programs.',
+			},
+			update: {},
+		})
+
+		const artworks = [
+			{
+				title: 'Morning Light on the Hill',
+				slug: 'morning-light-hill',
+				description: 'Soft landscape in watercolor — calm hills at dawn.',
+				price: 12500,
+				medium: 'Watercolor',
+				dimensions: '18 × 24 in',
+				year: 2025,
+				status: 'ACTIVE' as const,
+			},
+			{
+				title: 'Study in Indigo',
+				slug: 'study-in-indigo',
+				description: 'Abstract piece exploring depth and rest.',
+				price: 8900,
+				medium: 'Acrylic',
+				dimensions: '16 × 20 in',
+				year: 2026,
+				status: 'ACTIVE' as const,
+			},
+			{
+				title: 'Thread and Memory',
+				slug: 'thread-and-memory',
+				description: 'Textile-inspired mixed media — pending public release.',
+				price: 15000,
+				medium: 'Mixed media',
+				dimensions: '12 × 16 in',
+				year: 2024,
+				status: 'PENDING_REVIEW' as const,
+			},
+		]
+
+		for (const a of artworks) {
+			const exists = await db.artwork.findFirst({
+				where: { slug: a.slug, deletedAt: null },
+			})
+			if (exists) continue
+			await db.artwork.create({
+				data: { ...a, artistId: seller.id },
+			})
+			console.log(`+ Artwork: ${a.title}`)
+		}
+	}
+
 	console.log('\n✅ Seeding complete')
 }
 
