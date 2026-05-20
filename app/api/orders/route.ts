@@ -33,6 +33,7 @@ export async function GET() {
           where: { deletedAt: null },
           include: {
             product: { select: { id: true, name: true, slug: true } },
+            artwork: { select: { id: true, title: true, slug: true } },
           },
         },
       },
