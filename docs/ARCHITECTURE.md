@@ -23,11 +23,15 @@
 
 ### Local development
 - Default: path-based (`http://localhost:3000/shop`)
-- Optional hosts in `/etc/hosts`:
+- Subdomain hosts in `/etc/hosts`:
   ```
-  127.0.0.1 monalo.local shop.monalo.local learn.monalo.local
+  127.0.0.1 gallery.localhost shop.localhost learn.localhost
   ```
-- Or query param: `?site=shop` (documented in middleware when implemented)
+- Or query param: `?site=gallery` on localhost (see `lib/sites.ts`)
+
+### Media (R2)
+- Upload API: `POST /api/uploads` → Cloudflare R2 (`MEDIA_BUCKET`) or `public/uploads/` in dev
+- Setup guide: [docs/R2_AND_SUBDOMAINS.md](./R2_AND_SUBDOMAINS.md)
 
 ## Shared platform
 

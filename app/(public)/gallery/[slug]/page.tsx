@@ -43,9 +43,9 @@ export default async function ArtworkDetailPage({ params }: Props) {
   return (
     <PublicLayout currentPath="/gallery">
       <main className="mx-auto max-w-5xl px-4 py-12">
-        <Link href="/gallery" className="text-sm text-blue-600 hover:underline mb-8 inline-block">
+        <a href="/" className="text-sm text-blue-600 hover:underline mb-8 inline-block">
           ← Back to gallery
-        </Link>
+        </a>
 
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="aspect-[4/5] rounded-xl bg-gray-50 overflow-hidden">

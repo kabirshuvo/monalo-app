@@ -19,12 +19,11 @@
   ],
   "images": {
     "binding": "IMAGES"
-  }
-  // Optional: enable Next.js incremental cache on R2 after creating a bucket:
-  // "r2_buckets": [
-  //   {
-  //     "binding": "NEXT_INC_CACHE_R2_BUCKET",
-  //     "bucket_name": "monalo-next-cache"
-  //   }
-  // ]
+  },
+  "r2_buckets": [
+    {
+      "binding": "MEDIA_BUCKET",
+      "bucket_name": "monalo-media"
+    }
+  ]
 }

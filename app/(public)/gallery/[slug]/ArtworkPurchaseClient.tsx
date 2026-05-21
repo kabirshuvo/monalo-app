@@ -35,7 +35,11 @@ export default function ArtworkPurchaseClient({ slug, title }: Props) {
       const data = await res.json()
 
       if (res.status === 401) {
-        router.push(`/login?callbackUrl=/gallery/${slug}`)
+        const callback =
+          typeof window !== 'undefined' && window.location.hostname.startsWith('gallery.')
+            ? `/${slug}`
+            : `/gallery/${slug}`
+        router.push(`/login?callbackUrl=${encodeURIComponent(callback)}`)
         return
       }
 
