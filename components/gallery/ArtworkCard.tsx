@@ -1,8 +1,8 @@
 "use client"
 
-import Link from 'next/link'
 import Badge from '@/components/ui/Badge'
 import { formatPriceCents } from '@/lib/format'
+import ArtworkCardLink from '@/components/gallery/ArtworkCardLink'
 
 export type ArtworkListItem = {
   id: string
@@ -32,8 +32,8 @@ export default function ArtworkCard({ artwork }: { artwork: ArtworkListItem }) {
   const { slug, title, description, price, medium, imageUrl } = artwork
 
   return (
-    <Link
-      href={`/gallery/${slug}`}
+    <ArtworkCardLink
+      slug={slug}
       className="group flex flex-col rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow"
     >
       <div className="aspect-[4/5] bg-gray-50 overflow-hidden">
@@ -61,6 +61,6 @@ export default function ArtworkCard({ artwork }: { artwork: ArtworkListItem }) {
           <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
         )}
       </div>
-    </Link>
+    </ArtworkCardLink>
   )
 }

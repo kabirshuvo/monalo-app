@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import Textarea from '@/components/ui/Textarea'
 import Alert from '@/components/ui/Alert'
+import ImageUpload from '@/components/ui/ImageUpload'
 
 export default function SellerProductForm() {
   const router = useRouter()
@@ -13,6 +14,7 @@ export default function SellerProductForm() {
   const [description, setDescription] = useState('')
   const [priceDollars, setPriceDollars] = useState('')
   const [stock, setStock] = useState('10')
+  const [imageUrl, setImageUrl] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -39,6 +41,7 @@ export default function SellerProductForm() {
           description: description.trim() || undefined,
           price,
           stock: parseInt(stock, 10) || 0,
+          imageUrl: imageUrl.trim() || undefined,
         }),
       })
       const data = await res.json()
@@ -51,6 +54,7 @@ export default function SellerProductForm() {
       setDescription('')
       setPriceDollars('')
       setStock('10')
+      setImageUrl('')
       router.refresh()
     } catch {
       setError('Something went wrong. Try again.')
@@ -89,6 +93,12 @@ export default function SellerProductForm() {
           onChange={(e) => setStock(e.target.value)}
         />
       </div>
+      <ImageUpload
+        label="Product image"
+        folder="shop"
+        value={imageUrl}
+        onChange={setImageUrl}
+      />
       <Button type="submit" disabled={loading}>
         {loading ? 'Saving…' : 'Create product'}
       </Button>

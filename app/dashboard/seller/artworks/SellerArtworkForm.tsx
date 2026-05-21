@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import Textarea from '@/components/ui/Textarea'
 import Alert from '@/components/ui/Alert'
+import ImageUpload from '@/components/ui/ImageUpload'
 
 export default function SellerArtworkForm() {
   const router = useRouter()
@@ -110,11 +111,12 @@ export default function SellerArtworkForm() {
       </div>
       <Input label="Medium" value={medium} onChange={(e) => setMedium(e.target.value)} placeholder="Oil on canvas" />
       <Input label="Dimensions" value={dimensions} onChange={(e) => setDimensions(e.target.value)} placeholder="24 × 36 in" />
-      <Input
-        label="Image URL"
+      <ImageUpload
+        label="Artwork image"
+        folder="gallery"
         value={imageUrl}
-        onChange={(e) => setImageUrl(e.target.value)}
-        placeholder="https://..."
+        onChange={setImageUrl}
+        hint="Stored on Cloudflare R2 in production, or locally in dev."
       />
 
       <div className="flex flex-wrap gap-3">

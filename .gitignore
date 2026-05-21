@@ -55,3 +55,6 @@ next-env.d.ts
 .wrangler
 .dev.vars*
 !.dev.vars.example
+
+# Local upload fallback (dev without R2)
+/public/uploads/

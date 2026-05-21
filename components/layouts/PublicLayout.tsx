@@ -11,7 +11,7 @@ export interface PublicLayoutProps {
   currentPath?: string
 }
 
-const navigationItems = [
+const defaultNav = [
   { label: 'School', href: '/home' },
   { label: 'Learn', href: '/courses' },
   { label: 'Shop', href: '/shop' },
@@ -21,11 +21,29 @@ const navigationItems = [
   { label: 'About', href: '/about' },
 ]
 
+const galleryNav = [
+  { label: 'Gallery', href: '/' },
+  { label: 'Monalo School', href: '/home' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'Contact', href: '/contact' },
+]
+
+function isGalleryHost(): boolean {
+  if (typeof window === 'undefined') return false
+  const h = window.location.hostname.toLowerCase()
+  return h.startsWith('gallery.')
+}
+
 export default function PublicLayout({ children, currentPath = '' }: PublicLayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { data: session, status } = useSession()
   const [menuOpen, setMenuOpen] = useState(false)
   const isLanding = currentPath === '/'
+  const [onGalleryHost, setOnGalleryHost] = React.useState(false)
+  React.useEffect(() => {
+    setOnGalleryHost(isGalleryHost())
+  }, [])
+  const navigationItems = onGalleryHost ? galleryNav : defaultNav
 
   // Diagnostic helpers (development only)
   const _devUserEmail = (session as any)?.user?.email ?? null
