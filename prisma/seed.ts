@@ -1,5 +1,6 @@
-import db from '../lib/db'
-import { Role } from '@prisma/client'
+import { PrismaClient, Role } from '@prisma/client'
+
+const db = new PrismaClient()
 import bcrypt from 'bcrypt'
 
 const PASSWORD = 'Test@1234'
@@ -145,7 +146,10 @@ async function main() {
 	console.log('\n🎨 Seeding gallery artworks...')
 
 	const seller = await db.user.findFirst({ where: { role: 'SELLER' } })
-	if (seller) {
+	// Gallery tables require migration 20260520T140000_gallery
+	const hasGallery =
+		typeof (db as { artwork?: { create: unknown } }).artwork?.create === 'function'
+	if (seller && hasGallery) {
 		await db.artistProfile.upsert({
 			where: { userId: seller.id },
 			create: {
@@ -199,6 +203,8 @@ async function main() {
 			})
 			console.log(`+ Artwork: ${a.title}`)
 		}
+	} else if (seller && !hasGallery) {
+		console.log('- Skipping gallery seed (run: npx prisma migrate deploy && npx prisma generate)')
 	}
 
 	console.log('\n✅ Seeding complete')
