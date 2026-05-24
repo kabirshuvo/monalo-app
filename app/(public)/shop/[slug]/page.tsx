@@ -5,6 +5,8 @@ import { prisma } from '@/lib/db'
 import { formatPriceCents } from '@/lib/format'
 import ProductDetailClient from './ProductDetailClient'
 
+export const dynamic = 'force-dynamic'
+
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props) {

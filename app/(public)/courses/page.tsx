@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import PublicLayout from '@/components/layouts/PublicLayout'
 import CourseCard, { type Course } from '@/components/courses/CourseCard'
 import EmptyState from '@/components/ui/EmptyState'
@@ -10,8 +12,13 @@ export const metadata = {
 }
 
 export default async function CoursesPage() {
-  const session = await auth()
-  const userId = session?.user ? (session.user as { id?: string }).id : undefined
+  let userId: string | undefined
+  try {
+    const session = await auth()
+    userId = session?.user ? (session.user as { id?: string }).id : undefined
+  } catch (error) {
+    console.error('[courses] session lookup failed:', error)
+  }
 
   const rows = await prisma.course.findMany({
     where: { deletedAt: null },

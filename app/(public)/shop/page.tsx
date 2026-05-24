@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import PublicLayout from '@/components/layouts/PublicLayout'
 import ProductCard, { type Product } from '@/components/shop/ProductCard'
 import EmptyState from '@/components/ui/EmptyState'

@@ -5,7 +5,7 @@ import GoogleProvider from 'next-auth/providers/google'
 import FacebookProvider from 'next-auth/providers/facebook'
 import TwitterProvider from 'next-auth/providers/twitter'
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import type { Role } from '@prisma/client'
+import type { PrismaClient, Role } from '@prisma/client'
 import { prisma } from '@/lib/db'
 import { verifyPassword } from '@/lib/auth-helpers'
 import { getAuthCallbacks } from '@/lib/auth/callbacks'
@@ -29,7 +29,7 @@ type CredentialsDbUser = {
 
 const authConfig: NextAuthOptions = {
   // Use Prisma adapter for database-backed sessions
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma as PrismaClient),
   // Database-backed sessions (persisted in DB via adapter)
   session: {
     strategy: 'database',

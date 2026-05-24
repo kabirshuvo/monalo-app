@@ -82,7 +82,7 @@ export default function SellerArtworkForm() {
       className="rounded-xl border border-gray-200 p-6 space-y-4 bg-white max-w-xl"
     >
       <h2 className="text-lg font-semibold text-gray-900">Add artwork</h2>
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
 
       <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />

@@ -1,6 +1,13 @@
 import { PrismaClient, Role } from '@prisma/client'
 
-const db = new PrismaClient()
+// Seed/migrate always use direct Postgres (not Accelerate)
+const db = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL,
+    },
+  },
+})
 import bcrypt from 'bcrypt'
 
 const PASSWORD = 'Test@1234'

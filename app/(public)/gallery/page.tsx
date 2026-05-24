@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import PublicLayout from '@/components/layouts/PublicLayout'
 import ArtworkCard, { type ArtworkListItem } from '@/components/gallery/ArtworkCard'
 import EmptyState from '@/components/ui/EmptyState'

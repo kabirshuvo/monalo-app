@@ -66,7 +66,7 @@ export default function SellerProductForm() {
   return (
     <form onSubmit={submit} className="rounded-xl border border-gray-200 p-6 space-y-4 bg-white max-w-lg">
       <h2 className="text-lg font-semibold text-gray-900">Add product</h2>
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
       <Input label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
       <Textarea

@@ -67,7 +67,7 @@ async function fetchFromR2(key: string): Promise<NextResponse | null> {
     if (!out.Body) return null
 
     const bytes = await out.Body.transformToByteArray()
-    return new NextResponse(bytes, {
+    return new NextResponse(Buffer.from(bytes), {
       headers: {
         'Content-Type': out.ContentType || 'application/octet-stream',
         'Cache-Control': 'public, max-age=31536000, immutable',

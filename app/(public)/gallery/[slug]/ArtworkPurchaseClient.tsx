@@ -61,7 +61,7 @@ export default function ArtworkPurchaseClient({ slug, title }: Props) {
 
   return (
     <div className="space-y-4 border-t border-gray-200 pt-6">
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
       <Input
         label="Shipping address (optional)"

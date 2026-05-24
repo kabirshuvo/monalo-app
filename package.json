@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "prisma generate && next build",
+    "build": "node scripts/prisma-generate.mjs && next build --webpack",
     "dev": "next dev",
     "start": "next start",
     "lint": "eslint",
@@ -14,7 +14,7 @@
     "make-admin": "ts-node scripts/make-admin.ts",
     "postinstall": "prisma generate",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "deploy": "PRISMA_NO_ENGINE=1 opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
@@ -26,6 +26,7 @@
     "@aws-sdk/client-s3": "^3.750.0",
     "@opennextjs/cloudflare": "^1.19.10",
     "@prisma/client": "^6.19.1",
+    "@prisma/extension-accelerate": "^3.0.1",
     "@shadcn/ui": "^0.0.4",
     "@tiptap/react": "^3.15.3",
     "@tiptap/starter-kit": "^3.15.3",

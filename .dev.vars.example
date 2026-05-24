@@ -2,7 +2,11 @@
 # Copy to .env.local for `npm run dev`.
 NEXTJS_ENV=development
 
-DATABASE_URL=postgresql://USER:PASSWORD@HOST/DB?sslmode=require
+# Worker runtime: use Prisma Accelerate URL (see docs/PRISMA_ACCELERATE.md)
+DATABASE_URL=prisma+postgres://accelerate.prisma-data.net/?api_key=YOUR_API_KEY
+
+# Local migrations/seed only (direct Neon — never commit real values)
+# DATABASE_URL_UNPOOLED=postgresql://USER:PASSWORD@HOST/DB?sslmode=require
 NEXTAUTH_SECRET=generate-with-openssl-rand-base64-32
 NEXTAUTH_URL=http://localhost:3000
 NEXT_PUBLIC_APP_URL=http://localhost:3000

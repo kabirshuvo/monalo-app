@@ -49,7 +49,7 @@ export default function ImageUpload({
   return (
     <div className="space-y-3">
       <p className="text-sm font-medium text-gray-700">{label}</p>
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && <Alert variant="danger">{error}</Alert>}
 
       {value ? (
         <div className="relative rounded-lg border border-gray-200 overflow-hidden bg-gray-50 max-w-xs">

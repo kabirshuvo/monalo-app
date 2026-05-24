@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import PublicLayout from '@/components/layouts/PublicLayout'
 import PostCard, { type Post } from '@/components/blog/PostCard'
 import EmptyState from '@/components/ui/EmptyState'

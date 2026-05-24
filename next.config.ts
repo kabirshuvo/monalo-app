@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
 
 export default nextConfig
 
-initOpenNextCloudflareForDev()
-
-import('@opennextjs/cloudflare').then(m => m.initOpenNextCloudflareForDev());
+// Only simulate Workers runtime during `next dev`, not production/OpenNext builds
+if (process.env.NODE_ENV === 'development') {
+  initOpenNextCloudflareForDev()
+}

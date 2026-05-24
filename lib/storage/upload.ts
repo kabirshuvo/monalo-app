@@ -55,15 +55,11 @@ async function tryCloudflareBinding(
   contentType: string
 ): Promise<string | null> {
   try {
-    const mod = await import('@opennextjs/cloudflare')
-    const getContext = (mod as { getCloudflareContext?: () => Promise<{ env: Record<string, unknown> }> })
-      .getCloudflareContext
-    if (!getContext) return null
-
-    const { env } = await getContext()
-    const bucket = env.MEDIA_BUCKET as
-      | { put: (k: string, v: Buffer, o?: { httpMetadata?: { contentType?: string } }) => Promise<void> }
-      | undefined
+    const { getCloudflareContext } = await import('@opennextjs/cloudflare')
+    const { env } = await getCloudflareContext({ async: true })
+    const bucket = (env as { MEDIA_BUCKET?: {
+      put: (k: string, v: Buffer, o?: { httpMetadata?: { contentType?: string } }) => Promise<void>
+    } }).MEDIA_BUCKET
     if (!bucket?.put) return null
 
     await bucket.put(key, body, { httpMetadata: { contentType } })

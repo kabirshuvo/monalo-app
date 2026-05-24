@@ -7,6 +7,8 @@ import { isArtworkPurchasable } from '@/lib/gallery'
 import ArtworkPurchaseClient from './ArtworkPurchaseClient'
 import Badge from '@/components/ui/Badge'
 
+export const dynamic = 'force-dynamic'
+
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props) {
