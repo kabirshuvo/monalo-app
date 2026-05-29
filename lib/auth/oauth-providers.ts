@@ -3,10 +3,36 @@ import Google from 'next-auth/providers/google'
 import Facebook from 'next-auth/providers/facebook'
 import Twitter from 'next-auth/providers/twitter'
 import type { Provider } from 'next-auth/providers'
+import type { EmailConfig } from 'next-auth/providers/email'
 import { authorizeCredentials } from '@/lib/auth/credentials'
+import { sendMagicLinkEmail } from '@/lib/email/resend'
 
 function hasGoogleOAuth(): boolean {
   return Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET)
+}
+
+/** Passwordless magic-link sign-in is available when Resend is configured. */
+function hasMagicLink(): boolean {
+  return Boolean(process.env.RESEND_API_KEY)
+}
+
+/** Custom Email provider that sends the magic link via Resend's HTTP API (edge-safe). */
+function buildMagicLinkProvider(): Provider {
+  return {
+    id: 'email',
+    type: 'email',
+    name: 'Email',
+    from: process.env.RESEND_FROM_EMAIL || 'MonAlo <onboarding@resend.dev>',
+    server: {},
+    maxAge: 30 * 60,
+    options: {},
+    async sendVerificationRequest({ identifier, url }) {
+      const result = await sendMagicLinkEmail(identifier, url)
+      if (!result.ok) {
+        throw new Error(result.error || 'Failed to send sign-in link')
+      }
+    },
+  } as EmailConfig
 }
 
 /** Only register OAuth providers that have credentials configured. */
@@ -42,6 +68,10 @@ export function buildAuthProviders(): Provider[] {
     )
   }
 
+  if (hasMagicLink()) {
+    providers.push(buildMagicLinkProvider())
+  }
+
   providers.push(
     Credentials({
       name: 'Credentials',
@@ -56,4 +86,4 @@ export function buildAuthProviders(): Provider[] {
   return providers
 }
 
-export { hasGoogleOAuth }
+export { hasGoogleOAuth, hasMagicLink }

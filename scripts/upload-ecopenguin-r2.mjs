@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 /**
- * Upload public/ecopenguin/** to Cloudflare R2 under prefix eco-penguine/
+ * Upload public/ecopenguin/** to the dedicated Cloudflare R2 bucket `ecopenguin`
+ * (stored at the bucket root: images/..., audio/...).
  *
  * Requires in .env or environment:
- *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME
+ *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY
+ *   ECO_PENGUIN_R2_BUCKET (default: ecopenguin)
  *
  * Usage:
  *   node scripts/upload-ecopenguin-r2.mjs
  *   node scripts/upload-ecopenguin-r2.mjs --force   # re-upload all objects
  */
 
-import { createReadStream } from 'fs'
+import { createReadStream, readFileSync } from 'fs'
 import { readdir, stat } from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -19,13 +21,12 @@ import { S3Client, PutObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
 const LOCAL_DIR = path.join(ROOT, 'public', 'ecopenguin')
-const R2_PREFIX = 'eco-penguine'
+const R2_PREFIX = process.env.ECO_PENGUIN_R2_PREFIX || ''
 const FORCE = process.argv.includes('--force')
 
 function loadEnvFile(filePath) {
   try {
-    const fs = require('fs')
-    const text = fs.readFileSync(filePath, 'utf8')
+    const text = readFileSync(filePath, 'utf8')
     for (const line of text.split('\n')) {
       const trimmed = line.trim()
       if (!trimmed || trimmed.startsWith('#')) continue
@@ -80,7 +81,7 @@ async function main() {
   const accountId = process.env.R2_ACCOUNT_ID
   const accessKeyId = process.env.R2_ACCESS_KEY_ID
   const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY
-  const bucket = process.env.R2_BUCKET_NAME || 'monalomedia'
+  const bucket = process.env.ECO_PENGUIN_R2_BUCKET || 'ecopenguin'
 
   if (!accountId || !accessKeyId || !secretAccessKey) {
     console.error('Missing R2 credentials. Set R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY in .env')
@@ -102,13 +103,14 @@ async function main() {
   })
 
   const files = await walk(LOCAL_DIR)
-  console.log(`Uploading ${files.length} files to s3://${bucket}/${R2_PREFIX}/ ...`)
+  const dest = R2_PREFIX ? `${bucket}/${R2_PREFIX}/` : `${bucket}/`
+  console.log(`Uploading ${files.length} files to s3://${dest} ...`)
 
   let uploaded = 0
   let skipped = 0
 
   for (const { rel, full } of files) {
-    const key = `${R2_PREFIX}/${rel}`
+    const key = R2_PREFIX ? `${R2_PREFIX}/${rel}` : rel
     if (!FORCE) {
       try {
         await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }))
@@ -136,11 +138,16 @@ async function main() {
   }
 
   console.log(`Done. uploaded=${uploaded} skipped=${skipped} (existing)`)
-  const publicBase = process.env.R2_PUBLIC_BASE_URL?.replace(/\/$/, '')
+  const publicBase = (
+    process.env.NEXT_PUBLIC_ECO_PENGUIN_MEDIA_BASE_URL ||
+    process.env.R2_PUBLIC_BASE_URL ||
+    ''
+  ).replace(/\/$/, '')
+  const examplePath = R2_PREFIX ? `${R2_PREFIX}/images/categories/animals.webp` : 'images/categories/animals.webp'
   if (publicBase) {
-    console.log(`Public example: ${publicBase}/${R2_PREFIX}/images/categories/animals.webp`)
+    console.log(`Public example: ${publicBase}/${examplePath}`)
   } else {
-    console.log('Set R2_PUBLIC_BASE_URL to your R2 custom domain, or use /api/media/ecopenguin/... proxy.')
+    console.log('Set NEXT_PUBLIC_ECO_PENGUIN_MEDIA_BASE_URL to your bucket public URL (e.g. https://pub-xxxx.r2.dev).')
   }
 }
 

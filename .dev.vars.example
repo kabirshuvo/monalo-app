@@ -24,13 +24,15 @@ RESEND_FROM_EMAIL=MonAlo <onboarding@resend.dev>
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 
-# Cloudflare R2 — account 551aa3726dff734e7e9a82fc748927c4, bucket monalomedia
+# Cloudflare R2 — account 551aa3726dff734e7e9a82fc748927c4
 R2_ACCOUNT_ID=551aa3726dff734e7e9a82fc748927c4
 R2_ACCESS_KEY_ID=
 R2_SECRET_ACCESS_KEY=
+# General media bucket (avatars, gallery) → media.monalo.school
 R2_BUCKET_NAME=monalomedia
-# R2 custom domain (bucket monalomedia → media.monalo.school)
 R2_PUBLIC_BASE_URL=https://media.monalo.school
 
-# Eco Penguin: upload assets once with npm run ecopenguin:upload-r2
-# Objects live under eco-penguine/ in monalomedia (see scripts/upload-ecopenguin-r2.mjs)
+# Eco Penguin — dedicated bucket; assets stored at the bucket root.
+# Upload once with: npm run ecopenguin:upload-r2  (see scripts/upload-ecopenguin-r2.mjs)
+ECO_PENGUIN_R2_BUCKET=ecopenguin
+NEXT_PUBLIC_ECO_PENGUIN_MEDIA_BASE_URL=https://pub-776ff822a45940c7855415c583debc8e.r2.dev

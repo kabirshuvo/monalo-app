@@ -7,6 +7,13 @@ import { Form, FormSection, FormActions, Input, Button, Alert } from '@/componen
 import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton'
 import { logEvent } from '@/lib/analytics'
 import { messageForAuthError } from '@/lib/auth/oauth-errors'
+import {
+  getLastSignInMethod,
+  rememberSignInMethod,
+  type SignInMethod,
+} from '@/lib/auth/last-method'
+
+const magicLinkEnabled = process.env.NEXT_PUBLIC_MAGIC_LINK_ENABLED === 'true'
 
 function LoginForm() {
   const router = useRouter()
@@ -22,18 +29,27 @@ function LoginForm() {
   const [formMessage, setFormMessage] = useState('')
   const [fieldErrors, setFieldErrors] = useState<{ identifier?: string; password?: string }>({})
   const [isMounted, setIsMounted] = useState(false)
+  const [lastMethod, setLastMethod] = useState<SignInMethod | null>(null)
+  const [showRegisterCta, setShowRegisterCta] = useState(false)
 
-  // Set mounted flag for hydration
+  // Magic-link (passwordless) state
+  const [magicEmail, setMagicEmail] = useState('')
+  const [magicLoading, setMagicLoading] = useState(false)
+  const [magicError, setMagicError] = useState('')
+
+  // Set mounted flag for hydration + load last-used method
   useEffect(() => {
     setIsMounted(true)
+    setLastMethod(getLastSignInMethod())
   }, [])
 
-  // Redirect if already authenticated
+  // Already signed in? Skip the login page entirely.
   useEffect(() => {
     if (!isMounted) return
     if (status === 'authenticated' && session) {
-      const callbackUrl = searchParams?.get('callbackUrl') || '/'
-      router.push(callbackUrl)
+      const requested = searchParams?.get('callbackUrl')
+      const target = requested && !requested.includes('/login') ? requested : '/dashboard'
+      router.replace(target)
     }
   }, [status, session, router, searchParams, isMounted])
 
@@ -88,11 +104,40 @@ function LoginForm() {
     return Object.keys(errors).length === 0
   }
 
+  const handleMagicLink = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setMagicError('')
+    const email = magicEmail.trim().toLowerCase()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setMagicError('Please enter a valid email address')
+      return
+    }
+    setMagicLoading(true)
+    try {
+      const callbackUrl = searchParams?.get('callbackUrl') || '/dashboard'
+      const result = await signIn('email', { email, callbackUrl, redirect: false })
+      if (result?.error) {
+        setMagicError('We couldn’t send the link. Please try again in a moment.')
+        return
+      }
+      try {
+        rememberSignInMethod('email')
+        logEvent('login_link_sent', { identifier: email, method: 'email' })
+      } catch {}
+      router.push(`/verify-request?email=${encodeURIComponent(email)}`)
+    } catch {
+      setMagicError('We couldn’t send the link. Please try again in a moment.')
+    } finally {
+      setMagicLoading(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setFormMessage('')
-    
+    setShowRegisterCta(false)
+
     if (!validateForm()) {
       return
     }
@@ -143,6 +188,7 @@ function LoginForm() {
           const msg = "We couldn’t find an account for that email or phone. Want to create one?"
           setError(msg)
           setFormMessage(msg)
+          setShowRegisterCta(true)
         } else {
           const msg = 'Oops — something went wrong. Please try again in a moment.'
           setError(msg)
@@ -151,6 +197,7 @@ function LoginForm() {
       } else if (result?.ok) {
         // Success - record login start and event
         try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
+        try { rememberSignInMethod('credentials') } catch {}
         try {
           const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)
           const isPhone = /^\+?\d{10,15}$/.test(trimmedIdentifier)
@@ -272,15 +319,6 @@ function LoginForm() {
                 }
               />
 
-              <div className="mt-2 text-right">
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-blue-600 hover:text-blue-700"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -300,6 +338,16 @@ function LoginForm() {
 
             {formMessage && (
               <div className="mb-4 text-center text-sm text-red-600">{formMessage}</div>
+            )}
+            {showRegisterCta && (
+              <div className="mb-4 text-center">
+                <Link
+                  href={`/register?identifier=${encodeURIComponent(identifier.trim())}`}
+                  className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700"
+                >
+                  Create an account with this email →
+                </Link>
+              </div>
             )}
             <FormActions>
               <Button 
@@ -326,10 +374,18 @@ function LoginForm() {
 
           {/* Social Login Buttons */}
           <div className="space-y-3">
-            <GoogleSignInButton
-              callbackUrl={searchParams?.get('callbackUrl') || '/dashboard'}
-              disabled={isLoading}
-            />
+            <div className="relative">
+              {lastMethod === 'google' && (
+                <span className="absolute -top-2 right-3 z-10 rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white shadow">
+                  Last used
+                </span>
+              )}
+              <GoogleSignInButton
+                callbackUrl={searchParams?.get('callbackUrl') || '/dashboard'}
+                disabled={isLoading}
+                onBeforeSignIn={() => rememberSignInMethod('google')}
+              />
+            </div>
 
             {/* Facebook */}
             <Button
@@ -361,6 +417,37 @@ function LoginForm() {
               <span>Continue with X</span>
             </Button>
           </div>
+
+          {/* Passwordless magic link */}
+          {magicLinkEnabled && (
+            <div className="mt-6 border-t border-gray-200 pt-6">
+              <div className="mb-2 flex items-center justify-between">
+                <p className="text-sm font-medium text-gray-700">No password? Email me a sign-in link</p>
+                {lastMethod === 'email' && (
+                  <span className="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+                    Last used
+                  </span>
+                )}
+              </div>
+              {magicError && (
+                <div className="mb-2 text-sm text-red-600">{magicError}</div>
+              )}
+              <form onSubmit={handleMagicLink} className="flex flex-col gap-2 sm:flex-row">
+                <input
+                  type="email"
+                  value={magicEmail}
+                  onChange={(e) => setMagicEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  disabled={magicLoading}
+                  autoComplete="email"
+                  className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <Button type="submit" variant="secondary" isLoading={magicLoading} disabled={magicLoading}>
+                  {magicLoading ? 'Sending…' : 'Send link'}
+                </Button>
+              </form>
+            </div>
+          )}
         </div>
 
         {/* Register Link */}

@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /**
- * Apply CORS policy to monalomedia bucket (Eco Penguin browser access).
+ * Apply CORS policy to the dedicated `ecopenguin` R2 bucket (browser access).
  *
  * Uses Cloudflare API (not S3). Requires:
  *   CLOUDFLARE_API_TOKEN — R2 Edit permission
  *   R2_ACCOUNT_ID (default: 551aa3726dff734e7e9a82fc748927c4)
+ *   ECO_PENGUIN_R2_BUCKET (default: ecopenguin)
  *
  * Usage:
  *   CLOUDFLARE_API_TOKEN=xxx node scripts/configure-ecopenguin-r2-cors.mjs
@@ -17,7 +18,7 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
 const ACCOUNT_ID = process.env.R2_ACCOUNT_ID || '551aa3726dff734e7e9a82fc748927c4'
-const BUCKET = process.env.R2_BUCKET_NAME || 'monalomedia'
+const BUCKET = process.env.ECO_PENGUIN_R2_BUCKET || 'ecopenguin'
 const TOKEN = process.env.CLOUDFLARE_API_TOKEN
 
 async function main() {

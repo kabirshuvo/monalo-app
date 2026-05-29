@@ -9,12 +9,14 @@ type GoogleSignInButtonProps = {
   callbackUrl?: string
   disabled?: boolean
   label?: string
+  onBeforeSignIn?: () => void
 }
 
 export function GoogleSignInButton({
   callbackUrl = '/dashboard',
   disabled = false,
   label = 'Continue with Google',
+  onBeforeSignIn,
 }: GoogleSignInButtonProps) {
   if (!googleEnabled) {
     return null
@@ -25,7 +27,10 @@ export function GoogleSignInButton({
       type="button"
       variant="secondary"
       fullWidth
-      onClick={() => signIn('google', { callbackUrl })}
+      onClick={() => {
+        onBeforeSignIn?.()
+        void signIn('google', { callbackUrl })
+      }}
       disabled={disabled}
       className="flex items-center justify-center gap-3"
     >

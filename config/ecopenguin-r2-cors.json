@@ -8,7 +8,8 @@
           "http://localhost:3000",
           "https://monalo.school",
           "https://www.monalo.school",
-          "https://media.monalo.school"
+          "https://media.monalo.school",
+          "https://pub-776ff822a45940c7855415c583debc8e.r2.dev"
         ],
         "headers": ["*"]
       },

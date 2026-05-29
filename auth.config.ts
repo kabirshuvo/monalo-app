@@ -13,6 +13,7 @@ export const authConfig = {
   pages: {
     signIn: '/login',
     newUser: '/dashboard',
+    verifyRequest: '/verify-request',
   },
   session: {
     strategy: 'jwt',
