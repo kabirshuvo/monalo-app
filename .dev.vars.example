@@ -7,14 +7,30 @@ DATABASE_URL=prisma+postgres://accelerate.prisma-data.net/?api_key=YOUR_API_KEY
 
 # Local migrations/seed only (direct Neon — never commit real values)
 # DATABASE_URL_UNPOOLED=postgresql://USER:PASSWORD@HOST/DB?sslmode=require
+# Auth.js v5 (NEXTAUTH_* still supported)
+AUTH_SECRET=generate-with-openssl-rand-base64-32
+AUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=generate-with-openssl-rand-base64-32
-NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_GALLERY_URL=http://gallery.localhost:3000
 
-# Cloudflare R2 (optional locally — falls back to public/uploads/)
-R2_ACCOUNT_ID=
+# Resend (email verification)
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=MonAlo <onboarding@resend.dev>
+
+# Google OAuth — project monaloauth
+# https://console.cloud.google.com/apis/credentials?project=monaloauth
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# Cloudflare R2 — account 551aa3726dff734e7e9a82fc748927c4, bucket monalomedia
+R2_ACCOUNT_ID=551aa3726dff734e7e9a82fc748927c4
 R2_ACCESS_KEY_ID=
 R2_SECRET_ACCESS_KEY=
-R2_BUCKET_NAME=monalo-media
-R2_PUBLIC_BASE_URL=
+R2_BUCKET_NAME=monalomedia
+# R2 custom domain (bucket monalomedia → media.monalo.school)
+R2_PUBLIC_BASE_URL=https://media.monalo.school
+
+# Eco Penguin: upload assets once with npm run ecopenguin:upload-r2
+# Objects live under eco-penguine/ in monalomedia (see scripts/upload-ecopenguin-r2.mjs)

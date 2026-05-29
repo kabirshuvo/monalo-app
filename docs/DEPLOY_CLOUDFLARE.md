@@ -1,6 +1,6 @@
 # Deploy Monalo to Cloudflare Workers
 
-Stack: **Next.js 16** + **OpenNext Cloudflare** + **Neon Postgres** + **R2** (`monalo-media`).
+Stack: **Next.js 16** + **OpenNext Cloudflare** + **Neon Postgres** + **R2** (`monalomedia`).
 
 ## Prerequisites
 
@@ -19,10 +19,10 @@ Opens a browser to authorize Wrangler.
 ## 2. Create R2 bucket (first time only)
 
 ```bash
-npx wrangler r2 bucket create monalo-media
+npx wrangler r2 bucket create monalomedia
 ```
 
-Name must match `wrangler.jsonc` → `bucket_name: "monalo-media"`.
+Name must match `wrangler.jsonc` → `bucket_name: "monalomedia"`.
 
 ## 3. Set production secrets on the Worker
 
@@ -50,7 +50,7 @@ npx wrangler secret put R2_ACCOUNT_ID
 npx wrangler secret put R2_ACCESS_KEY_ID
 npx wrangler secret put R2_SECRET_ACCESS_KEY
 npx wrangler secret put R2_BUCKET_NAME
-# value: monalo-media
+# value: monalomedia
 ```
 
 List secrets:
@@ -118,7 +118,7 @@ Do **not** add `custom_domain` routes in `wrangler.jsonc` until old DNS records 
 |-------|-----|
 | `wrangler login` required | Run step 1 |
 | Build fails with SQLite/workerd | Fixed: `initOpenNextCloudflareForDev` only in development |
-| R2 bucket missing | `wrangler r2 bucket create monalo-media` |
+| R2 bucket missing | `wrangler r2 bucket create monalomedia` |
 | Auth redirect loop | `NEXTAUTH_URL` must match deployed URL exactly |
 | DB errors on Worker | `DATABASE_URL` must be **Prisma Accelerate** URL (`prisma+postgres://...`), not raw Neon — see [PRISMA_ACCELERATE.md](./PRISMA_ACCELERATE.md) |
 | `fs.readdir is not implemented` | Prisma Accelerate + edge client (fixed in `lib/db.ts`) |

@@ -57,7 +57,7 @@ export default async function CustomerOrdersPage() {
             title="No orders yet"
             description="When you make a purchase, it will appear here. Take your time exploring."
             actionLabel="Start shopping"
-            onAction={() => {}}
+            actionHref="/shop"
           />
         ) : (
           <Card>

@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth'
-import authConfig from '@/auth.config'
+import { auth } from '@/auth'
 
 /**
  * Get current user ID from NextAuth session
@@ -7,7 +6,7 @@ import authConfig from '@/auth.config'
  */
 export async function getSessionUserId(): Promise<string | null> {
   try {
-    const session = await getServerSession(authConfig)
+    const session = await auth()
     const userId = (session?.user as any)?.id
     return userId || null
   } catch (error) {

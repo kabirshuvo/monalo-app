@@ -14,8 +14,7 @@
  *   }
  */
 
-import { getServerSession } from 'next-auth'
-import authConfig from '@/auth.config'
+import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import type { Role } from '@prisma/client'
 import type { Session } from 'next-auth'
@@ -33,7 +32,7 @@ import { logAccessDenied, logAuthFailure } from '@/lib/auth/audit-logs'
  *   }
  */
 export async function getServerUserSession(): Promise<Session | null> {
-  return getServerSession(authConfig)
+  return auth()
 }
 
 /**

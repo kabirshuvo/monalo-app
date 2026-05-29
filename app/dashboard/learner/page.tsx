@@ -68,7 +68,7 @@ export default async function DashboardLearner() {
             title="Start your learning adventure"
             description="Explore courses when you're ready. There's no rush—pick what interests you most."
             actionLabel="Browse courses"
-            onAction={() => {}}
+            actionHref="/courses"
           />
         </section>
       </div>

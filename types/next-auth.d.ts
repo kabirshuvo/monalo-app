@@ -7,6 +7,9 @@ declare module 'next-auth' {
       id: string
       role: Role
       isFirstLogin?: boolean
+      emailVerified?: Date | null
+      avatarUrl?: string | null
+      level?: number
     } & DefaultSession['user']
   }
 
@@ -14,14 +17,19 @@ declare module 'next-auth' {
     id: string
     role: Role
     isFirstLogin?: boolean
+    emailVerified?: Date | null
+    avatarUrl?: string | null
   }
 }
 
-declare module 'next-auth/jwt' {
+declare module '@auth/core/jwt' {
   interface JWT {
     id?: string
     role?: Role
     isFirstLogin?: boolean
+    emailVerified?: Date | null
+    avatarUrl?: string | null
+    level?: number
   }
 }
 
@@ -29,11 +37,13 @@ declare module 'next-auth/jwt' {
 declare module 'next-auth/adapters' {
   interface AdapterUser {
     role?: Role
+    emailVerified?: Date | null
   }
 }
 
 declare module '@auth/core/adapters' {
   interface AdapterUser {
     role?: Role
+    emailVerified?: Date | null
   }
 }

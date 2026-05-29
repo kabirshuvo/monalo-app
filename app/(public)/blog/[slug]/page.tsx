@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import PublicLayout from '@/components/layouts/PublicLayout'
+import ActivityTracker from '@/components/points/ActivityTracker'
 import { prisma } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
@@ -35,6 +36,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <PublicLayout currentPath="/blog">
+      <ActivityTracker type="blog" />
       <main className="mx-auto max-w-3xl px-4 py-12">
         <p className="text-sm text-gray-500">
           {date}

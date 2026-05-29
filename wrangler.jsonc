@@ -24,7 +24,7 @@
 	"r2_buckets": [
 		{
 			"binding": "MEDIA_BUCKET",
-			"bucket_name": "monalo-media",
+			"bucket_name": "monalomedia",
 			"remote": true
 		}
 	]

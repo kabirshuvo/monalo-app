@@ -1,31 +1,67 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth-server'
+import { prisma } from '@/lib/db'
+import { getPointsBreakdown, getRecentPointEvents } from '@/lib/points/service'
+import { badgeFromTotalPoints, levelFromTotalPoints } from '@/lib/points/config'
+import { normalizeAvatarValue } from '@/lib/avatars/presets'
 
-/**
- * GET /api/profile
- * Returns current user's profile (excludes password and sensitive fields)
- */
 export async function GET() {
   try {
     const session = await auth()
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Mock profile data
-    // In production: fetch from Prisma excluding password
+    const userId = session.user.id
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        role: true,
+        bio: true,
+        avatarUrl: true,
+        emailVerified: true,
+        totalPoints: true,
+        level: true,
+        badge: true,
+        createdAt: true,
+      },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    const [pointsBreakdown, recentActivity] = await Promise.all([
+      getPointsBreakdown(userId),
+      getRecentPointEvents(userId, 8),
+    ])
+
     const profile = {
-      id: (session.user as any).id || 'demo-user',
-      name: session.user.name || null,
-      email: session.user.email || null,
-      avatar: session.user.image || null,
-      phone: null,
-      role: (session.user as any).role || 'CUSTOMER',
-      level: (session.user as any).level || 1,
-      badge: 'New Light',
-      points: 0,
-      isVerified: true,
-      createdAt: new Date().toISOString()
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      avatar: user.avatarUrl || session.user.image || null,
+      role: user.role,
+      bio: user.bio,
+      level: user.level || levelFromTotalPoints(user.totalPoints),
+      badge: user.badge || badgeFromTotalPoints(user.totalPoints),
+      points: user.totalPoints,
+      isVerified: Boolean(user.emailVerified),
+      createdAt: user.createdAt.toISOString(),
+      pointsBreakdown,
+      recentActivity: recentActivity.map((e) => ({
+        id: e.id,
+        category: e.category,
+        points: e.points,
+        description: e.description,
+        createdAt: e.createdAt.toISOString(),
+      })),
     }
 
     return NextResponse.json({ ok: true, profile })
@@ -35,47 +71,76 @@ export async function GET() {
   }
 }
 
-/**
- * PATCH /api/profile
- * Updates user profile (allowed fields: name, avatar, phone)
- */
 export async function PATCH(request: Request) {
   try {
     const session = await auth()
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const body = await request.json().catch(() => ({}))
-    
-    // Validate allowed fields
-    const allowedFields = ['name', 'avatar', 'phone']
-    const updates: Record<string, any> = {}
-    
+    const allowedFields = ['name', 'avatar', 'phone', 'bio', 'avatarUrl'] as const
+    const updates: Record<string, string | null> = {}
+
     for (const field of allowedFields) {
       if (field in body) {
-        updates[field] = body[field]
+        const key = field === 'avatar' ? 'avatarUrl' : field
+        const value = body[field]
+        updates[key] = value === '' || value == null ? null : String(value).trim()
       }
     }
 
-    // Normalize phone if provided: keep digits and optional leading +
     if (updates.phone) {
-      updates.phone = String(updates.phone).trim().replace(/(?!^\+)\D/g, '')
+      updates.phone = updates.phone.replace(/(?!^\+)\D/g, '')
     }
 
-    // Mock update response
-    // In production: update via Prisma
-    const updatedProfile = {
-      id: (session.user as any).id || 'demo-user',
-      name: updates.name ?? session.user.name,
-      email: session.user.email,
-      avatar: updates.avatar ?? session.user.image,
-      phone: updates.phone ?? null,
-      role: (session.user as any).role || 'CUSTOMER',
-      updatedAt: new Date().toISOString()
+    if ('avatarUrl' in updates) {
+      const normalized = normalizeAvatarValue(updates.avatarUrl)
+      if (updates.avatarUrl && normalized === null) {
+        return NextResponse.json({ error: 'Invalid avatar selection' }, { status: 400 })
+      }
+      updates.avatarUrl = normalized
     }
 
-    return NextResponse.json({ ok: true, profile: updatedProfile })
+    const user = await prisma.user.update({
+      where: { id: session.user.id },
+      data: updates,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        role: true,
+        bio: true,
+        avatarUrl: true,
+        totalPoints: true,
+        level: true,
+        badge: true,
+        emailVerified: true,
+        createdAt: true,
+      },
+    })
+
+    const pointsBreakdown = await getPointsBreakdown(user.id)
+
+    return NextResponse.json({
+      ok: true,
+      profile: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        avatar: user.avatarUrl || session.user.image || null,
+        role: user.role,
+        bio: user.bio,
+        level: user.level,
+        badge: user.badge,
+        points: user.totalPoints,
+        isVerified: Boolean(user.emailVerified),
+        createdAt: user.createdAt.toISOString(),
+        pointsBreakdown,
+      },
+    })
   } catch (error) {
     console.error('[PATCH /api/profile]', error)
     return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 })

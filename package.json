@@ -16,7 +16,9 @@
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "PRISMA_NO_ENGINE=1 opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "ecopenguin:upload-r2": "node scripts/upload-ecopenguin-r2.mjs",
+    "ecopenguin:configure-cors": "node scripts/configure-ecopenguin-r2-cors.mjs"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -30,10 +32,10 @@
     "@shadcn/ui": "^0.0.4",
     "@tiptap/react": "^3.15.3",
     "@tiptap/starter-kit": "^3.15.3",
-    "@types/bcrypt": "^6.0.0",
-    "bcrypt": "^6.0.0",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
     "next": "^16.2.6",
-    "next-auth": "^4.24.13",
+    "next-auth": "^5.0.0-beta.31",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },

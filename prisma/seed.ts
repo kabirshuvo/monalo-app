@@ -8,7 +8,7 @@ const db = new PrismaClient({
     },
   },
 })
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 const PASSWORD = 'Test@1234'
 
@@ -37,12 +37,13 @@ async function main() {
 			continue
 		}
 
-		const user = await db.user.create({
+        const user = await db.user.create({
 			data: {
 				email,
 				name: displayName,
 				password: hashed,
 				role,
+				emailVerified: new Date(),
 			},
 		})
 

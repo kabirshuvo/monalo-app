@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth-server'
 import { redirect } from 'next/navigation'
 import DashboardLayout from '@/components/dashboard/Layout'
+import { getUserAvatarFromSession } from '@/lib/auth/user-avatar'
 import LessonViewer from '@/components/courses/LessonViewer'
 
 export const metadata = {
@@ -24,7 +25,7 @@ export default async function LessonPage({
     <DashboardLayout
       userRole={(role as 'LEARNER' | 'ADMIN') || 'LEARNER'}
       userName={session.user.name || 'Learner'}
-      userAvatar={session.user.image || undefined}
+      userAvatar={getUserAvatarFromSession(session)}
       currentPath="/dashboard/learning"
     >
       <div className="max-w-4xl mx-auto">

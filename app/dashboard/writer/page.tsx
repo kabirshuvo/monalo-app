@@ -68,7 +68,7 @@ export default async function DashboardWriter() {
             title="Ready to create?"
             description="Your first course is an opportunity to share what you know. Take your time building something meaningful."
             actionLabel="Create your first course"
-            onAction={() => {}}
+            actionHref="/dashboard/writer"
           />
         </section>
       </div>

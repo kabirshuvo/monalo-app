@@ -1,0 +1,18 @@
+{
+  "rules": [
+    {
+      "id": "MonAlo Eco Penguin",
+      "allowed": {
+        "methods": ["GET", "HEAD"],
+        "origins": [
+          "http://localhost:3000",
+          "https://monalo.school",
+          "https://www.monalo.school",
+          "https://media.monalo.school"
+        ],
+        "headers": ["*"]
+      },
+      "maxAgeSeconds": 86400
+    }
+  ]
+}

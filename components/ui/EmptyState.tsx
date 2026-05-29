@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import Link from 'next/link'
 import Button from './Button'
 
 export type EmptyStateVariant = 'generic' | 'blog' | 'courses-learner' | 'courses-instructor' | 'cart' | 'orders'
@@ -9,6 +10,7 @@ export interface EmptyStateProps {
   title?: string
   description?: string
   actionLabel?: string
+  actionHref?: string
   onAction?: () => void
   icon?: React.ReactNode
 }
@@ -84,6 +86,7 @@ export default function EmptyState({
   title,
   description,
   actionLabel,
+  actionHref,
   onAction,
   icon
 }: EmptyStateProps) {
@@ -115,11 +118,15 @@ export default function EmptyState({
       </p>
 
       {/* Action Button */}
-      {onAction && (
+      {actionHref ? (
+        <Link href={actionHref}>
+          <Button variant="primary">{displayActionLabel}</Button>
+        </Link>
+      ) : onAction ? (
         <Button onClick={onAction} variant="primary">
           {displayActionLabel}
         </Button>
-      )}
+      ) : null}
     </div>
   )
 }

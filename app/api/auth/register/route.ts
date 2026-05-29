@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { hashPassword, validateEmail, validatePassword } from '@/lib/auth-helpers'
+import { createEmailVerificationToken } from '@/lib/auth/verification'
+import { sendVerificationEmail } from '@/lib/email/resend'
 
 interface RegisterRequest {
   email?: string
@@ -16,12 +18,12 @@ interface RegisterResponse {
     email: string | null
     name: string | null
   }
+  verificationEmailSent?: boolean
   error?: string
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse<RegisterResponse>> {
   try {
-    // Parse and validate request body
     let body: RegisterRequest
     try {
       body = await req.json()
@@ -34,33 +36,23 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
 
     const { email, phone, password, name } = body
 
-    // Normalize optional contact fields to null for consistent DB writes
     const normalizedEmail = email ? String(email).trim().toLowerCase() : null
     const normalizedPhone = phone ? String(phone).trim().replace(/(?!^\+)\D/g, '') : null
 
-    // ============= Input Validation =============
-
-    // Validate normalized email if present
-    if (normalizedEmail) {
-      if (!validateEmail(normalizedEmail)) {
-        return NextResponse.json<RegisterResponse>(
-          { ok: false, error: 'Invalid email format' },
-          { status: 400 }
-        )
-      }
+    if (normalizedEmail && !validateEmail(normalizedEmail)) {
+      return NextResponse.json<RegisterResponse>(
+        { ok: false, error: 'Invalid email format' },
+        { status: 400 }
+      )
     }
 
-    // If phone provided, ensure it's plausible after normalization
-    if (normalizedPhone) {
-      if (!/^\+?[0-9]{7,20}$/.test(normalizedPhone)) {
-        return NextResponse.json<RegisterResponse>(
-          { ok: false, error: 'Invalid phone format' },
-          { status: 400 }
-        )
-      }
+    if (normalizedPhone && !/^\+?[0-9]{7,20}$/.test(normalizedPhone)) {
+      return NextResponse.json<RegisterResponse>(
+        { ok: false, error: 'Invalid phone format' },
+        { status: 400 }
+      )
     }
 
-    // Require at least one contact method
     if (!normalizedEmail && !normalizedPhone) {
       return NextResponse.json<RegisterResponse>(
         { ok: false, error: 'Please provide an email or phone number' },
@@ -68,7 +60,6 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
       )
     }
 
-    // Password validation
     if (!password) {
       return NextResponse.json<RegisterResponse>(
         { ok: false, error: 'Password is required' },
@@ -84,7 +75,6 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
       )
     }
 
-    // ============= Duplicate Check =============
     if (normalizedEmail) {
       const existingEmail = await prisma.user.findUnique({
         where: { email: normalizedEmail },
@@ -111,13 +101,8 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
       }
     }
 
-    // No username handling: keep registration focused on name/email/phone/password
-
-    // ============= Hash Password =============
-
     const hashedPassword = await hashPassword(password)
 
-    // ============= Create User =============
     let user
     try {
       user = await prisma.user.create({
@@ -126,6 +111,8 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
           phone: normalizedPhone,
           password: hashedPassword,
           name: name || null,
+          role: 'LEARNER',
+          emailVerified: normalizedEmail ? null : new Date(),
         },
         select: {
           id: true,
@@ -134,10 +121,11 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
         },
       })
     } catch (err: unknown) {
-      // Handle Prisma unique constraint errors gracefully
       if (
-        err && typeof err === 'object' &&
-        'code' in err && (err as any).code === 'P2002'
+        err &&
+        typeof err === 'object' &&
+        'code' in err &&
+        (err as { code: string }).code === 'P2002'
       ) {
         return NextResponse.json<RegisterResponse>(
           { ok: false, error: 'Unique constraint violation' },
@@ -152,7 +140,21 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
       )
     }
 
-    // ============= Return Success Response =============
+    let verificationEmailSent = false
+
+    if (normalizedEmail) {
+      try {
+        const token = await createEmailVerificationToken(normalizedEmail)
+        const emailResult = await sendVerificationEmail(normalizedEmail, token)
+        verificationEmailSent = emailResult.ok
+
+        if (!emailResult.ok) {
+          console.error('[register] verification email failed:', emailResult.error)
+        }
+      } catch (err) {
+        console.error('[register] verification token/email error:', err)
+      }
+    }
 
     return NextResponse.json<RegisterResponse>(
       {
@@ -162,11 +164,11 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterRespo
           email: user.email,
           name: user.name,
         },
+        verificationEmailSent,
       },
       { status: 201 }
     )
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Registration failed'
     console.error('[register] Error:', error)
 
     return NextResponse.json<RegisterResponse>(

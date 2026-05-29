@@ -2,7 +2,7 @@
 
 ## R2 bucket setup (Cloudflare dashboard)
 
-1. Create bucket: **monalo-media** (must match `wrangler.jsonc`).
+1. Create bucket: **monalomedia** (must match `wrangler.jsonc`).
 2. Create API token: **R2 Read & Write** for that bucket.
 3. Optional: connect custom domain **media.monalo.school** (public access) → set `R2_PUBLIC_BASE_URL=https://media.monalo.school`.
 4. If the bucket stays private, images are served via `/api/media/{key}`.
@@ -14,7 +14,7 @@
 R2_ACCOUNT_ID=your_cloudflare_account_id
 R2_ACCESS_KEY_ID=
 R2_SECRET_ACCESS_KEY=
-R2_BUCKET_NAME=monalo-media
+R2_BUCKET_NAME=monalomedia
 R2_PUBLIC_BASE_URL=https://media.monalo.school
 
 # App URLs (production)
@@ -82,7 +82,7 @@ Set `NEXTAUTH_URL` to your primary origin. For shared login across subdomains, c
 ## Wrangler deploy
 
 ```bash
-npx wrangler r2 bucket create monalo-media
+npx wrangler r2 bucket create monalomedia
 npx wrangler secret put R2_ACCESS_KEY_ID
 npx wrangler secret put R2_SECRET_ACCESS_KEY
 npm run deploy

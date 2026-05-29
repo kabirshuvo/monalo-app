@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import authConfig from '@/auth.config'
+import { auth } from '@/auth'
 import { prisma } from '@/lib/db'
 
 type Params = { params: Promise<{ courseId: string }> }
@@ -8,7 +7,7 @@ type Params = { params: Promise<{ courseId: string }> }
 export async function POST(_request: NextRequest, { params }: Params) {
   const { courseId } = await params
   try {
-    const session = await getServerSession(authConfig)
+    const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }

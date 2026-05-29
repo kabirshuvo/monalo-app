@@ -1,48 +1,39 @@
 /**
- * Middleware: surface subdomain routing + dashboard authentication.
+ * Middleware: subdomain routing + Auth.js v5 JWT session protection.
+ * Uses edge-safe auth.config only (no Prisma in middleware bundle).
  */
 
-import { getToken } from 'next-auth/jwt'
-import { NextRequest, NextResponse } from 'next/server'
-import type { JWT } from 'next-auth/jwt'
+import NextAuth from 'next-auth'
+import { NextResponse } from 'next/server'
+import authConfig from '@/auth.config'
 import { handleSiteRouting } from '@/lib/sites'
 
-interface AuthToken extends JWT {
-  sub?: string
-}
+const { auth } = NextAuth(authConfig)
 
-async function requireAuth(request: NextRequest, pathname: string) {
-  const token = (await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  })) as AuthToken | null
+export default auth((request) => {
+  const pathname = request.nextUrl.pathname
 
-  if (!token) {
+  const needsAuth =
+    pathname.startsWith('/dashboard') ||
+    pathname === '/profile' ||
+    pathname.startsWith('/learning/ecopenguin')
+
+  if (needsAuth && !request.auth?.user) {
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('callbackUrl', pathname)
     return NextResponse.redirect(loginUrl)
-  }
-  return null
-}
-
-export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname
-
-  if (pathname.startsWith('/dashboard')) {
-    const authRedirect = await requireAuth(request, pathname)
-    if (authRedirect) return authRedirect
-    return NextResponse.next()
   }
 
   const siteResponse = handleSiteRouting(request)
   if (siteResponse) return siteResponse
 
   return NextResponse.next()
-}
+})
 
 export const config = {
   matcher: [
     '/dashboard/:path*',
-    '/((?!_next/static|_next/image|favicon.ico|api/media|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+    '/learning/ecopenguin/:path*',
+    '/((?!_next/static|_next/image|favicon.ico|api/media|ecopenguin|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp3|webp)$).*)',
   ],
 }

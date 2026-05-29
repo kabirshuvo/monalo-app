@@ -64,7 +64,7 @@ export default function CourseCard({ course }: CourseCardProps) {
               style={{ width: `${clampedProgress}%` }}
             />
           </div>
-          <Link href={`/dashboard/learning/courses/${id}/lessons/l-001`}>
+          <Link href="/dashboard/learning">
             <Button size="sm" fullWidth>
               Continue learning
             </Button>

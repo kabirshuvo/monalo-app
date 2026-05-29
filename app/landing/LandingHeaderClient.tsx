@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import { logEvent } from '@/lib/analytics'
+import AvatarVisual from '@/components/profile/AvatarVisual'
+import { getUserAvatarFromSession } from '@/lib/auth/user-avatar'
 
 export default function LandingHeaderClient() {
   const pathname = usePathname()
@@ -85,15 +87,11 @@ export default function LandingHeaderClient() {
                 aria-expanded={menuOpen}
                 className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                {user?.image ? (
-                  // profile image when available
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={user.image} alt={displayName()} className="w-9 h-9 rounded-full object-cover" />
-                ) : (
-                  <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
-                    <span className="text-sm font-semibold text-blue-600">{displayName().charAt(0).toUpperCase()}</span>
-                  </div>
-                )}
+                <AvatarVisual
+                  value={getUserAvatarFromSession(session)}
+                  name={displayName()}
+                  size="sm"
+                />
               </button>
 
               {menuOpen && (

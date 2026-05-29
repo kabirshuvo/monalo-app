@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui'
 import Button from '@/components/ui/Button'
 import LoadingState from '@/components/ui/LoadingState'
 import CourseProgress from '@/components/courses/CourseProgress'
-import api from '@/lib/api'
+import api, { ApiError } from '@/lib/api'
 
 interface Lesson {
   id: string
@@ -30,17 +30,23 @@ export default function LessonViewer({ courseId, lessonId }: LessonViewerProps) 
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [trackingProgress, setTrackingProgress] = useState(false)
+  const [progressError, setProgressError] = useState<string | null>(null)
 
   useEffect(() => {
     async function loadLesson() {
       setLoading(true)
       try {
         // Fetch all lessons for navigation
-        const res = await api.get<{ ok: boolean; lessons: Lesson[] }>(
-          `/api/courses/${courseId}/lessons`
-        )
+        const res = await api.get<{
+          ok: boolean
+          lessons: Lesson[]
+          completedLessonIds?: string[]
+        }>(`/api/courses/${courseId}/lessons`)
         const lessons = res?.lessons || []
         setAllLessons(lessons)
+        if (res?.completedLessonIds?.length) {
+          setCompletedLessons(new Set(res.completedLessonIds))
+        }
 
         // Find current lesson
         const current = lessons.find((l) => l.id === lessonId)
@@ -61,15 +67,14 @@ export default function LessonViewer({ courseId, lessonId }: LessonViewerProps) 
   const markCompleted = async () => {
     if (!lesson) return
     setTrackingProgress(true)
+    setProgressError(null)
     try {
       await api.post(`/api/lessons/${lesson.id}/progress`, {
         completed: true,
-        watchedMinutes: Math.floor((lesson.duration || 0) / 60)
+        watchedMinutes: Math.max(1, Math.floor((lesson.duration || 0) / 60)),
       })
-      // Mark as completed locally
       setCompletedLessons((prev) => new Set([...prev, lesson.id]))
-      
-      // Move to next lesson if available
+
       if (nextLesson) {
         router.push(`/dashboard/learning/courses/${courseId}/lessons/${nextLesson.id}`)
       } else {
@@ -77,6 +82,12 @@ export default function LessonViewer({ courseId, lessonId }: LessonViewerProps) 
       }
     } catch (error) {
       console.error('Failed to track progress', error)
+      if (error instanceof ApiError) {
+        const body = error.data as { error?: string } | undefined
+        setProgressError(body?.error || error.message)
+      } else {
+        setProgressError('Could not save progress. Please try again.')
+      }
     } finally {
       setTrackingProgress(false)
     }
@@ -182,19 +193,31 @@ export default function LessonViewer({ courseId, lessonId }: LessonViewerProps) 
                 <div />
               )}
             </div>
-            <div className="flex items-center gap-3">
-              <Button
-                variant="secondary"
-                onClick={() => router.push('/dashboard/learning')}
-              >
-                Back to dashboard
-              </Button>
-              <Button
-                onClick={markCompleted}
-                isLoading={trackingProgress}
-              >
-                {nextLesson ? 'Complete & Continue' : 'Complete lesson'}
-              </Button>
+            <div className="flex flex-col items-end gap-2">
+              {progressError && (
+                <p className="text-sm text-red-600" role="alert">
+                  {progressError}
+                </p>
+              )}
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="secondary"
+                  onClick={() => router.push('/dashboard/learning')}
+                >
+                  Back to dashboard
+                </Button>
+                <Button
+                  onClick={markCompleted}
+                  isLoading={trackingProgress}
+                  disabled={completedLessons.has(lesson.id)}
+                >
+                  {completedLessons.has(lesson.id)
+                    ? 'Completed'
+                    : nextLesson
+                      ? 'Complete & Continue'
+                      : 'Complete lesson'}
+                </Button>
+              </div>
             </div>
             <div>
               {nextLesson ? (

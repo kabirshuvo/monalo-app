@@ -50,7 +50,7 @@ export default async function DashboardCustomer() {
             title="Ready to explore?"
             description="When you purchase something, your orders will show up here. No pressure—take your time."
             actionLabel="Browse our shop"
-            onAction={() => {}}
+            actionHref="/shop"
           />
         </section>
 

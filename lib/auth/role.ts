@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth'
-import authConfig from '@/auth.config'
+import { auth } from '@/auth'
 import { Role as PrismaRole } from '@prisma/client'
 import { logAccessDenied, logAuthFailure } from '@/lib/auth/audit-logs'
 
@@ -43,7 +42,7 @@ export async function requireRole(
   allowedRoles: PrismaRole | PrismaRole[]
 ) {
   // Get the session
-  const session = await getServerSession(authConfig)
+  const session = await auth()
 
   // Check if user is authenticated
   if (!session || !session.user) {
@@ -123,7 +122,7 @@ export async function hasRole(allowedRoles: PrismaRole | PrismaRole[]): Promise<
  */
 export async function getCurrentRole(): Promise<PrismaRole | null> {
   try {
-    const session = await getServerSession(authConfig)
+    const session = await auth()
     return (session?.user as any)?.role || null
   } catch {
     return null
@@ -143,7 +142,7 @@ export async function getCurrentRole(): Promise<PrismaRole | null> {
  */
 export async function getCurrentUserId(): Promise<string | null> {
   try {
-    const session = await getServerSession(authConfig)
+    const session = await auth()
     return (session?.user as any)?.id || null
   } catch {
     return null
@@ -164,7 +163,7 @@ export async function getCurrentUserId(): Promise<string | null> {
  */
 export async function getCurrentSession() {
   try {
-    return await getServerSession(authConfig)
+    return await auth()
   } catch {
     return null
   }

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import authConfig from '@/auth.config'
+import { auth } from '@/auth'
 import { prisma } from '@/lib/db'
 import { requireRole, AuthorizationError } from '@/lib/auth/role'
 import { withUpdatedBy } from '@/lib/auth/audit'
@@ -30,7 +29,7 @@ export async function GET(_request: NextRequest, { params }: Params) {
     }
 
     if (artwork.status !== 'ACTIVE') {
-      const session = await getServerSession(authConfig)
+      const session = await auth()
       const role = (session?.user as { role?: string })?.role
       const userId = (session?.user as { id?: string })?.id
       const canView =

@@ -1,6 +1,10 @@
 import { mkdir, writeFile } from 'fs/promises'
 import path from 'path'
 import { randomUUID } from 'crypto'
+import { createR2S3Client, r2BucketName, r2PublicBaseUrl } from '@/lib/storage/r2'
+import { PutObjectCommand } from '@aws-sdk/client-s3'
+
+export { isR2Configured } from '@/lib/storage/r2'
 
 export type UploadFolder = 'gallery' | 'shop' | 'products'
 
@@ -43,7 +47,7 @@ function buildKey(folder: UploadFolder, contentType: string): string {
 }
 
 function publicUrlForKey(key: string): string {
-  const base = process.env.R2_PUBLIC_BASE_URL?.replace(/\/$/, '')
+  const base = r2PublicBaseUrl()
   if (base) return `${base}/${key}`
   const app = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') || ''
   return `${app}/api/media/${key}`
@@ -74,29 +78,18 @@ async function uploadViaS3Api(
   body: Buffer,
   contentType: string
 ): Promise<string | null> {
-  const accountId = process.env.R2_ACCOUNT_ID
-  const accessKeyId = process.env.R2_ACCESS_KEY_ID
-  const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY
-  const bucket = process.env.R2_BUCKET_NAME
-
-  if (!accountId || !accessKeyId || !secretAccessKey || !bucket) {
-    return null
-  }
+  const client = createR2S3Client()
+  const bucket = r2BucketName()
+  if (!client || !bucket) return null
 
   try {
-    const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3')
-    const client = new S3Client({
-      region: 'auto',
-      endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
-      credentials: { accessKeyId, secretAccessKey },
-    })
-
     await client.send(
       new PutObjectCommand({
         Bucket: bucket,
         Key: key,
         Body: body,
         ContentType: contentType,
+        CacheControl: 'public, max-age=31536000, immutable',
       })
     )
     return publicUrlForKey(key)
@@ -140,11 +133,3 @@ export async function uploadImage(
   return { url: localUrl, key }
 }
 
-export function isR2Configured(): boolean {
-  return Boolean(
-    process.env.R2_ACCOUNT_ID &&
-      process.env.R2_ACCESS_KEY_ID &&
-      process.env.R2_SECRET_ACCESS_KEY &&
-      process.env.R2_BUCKET_NAME
-  )
-}

@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import authConfig from '@/auth.config'
+import { auth } from '@/auth'
 import { prisma } from '@/lib/db'
 import { withCreatedBy } from '@/lib/auth/audit'
+import { awardPurchasePoints } from '@/lib/points/service'
 import { Role } from '@prisma/client'
 
 type OrderItemInput = { productId: string; quantity: number }
 
 export async function GET() {
   try {
-    const session = await getServerSession(authConfig)
+    const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -49,7 +49,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig)
+    const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -146,6 +146,10 @@ export async function POST(request: NextRequest) {
         },
       })
     })
+
+    if (order) {
+      await awardPurchasePoints(userId, order.id, totalAmount)
+    }
 
     return NextResponse.json({ ok: true, order }, { status: 201 })
   } catch (error) {

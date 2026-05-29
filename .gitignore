@@ -58,3 +58,6 @@ next-env.d.ts
 
 # Local upload fallback (dev without R2)
 /public/uploads/
+
+# Eco Penguin media lives in R2 (monalomedia/eco-penguine). Kept locally for dev/upload script.
+/public/ecopenguin/

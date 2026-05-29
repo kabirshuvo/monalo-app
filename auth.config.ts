@@ -1,130 +1,98 @@
-import type { NextAuthOptions } from 'next-auth'
-import type { User } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import GoogleProvider from 'next-auth/providers/google'
-import FacebookProvider from 'next-auth/providers/facebook'
-import TwitterProvider from 'next-auth/providers/twitter'
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import type { PrismaClient, Role } from '@prisma/client'
-import { prisma } from '@/lib/db'
-import { verifyPassword } from '@/lib/auth-helpers'
-import { getAuthCallbacks } from '@/lib/auth/callbacks'
+import type { NextAuthConfig } from 'next-auth'
+import type { Role } from '@prisma/client'
+import { buildSessionCookieOptions } from '@/lib/auth/cookies'
 
-/** Fields loaded for credentials sign-in — role must come from the database. */
-const credentialsUserSelect = {
-  id: true,
-  email: true,
-  name: true,
-  password: true,
-  role: true,
-} as const
+const sessionCookieOptions = buildSessionCookieOptions()
 
-type CredentialsDbUser = {
-  id: string
-  email: string | null
-  name: string | null
-  password: string
-  role: Role
-}
-
-const authConfig: NextAuthOptions = {
-  // Use Prisma adapter for database-backed sessions
-  adapter: PrismaAdapter(prisma as PrismaClient),
-  // Database-backed sessions (persisted in DB via adapter)
-  session: {
-    strategy: 'database',
-    // Session expiration: 30 days
-    maxAge: 30 * 24 * 60 * 60,
-    // Update session every 24 hours
-    updateAge: 24 * 60 * 60,
-  },
-  providers: [
-    // Google OAuth
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-      authorization: {
-        params: {
-          prompt: 'consent',
-          access_type: 'offline',
-          response_type: 'code'
-        }
-      }
-    }),
-    // Facebook OAuth
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID || '',
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '',
-    }),
-    // X (Twitter) OAuth
-    TwitterProvider({
-      clientId: process.env.TWITTER_CLIENT_ID || '',
-      clientSecret: process.env.TWITTER_CLIENT_SECRET || '',
-      version: '2.0', // Use Twitter OAuth 2.0
-    }),
-    // Email or Phone / Password Credentials
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        identifier: { label: 'Email or phone', type: 'text' },
-        password: { label: 'Password', type: 'password' },
-      },
-      async authorize(credentials) {
-        if (!credentials?.identifier || !credentials?.password) {
-          throw new Error('Missing credentials')
-        }
-
-        const identifier = (credentials.identifier || '').trim()
-
-        // Simple heuristics to detect email vs phone
-        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)
-        const isPhone = /^\+?[0-9 \-()]{7,20}$/.test(identifier)
-
-        if (!isEmail && !isPhone) {
-          throw new Error('Please provide a valid email or phone number')
-        }
-
-        let user: CredentialsDbUser | null = null
-        if (isEmail) {
-          user = await prisma.user.findUnique({
-            where: { email: identifier.toLowerCase() },
-            select: credentialsUserSelect,
-          })
-        } else {
-          // Normalize phone to match stored format: keep digits and optional leading +
-          const normalizedPhone = identifier.replace(/(?!^\+)\D/g, '')
-          user = await prisma.user.findFirst({
-            where: { phone: normalizedPhone },
-            select: credentialsUserSelect,
-          })
-        }
-
-        if (!user || !user.password) {
-          throw new Error('User not found or not registered with password')
-        }
-
-        const isPasswordValid = await verifyPassword(credentials.password as string, user.password)
-        if (!isPasswordValid) {
-          throw new Error('Invalid password')
-        }
-
-        const authUser: User = {
-          id: user.id,
-          email: user.email ?? undefined,
-          name: user.name ?? user.email ?? undefined,
-          role: user.role,
-        }
-
-        return authUser
-      },
-    }),
-  ],
+/**
+ * Edge-safe Auth.js config (no Prisma, no bcrypt).
+ * Credentials provider is wired in `auth.ts` (authorize uses Prisma).
+ */
+export const authConfig = {
+  trustHost: true,
   pages: {
     signIn: '/login',
-    newUser: '/register',
+    newUser: '/dashboard',
   },
-  callbacks: getAuthCallbacks(),
-}
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
+  },
+  cookies: {
+    sessionToken: {
+      name: sessionCookieOptions.secure
+        ? '__Secure-authjs.session-token'
+        : 'authjs.session-token',
+      options: sessionCookieOptions,
+    },
+    callbackUrl: {
+      name: sessionCookieOptions.secure
+        ? '__Secure-authjs.callback-url'
+        : 'authjs.callback-url',
+      options: { ...sessionCookieOptions, httpOnly: false },
+    },
+    csrfToken: {
+      name: sessionCookieOptions.secure
+        ? '__Host-authjs.csrf-token'
+        : 'authjs.csrf-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: sessionCookieOptions.secure,
+      },
+    },
+  },
+  providers: [],
+  callbacks: {
+    authorized({ auth, request }) {
+      const { pathname } = request.nextUrl
+      if (pathname.startsWith('/dashboard')) {
+        return !!auth?.user
+      }
+      return true
+    },
+    async signIn({ user, account }) {
+      if (account?.provider === 'credentials' && user.email) {
+        if (!user.emailVerified) {
+          const email = encodeURIComponent(user.email)
+          return `/login?error=EmailNotVerified&email=${email}`
+        }
+      }
+      return true
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+        if (user.role) {
+          token.role = user.role as Role
+        }
+        if (user.isFirstLogin !== undefined) {
+          token.isFirstLogin = user.isFirstLogin
+        }
+        if (user.emailVerified) {
+          token.emailVerified = user.emailVerified
+        }
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        if (token.id) {
+          session.user.id = token.id as string
+        }
+        if (token.role) {
+          session.user.role = token.role as Role
+        }
+        session.user.isFirstLogin = Boolean(token.isFirstLogin)
+        if (token.emailVerified) {
+          session.user.emailVerified = token.emailVerified as Date
+        }
+      }
+      return session
+    },
+  },
+} satisfies NextAuthConfig
 
-// Export configuration as default for API route setup
 export default authConfig

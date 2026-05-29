@@ -10,15 +10,25 @@ datasource db {
 
 
 model User {
-  id        String   @id @default(cuid()) @map("id")
-  name      String?  @db.VarChar(255) @map("name")
-  email     String?  @unique @db.VarChar(255) @map("email")
-  phone     String?  @unique @db.VarChar(32) @map("phone")
-  password  String   @db.Text @map("password")
-  role      Role     @default(BROWSER) @map("role")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
-  lastLoginAt DateTime? @map("last_login_at") @db.Timestamp()
+  id            String    @id @default(cuid()) @map("id")
+  name          String?   @db.VarChar(255) @map("name")
+  email         String?   @unique @db.VarChar(255) @map("email")
+  phone         String?   @unique @db.VarChar(32) @map("phone")
+  password      String?   @db.Text @map("password")
+  role          Role      @default(LEARNER) @map("role")
+  emailVerified DateTime? @map("email_verified") @db.Timestamp()
+  totalPoints   Int       @default(0) @map("total_points")
+  level         Int       @default(1) @map("level")
+  badge         String?   @db.VarChar(64) @map("badge")
+  bio           String?   @db.Text @map("bio")
+  avatarUrl     String?   @db.Text @map("avatar_url")
+  blogReadingMinutes Int  @default(0) @map("blog_reading_minutes")
+  learningMinutes    Int  @default(0) @map("learning_minutes")
+  lessonsCompleted   Int  @default(0) @map("lessons_completed")
+  purchaseAmountTaka Int  @default(0) @map("purchase_amount_taka")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  lastLoginAt   DateTime? @map("last_login_at") @db.Timestamp()
 
   // Relations
   accounts                 Account[]             @relation("UserAccounts")
@@ -31,6 +41,7 @@ model User {
   artistProfile            ArtistProfile?        @relation("UserArtistProfile")
   artworks                 Artwork[]             @relation("UserArtworks")
   passwordResetTokens      PasswordResetToken[]  @relation("UserPasswordResetTokens")
+  pointEvents              PointEvent[]          @relation("UserPointEvents")
 
   @@map("users")
   @@index([email])
@@ -357,6 +368,30 @@ model PointsRule {
   @@map("points_rules")
 }
 
+enum PointCategory {
+  PURCHASE
+  BLOG_READING
+  LESSON_COMPLETE
+  LEARNING
+}
+
+model PointEvent {
+  id          String        @id @default(cuid()) @map("id")
+  userId      String        @map("user_id")
+  category    PointCategory @map("category")
+  points      Int           @map("points")
+  description String?       @db.VarChar(255) @map("description")
+  referenceId String?       @db.VarChar(128) @map("reference_id")
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp()
+
+  user User @relation("UserPointEvents", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, category, referenceId])
+  @@index([userId, createdAt])
+  @@index([category])
+  @@map("point_events")
+}
+
 enum ProductStatus {
   ACTIVE
   INACTIVE
@@ -435,10 +470,11 @@ model Session {
 }
 
 model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-  createdAt  DateTime @default(now()) @map("created_at")
+  id         String   @id @default(cuid()) @map("id")
+  identifier String   @db.VarChar(255) @map("email")
+  token      String   @unique @db.VarChar(64) @map("token")
+  expires    DateTime @map("expires") @db.Timestamp()
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp()
 
   @@unique([identifier, token])
   @@index([identifier])
