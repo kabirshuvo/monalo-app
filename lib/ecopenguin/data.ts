@@ -1,5 +1,5 @@
-import { readFile } from 'fs/promises'
-import path from 'path'
+import categoriesData from '@/data/ecopenguin/categories.json'
+import itemsData from '@/data/ecopenguin/items.json'
 import { resolveEcoPenguinAsset } from '@/lib/ecopenguin/assets'
 import { categoryNameToSlug, itemNameToSlug } from '@/lib/ecopenguin/slug'
 import type {
@@ -7,8 +7,6 @@ import type {
   EcoPenguinCategoryMeta,
   EcoPenguinItem,
 } from '@/lib/ecopenguin/types'
-
-const DATA_DIR = path.join(process.cwd(), 'data', 'ecopenguin')
 
 type ItemsJson = Record<string, EcoPenguinItem[]>
 
@@ -35,13 +33,11 @@ function mapItem(item: EcoPenguinItem): EcoPenguinItem {
 }
 
 async function readCategoriesFile(): Promise<EcoPenguinCategoryMeta[]> {
-  const raw = await readFile(path.join(DATA_DIR, 'categories.json'), 'utf-8')
-  return JSON.parse(raw) as EcoPenguinCategoryMeta[]
+  return categoriesData as EcoPenguinCategoryMeta[]
 }
 
 async function readItemsFile(): Promise<ItemsJson> {
-  const raw = await readFile(path.join(DATA_DIR, 'items.json'), 'utf-8')
-  return JSON.parse(raw) as ItemsJson
+  return itemsData as ItemsJson
 }
 
 export async function getEcoPenguinCategories(): Promise<EcoPenguinCategory[]> {
