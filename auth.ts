@@ -1,10 +1,10 @@
 import NextAuth from 'next-auth'
-import { PrismaAdapter } from '@auth/prisma-adapter'
 import type { PrismaClient } from '@prisma/client'
 import { authConfig } from '@/auth.config'
 import { prisma } from '@/lib/db'
 import { configureNewOAuthUser, handleOAuthSignIn } from '@/lib/auth/callbacks'
 import { buildAuthProviders } from '@/lib/auth/oauth-providers'
+import { MonaloPrismaAdapter } from '@/lib/auth/prisma-adapter'
 
 const secret =
   process.env.AUTH_SECRET ||
@@ -20,7 +20,7 @@ if (!secret && process.env.NODE_ENV === 'production') {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   secret,
-  adapter: PrismaAdapter(prisma as PrismaClient),
+  adapter: MonaloPrismaAdapter(prisma as PrismaClient),
   providers: buildAuthProviders(),
   events: {
     async createUser({ user }) {
