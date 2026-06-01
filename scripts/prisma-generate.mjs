@@ -1,6 +1,5 @@
 import { execSync } from 'node:child_process'
 
-const noEngine = process.env.PRISMA_NO_ENGINE === '1'
-const cmd = noEngine ? 'prisma generate --no-engine' : 'prisma generate'
-
-execSync(cmd, { stdio: 'inherit' })
+// Always generate the standard client — driver adapters (PrismaPg) replace the engine at runtime.
+// Do NOT pass --no-engine: it is incompatible with the { adapter } option.
+execSync('prisma generate', { stdio: 'inherit' })

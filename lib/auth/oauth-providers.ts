@@ -1,9 +1,11 @@
 import Credentials from 'next-auth/providers/credentials'
 import Google from 'next-auth/providers/google'
+import type { GoogleProfile } from 'next-auth/providers/google'
 import Facebook from 'next-auth/providers/facebook'
 import Twitter from 'next-auth/providers/twitter'
 import type { Provider } from 'next-auth/providers'
 import type { EmailConfig } from 'next-auth/providers/email'
+import type { User } from 'next-auth'
 import { authorizeCredentials } from '@/lib/auth/credentials'
 import { sendMagicLinkEmail } from '@/lib/email/resend'
 
@@ -46,6 +48,19 @@ export function buildAuthProviders(): Provider[] {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         // Link Google to an existing account with the same verified email (e.g. registered with password).
         allowDangerousEmailAccountLinking: true,
+        // Map Google's profile to our schema. The default mapping emits an `image`
+        // field, but our User model uses `avatarUrl` and has no `image` column —
+        // passing `image` makes the PrismaAdapter's createUser() throw a validation
+        // error for every brand-new Google user (breaking first-time Google sign-in).
+        profile(profile: GoogleProfile): User {
+          return {
+            id: profile.sub,
+            name: profile.name,
+            email: profile.email,
+            avatarUrl: profile.picture ?? null,
+            emailVerified: profile.email_verified ? new Date() : null,
+          } as User
+        },
       })
     )
   }

@@ -1,6 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "monalo",
+	"account_id": "551aa3726dff734e7e9a82fc748927c4",
 	"main": ".open-next/worker.js",
 	"compatibility_date": "2025-04-01",
 	"compatibility_flags": [
@@ -20,7 +21,7 @@
 	"images": {
 		"binding": "IMAGES"
 	},
-	"workers_dev": true,
+	"workers_dev": false,
 	"r2_buckets": [
 		{
 			"binding": "MEDIA_BUCKET",
