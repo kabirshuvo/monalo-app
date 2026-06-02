@@ -37,6 +37,9 @@ export type { ModalProps } from './Modal'
 export { default as Tabs } from './Tabs'
 export type { TabsProps, Tab } from './Tabs'
 
+// Theme
+export { default as ThemeToggle } from './ThemeToggle'
+
 // State Components
 export { default as EmptyState } from './EmptyState'
 export type { EmptyStateProps, EmptyStateVariant } from './EmptyState'

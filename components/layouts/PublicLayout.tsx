@@ -5,6 +5,7 @@ import Button from '../ui/Button'
 import { useSession, signOut } from 'next-auth/react'
 // path-based UI logic removed: auth UI must not depend on pathname
 import { logEvent } from '@/lib/analytics'
+import { ThemeToggle } from '@/components/ui'
 
 export interface PublicLayoutProps {
   children: React.ReactNode
@@ -233,17 +234,17 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
   return (
     // TEMP DIAGNOSTIC: force remount when `status` changes to verify
     // whether remounting fixes navbar staleness. Remove when debugging is done.
-    <div key={status} className="min-h-screen flex flex-col bg-gray-50">
+    <div key={status} className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)]">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+      <header className="bg-white dark:bg-zinc-950 border-b border-gray-200 dark:border-zinc-800 sticky top-0 z-40">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link
               href="/"
-              className="flex items-center gap-2 text-xl font-semibold text-gray-900 hover:text-gray-700 transition-colors"
+              className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-zinc-50 hover:text-gray-700 dark:hover:text-zinc-200 transition-colors"
             >
-              <svg className="w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-gray-900 dark:text-zinc-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
               <span>MonAlo</span>
@@ -258,8 +259,8 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
                   href={item.href}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
                     ${currentPath === item.href
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'text-purple-700 bg-purple-50 dark:text-zinc-50 dark:bg-zinc-900'
+                      : 'text-gray-700 dark:text-zinc-200 hover:text-gray-900 dark:hover:text-zinc-50 hover:bg-gray-100 dark:hover:bg-zinc-900'
                     }`}
                 >
                   {item.label}
@@ -268,26 +269,34 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
               </div>
             )}
 
-            {/* Auth Buttons / Avatar - render exactly one branch per status */}
-            {!isLanding && <AuthControls variant="desktop" />}
+            {/* Theme + Auth (desktop) */}
+            {!isLanding && (
+              <div className="hidden md:flex items-center gap-3">
+                <ThemeToggle />
+                <AuthControls variant="desktop" />
+              </div>
+            )}
 
             {/* Mobile menu button */}
             {!isLanding && (
-              <button
-              type="button"
-              className="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-expanded={mobileMenuOpen}
-              aria-label="Toggle navigation menu"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {mobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-              </button>
+              <div className="md:hidden flex items-center gap-2">
+                <ThemeToggle />
+                <button
+                  type="button"
+                  className="p-2 rounded-md text-gray-700 dark:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-colors"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  aria-expanded={mobileMenuOpen}
+                  aria-label="Toggle navigation menu"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {mobileMenuOpen ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    )}
+                  </svg>
+                </button>
+              </div>
             )}
           </div>
 
@@ -301,8 +310,8 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
                     href={item.href}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
                       ${currentPath === item.href
-                        ? 'text-blue-600 bg-blue-50'
-                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                        ? 'text-purple-700 bg-purple-50 dark:text-zinc-50 dark:bg-zinc-900'
+                        : 'text-gray-700 dark:text-zinc-200 hover:text-gray-900 dark:hover:text-zinc-50 hover:bg-gray-100 dark:hover:bg-zinc-900'
                       }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
