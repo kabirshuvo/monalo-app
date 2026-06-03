@@ -56,8 +56,11 @@ function MonitorIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export default function ThemeToggle({ className = '' }: { className?: string }) {
   const { theme, resolvedTheme, setTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
   const [open, setOpen] = React.useState(false)
   const ref = React.useRef<HTMLDivElement | null>(null)
+
+  React.useEffect(() => setMounted(true), [])
 
   React.useEffect(() => {
     function onDocClick(e: MouseEvent) {
@@ -70,6 +73,19 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
 
   const effective = (resolvedTheme || theme) as ThemeChoice | undefined
   const Icon = effective === 'dark' ? MoonIcon : SunIcon
+
+  if (!mounted) {
+    return (
+      <div
+        className={[
+          'inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 dark:border-zinc-800',
+          'bg-white dark:bg-zinc-950',
+          className,
+        ].join(' ')}
+        aria-hidden="true"
+      />
+    )
+  }
 
   const pick = (t: ThemeChoice) => {
     setTheme(t)
