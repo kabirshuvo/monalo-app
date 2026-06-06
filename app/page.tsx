@@ -1,7 +1,7 @@
-import Link from 'next/link'
-import Button from '@/components/ui/Button'
+import { Suspense } from 'react'
 import LandingHeaderClient from './landing/LandingHeaderClient'
 import LandingHeroClient from './landing/LandingHeroClient'
+import SessionResetOnSignOut from '@/components/auth/SessionResetOnSignOut'
 
 // Force the root landing page to be statically rendered and public
 export const dynamic = 'force-static'
@@ -14,6 +14,9 @@ export const metadata = {
 export default function LaunchPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white dark:from-zinc-950 dark:to-zinc-900 flex flex-col">
+      <Suspense fallback={null}>
+        <SessionResetOnSignOut />
+      </Suspense>
       <LandingHeaderClient />
 
       {/* Main Content */}

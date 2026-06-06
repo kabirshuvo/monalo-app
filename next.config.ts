@@ -4,6 +4,7 @@ import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare'
 function r2ImageRemotePatterns(): NonNullable<NextConfig['images']>['remotePatterns'] {
   const sources = [
     process.env.R2_PUBLIC_BASE_URL,
+    process.env.NEXT_PUBLIC_R2_PUBLIC_BASE_URL,
     process.env.NEXT_PUBLIC_ECO_PENGUIN_MEDIA_BASE_URL,
   ].filter((value): value is string => Boolean(value))
 

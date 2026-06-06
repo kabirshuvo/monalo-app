@@ -26,6 +26,7 @@ export default async function EcoPenguinItemPage({ params, searchParams }: PageP
       <ItemCelebrate
         category={category}
         item={item}
+        itemSlug={itemSlug}
         showConfetti={celebrate === '1'}
       />
     </EcoPenguinShell>

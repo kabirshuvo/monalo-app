@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
@@ -9,7 +10,7 @@ import Badge from '@/components/ui/Badge'
 import Alert from '@/components/ui/Alert'
 import LoadingState from '@/components/ui/LoadingState'
 import { POINTS_CONFIG } from '@/lib/points/config'
-import api from '@/lib/api'
+import api, { ApiError } from '@/lib/api'
 import { useSession } from 'next-auth/react'
 import AvatarPicker from '@/components/profile/AvatarPicker'
 import AvatarVisual from '@/components/profile/AvatarVisual'
@@ -93,8 +94,12 @@ export default function ProfilePage() {
             avatar: res.profile.avatar || '',
           })
         }
-      } catch {
-        setErrorMessage('Failed to load profile')
+      } catch (err) {
+        const msg =
+          err instanceof ApiError
+            ? err.message || `Could not load profile (${err.status})`
+            : 'Failed to load profile. Please refresh or try again.'
+        setErrorMessage(msg)
       } finally {
         setLoading(false)
       }
@@ -142,11 +147,24 @@ export default function ProfilePage() {
     return (
       <Card>
         <CardContent>
-          <p className="text-gray-600 text-center py-8">Profile not found.</p>
-          <div className="text-center">
+          {errorMessage && (
+            <Alert variant="danger" title="Could not load profile">
+              {errorMessage}
+            </Alert>
+          )}
+          <p className="text-gray-600 dark:text-zinc-300 text-center py-4">
+            We could not load your profile right now.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button variant="primary" onClick={() => window.location.reload()}>
+              Try again
+            </Button>
             <Button variant="secondary" onClick={() => router.push('/dashboard')}>
               Back to dashboard
             </Button>
+            <Link href="/settings">
+              <Button variant="ghost">Settings</Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
@@ -198,6 +216,13 @@ export default function ProfilePage() {
               <span className="bg-white/15 rounded-lg px-3 py-1">
                 {profile.badge || 'New Light'}
               </span>
+            </div>
+            <div className="mt-4">
+              <Link href="/settings">
+                <Button variant="secondary" size="sm" className="bg-white/20 border-white/30 text-white hover:bg-white/30">
+                  Account settings
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

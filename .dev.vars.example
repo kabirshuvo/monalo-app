@@ -31,8 +31,9 @@ R2_SECRET_ACCESS_KEY=
 # General media bucket (avatars, gallery) → media.monalo.school
 R2_BUCKET_NAME=monalomedia
 R2_PUBLIC_BASE_URL=https://media.monalo.school
+NEXT_PUBLIC_R2_PUBLIC_BASE_URL=https://media.monalo.school
 
-# Eco Penguin — dedicated bucket; assets stored at the bucket root.
-# Upload once with: npm run ecopenguin:upload-r2  (see scripts/upload-ecopenguin-r2.mjs)
-ECO_PENGUIN_R2_BUCKET=ecopenguin
-NEXT_PUBLIC_ECO_PENGUIN_MEDIA_BASE_URL=https://pub-776ff822a45940c7855415c583debc8e.r2.dev
+# Eco Penguin — monalomedia bucket under eco-penguine/ prefix.
+# Upload once with: npm run ecopenguin:upload-r2  (see docs/ECO_PENGUIN_R2.md)
+ECO_PENGUIN_R2_BUCKET=monalomedia
+ECO_PENGUIN_R2_PREFIX=eco-penguine

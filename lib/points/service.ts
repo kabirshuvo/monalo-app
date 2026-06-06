@@ -4,6 +4,7 @@ import {
   badgeFromTotalPoints,
   levelFromTotalPoints,
   pointsForLessonComplete,
+  pointsForEcoPenguinCorrect,
   pointsFromBlogMinutes,
   pointsFromLearningMinutes,
   pointsFromPurchaseTaka,
@@ -178,6 +179,22 @@ export async function awardLessonComplete(
   }
 
   return result
+}
+
+/** Award points for a first-time correct Eco Penguin answer (once per item). */
+export async function awardEcoPenguinCorrect(
+  userId: string,
+  categorySlug: string,
+  itemSlug: string,
+  itemName: string
+): Promise<{ awarded: boolean; points: number }> {
+  const pts = pointsForEcoPenguinCorrect()
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pts,
+    description: `Eco Penguin: ${itemName}`,
+    referenceId: `ecopenguin:${categorySlug}:${itemSlug}`,
+  })
 }
 
 /**

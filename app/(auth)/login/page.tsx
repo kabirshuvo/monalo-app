@@ -12,6 +12,8 @@ import {
   rememberSignInMethod,
   type SignInMethod,
 } from '@/lib/auth/last-method'
+import { beginExplicitSignIn, clearSignedOutFlag } from '@/lib/auth/client-sign-out'
+import { sanitizeAuthCallbackUrl } from '@/lib/auth/post-auth'
 
 const magicLinkEnabled = process.env.NEXT_PUBLIC_MAGIC_LINK_ENABLED === 'true'
 
@@ -47,8 +49,7 @@ function LoginForm() {
   useEffect(() => {
     if (!isMounted) return
     if (status === 'authenticated' && session) {
-      const requested = searchParams?.get('callbackUrl')
-      const target = requested && !requested.includes('/login') ? requested : '/dashboard'
+      const target = sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl'))
       router.replace(target)
     }
   }, [status, session, router, searchParams, isMounted])
@@ -114,7 +115,8 @@ function LoginForm() {
     }
     setMagicLoading(true)
     try {
-      const callbackUrl = searchParams?.get('callbackUrl') || '/dashboard'
+      const callbackUrl = sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl'))
+      beginExplicitSignIn()
       const result = await signIn('email', { email, callbackUrl, redirect: false })
       if (result?.error) {
         setMagicError('We couldn’t send the link. Please try again in a moment.')
@@ -143,6 +145,7 @@ function LoginForm() {
     }
 
     setIsLoading(true)
+    beginExplicitSignIn()
 
     try {
       const trimmedIdentifier = identifier.trim()
@@ -195,6 +198,7 @@ function LoginForm() {
           setFormMessage(msg)
         }
       } else if (result?.ok) {
+        clearSignedOutFlag()
         // Success - record login start and event
         try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
         try { rememberSignInMethod('credentials') } catch {}
@@ -220,12 +224,7 @@ function LoginForm() {
         } catch (e) {}
 
         // Now perform client navigation to the callback or /home.
-        const requestedCallback = searchParams?.get('callbackUrl') || ''
-        if (requestedCallback && requestedCallback.includes('/login')) {
-          router.push('/home')
-        } else {
-          router.push(requestedCallback || '/home')
-        }
+        router.push(sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl')))
       }
     } catch (err) {
       const msg = 'Oops — something went wrong. Please try again in a moment.'
@@ -381,7 +380,7 @@ function LoginForm() {
                 </span>
               )}
               <GoogleSignInButton
-                callbackUrl={searchParams?.get('callbackUrl') || '/dashboard'}
+                callbackUrl={sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl'))}
                 disabled={isLoading}
                 onBeforeSignIn={() => rememberSignInMethod('google')}
               />
@@ -392,7 +391,11 @@ function LoginForm() {
               type="button"
               variant="secondary"
               fullWidth
-              onClick={() => signIn('facebook', { callbackUrl: searchParams?.get('callbackUrl') || '/' })}
+              onClick={() =>
+                signIn('facebook', {
+                  callbackUrl: sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl')),
+                })
+              }
               disabled={isLoading}
               className="flex items-center justify-center gap-3"
             >
@@ -407,7 +410,11 @@ function LoginForm() {
               type="button"
               variant="secondary"
               fullWidth
-              onClick={() => signIn('twitter', { callbackUrl: searchParams?.get('callbackUrl') || '/' })}
+              onClick={() =>
+                signIn('twitter', {
+                  callbackUrl: sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl')),
+                })
+              }
               disabled={isLoading}
               className="flex items-center justify-center gap-3"
             >
@@ -464,10 +471,10 @@ function LoginForm() {
         {/* Back to Home */}
         <div className="mt-4 text-center">
           <Link 
-            href="/home" 
+            href="/" 
             className="text-sm text-gray-500 hover:text-gray-700"
           >
-            ← Back to home
+            ← Back to landing
           </Link>
         </div>
       </div>

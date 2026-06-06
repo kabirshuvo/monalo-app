@@ -12,7 +12,7 @@ export const authConfig = {
   trustHost: true,
   pages: {
     signIn: '/login',
-    newUser: '/dashboard',
+    newUser: '/',
     verifyRequest: '/verify-request',
   },
   session: {

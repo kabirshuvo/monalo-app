@@ -22,6 +22,18 @@ function isLegacyAccelerateUrl(url: string | undefined): boolean {
   return url.startsWith('prisma://') || url.startsWith('prisma+postgres://')
 }
 
+/** Direct Neon URL for local dev / migrations (not Accelerate). */
+function directPostgresUrl(): string | undefined {
+  for (const url of [
+    process.env.DATABASE_URL_UNPOOLED,
+    process.env.POSTGRES_URL_NON_POOLING,
+    process.env.DATABASE_URL,
+  ]) {
+    if (url && !isLegacyAccelerateUrl(url)) return url
+  }
+  return undefined
+}
+
 function createPrismaClient(): PrismaClient {
   const dbUrl = process.env.DATABASE_URL || ''
   const log = isDevelopment
@@ -32,6 +44,20 @@ function createPrismaClient(): PrismaClient {
       ]
     : [{ level: 'error' as const, emit: 'stdout' as const }]
   const errorFormat = isDevelopment ? 'pretty' as const : 'minimal' as const
+
+  // Local dev: always prefer direct Postgres — Accelerate/WASM fail under Next dev.
+  if (isDevelopment) {
+    const devUrl = directPostgresUrl()
+    if (devUrl) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { PrismaClient: PrismaClientNode } = require('@prisma/client')
+      return new PrismaClientNode({
+        datasources: { db: { url: devUrl } },
+        log,
+        errorFormat,
+      })
+    }
+  }
 
   if (isLegacyAccelerateUrl(dbUrl)) {
     // Legacy Accelerate proxy (prisma:// or prisma+postgres://) — edge client
@@ -46,7 +72,7 @@ function createPrismaClient(): PrismaClient {
     }).$extends(withAccelerate()) as unknown as PrismaClient
   }
 
-  // Standard postgres:// URL — WASM engine + PrismaPg driver adapter.
+  // Cloudflare Workers: WASM engine + PrismaPg driver adapter.
   // '@prisma/client/wasm' always resolves to the WASM engine entry point,
   // bypassing esbuild's CJS-condition resolution that would otherwise pick LibraryEngine.
   // eslint-disable-next-line @typescript-eslint/no-require-imports

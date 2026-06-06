@@ -16,6 +16,7 @@ export default auth((request) => {
   const needsAuth =
     pathname.startsWith('/dashboard') ||
     pathname === '/profile' ||
+    pathname === '/settings' ||
     pathname.startsWith('/learning/ecopenguin')
 
   if (needsAuth && !request.auth?.user) {

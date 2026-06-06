@@ -2,10 +2,15 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Button from '../ui/Button'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
+import { clientSignOut } from '@/lib/auth/client-sign-out'
+import { useAuthNav } from '@/lib/auth/use-auth-nav'
 // path-based UI logic removed: auth UI must not depend on pathname
 import { logEvent } from '@/lib/analytics'
 import { ThemeToggle } from '@/components/ui'
+import TotalPointsBadge from '@/components/nav/TotalPointsBadge'
+import SignInNavButton from '@/components/auth/SignInNavButton'
+import StartTodayButton from '@/components/landing/StartTodayButton'
 
 export interface PublicLayoutProps {
   children: React.ReactNode
@@ -29,22 +34,44 @@ const galleryNav = [
   { label: 'Contact', href: '/contact' },
 ]
 
-function isGalleryHost(): boolean {
+const blogNav = [
+  { label: 'Articles', href: '/' },
+  { label: 'Monalo School', href: '/home' },
+  { label: 'Learn', href: '/courses' },
+  { label: 'Contact', href: '/contact' },
+]
+
+function isSubdomainHost(prefix: string): boolean {
   if (typeof window === 'undefined') return false
-  const h = window.location.hostname.toLowerCase()
-  return h.startsWith('gallery.')
+  return window.location.hostname.toLowerCase().startsWith(`${prefix}.`)
+}
+
+function isGalleryHost(): boolean {
+  return isSubdomainHost('gallery')
+}
+
+function isBlogHost(): boolean {
+  return isSubdomainHost('blog')
 }
 
 export default function PublicLayout({ children, currentPath = '' }: PublicLayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { data: session, status } = useSession()
+  const { isAuthenticated: navAuthenticated } = useAuthNav()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [signingOut, setSigningOut] = useState(false)
   const isLanding = currentPath === '/'
   const [onGalleryHost, setOnGalleryHost] = React.useState(false)
+  const [onBlogHost, setOnBlogHost] = React.useState(false)
   React.useEffect(() => {
     setOnGalleryHost(isGalleryHost())
+    setOnBlogHost(isBlogHost())
   }, [])
-  const navigationItems = onGalleryHost ? galleryNav : defaultNav
+  const navigationItems = onGalleryHost ? galleryNav : onBlogHost ? blogNav : defaultNav
+  const blogHome = onBlogHost
+  const navPath =
+    onBlogHost && (currentPath === '/blog' || currentPath.startsWith('/blog/')) ? '/' : currentPath
+  const logoHref = status === 'authenticated' ? '/home' : '/'
 
   // Diagnostic helpers (development only)
   const _devUserEmail = (session as any)?.user?.email ?? null
@@ -116,24 +143,19 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
   }
 
   const handleLogout = async () => {
-    // Compute session duration
+    setSigningOut(true)
+    setMenuOpen(false)
     const start = sessionStorage.getItem('monalo_login_start')
     let minutes = 0
     if (start) {
       const ms = Date.now() - parseInt(start, 10)
       minutes = Math.max(0, Math.round(ms / 60000))
     }
-    // Clear start time
-    sessionStorage.removeItem('monalo_login_start')
-
-    // Sign out and redirect to see-off with minutes
-    // Only read session user data if we're authenticated
-    const email = status === 'authenticated' ? (session as any)?.user?.email : undefined
-    const emailParam = email ? `&email=${encodeURIComponent(email)}` : ''
+    const email = navAuthenticated ? (session as { user?: { email?: string } })?.user?.email : undefined
     try {
       logEvent('logout', { minutes, email: email || null, method: 'signout' })
     } catch {}
-    await signOut({ callbackUrl: `/see-off?minutes=${minutes}${emailParam}` })
+    clientSignOut()
   }
 
   const displayName = () => {
@@ -149,31 +171,32 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     if (process.env.NODE_ENV === 'development') {
       try { console.log(`[NAVBAR AuthControls] variant=${variant} status=${status}`) } catch (e) {}
     }
-    if (status === 'loading') return null
+    if (status === 'loading' || signingOut) return null
 
-    if (status === 'authenticated') {
+    if (navAuthenticated && status === 'authenticated') {
       // Authenticated UI
       if (variant === 'desktop') {
         return (
           <div className="hidden md:flex items-center gap-3 relative">
+            <TotalPointsBadge />
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               aria-haspopup="true"
               aria-expanded={menuOpen}
-              className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
             >
-              <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
-                <span className="text-sm font-semibold text-blue-600">
+              <div className="w-9 h-9 rounded-full bg-purple-100 dark:bg-purple-950 flex items-center justify-center">
+                <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">
                   {String(((session as any)?.user?.name || (session as any)?.user?.email || '')).charAt(0).toUpperCase()}
                 </span>
               </div>
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-12 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50">
-                <Link href={getDashboardPath((session as any)?.user?.role)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Dashboard</Link>
-                <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
-                <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Logout</button>
+              <div className="absolute right-0 mt-12 w-48 bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-md shadow-lg py-1 z-50">
+                <Link href={getDashboardPath((session as any)?.user?.role)} className="block px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900">Dashboard</Link>
+                <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900">Profile</Link>
+                <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900">Sign out</button>
               </div>
             )}
           </div>
@@ -183,6 +206,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
       // Mobile authenticated actions (rendered inside mobile nav container)
       return (
         <>
+          <TotalPointsBadge className="w-full justify-center" />
           <Link href={getDashboardPath((session as any)?.user?.role)}>
             <Button variant="secondary" size="sm" fullWidth>
               Dashboard
@@ -190,43 +214,27 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
           </Link>
           <button onClick={handleLogout} className="w-full text-left">
             <Button variant="ghost" size="sm" fullWidth>
-              Logout
+              Sign out
             </Button>
           </button>
         </>
       )
     }
 
-    // Unauthenticated UI
+    // Unauthenticated UI — no sign-out; Sign in + Start today trigger auth
     if (variant === 'desktop') {
       return (
         <div className="hidden md:flex items-center gap-3 relative">
-          <Link href="/login">
-            <Button variant="ghost" size="sm">
-              Log in
-            </Button>
-          </Link>
-          <Link href="/register">
-            <Button variant="primary" size="sm">
-              Get Started
-            </Button>
-          </Link>
+          <SignInNavButton />
+          <StartTodayButton size="sm" />
         </div>
       )
     }
 
     return (
       <>
-        <Link href="/login">
-          <Button variant="ghost" size="sm" fullWidth>
-            Log in
-          </Button>
-        </Link>
-        <Link href="/register">
-          <Button variant="primary" size="sm" fullWidth>
-            Get Started
-          </Button>
-        </Link>
+        <SignInNavButton fullWidth />
+        <StartTodayButton size="sm" fullWidth />
       </>
     )
   }
@@ -241,7 +249,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link
-              href="/"
+              href={blogHome ? '/' : logoHref}
               className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-zinc-50 hover:text-gray-700 dark:hover:text-zinc-200 transition-colors"
             >
               <svg className="w-8 h-8 text-gray-900 dark:text-zinc-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,7 +266,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
                   key={item.href}
                   href={item.href}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
-                    ${currentPath === item.href
+                    ${navPath === item.href
                       ? 'text-purple-700 bg-purple-50 dark:text-zinc-50 dark:bg-zinc-900'
                       : 'text-gray-700 dark:text-zinc-200 hover:text-gray-900 dark:hover:text-zinc-50 hover:bg-gray-100 dark:hover:bg-zinc-900'
                     }`}
@@ -309,7 +317,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
                     key={item.href}
                     href={item.href}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
-                      ${currentPath === item.href
+                      ${navPath === item.href
                         ? 'text-purple-700 bg-purple-50 dark:text-zinc-50 dark:bg-zinc-900'
                         : 'text-gray-700 dark:text-zinc-200 hover:text-gray-900 dark:hover:text-zinc-50 hover:bg-gray-100 dark:hover:bg-zinc-900'
                       }`}

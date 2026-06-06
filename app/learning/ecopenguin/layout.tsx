@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import ActivityTracker from '@/components/points/ActivityTracker'
 
 export const metadata: Metadata = {
   title: 'Eco Penguin · MonAlo',
@@ -6,5 +7,10 @@ export const metadata: Metadata = {
 }
 
 export default function EcoPenguinLayout({ children }: { children: React.ReactNode }) {
-  return children
+  return (
+    <>
+      <ActivityTracker type="learning" />
+      {children}
+    </>
+  )
 }

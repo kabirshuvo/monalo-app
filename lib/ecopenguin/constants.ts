@@ -7,10 +7,10 @@ export const ECO_PENGUIN_CATEGORIES_PER_PAGE = 12
 export const ECO_PENGUIN_BASE_PATH = '/learning/ecopenguin'
 
 /**
- * Object key prefix inside the dedicated `ecopenguin` R2 bucket.
- * Empty = assets stored at the bucket root (e.g. images/categories/animals.webp).
+ * Object key prefix inside the `monalomedia` R2 bucket.
+ * Production layout: monalomedia/eco-penguine/images/...
  */
-export const ECO_PENGUIN_R2_PREFIX = ''
+export const ECO_PENGUIN_R2_PREFIX = 'eco-penguine'
 
 /** @deprecated Use getEcoPenguinMediaOrigin() — kept for middleware static exclusion. */
 export const ECO_PENGUIN_MEDIA_PREFIX = '/ecopenguin'

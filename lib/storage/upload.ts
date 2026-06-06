@@ -6,7 +6,7 @@ import { PutObjectCommand } from '@aws-sdk/client-s3'
 
 export { isR2Configured } from '@/lib/storage/r2'
 
-export type UploadFolder = 'gallery' | 'shop' | 'products'
+export type UploadFolder = 'gallery' | 'shop' | 'products' | 'blog'
 
 const MAX_BYTES = 5 * 1024 * 1024
 const ALLOWED_TYPES = new Set([

@@ -2,6 +2,8 @@
 
 import { signIn } from 'next-auth/react'
 import { Button } from '@/components/ui'
+import { beginExplicitSignIn } from '@/lib/auth/client-sign-out'
+import { DEFAULT_POST_AUTH_PATH } from '@/lib/auth/post-auth'
 
 const googleEnabled = process.env.NEXT_PUBLIC_GOOGLE_LOGIN_ENABLED === 'true'
 
@@ -13,7 +15,7 @@ type GoogleSignInButtonProps = {
 }
 
 export function GoogleSignInButton({
-  callbackUrl = '/dashboard',
+  callbackUrl = DEFAULT_POST_AUTH_PATH,
   disabled = false,
   label = 'Continue with Google',
   onBeforeSignIn,
@@ -29,7 +31,9 @@ export function GoogleSignInButton({
       fullWidth
       onClick={() => {
         onBeforeSignIn?.()
-        void signIn('google', { callbackUrl })
+        const forceAccountPicker = beginExplicitSignIn()
+        const authParams = forceAccountPicker ? { prompt: 'select_account' } : undefined
+        void signIn('google', { callbackUrl }, authParams)
       }}
       disabled={disabled}
       className="flex items-center justify-center gap-3"

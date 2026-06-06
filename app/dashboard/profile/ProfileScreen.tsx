@@ -5,6 +5,8 @@ import { getUserAvatarFromSession } from '@/lib/auth/user-avatar'
 import ProfilePage from '@/components/profile/ProfilePage'
 import ActivityTracker from '@/components/points/ActivityTracker'
 
+export const dynamic = 'force-dynamic'
+
 const DASHBOARD_ROLES = ['CUSTOMER', 'LEARNER', 'WRITER', 'ADMIN', 'SELLER'] as const
 
 export default async function ProfileScreen() {

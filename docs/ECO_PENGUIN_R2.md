@@ -63,6 +63,12 @@ npm run ecopenguin:upload-r2
 
 This writes keys like `eco-penguine/images/...` and `eco-penguine/audio/...`.
 
+If assets were uploaded to the legacy `ecopenguin` bucket, sync them into `monalomedia`:
+
+```bash
+npm run ecopenguin:sync-monalomedia
+```
+
 Skip existing objects (faster re-run):
 
 ```bash

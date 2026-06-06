@@ -1,28 +1,79 @@
 import type { User } from 'next-auth'
 import type { AdapterUser } from '@auth/core/adapters'
+import type { Account } from 'next-auth'
 import { prisma } from '@/lib/db'
+
+type DbUserRow = {
+  id: string
+  lastLoginAt: Date | null
+  role: import('@prisma/client').Role
+  emailVerified: Date | null
+  email: string | null
+}
 
 /**
  * OAuth sign-in: sync JWT fields (role, emailVerified, lastLoginAt) from Prisma.
  */
-export async function handleOAuthSignIn(user: User | AdapterUser): Promise<boolean> {
+export async function handleOAuthSignIn(
+  user: User | AdapterUser,
+  account?: Account | null
+): Promise<boolean> {
   try {
     const email = user.email?.toLowerCase()
     if (!email && !user.id) {
       return false
     }
 
-    const dbUser = user.id
+    let dbUser: DbUserRow | null = user.id
       ? await prisma.user.findUnique({
           where: { id: user.id },
           select: { id: true, lastLoginAt: true, role: true, emailVerified: true, email: true },
         })
-      : email
-        ? await prisma.user.findUnique({
-            where: { email },
-            select: { id: true, lastLoginAt: true, role: true, emailVerified: true, email: true },
-          })
-        : null
+      : null
+
+    if (!dbUser && email) {
+      dbUser = await prisma.user.findUnique({
+        where: { email },
+        select: { id: true, lastLoginAt: true, role: true, emailVerified: true, email: true },
+      })
+    }
+
+    if (!dbUser && account?.provider && account.providerAccountId) {
+      const linked = await prisma.account.findFirst({
+        where: {
+          provider: account.provider,
+          providerAccountId: account.providerAccountId,
+        },
+        select: {
+          user: {
+            select: {
+              id: true,
+              lastLoginAt: true,
+              role: true,
+              emailVerified: true,
+              email: true,
+            },
+          },
+        },
+      })
+      dbUser = linked?.user ?? null
+    }
+
+    if (!dbUser && email) {
+      dbUser = await prisma.user.upsert({
+        where: { email },
+        create: {
+          email,
+          name: user.name ?? null,
+          avatarUrl: (user as User & { image?: string }).image ?? null,
+          role: 'LEARNER',
+          emailVerified: new Date(),
+          lastLoginAt: new Date(),
+        },
+        update: { lastLoginAt: new Date() },
+        select: { id: true, lastLoginAt: true, role: true, emailVerified: true, email: true },
+      })
+    }
 
     if (!dbUser) {
       return true

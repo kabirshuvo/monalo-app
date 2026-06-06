@@ -4,16 +4,14 @@ import PublicLayout from '@/components/layouts/PublicLayout'
 import PostCard, { type Post } from '@/components/blog/PostCard'
 import EmptyState from '@/components/ui/EmptyState'
 import { prisma } from '@/lib/db'
+import { excerptFromContent } from '@/lib/blog/content'
+import { blogArticleStats } from '@/lib/blog/stats'
+import { blogCategoryForSlug } from '@/lib/blog/categories'
 
 export const metadata = {
-  title: 'Blog - Monalo School',
-  description: 'Articles on learning, craft, and building Monalo School',
-}
-
-function readingTime(text: string): string {
-  const words = text.split(/\s+/).length
-  const mins = Math.max(1, Math.round(words / 200))
-  return `${mins} min read`
+  title: 'MonAlo Blog — Guides for guardians & kids',
+  description:
+    'Calm, practical articles on screen time, homework, sleep, anxiety, and growing together at home and school.',
 }
 
 export default async function BlogPage() {
@@ -22,37 +20,47 @@ export default async function BlogPage() {
     orderBy: { publishedAt: 'desc' },
   })
 
-  const posts: Post[] = rows.map((p) => ({
-    slug: p.slug,
-    title: p.title,
-    excerpt: p.excerpt || p.content.slice(0, 160) + '…',
-    date: (p.publishedAt || p.createdAt).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    }),
-    readingTime: readingTime(p.content),
-  }))
+  const posts: Post[] = rows.map((p) => {
+    const stats = blogArticleStats(p.content)
+    return {
+      slug: p.slug,
+      title: p.title,
+      excerpt: p.excerpt || excerptFromContent(p.content),
+      date: (p.publishedAt || p.createdAt).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      readingTime: stats.readLabel,
+      pointsLabel: stats.pointsLabel,
+      category: blogCategoryForSlug(p.slug),
+    }
+  })
 
   return (
     <PublicLayout currentPath="/blog">
-      <main className="mx-auto max-w-5xl px-4 py-12">
-        <div className="mb-10 space-y-3">
-          <p className="text-sm font-semibold text-blue-600">Blog</p>
-          <h1 className="text-3xl font-bold text-gray-900">Notes on learning and craft</h1>
-          <p className="text-gray-600 max-w-3xl">
-            Stories and guides that support Monalo School — and help more people find us online.
+      <div className="bg-gradient-to-b from-purple-50/80 to-transparent dark:from-purple-950/30 dark:to-transparent border-b border-gray-200 dark:border-zinc-800">
+        <div className="mx-auto max-w-5xl px-4 py-14">
+          <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">MonAlo Blog</p>
+          <h1 className="mt-2 text-3xl sm:text-4xl font-light text-gray-900 dark:text-zinc-50">
+            Guides for guardians & kids
+          </h1>
+          <p className="mt-4 text-gray-600 dark:text-zinc-300 max-w-2xl leading-relaxed">
+            Practical, calm advice for everyday challenges — screen time, homework, sleep, friendships,
+            and building confidence at home and school.
           </p>
         </div>
+      </div>
 
+      <main className="mx-auto max-w-5xl px-4 py-12">
         {posts.length === 0 ? (
           <EmptyState
             variant="blog"
-            title="No posts yet"
-            description="Writers are preparing the first essays. Check back soon."
+            title="Articles coming soon"
+            description="Our writers are preparing the first guides for guardians and kids."
           />
         ) : (
-          <div className="grid gap-6">
+          <div className="grid gap-6 sm:grid-cols-2">
             {posts.map((post) => (
               <PostCard key={post.slug} post={post} />
             ))}

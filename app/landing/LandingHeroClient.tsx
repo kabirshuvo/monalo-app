@@ -2,14 +2,12 @@
 import React from 'react'
 import welcomeMessages from '../../welcomeMessages.json'
 import Link from 'next/link'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useAuthNav } from '@/lib/auth/use-auth-nav'
 import Button from '@/components/ui/Button'
+import StartTodayButton from '@/components/landing/StartTodayButton'
 
 export default function LandingHeroClient() {
-  const { data: session, status } = useSession()
-  const isAuthenticated = status === 'authenticated'
-  const router = useRouter()
+  const { isAuthenticated } = useAuthNav()
 
   const welcome = React.useMemo(() => {
     try {
@@ -20,12 +18,6 @@ export default function LandingHeroClient() {
     }
   }, [])
 
-  const getDashboardPath = () => {
-    const role = (session as any)?.user?.role
-    if (!role) return '/dashboard'
-    return `/dashboard/${(role as string).toLowerCase()}`
-  }
-
   if (isAuthenticated) {
     return (
       <div className="max-w-4xl w-full">
@@ -35,12 +27,14 @@ export default function LandingHeroClient() {
               Welcome back.
             </h1>
             <p className="text-lg text-gray-600 dark:text-zinc-300">
-              Continue where you left off — one calm step at a time.
+              You&apos;re signed in — pick up your profile or explore courses at your own pace.
             </p>
             <div className="pt-4 flex flex-col sm:flex-row gap-3">
-              <Button variant="primary" size="lg" onClick={() => router.push(getDashboardPath())}>
-                Continue journey
-              </Button>
+              <Link href="/profile">
+                <Button variant="primary" size="lg">
+                  Your profile
+                </Button>
+              </Link>
               <Link href="/courses">
                 <Button variant="secondary" size="lg">
                   Browse courses
@@ -63,7 +57,6 @@ export default function LandingHeroClient() {
   return (
     <div className="max-w-5xl w-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-        {/* Left: message + CTA */}
         <div className="space-y-6 text-left">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 dark:text-zinc-50 leading-tight tracking-tight">
             A calm place to learn, create, and grow.
@@ -76,11 +69,7 @@ export default function LandingHeroClient() {
           )}
 
           <div className="pt-2 flex flex-col sm:flex-row items-start gap-3">
-            <Link href="/register">
-              <Button variant="primary" size="lg">
-                Get started
-              </Button>
-            </Link>
+            <StartTodayButton />
             <Link href="/courses">
               <Button variant="secondary" size="lg">
                 Browse courses
@@ -93,7 +82,6 @@ export default function LandingHeroClient() {
           </p>
         </div>
 
-        {/* Right: supporting surface */}
         <div className="rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-950/60 p-6 sm:p-8">
           <div className="space-y-4">
             <div className="flex items-center gap-3">

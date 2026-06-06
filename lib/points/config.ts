@@ -9,6 +9,8 @@ export const POINTS_CONFIG = {
   learningMinutesPerPoint: 1,
   lessonCompleteMin: 5,
   lessonCompleteMax: 10,
+  /** Points for a first-time correct Eco Penguin answer */
+  ecoPenguinCorrect: 2,
 } as const
 
 export function pointsFromPurchaseTaka(taka: number): number {
@@ -32,6 +34,10 @@ export function pointsForLessonComplete(): number {
     lessonCompleteMin +
     Math.floor(Math.random() * (lessonCompleteMax - lessonCompleteMin + 1))
   )
+}
+
+export function pointsForEcoPenguinCorrect(): number {
+  return POINTS_CONFIG.ecoPenguinCorrect
 }
 
 export function levelFromTotalPoints(totalPoints: number): number {

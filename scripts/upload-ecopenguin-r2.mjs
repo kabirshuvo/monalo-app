@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * Upload public/ecopenguin/** to the dedicated Cloudflare R2 bucket `ecopenguin`
- * (stored at the bucket root: images/..., audio/...).
+ * Upload public/ecopenguin/** to Cloudflare R2 (default: monalomedia/eco-penguine/).
  *
  * Requires in .env or environment:
  *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY
- *   ECO_PENGUIN_R2_BUCKET (default: ecopenguin)
+ *   ECO_PENGUIN_R2_BUCKET (default: monalomedia)
+ *   ECO_PENGUIN_R2_PREFIX (default: eco-penguine)
  *
  * Usage:
  *   node scripts/upload-ecopenguin-r2.mjs
@@ -21,7 +21,7 @@ import { S3Client, PutObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
 const LOCAL_DIR = path.join(ROOT, 'public', 'ecopenguin')
-const R2_PREFIX = process.env.ECO_PENGUIN_R2_PREFIX || ''
+const R2_PREFIX = process.env.ECO_PENGUIN_R2_PREFIX || 'eco-penguine'
 const FORCE = process.argv.includes('--force')
 
 function loadEnvFile(filePath) {
@@ -81,7 +81,7 @@ async function main() {
   const accountId = process.env.R2_ACCOUNT_ID
   const accessKeyId = process.env.R2_ACCESS_KEY_ID
   const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY
-  const bucket = process.env.ECO_PENGUIN_R2_BUCKET || 'ecopenguin'
+  const bucket = process.env.ECO_PENGUIN_R2_BUCKET || process.env.R2_BUCKET_NAME || 'monalomedia'
 
   if (!accountId || !accessKeyId || !secretAccessKey) {
     console.error('Missing R2 credentials. Set R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY in .env')

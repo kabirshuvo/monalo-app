@@ -19,6 +19,22 @@ export function galleryHref(slug?: string): string {
   return galleryPath(slug)
 }
 
+/** Server-safe blog path */
+export function blogPath(slug?: string): string {
+  return slug ? `/blog/${slug}` : '/blog'
+}
+
+/** Client: root paths on blog.monalo.school, /blog on main host. */
+export function blogHref(slug?: string): string {
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname.toLowerCase()
+    if (host.startsWith('blog.')) {
+      return slug ? `/${slug}` : '/'
+    }
+  }
+  return blogPath(slug)
+}
+
 export function absoluteSiteUrl(site: MonaloSite, path = ''): string {
   const base = getSitePublicUrl(site)
   if (!base) return path

@@ -5,6 +5,9 @@ import { prisma } from '@/lib/db'
 import { configureNewOAuthUser, handleOAuthSignIn } from '@/lib/auth/callbacks'
 import { buildAuthProviders } from '@/lib/auth/oauth-providers'
 import { MonaloPrismaAdapter } from '@/lib/auth/prisma-adapter'
+import { ensureDatabaseUserForAuth } from '@/lib/auth/ensure-database-user'
+import { DEFAULT_POST_AUTH_PATH } from '@/lib/auth/post-auth'
+import { resolveDatabaseUserIdFromJwt } from '@/lib/auth/resolve-user-id'
 
 const secret =
   process.env.AUTH_SECRET ||
@@ -39,10 +42,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
         return true
       }
-      return handleOAuthSignIn(params.user)
+      return handleOAuthSignIn(params.user, params.account)
+    },
+    async redirect({ url, baseUrl }) {
+      const landing = `${baseUrl}${DEFAULT_POST_AUTH_PATH}`
+      if (url === `${baseUrl}/dashboard` || url === '/dashboard') {
+        return landing
+      }
+      if (url.startsWith('/')) return `${baseUrl}${url}`
+      if (url.startsWith(baseUrl)) return url
+      return landing
     },
     async jwt({ token, user, account, trigger }) {
       if (user) {
+        if (user.email) {
+          token.email = user.email.toLowerCase()
+        }
         if (user.id) {
           token.id = user.id
         } else if (user.email) {
@@ -58,13 +73,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         } else if (token.id) {
           const dbUser = await prisma.user.findUnique({
             where: { id: token.id as string },
-            select: { role: true, emailVerified: true, avatarUrl: true, level: true },
+            select: { role: true, emailVerified: true, avatarUrl: true, level: true, totalPoints: true },
           })
           if (dbUser?.role) token.role = dbUser.role
           if (dbUser?.emailVerified) token.emailVerified = dbUser.emailVerified
           if (dbUser) {
             token.avatarUrl = dbUser.avatarUrl
             token.level = dbUser.level
+            token.totalPoints = dbUser.totalPoints
           }
         }
         if (user.isFirstLogin !== undefined) {
@@ -89,15 +105,39 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (linked) token.id = linked.userId
       }
 
-      if ((trigger === 'update' || token.avatarUrl === undefined) && token.id) {
+      // Always map JWT id → database user (fixes stale OAuth sub / wrong-db ids).
+      let resolvedId = await resolveDatabaseUserIdFromJwt(token)
+      if (!resolvedId && token.email) {
+        resolvedId = await ensureDatabaseUserForAuth(
+          {
+            user: {
+              id: token.id as string | undefined,
+              email: token.email as string,
+              name: token.name as string | undefined,
+              image: token.picture as string | undefined,
+            },
+          },
+          token
+        )
+      }
+      if (resolvedId) {
+        token.id = resolvedId
         const dbUser = await prisma.user.findUnique({
-          where: { id: token.id as string },
-          select: { avatarUrl: true, level: true, role: true },
+          where: { id: resolvedId },
+          select: {
+            avatarUrl: true,
+            level: true,
+            role: true,
+            totalPoints: true,
+            emailVerified: true,
+          },
         })
         if (dbUser) {
           token.avatarUrl = dbUser.avatarUrl
           token.level = dbUser.level
+          token.totalPoints = dbUser.totalPoints
           if (!token.role) token.role = dbUser.role
+          if (dbUser.emailVerified) token.emailVerified = dbUser.emailVerified
         }
       }
 
@@ -105,7 +145,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async session({ session, token }) {
       if (session.user) {
-        if (token.id) {
+        const resolvedId = await resolveDatabaseUserIdFromJwt(token)
+        if (resolvedId) {
+          session.user.id = resolvedId
+        } else if (token.id) {
           session.user.id = token.id as string
         }
         if (token.role) {
@@ -120,6 +163,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
         if (token.level !== undefined) {
           session.user.level = token.level as number
+        }
+        if (token.totalPoints !== undefined) {
+          session.user.totalPoints = token.totalPoints as number
         }
       }
       return session

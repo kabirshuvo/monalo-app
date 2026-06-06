@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireRole, AuthorizationError } from '@/lib/auth/role'
 import { uploadImage, isR2Configured, type UploadFolder } from '@/lib/storage/upload'
 
-const ALLOWED_FOLDERS: UploadFolder[] = ['gallery', 'shop', 'products']
+const ALLOWED_FOLDERS: UploadFolder[] = ['gallery', 'shop', 'products', 'blog']
 
 /**
  * POST /api/uploads — multipart image upload (SELLER, ADMIN, WRITER)
- * Form fields: file (required), folder (gallery | shop | products)
+ * Form fields: file (required), folder (gallery | shop | products | blog)
  */
 export async function POST(request: NextRequest) {
   try {

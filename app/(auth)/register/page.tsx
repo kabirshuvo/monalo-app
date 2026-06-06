@@ -37,7 +37,7 @@ function RegisterForm() {
   useEffect(() => {
     if (!isMounted) return
     if (status === 'authenticated' && session) {
-      router.push('/dashboard')
+      router.push('/')
     }
   }, [status, session, router, isMounted])
 
@@ -340,7 +340,7 @@ function RegisterForm() {
 
           {/* Social Login Buttons */}
           <div className="space-y-3">
-            <GoogleSignInButton callbackUrl="/dashboard" disabled={isLoading} label="Continue with Google" />
+            <GoogleSignInButton disabled={isLoading} label="Continue with Google" />
 
             {/* Facebook */}
             <Button

@@ -55,5 +55,8 @@ export function r2BucketName(): string | undefined {
 }
 
 export function r2PublicBaseUrl(): string | undefined {
-  return process.env.R2_PUBLIC_BASE_URL?.replace(/\/$/, '')
+  return (
+    process.env.NEXT_PUBLIC_R2_PUBLIC_BASE_URL ||
+    process.env.R2_PUBLIC_BASE_URL
+  )?.replace(/\/$/, '')
 }

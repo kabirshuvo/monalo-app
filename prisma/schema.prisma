@@ -43,6 +43,7 @@ model User {
   artworks                 Artwork[]             @relation("UserArtworks")
   passwordResetTokens      PasswordResetToken[]  @relation("UserPasswordResetTokens")
   pointEvents              PointEvent[]          @relation("UserPointEvents")
+  blogReactions            BlogReaction[]        @relation("UserBlogReactions")
 
   @@map("users")
   @@index([email])
@@ -326,6 +327,12 @@ enum BlogStatus {
   PUBLISHED
 }
 
+enum BlogReactionType {
+  LOVE
+  LIKE
+  DISLIKE
+}
+
 model Blog {
   id              String     @id @default(cuid()) @map("id")
   title           String     @db.VarChar(255) @map("title")
@@ -345,6 +352,7 @@ model Blog {
   updatedAt       DateTime   @updatedAt @map("updated_at") @db.Timestamp()
 
   author User? @relation("UserBlogs", fields: [authorId], references: [id], onDelete: SetNull)
+  reactions BlogReaction[] @relation("BlogReactions")
 
   @@index([authorId])
   @@index([slug])
@@ -353,6 +361,23 @@ model Blog {
   @@index([deletedAt])
   @@index([authorId, createdAt])
   @@map("blogs")
+}
+
+model BlogReaction {
+  id        String           @id @default(cuid()) @map("id")
+  blogId    String           @map("blog_id")
+  userId    String           @map("user_id")
+  type      BlogReactionType @map("type")
+  createdAt DateTime         @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime         @updatedAt @map("updated_at") @db.Timestamp()
+
+  blog Blog @relation("BlogReactions", fields: [blogId], references: [id], onDelete: Cascade)
+  user User @relation("UserBlogReactions", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, blogId])
+  @@index([blogId])
+  @@index([userId])
+  @@map("blog_reactions")
 }
 
 model PointsRule {

@@ -118,33 +118,24 @@ async function main() {
 	console.log('\n📝 Seeding blog posts...')
 
 	const writer = await db.user.findFirst({ where: { role: 'WRITER' } })
-	const posts = [
-		{
-			title: 'Learning in seasons',
-			slug: 'learning-in-seasons',
-			excerpt: 'Embrace the natural ebbs and flows of focus without losing momentum.',
-			content:
-				'Learning is not a straight line. Monalo School invites you to work in seasons — times of deep focus and times of rest.\n\nWhen motivation dips, small steps still count. Return when you are ready.',
-			status: 'PUBLISHED' as const,
-			publishedAt: new Date('2026-01-10'),
-		},
-		{
-			title: 'Write gently, teach clearly',
-			slug: 'write-gently-teach-clearly',
-			excerpt: 'Warm, direct language helps learners feel safe to explore.',
-			content:
-				'Good teaching writing is calm and precise. Avoid jargon when a plain word will do.\n\nYour students are people first — honor their time and attention.',
-			status: 'PUBLISHED' as const,
-			publishedAt: new Date('2025-12-28'),
-		},
-	]
+	const { KIDS_BLOG_POSTS } = await import('./data/kids-blog-posts')
 
-	for (const p of posts) {
+	for (const p of KIDS_BLOG_POSTS) {
 		const exists = await db.blog.findFirst({ where: { slug: p.slug } })
-		if (exists) continue
+		if (exists) {
+			console.log(`- Skipping blog: ${p.slug}`)
+			continue
+		}
 		await db.blog.create({
 			data: {
-				...p,
+				title: p.title,
+				slug: p.slug,
+				excerpt: p.excerpt,
+				content: p.content,
+				metaTitle: p.metaTitle,
+				metaDescription: p.metaDescription,
+				status: 'PUBLISHED',
+				publishedAt: p.publishedAt,
 				authorId: writer?.id,
 			},
 		})

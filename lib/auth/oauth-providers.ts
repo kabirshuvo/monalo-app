@@ -48,13 +48,20 @@ export function buildAuthProviders(): Provider[] {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         // Link Google to an existing account with the same verified email (e.g. registered with password).
         allowDangerousEmailAccountLinking: true,
+        authorization: {
+          params: {
+            // Avoid silent re-login right after the user signed out of MonAlo.
+            prompt: 'select_account',
+          },
+        },
         // Map Google's profile to our schema. The default mapping emits an `image`
         // field, but our User model uses `avatarUrl` and has no `image` column —
         // passing `image` makes the PrismaAdapter's createUser() throw a validation
         // error for every brand-new Google user (breaking first-time Google sign-in).
         profile(profile: GoogleProfile): User {
+          // Do not set `id` to Google's `sub` — the Prisma adapter assigns the real
+          // database cuid. Putting OAuth subject ids in the JWT breaks /api/profile.
           return {
-            id: profile.sub,
             name: profile.name,
             email: profile.email,
             avatarUrl: profile.picture ?? null,

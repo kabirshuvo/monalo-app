@@ -10,6 +10,7 @@ declare module 'next-auth' {
       emailVerified?: Date | null
       avatarUrl?: string | null
       level?: number
+      totalPoints?: number
     } & DefaultSession['user']
   }
 
@@ -30,6 +31,7 @@ declare module '@auth/core/jwt' {
     emailVerified?: Date | null
     avatarUrl?: string | null
     level?: number
+    totalPoints?: number
   }
 }
 

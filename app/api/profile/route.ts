@@ -4,15 +4,29 @@ import { prisma } from '@/lib/db'
 import { getPointsBreakdown, getRecentPointEvents } from '@/lib/points/service'
 import { badgeFromTotalPoints, levelFromTotalPoints } from '@/lib/points/config'
 import { normalizeAvatarValue } from '@/lib/avatars/presets'
+import { ensureDatabaseUserForAuth } from '@/lib/auth/ensure-database-user'
+import { getAuthJwtFromCookies } from '@/lib/auth/session-token'
 
 export async function GET() {
   try {
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const userId = session.user.id
+    const jwt = await getAuthJwtFromCookies()
+    const userId = await ensureDatabaseUserForAuth(session, jwt)
+
+    if (!userId) {
+      console.warn('[GET /api/profile] no user for session', {
+        sessionId: session.user.id?.slice(0, 8),
+        hasEmail: Boolean(session.user.email ?? jwt?.email),
+      })
+      return NextResponse.json(
+        { error: 'Account not found. Please sign out and sign in again.' },
+        { status: 404 }
+      )
+    }
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -33,13 +47,20 @@ export async function GET() {
     })
 
     if (!user) {
+      console.warn('[GET /api/profile] resolved id missing row', { userId: userId.slice(0, 8) })
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    const [pointsBreakdown, recentActivity] = await Promise.all([
-      getPointsBreakdown(userId),
-      getRecentPointEvents(userId, 8),
-    ])
+    let pointsBreakdown: Awaited<ReturnType<typeof getPointsBreakdown>> | null = null
+    let recentActivity: Awaited<ReturnType<typeof getRecentPointEvents>> = []
+    try {
+      ;[pointsBreakdown, recentActivity] = await Promise.all([
+        getPointsBreakdown(userId),
+        getRecentPointEvents(userId, 8),
+      ])
+    } catch (pointsErr) {
+      console.error('[GET /api/profile] points data unavailable:', pointsErr)
+    }
 
     const profile = {
       id: user.id,
@@ -54,7 +75,7 @@ export async function GET() {
       points: user.totalPoints,
       isVerified: Boolean(user.emailVerified),
       createdAt: user.createdAt.toISOString(),
-      pointsBreakdown,
+      pointsBreakdown: pointsBreakdown ?? undefined,
       recentActivity: recentActivity.map((e) => ({
         id: e.id,
         category: e.category,
@@ -74,8 +95,17 @@ export async function GET() {
 export async function PATCH(request: Request) {
   try {
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const jwt = await getAuthJwtFromCookies()
+    const userId = await ensureDatabaseUserForAuth(session, jwt)
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Account not found. Please sign out and sign in again.' },
+        { status: 404 }
+      )
     }
 
     const body = await request.json().catch(() => ({}))
@@ -103,7 +133,7 @@ export async function PATCH(request: Request) {
     }
 
     const user = await prisma.user.update({
-      where: { id: session.user.id },
+      where: { id: userId },
       data: updates,
       select: {
         id: true,
@@ -121,7 +151,12 @@ export async function PATCH(request: Request) {
       },
     })
 
-    const pointsBreakdown = await getPointsBreakdown(user.id)
+    let pointsBreakdown: Awaited<ReturnType<typeof getPointsBreakdown>> | undefined
+    try {
+      pointsBreakdown = await getPointsBreakdown(user.id)
+    } catch (pointsErr) {
+      console.error('[PATCH /api/profile] points breakdown unavailable:', pointsErr)
+    }
 
     return NextResponse.json({
       ok: true,

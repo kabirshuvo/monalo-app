@@ -30,8 +30,14 @@ export default function SeeOffClient() {
         )}
 
         <div className="flex items-center justify-center gap-4">
-          <Link href={email ? `/login?email=${encodeURIComponent(email)}` : '/login'}>
-            <button className="px-6 py-3 bg-blue-600 text-white rounded-md">Enter again</button>
+          <Link
+            href={
+              email
+                ? `/login?email=${encodeURIComponent(email)}&callbackUrl=%2F`
+                : '/login?callbackUrl=%2F'
+            }
+          >
+            <button className="px-6 py-3 bg-blue-600 text-white rounded-md">Sign in</button>
           </Link>
           <Link href="/">
             <button className="px-6 py-3 bg-white border border-gray-200 rounded-md">Back to landing</button>

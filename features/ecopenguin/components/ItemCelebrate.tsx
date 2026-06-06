@@ -4,22 +4,57 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ECO_PENGUIN_BASE_PATH } from '@/lib/ecopenguin/constants'
+import { playEcoPenguinAudio } from '@/features/ecopenguin/hooks/useEcoPenguinAudio'
+import api from '@/lib/api'
 import type { EcoPenguinCategory, EcoPenguinItem } from '@/lib/ecopenguin/types'
 
 type ItemCelebrateProps = {
   category: EcoPenguinCategory
   item: EcoPenguinItem
+  itemSlug: string
   showConfetti?: boolean
 }
 
-export default function ItemCelebrate({ category, item, showConfetti }: ItemCelebrateProps) {
+export default function ItemCelebrate({ category, item, itemSlug, showConfetti }: ItemCelebrateProps) {
   const [burst, setBurst] = useState(showConfetti ?? true)
+  const [pointsAwarded, setPointsAwarded] = useState<number | null>(null)
 
   useEffect(() => {
     if (!showConfetti) return
     const t = window.setTimeout(() => setBurst(false), 5000)
     return () => window.clearTimeout(t)
   }, [showConfetti])
+
+  useEffect(() => {
+    if (!showConfetti) return
+    playEcoPenguinAudio(item.audio.success)
+  }, [showConfetti, item.audio.success])
+
+  useEffect(() => {
+    if (!showConfetti) return
+
+    let cancelled = false
+    void (async () => {
+      try {
+        const res = await api.post<{ awarded?: boolean; points?: number }>(
+          '/api/learning/ecopenguin/celebrate',
+          {
+            categorySlug: category.slug,
+            itemSlug,
+          }
+        )
+        if (!cancelled && res.awarded) {
+          setPointsAwarded(res.points ?? 2)
+        }
+      } catch {
+        // Non-blocking — play continues without points toast
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [showConfetti, category.slug, itemSlug])
 
   const first = item.name.charAt(0)
   const rest = item.name.slice(1)
@@ -29,6 +64,11 @@ export default function ItemCelebrate({ category, item, showConfetti }: ItemCele
       {burst && (
         <p className="text-4xl animate-bounce" aria-hidden>
           🎉🐧✨
+        </p>
+      )}
+      {pointsAwarded !== null && (
+        <p className="rounded-full bg-amber-100 px-4 py-1.5 text-sm font-semibold text-amber-900">
+          +{pointsAwarded} points!
         </p>
       )}
       <div className="w-full max-w-md rounded-2xl bg-white border-2 border-teal-200 p-6 shadow-lg text-center">

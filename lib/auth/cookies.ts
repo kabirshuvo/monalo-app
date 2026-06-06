@@ -2,6 +2,13 @@
  * Shared session cookie options for monalo.school + subdomains.
  */
 export function getAuthCookieDomain(): string | undefined {
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname.toLowerCase()
+    if (host === 'monalo.school' || host.endsWith('.monalo.school')) {
+      return '.monalo.school'
+    }
+  }
+
   const base =
     process.env.NEXT_PUBLIC_BASE_URL ||
     process.env.NEXT_PUBLIC_APP_URL ||

@@ -33,6 +33,9 @@ export default function EcoPenguinShell({
             </Link>
           </div>
           <nav className="flex items-center gap-3 text-sm shrink-0">
+            <Link href="/dashboard/learning" className="text-teal-700 hover:text-teal-900">
+              Learning
+            </Link>
             <Link href="/dashboard" className="text-teal-700 hover:text-teal-900">
               MonAlo
             </Link>

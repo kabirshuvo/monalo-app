@@ -12,10 +12,9 @@ function withPrefix(base: string): string {
 
 /**
  * Base URL for Eco Penguin media (no trailing slash). Checked in order:
- * - NEXT_PUBLIC_ECO_PENGUIN_MEDIA_BASE_URL: dedicated `ecopenguin` bucket public URL
- *   (works in the browser, e.g. https://pub-xxxx.r2.dev)
- * - R2_PUBLIC_BASE_URL: generic media bucket custom domain (server only)
- * - /api/media proxy when R2 is configured without a public domain (server only)
+ * - NEXT_PUBLIC_ECO_PENGUIN_MEDIA_BASE_URL: override (usually same as custom domain)
+ * - NEXT_PUBLIC_R2_PUBLIC_BASE_URL / R2_PUBLIC_BASE_URL: media.monalo.school
+ * - /api/media proxy when R2 is configured without a public domain
  * - /ecopenguin local static files (dev fallback)
  */
 export function getEcoPenguinMediaOrigin(): string {

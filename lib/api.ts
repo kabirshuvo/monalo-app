@@ -91,8 +91,17 @@ async function request<T = unknown>(
     // Handle error responses
     if (!response.ok) {
       const message =
-        (typeof data === 'object' && data !== null && 'message' in data && typeof (data as any).message === 'string'
-          ? (data as any).message
+        (typeof data === 'object' &&
+        data !== null &&
+        'error' in data &&
+        typeof (data as { error?: unknown }).error === 'string'
+          ? (data as { error: string }).error
+          : null) ||
+        (typeof data === 'object' &&
+        data !== null &&
+        'message' in data &&
+        typeof (data as { message?: unknown }).message === 'string'
+          ? (data as { message: string }).message
           : null) ||
         response.statusText ||
         `HTTP ${response.status}`
