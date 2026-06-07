@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { ecoTheme, ECO_PENGUIN_IMAGE_ASPECT } from '@/features/ecopenguin/eco-theme'
 import { ECO_PENGUIN_BASE_PATH, ECO_PENGUIN_CATEGORIES_PER_PAGE } from '@/lib/ecopenguin/constants'
 import type { EcoPenguinCategory } from '@/lib/ecopenguin/types'
 
@@ -33,57 +34,81 @@ export default function EcoPenguinHub({ categories }: EcoPenguinHubProps) {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl bg-white/70 border border-teal-200 p-6 text-center shadow-sm">
-        <p className="text-4xl mb-2" aria-hidden>
+      <section className={`${ecoTheme.card} relative overflow-hidden p-6 text-center sm:p-8`}>
+        <div
+          className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-sky-100/80"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -bottom-10 -left-6 h-28 w-28 rounded-full bg-emerald-100/70"
+          aria-hidden
+        />
+        <p className="text-5xl sm:text-6xl" aria-hidden>
           🐧
         </p>
-        <h2 className="text-2xl font-bold text-teal-900">Learn English with Eco Penguin</h2>
-        <p className="mt-2 text-teal-800/80 max-w-lg mx-auto">
-          Tap a category. Listen, look, and play — just like the classic This Is / Which Is games.
+        <h2 className="mt-3 text-2xl font-extrabold text-sky-950 sm:text-3xl">
+          Learn English with Eco Penguin
+        </h2>
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-sky-800/85 sm:text-base">
+          Pick a topic, tap the pictures, and play the listening games. Great for curious kids!
         </p>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+          <span className={`${ecoTheme.pill} bg-amber-100 text-amber-900`}>👂 Listen</span>
+          <span className={`${ecoTheme.pill} bg-sky-100 text-sky-900`}>👀 Look</span>
+          <span className={`${ecoTheme.pill} bg-emerald-100 text-emerald-900`}>🎯 Play</span>
+        </div>
       </section>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {visible.map((category) => (
-          <Link
-            key={category.id}
-            href={`${ECO_PENGUIN_BASE_PATH}/categories/${category.slug}`}
-            className="group rounded-2xl bg-white border-2 border-teal-100 p-3 shadow-sm hover:border-teal-400 hover:shadow-md transition-all"
-          >
-            <div className="relative aspect-square overflow-hidden rounded-xl bg-teal-50 mb-3">
-              <Image
-                src={category.image}
-                alt={category.name}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform"
-                sizes="(max-width: 768px) 50vw, 200px"
-              />
-            </div>
-            <p className="text-center font-semibold text-teal-900">{category.name}</p>
-          </Link>
-        ))}
+      <div>
+        <h3 className="mb-4 text-center text-sm font-bold uppercase tracking-widest text-sky-700/80">
+          Choose a category
+        </h3>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+          {visible.map((category) => (
+            <Link
+              key={category.id}
+              href={`${ECO_PENGUIN_BASE_PATH}/categories/${category.slug}`}
+              className={`${ecoTheme.cardSoft} group p-3 transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-lg`}
+            >
+              <div
+                className={`relative mb-3 overflow-hidden rounded-2xl bg-gradient-to-br from-sky-50 to-emerald-50 ${ECO_PENGUIN_IMAGE_ASPECT}`}
+              >
+                <Image
+                  src={category.image}
+                  alt={category.name}
+                  fill
+                  className={`${ecoTheme.image} transition duration-300 group-hover:scale-[1.02]`}
+                  sizes="(max-width: 768px) 45vw, 180px"
+                />
+              </div>
+              <p className="text-center text-sm font-extrabold text-sky-950 sm:text-base">
+                {category.name}
+              </p>
+            </Link>
+          ))}
+        </div>
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2">
+        <div className="flex items-center justify-center gap-3">
           <button
             type="button"
             disabled={safePage <= 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="px-4 py-2 rounded-lg bg-white border border-teal-200 text-teal-800 disabled:opacity-40"
+            className={ecoTheme.btnSecondary}
           >
-            Previous
+            ← Previous
           </button>
-          <span className="px-3 py-2 text-teal-800 text-sm">
+          <span className="rounded-full bg-white px-4 py-2 text-sm font-bold text-sky-900 shadow-sm">
             {safePage} / {totalPages}
           </span>
           <button
             type="button"
             disabled={safePage >= totalPages}
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            className="px-4 py-2 rounded-lg bg-teal-600 text-white disabled:opacity-40"
+            className={ecoTheme.btnPrimary}
           >
-            Next
+            Next →
           </button>
         </div>
       )}

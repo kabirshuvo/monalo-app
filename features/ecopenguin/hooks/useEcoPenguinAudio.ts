@@ -1,6 +1,16 @@
 'use client'
 
 import { useCallback, useEffect, useRef } from 'react'
+import {
+  playEcoPenguinAudio as playManagedAudio,
+  stopEcoPenguinAudio,
+} from '@/features/ecopenguin/hooks/ecoPenguinAudioManager'
+
+export {
+  playEcoPenguinAudio,
+  playEcoPenguinSequence,
+  stopEcoPenguinAudio,
+} from '@/features/ecopenguin/hooks/ecoPenguinAudioManager'
 
 export function useEcoPenguinAudio(src: string | null) {
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -15,36 +25,13 @@ export function useEcoPenguinAudio(src: string | null) {
   }, [src])
 
   const play = useCallback(() => {
-    if (!audioRef.current) return
-    audioRef.current.currentTime = 0
-    void audioRef.current.play().catch(() => {})
-  }, [])
+    if (!src) return
+    playManagedAudio(src)
+  }, [src])
 
   return play
 }
 
-export function playEcoPenguinAudio(src: string): void {
-  const audio = new Audio(src)
-  void audio.play().catch(() => {})
-}
-
-export function playEcoPenguinSequence(urls: string[]): () => void {
-  let index = 0
-  let current: HTMLAudioElement | null = null
-
-  const playNext = () => {
-    if (index >= urls.length) return
-    current?.pause()
-    current = new Audio(urls[index])
-    index += 1
-    current.addEventListener('ended', playNext)
-    void current.play().catch(playNext)
-  }
-
-  playNext()
-
-  return () => {
-    current?.pause()
-    current = null
-  }
+export function useStopEcoPenguinAudioOnUnmount(): void {
+  useEffect(() => () => stopEcoPenguinAudio(), [])
 }

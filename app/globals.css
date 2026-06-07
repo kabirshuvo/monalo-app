@@ -80,3 +80,22 @@ body {
 .animate-eco-shake {
   animation: eco-shake 0.45s ease-in-out;
 }
+
+@keyframes eco-pop {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-eco-pop {
+  animation: eco-pop 0.45s ease-out;
+}
