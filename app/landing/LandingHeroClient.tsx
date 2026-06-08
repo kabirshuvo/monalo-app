@@ -27,7 +27,7 @@ export default function LandingHeroClient() {
               Welcome back.
             </h1>
             <p className="text-lg text-gray-600 dark:text-zinc-300">
-              You&apos;re signed in — pick up your profile or explore courses at your own pace.
+              You&apos;re signed in — visit your profile or head to the MonAlo home page.
             </p>
             <div className="pt-4 flex flex-col sm:flex-row gap-3">
               <Link href="/profile">
@@ -35,9 +35,9 @@ export default function LandingHeroClient() {
                   Your profile
                 </Button>
               </Link>
-              <Link href="/courses">
+              <Link href="/home">
                 <Button variant="secondary" size="lg">
-                  Browse courses
+                  Home
                 </Button>
               </Link>
             </div>
@@ -70,9 +70,9 @@ export default function LandingHeroClient() {
 
           <div className="pt-2 flex flex-col sm:flex-row items-start gap-3">
             <StartTodayButton />
-            <Link href="/courses">
+            <Link href="/home">
               <Button variant="secondary" size="lg">
-                Browse courses
+                Home
               </Button>
             </Link>
           </div>

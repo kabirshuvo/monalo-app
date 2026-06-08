@@ -15,7 +15,7 @@ export function Card({
 }: CardProps) {
   return (
     <div 
-      className={`bg-white rounded-lg border border-gray-100 shadow-xs 
+      className={`bg-surface rounded-lg border border-subtle shadow-xs 
         ${hover ? 'hover:shadow-sm transition-shadow duration-200' : ''} 
         ${!noPadding ? 'p-6' : ''} 
         ${className}`}
@@ -36,7 +36,7 @@ export function CardHeader({ children, className = '', ...props }: React.HTMLAtt
 
 export function CardTitle({ children, className = '', ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h3 className={`text-xl font-semibold text-gray-900 ${className}`} {...props}>
+    <h3 className={`text-xl font-semibold text-content ${className}`} {...props}>
       {children}
     </h3>
   )
@@ -44,7 +44,7 @@ export function CardTitle({ children, className = '', ...props }: React.HTMLAttr
 
 export function CardDescription({ children, className = '', ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className={`text-sm text-gray-600 mt-1 ${className}`} {...props}>
+    <p className={`text-sm text-content-secondary mt-1 ${className}`} {...props}>
       {children}
     </p>
   )
@@ -60,7 +60,7 @@ export function CardContent({ children, className = '', ...props }: React.HTMLAt
 
 export function CardFooter({ children, className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={`mt-4 pt-4 border-t border-gray-200 ${className}`} {...props}>
+    <div className={`mt-4 pt-4 border-t border-subtle ${className}`} {...props}>
       {children}
     </div>
   )

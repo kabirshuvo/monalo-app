@@ -17,7 +17,7 @@ NEXT_PUBLIC_GALLERY_URL=http://gallery.localhost:3000
 
 # Resend (email verification)
 RESEND_API_KEY=
-RESEND_FROM_EMAIL=MonAlo <onboarding@resend.dev>
+RESEND_FROM_EMAIL="MonAlo <onboarding@resend.dev>"
 
 # Google OAuth — project monaloauth
 # https://console.cloud.google.com/apis/credentials?project=monaloauth

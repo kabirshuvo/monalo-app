@@ -4,28 +4,181 @@
 /* Tailwind v4: make `dark:` respond to `.dark` class (next-themes). */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * MonAlo readable text system — warm stone palette, softer than pure black/white.
+ * Existing `text-gray-*`, `bg-gray-*`, and `text-blue-*` utilities pick these up via @theme.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  --background: #fafaf9;
+  --foreground: #292524;
+  --surface: #ffffff;
+  --surface-muted: #f5f5f4;
+  --surface-hover: #f5f5f4;
+  --border-subtle: #e7e5e4;
+  --border-strong: #d6d3d1;
+
+  --text-primary: #292524;
+  --text-secondary: #44403c;
+  --text-tertiary: #57534e;
+  --text-muted: #78716c;
+  --text-link: #1d4ed8;
+  --text-link-hover: #1e40af;
+
+  /* Remapped Tailwind gray scale (light mode) */
+  --gray-50: #fafaf9;
+  --gray-100: #f5f5f4;
+  --gray-200: #e7e5e4;
+  --gray-300: #d6d3d1;
+  --gray-400: #a8a29e;
+  --gray-500: #78716c;
+  --gray-600: #57534e;
+  --gray-700: #44403c;
+  --gray-800: #292524;
+  --gray-900: #1c1917;
+
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --white: #ffffff;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: #0c0a09;
+  --foreground: #f5f5f4;
+  --surface: #1c1917;
+  --surface-muted: #141110;
+  --surface-hover: #292524;
+  --border-subtle: #292524;
+  --border-strong: #44403c;
+
+  --text-primary: #f5f5f4;
+  --text-secondary: #e7e5e4;
+  --text-tertiary: #d6d3d1;
+  --text-muted: #a8a29e;
+  --text-link: #93c5fd;
+  --text-link-hover: #bfdbfe;
+
+  /* In dark mode, lower gray numbers = lighter text for readability */
+  --gray-50: #0c0a09;
+  --gray-100: #1c1917;
+  --gray-200: #292524;
+  --gray-300: #44403c;
+  --gray-400: #57534e;
+  --gray-500: #78716c;
+  --gray-600: #a8a29e;
+  --gray-700: #d6d3d1;
+  --gray-800: #e7e5e4;
+  --gray-900: #f5f5f4;
+
+  --blue-600: #93c5fd;
+  --blue-700: #bfdbfe;
+  --white: #1c1917;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-hover: var(--surface-hover);
+  --color-border-subtle: var(--border-subtle);
+  --color-content: var(--text-primary);
+  --color-content-secondary: var(--text-secondary);
+  --color-content-muted: var(--text-muted);
+  --color-content-link: var(--text-link);
+
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
+  --color-gray-700: var(--gray-700);
+  --color-gray-800: var(--gray-800);
+  --color-gray-900: var(--gray-900);
+
+  --color-blue-600: var(--blue-600);
+  --color-blue-700: var(--blue-700);
+  --color-white: var(--white);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-/* Dark theme variables (set via next-themes: html.dark). */
-.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+@layer base {
+  html {
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--text-primary);
+    line-height: 1.25;
+  }
+
+  p {
+    color: var(--text-secondary);
+  }
+
+  a:not([class*='text-']) {
+    color: var(--text-link);
+  }
+
+  a:not([class*='text-']):hover {
+    color: var(--text-link-hover);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--text-link) 22%, transparent);
+    color: var(--text-primary);
+  }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Semantic text utilities for new components */
+@utility text-content {
+  color: var(--text-primary);
+}
+
+@utility text-content-secondary {
+  color: var(--text-secondary);
+}
+
+@utility text-content-muted {
+  color: var(--text-muted);
+}
+
+@utility text-content-link {
+  color: var(--text-link);
+}
+
+@utility bg-surface {
+  background-color: var(--surface);
+}
+
+@utility bg-surface-muted {
+  background-color: var(--surface-muted);
+}
+
+@utility border-subtle {
+  border-color: var(--border-subtle);
 }
 
 /* Custom animations */

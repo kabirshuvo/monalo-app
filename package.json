@@ -7,7 +7,8 @@
     "dev": "next dev",
     "start": "next start",
     "lint": "eslint",
-    "seed": "ts-node prisma/seed.ts",
+    "db:seed": "node scripts/db-seed.mjs",
+    "seed": "node scripts/db-seed.mjs",
     "db:generate": "prisma generate",
     "db:migrate": "node scripts/db-migrate.mjs",
     "db:reset": "bash scripts/db-reset.sh",
@@ -20,9 +21,6 @@
     "ecopenguin:upload-r2": "node scripts/upload-ecopenguin-r2.mjs",
     "ecopenguin:sync-monalomedia": "node scripts/copy-ecopenguin-to-monalomedia.mjs",
     "ecopenguin:configure-cors": "node scripts/configure-ecopenguin-r2-cors.mjs"
-  },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

@@ -25,6 +25,8 @@ export default async function DashboardPage() {
     CUSTOMER: '/dashboard/customer',
     SELLER: '/dashboard/seller',
     DONOR: '/home',
+    GUARDIAN: '/home',
+    SPONSOR: '/home',
     BROWSER: '/home',
   }
 

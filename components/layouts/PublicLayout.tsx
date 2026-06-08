@@ -7,8 +7,9 @@ import { clientSignOut } from '@/lib/auth/client-sign-out'
 import { useAuthNav } from '@/lib/auth/use-auth-nav'
 // path-based UI logic removed: auth UI must not depend on pathname
 import { logEvent } from '@/lib/analytics'
-import { ThemeToggle } from '@/components/ui'
+import { ThemeToggle, InlineLoading } from '@/components/ui'
 import TotalPointsBadge from '@/components/nav/TotalPointsBadge'
+import CartNavLink from '@/components/shop/CartNavLink'
 import SignInNavButton from '@/components/auth/SignInNavButton'
 import StartTodayButton from '@/components/landing/StartTodayButton'
 
@@ -171,7 +172,18 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     if (process.env.NODE_ENV === 'development') {
       try { console.log(`[NAVBAR AuthControls] variant=${variant} status=${status}`) } catch (e) {}
     }
-    if (status === 'loading' || signingOut) return null
+    if (status === 'loading' || signingOut) {
+      if (status === 'loading') {
+        return variant === 'desktop' ? (
+          <div className="hidden md:flex items-center">
+            <InlineLoading />
+          </div>
+        ) : (
+          <InlineLoading className="w-full justify-center py-2" />
+        )
+      }
+      return null
+    }
 
     if (navAuthenticated && status === 'authenticated') {
       // Authenticated UI
@@ -244,7 +256,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     // whether remounting fixes navbar staleness. Remove when debugging is done.
     <div key={status} className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)]">
       {/* Header */}
-      <header className="bg-white dark:bg-zinc-950 border-b border-gray-200 dark:border-zinc-800 sticky top-0 z-40">
+      <header className="bg-surface border-b border-subtle sticky top-0 z-40">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -280,6 +292,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
             {/* Theme + Auth (desktop) */}
             {!isLanding && (
               <div className="hidden md:flex items-center gap-3">
+                <CartNavLink />
                 <ThemeToggle />
                 <AuthControls variant="desktop" />
               </div>
@@ -288,6 +301,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
             {/* Mobile menu button */}
             {!isLanding && (
               <div className="md:hidden flex items-center gap-2">
+                <CartNavLink />
                 <ThemeToggle />
                 <button
                   type="button"
@@ -341,7 +355,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-auto">
+      <footer className="bg-surface border-t border-subtle mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Brand */}

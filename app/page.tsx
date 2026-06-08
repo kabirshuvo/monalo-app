@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import LandingHeaderClient from './landing/LandingHeaderClient'
 import LandingHeroClient from './landing/LandingHeroClient'
 import SessionResetOnSignOut from '@/components/auth/SessionResetOnSignOut'
+import { RouteLoader } from '@/components/ui/LoadingState'
 
 // Force the root landing page to be statically rendered and public
 export const dynamic = 'force-static'
@@ -14,7 +15,7 @@ export const metadata = {
 export default function LaunchPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white dark:from-zinc-950 dark:to-zinc-900 flex flex-col">
-      <Suspense fallback={null}>
+      <Suspense fallback={<RouteLoader variant="page" className="min-h-[50vh]" />}>
         <SessionResetOnSignOut />
       </Suspense>
       <LandingHeaderClient />

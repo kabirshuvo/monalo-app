@@ -3,7 +3,7 @@ import React, { useState, useEffect, Suspense } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Form, FormSection, FormActions, Input, Button } from '@/components/ui'
+import { Form, FormSection, FormActions, Input, Button, AuthLoadingScreen } from '@/components/ui'
 import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton'
 import { logEvent } from '@/lib/analytics'
 
@@ -168,14 +168,7 @@ function RegisterForm() {
 
   // Show loading state while checking authentication
   if (status === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600">Just a moment...</p>
-        </div>
-      </div>
-    )
+    return <AuthLoadingScreen />
   }
 
   // Don't show form if already authenticated
@@ -401,14 +394,7 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600">Just a moment...</p>
-        </div>
-      </div>
-    }>
+    <Suspense fallback={<AuthLoadingScreen />}>
       <RegisterForm />
     </Suspense>
   )

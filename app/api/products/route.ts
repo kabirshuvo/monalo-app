@@ -3,27 +3,22 @@ import { prisma } from '@/lib/db'
 import { requireRole, AuthorizationError } from '@/lib/auth/role'
 import { withCreatedBy } from '@/lib/auth/audit'
 import { slugify } from '@/lib/format'
+import { isShopCategoryId } from '@/lib/shop/categories'
+import { listActiveShopProducts } from '@/lib/shop/queries'
+import type { ProductCategory } from '@prisma/client'
 
 /**
  * GET /api/products — public active products
  */
 export async function GET() {
   try {
-    const products = await prisma.product.findMany({
-      where: { deletedAt: null, status: 'ACTIVE' },
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        description: true,
-        price: true,
-        stock: true,
-        imageUrl: true,
-        status: true,
-      },
-      orderBy: { createdAt: 'desc' },
-    })
-    return NextResponse.json(products)
+    const products = await listActiveShopProducts()
+    return NextResponse.json(
+      products.map((p) => ({
+        ...p,
+        status: 'ACTIVE' as const,
+      }))
+    )
   } catch (error) {
     console.error('[GET /api/products]', error)
     return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 })
@@ -53,6 +48,10 @@ export async function POST(request: NextRequest) {
 
     const slug = body.slug ? String(body.slug).trim() : slugify(name)
     const stock = Number(body.stock ?? 0)
+    const categoryRaw = body.category ? String(body.category) : 'OTHER_CRAFT'
+    const category: ProductCategory = isShopCategoryId(categoryRaw)
+      ? categoryRaw
+      : 'OTHER_CRAFT'
 
     const product = await prisma.product.create({
       data: withCreatedBy(
@@ -64,6 +63,7 @@ export async function POST(request: NextRequest) {
           stock: Number.isInteger(stock) ? stock : 0,
           imageUrl: body.imageUrl ? String(body.imageUrl) : null,
           status: body.status === 'INACTIVE' ? 'INACTIVE' : 'ACTIVE',
+          category,
         },
         userId
       ),

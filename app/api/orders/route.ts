@@ -24,7 +24,17 @@ export async function GET() {
     const where =
       role === 'ADMIN'
         ? { deletedAt: null }
-        : { userId, deletedAt: null }
+        : role === 'SELLER'
+          ? {
+              deletedAt: null,
+              items: {
+                some: {
+                  deletedAt: null,
+                  product: { createdBy: userId, deletedAt: null },
+                },
+              },
+            }
+          : { userId, deletedAt: null }
 
     const orders = await prisma.order.findMany({
       where,
@@ -32,10 +42,13 @@ export async function GET() {
         items: {
           where: { deletedAt: null },
           include: {
-            product: { select: { id: true, name: true, slug: true } },
+            product: { select: { id: true, name: true, slug: true, createdBy: true } },
             artwork: { select: { id: true, title: true, slug: true } },
           },
         },
+        user: role === 'ADMIN' || role === 'SELLER'
+          ? { select: { id: true, name: true, email: true } }
+          : false,
       },
       orderBy: { createdAt: 'desc' },
     })

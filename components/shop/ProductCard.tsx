@@ -6,6 +6,8 @@ import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
 import { useCart } from '@/hooks/useCart'
 import { formatPriceCents } from '@/lib/format'
+import ProductCategoryBadge from '@/components/shop/ProductCategoryBadge'
+import type { ShopCategoryId } from '@/lib/shop/categories'
 
 export type Product = {
   id: string
@@ -15,6 +17,7 @@ export type Product = {
   price: number
   stock?: number
   imageUrl?: string | null
+  category?: ShopCategoryId
   badge?: string
 }
 
@@ -24,7 +27,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { add } = useCart()
-  const { id, slug, name, description, price, stock = 0, imageUrl, badge } = product
+  const { id, slug, name, description, price, stock = 0, imageUrl, category, badge } = product
   const outOfStock = stock <= 0
 
   return (
@@ -32,7 +35,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <Link href={`/shop/${slug}`} className="aspect-[4/3] w-full overflow-hidden rounded-t-xl bg-gray-50 block">
         {imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={imageUrl} alt={name} className="h-full w-full object-cover" />
+          <img src={imageUrl} alt={name} className="h-full w-full object-contain p-2" />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-gray-300">No image yet</div>
         )}
@@ -40,7 +43,12 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       <div className="flex flex-col gap-3 p-4">
         <div className="flex items-start justify-between gap-3">
-          <div>
+          <div className="min-w-0">
+            {category && (
+              <div className="mb-2">
+                <ProductCategoryBadge category={category} linked />
+              </div>
+            )}
             <Link href={`/shop/${slug}`}>
               <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600">{name}</h3>
             </Link>

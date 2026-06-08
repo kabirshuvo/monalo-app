@@ -10,13 +10,8 @@ if [ ! -f .env ]; then
   exit 1
 fi
 
-# shellcheck disable=SC1091
-set -a
-source .env
-set +a
-
-# Neon: use unpooled connection for DDL/migrations
-MIGRATE_URL="${DATABASE_URL_UNPOOLED:-${POSTGRES_URL_NON_POOLING:-$DATABASE_URL}}"
+# Load DB URL via Node — avoids bash `source .env` breaking on values with < or spaces
+MIGRATE_URL="$(node scripts/print-migrate-url.mjs)"
 
 if [ -z "$MIGRATE_URL" ]; then
   echo "Set DATABASE_URL or DATABASE_URL_UNPOOLED in .env"

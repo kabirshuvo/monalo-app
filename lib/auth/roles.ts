@@ -12,8 +12,6 @@
  *   const isAdmin = userRole === ROLES.ADMIN
  */
 
-import type { Role } from '@prisma/client'
-
 /**
  * Role Constants
  * 
@@ -27,6 +25,8 @@ export const ROLES = {
   CUSTOMER: 'CUSTOMER' as const,
   SELLER: 'SELLER' as const,
   DONOR: 'DONOR' as const,
+  GUARDIAN: 'GUARDIAN' as const,
+  SPONSOR: 'SPONSOR' as const,
   BROWSER: 'BROWSER' as const,
 } as const
 
@@ -39,8 +39,8 @@ export const ROLES = {
  *     return Object.values(ROLES).includes(role)
  *   }
  */
-/** Matches Prisma `Role` enum — keep in sync with schema.prisma */
-export type RoleType = Role
+/** All app roles — derived from ROLES; keep ROLES in sync with prisma/schema.prisma */
+export type RoleType = (typeof ROLES)[keyof typeof ROLES]
 
 /**
  * All available roles as an array
@@ -57,13 +57,15 @@ export const ALL_ROLES = Object.values(ROLES) as RoleType[]
  * Human-readable descriptions for each role
  * Useful for UI displays and documentation
  */
-export const ROLE_DESCRIPTIONS: Record<Role, string> = {
+export const ROLE_DESCRIPTIONS: Record<RoleType, string> = {
   [ROLES.ADMIN]: 'Administrator - Full system access',
   [ROLES.WRITER]: 'Content Creator - Create and manage content',
   [ROLES.LEARNER]: 'Student - Enroll in courses',
   [ROLES.CUSTOMER]: 'Shopper - Purchase products',
   [ROLES.SELLER]: 'Seller - Manage craft shop products',
   [ROLES.DONOR]: 'Donor - Support the school',
+  [ROLES.GUARDIAN]: 'Guardian - Support and follow a learner',
+  [ROLES.SPONSOR]: 'Sponsor - Fund learning opportunities',
   [ROLES.BROWSER]: 'Visitor - Browse public content',
 }
 
@@ -104,6 +106,7 @@ export const ROLE_REQUIREMENTS: Record<string, RoleType[]> = {
    * Access to system administration, analytics, user management
    */
   '/dashboard/admin': [ROLES.ADMIN],
+  '/dashboard/admin/users': [ROLES.ADMIN],
 
   /**
    * Writer Dashboard
@@ -235,7 +238,7 @@ export const ROUTE_METADATA: Record<string, RouteConfig> = {
  *   // Show create course button
  * }
  */
-export const PERMISSIONS: Record<Role, string[]> = {
+export const PERMISSIONS: Record<RoleType, string[]> = {
   [ROLES.ADMIN]: [
     'view_analytics',
     'manage_users',
@@ -248,12 +251,16 @@ export const PERMISSIONS: Record<Role, string[]> = {
     'create_product',
   ],
 
-  [ROLES.WRITER]: [
-    'create_course',
-    'edit_own_course',
-    'create_blog',
-    'edit_own_blog',
-    'view_analytics',
+  [ROLES.CUSTOMER]: [
+    'browse_products',
+    'view_product',
+    'purchase_product',
+    'view_orders',
+    'track_shipment',
+    'manage_wishlist',
+    'view_course',
+    'view_blog',
+    'download_resources',
   ],
 
   [ROLES.LEARNER]: [
@@ -262,32 +269,60 @@ export const PERMISSIONS: Record<Role, string[]> = {
     'complete_lesson',
     'view_progress',
     'download_resources',
-  ],
-
-  [ROLES.CUSTOMER]: [
+    'view_blog',
     'browse_products',
-    'view_product',
     'purchase_product',
     'view_orders',
-    'track_shipment',
-    'manage_wishlist',
+  ],
+
+  [ROLES.WRITER]: [
+    'create_course',
+    'edit_own_course',
+    'create_blog',
+    'edit_own_blog',
+    'view_analytics',
+    'view_course',
+    'view_blog',
+    'create_product',
+    'download_resources',
   ],
 
   [ROLES.SELLER]: [
     'manage_products',
+    'create_product',
     'view_orders',
     'view_analytics',
+    'browse_products',
   ],
 
   [ROLES.DONOR]: [
     'donate',
     'view_blog',
+    'browse_products',
+    'view_course',
+    'download_resources',
+  ],
+
+  [ROLES.GUARDIAN]: [
+    'view_progress',
+    'view_course',
+    'view_blog',
+    'browse_products',
+  ],
+
+  [ROLES.SPONSOR]: [
+    'donate',
+    'view_blog',
+    'view_course',
+    'browse_products',
+    'download_resources',
   ],
 
   [ROLES.BROWSER]: [
     'view_blog',
-    'view_courses',
+    'view_course',
     'browse_products',
+    'download_resources',
   ],
 }
 

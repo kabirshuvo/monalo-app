@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { requireRole, AuthorizationError } from '@/lib/auth/role'
 import { withUpdatedBy } from '@/lib/auth/audit'
+import { canManageProduct } from '@/lib/shop/access'
+import { isShopCategoryId } from '@/lib/shop/categories'
+import type { Role, ProductCategory } from '@prisma/client'
 
 type Params = { params: Promise<{ slug: string }> }
 
@@ -42,6 +45,11 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 })
     }
 
+    const role = (session.user as { role?: Role }).role
+    if (!canManageProduct(role, userId, existing)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const body = await request.json()
     const data: Record<string, unknown> = {}
 
@@ -57,6 +65,13 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     if (body.stock !== undefined) data.stock = Number(body.stock)
     if (body.imageUrl !== undefined) data.imageUrl = body.imageUrl ? String(body.imageUrl) : null
     if (body.status !== undefined) data.status = body.status
+    if (body.category !== undefined) {
+      const category = String(body.category)
+      if (!isShopCategoryId(category)) {
+        return NextResponse.json({ error: 'Invalid category' }, { status: 400 })
+      }
+      data.category = category as ProductCategory
+    }
 
     const product = await prisma.product.update({
       where: { id: existing.id },
@@ -70,5 +85,41 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     }
     console.error('[PATCH /api/products/[slug]]', error)
     return NextResponse.json({ error: 'Failed to update product' }, { status: 500 })
+  }
+}
+
+export async function DELETE(_request: NextRequest, { params }: Params) {
+  const { slug } = await params
+  try {
+    const session = await requireRole(['ADMIN', 'SELLER'])
+    const userId = (session.user as { id?: string }).id
+    if (!userId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 })
+    }
+
+    const existing = await prisma.product.findFirst({
+      where: { slug, deletedAt: null },
+    })
+    if (!existing) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+    }
+
+    const role = (session.user as { role?: Role }).role
+    if (!canManageProduct(role, userId, existing)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    await prisma.product.update({
+      where: { id: existing.id },
+      data: withUpdatedBy({ deletedAt: new Date(), status: 'DISCONTINUED' }, userId),
+    })
+
+    return NextResponse.json({ ok: true })
+  } catch (error) {
+    if (error instanceof AuthorizationError) {
+      return NextResponse.json({ error: error.message }, { status: error.statusCode })
+    }
+    console.error('[DELETE /api/products/[slug]]', error)
+    return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 })
   }
 }

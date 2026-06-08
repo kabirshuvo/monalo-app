@@ -1,12 +1,14 @@
 "use client"
 import { useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import PublicLayout from '@/components/layouts/PublicLayout'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, Button } from '@/components/ui'
 import Alert from '@/components/ui/Alert'
 import EmptyState from '@/components/ui/EmptyState'
 import { useCart } from '@/hooks/useCart'
-import api from '@/lib/api'
+import api, { ApiError } from '@/lib/api'
 
 function formatPrice(cents: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100)
@@ -14,14 +16,22 @@ function formatPrice(cents: number) {
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { items, total, isEmpty, clear } = useCart()
+  const { status } = useSession()
+  const { items, total, isEmpty, clear, update, remove } = useCart()
   const [shippingAddress, setShippingAddress] = useState('')
   const [isPlacingOrder, setIsPlacingOrder] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
+  const isAuthenticated = status === 'authenticated'
+  const loginHref = '/login?callbackUrl=%2Fcheckout'
+
   const placeOrder = async () => {
     if (isEmpty) return
+    if (!isAuthenticated) {
+      router.push(loginHref)
+      return
+    }
     setIsPlacingOrder(true)
     setSuccessMessage(null)
     setErrorMessage(null)
@@ -41,6 +51,10 @@ export default function CheckoutPage() {
         setErrorMessage("We couldn’t place your order. Please try again.")
       }
     } catch (e) {
+      if (e instanceof ApiError && e.status === 401) {
+        router.push(loginHref)
+        return
+      }
       setErrorMessage("Something unexpected happened. Please try again.")
     } finally {
       setIsPlacingOrder(false)
@@ -67,6 +81,15 @@ export default function CheckoutPage() {
     <PublicLayout currentPath="/checkout">
       <div className="max-w-5xl mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
+          {status !== 'loading' && !isAuthenticated && (
+            <Alert variant="info" title="Sign in to checkout">
+              <Link href={loginHref} className="font-medium text-blue-700 underline">
+                Sign in
+              </Link>{' '}
+              to place your order. Your cart is saved on this device.
+            </Alert>
+          )}
+
           <Card>
             <CardHeader>
               <CardTitle>Review your items</CardTitle>
@@ -74,13 +97,41 @@ export default function CheckoutPage() {
             <CardContent>
               <ul className="divide-y divide-gray-200">
                 {items.map(item => (
-                  <li key={item.productId} className="py-4 flex items-center justify-between">
+                  <li key={item.productId} className="py-4 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <p className="font-medium text-gray-900">{item.name}</p>
-                      <p className="text-sm text-gray-600">{formatPrice(item.price)} × {item.quantity}</p>
+                      <p className="text-sm text-gray-600">{formatPrice(item.price)} each</p>
                     </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-gray-900">{formatPrice(item.price * item.quantity)}</p>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center rounded-lg border border-gray-200">
+                        <button
+                          type="button"
+                          className="px-2 py-1 text-gray-600 hover:bg-gray-50"
+                          aria-label={`Decrease ${item.name} quantity`}
+                          onClick={() => update(item.productId, item.quantity - 1)}
+                        >
+                          −
+                        </button>
+                        <span className="min-w-[2rem] text-center text-sm">{item.quantity}</span>
+                        <button
+                          type="button"
+                          className="px-2 py-1 text-gray-600 hover:bg-gray-50"
+                          aria-label={`Increase ${item.name} quantity`}
+                          onClick={() => update(item.productId, item.quantity + 1)}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <p className="min-w-[5rem] text-right font-semibold text-gray-900">
+                        {formatPrice(item.price * item.quantity)}
+                      </p>
+                      <button
+                        type="button"
+                        className="text-sm text-red-600 hover:underline"
+                        onClick={() => remove(item.productId)}
+                      >
+                        Remove
+                      </button>
                     </div>
                   </li>
                 ))}
@@ -137,8 +188,13 @@ export default function CheckoutPage() {
                   <span>Total</span>
                   <span>{formatPrice(total)}</span>
                 </div>
-                <Button onClick={placeOrder} isLoading={isPlacingOrder} fullWidth>
-                  Place order
+                <Button
+                  onClick={placeOrder}
+                  isLoading={isPlacingOrder}
+                  disabled={!isAuthenticated && status !== 'loading'}
+                  fullWidth
+                >
+                  {isAuthenticated ? 'Place order' : 'Sign in to place order'}
                 </Button>
                 <Button variant="ghost" fullWidth onClick={() => router.push('/shop')}>
                   Keep shopping

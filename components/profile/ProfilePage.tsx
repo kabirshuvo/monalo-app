@@ -14,6 +14,10 @@ import api, { ApiError } from '@/lib/api'
 import { useSession } from 'next-auth/react'
 import AvatarPicker from '@/components/profile/AvatarPicker'
 import AvatarVisual from '@/components/profile/AvatarVisual'
+import RoleApplicationModal, {
+  RoleApplicationStatusCard,
+  type RoleApplication,
+} from '@/components/profile/RoleApplicationModal'
 
 type PointsBreakdown = {
   totalPoints: number
@@ -73,6 +77,8 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [roleModalOpen, setRoleModalOpen] = useState(false)
+  const [roleApplications, setRoleApplications] = useState<RoleApplication[]>([])
 
   const [formData, setFormData] = useState({
     name: '',
@@ -93,6 +99,15 @@ export default function ProfilePage() {
             bio: res.profile.bio || '',
             avatar: res.profile.avatar || '',
           })
+        }
+
+        try {
+          const apps = await api.get<{ ok: boolean; applications: RoleApplication[] }>(
+            '/api/role-applications'
+          )
+          if (apps?.applications) setRoleApplications(apps.applications)
+        } catch {
+          // Non-blocking: profile still works without applications
         }
       } catch (err) {
         const msg =
@@ -140,7 +155,7 @@ export default function ProfilePage() {
   }
 
   if (loading) {
-    return <LoadingState variant="global" />
+    return <LoadingState variant="profile" />
   }
 
   if (!profile) {
@@ -238,6 +253,23 @@ export default function ProfilePage() {
           {errorMessage}
         </Alert>
       )}
+
+      <RoleApplicationStatusCard
+        applications={roleApplications}
+        onApply={() => setRoleModalOpen(true)}
+      />
+
+      <RoleApplicationModal
+        isOpen={roleModalOpen}
+        onClose={() => setRoleModalOpen(false)}
+        currentRole={profile.role}
+        onSubmitted={async () => {
+          const apps = await api.get<{ ok: boolean; applications: RoleApplication[] }>(
+            '/api/role-applications'
+          )
+          if (apps?.applications) setRoleApplications(apps.applications)
+        }}
+      />
 
       {/* Points breakdown */}
       {breakdown && (

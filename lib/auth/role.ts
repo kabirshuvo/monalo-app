@@ -1,5 +1,6 @@
 import { auth } from '@/auth'
 import { Role as PrismaRole } from '@prisma/client'
+import { ROLES, type RoleType } from '@/lib/auth/roles'
 import { logAccessDenied, logAuthFailure } from '@/lib/auth/audit-logs'
 
 /**
@@ -223,52 +224,97 @@ export function withRole(
 }
 
 /**
- * Role permission matrix for fine-grained access control
- * Use this to define what each role can do
+ * Role permission matrix for fine-grained access control.
+ * Uses `verb:noun` strings — aligned with lib/auth/roles.ts PERMISSIONS (underscore form).
  */
-export const rolePermissions: Record<PrismaRole, string[]> = {
-  ADMIN: [
+export const rolePermissions: Record<RoleType, string[]> = {
+  [ROLES.ADMIN]: [
     'manage:users',
     'manage:products',
     'manage:courses',
     'manage:orders',
     'manage:blog',
-    'view:analytics',
     'manage:settings',
-  ],
-  CUSTOMER: [
-    'view:products',
-    'purchase:products',
-    'view:orders',
-    'view:courses',
-    'view:blog',
-  ],
-  LEARNER: [
+    'view:analytics',
+    'create:course',
+    'create:product',
+    'create:blog',
+    'edit:blog',
+    'enroll:course',
     'view:courses',
     'view:lessons',
     'track:progress',
-    'view:blog',
+    'view:products',
+    'purchase:products',
+    'view:orders',
+    'track:shipment',
   ],
-  WRITER: [
+  [ROLES.CUSTOMER]: [
+    'view:products',
+    'purchase:products',
+    'view:orders',
+    'track:shipment',
+    'manage:wishlist',
+    'view:courses',
+    'view:blog',
+    'download:resources',
+  ],
+  [ROLES.LEARNER]: [
+    'enroll:course',
+    'view:courses',
+    'view:lessons',
+    'complete:lesson',
+    'track:progress',
+    'download:resources',
+    'view:blog',
+    'view:products',
+    'purchase:products',
+    'view:orders',
+  ],
+  [ROLES.WRITER]: [
     'create:blog',
     'edit:blog',
+    'create:course',
+    'edit:own_course',
     'view:blog',
     'view:courses',
+    'view:analytics',
+    'create:product',
+    'download:resources',
   ],
-  SELLER: [
+  [ROLES.SELLER]: [
     'manage:products',
+    'create:product',
     'view:orders',
     'view:analytics',
-  ],
-  DONOR: [
     'view:products',
+  ],
+  [ROLES.DONOR]: [
     'donate:projects',
     'view:blog',
+    'view:products',
+    'view:courses',
+    'download:resources',
   ],
-  BROWSER: [
+  [ROLES.GUARDIAN]: [
+    'track:progress',
+    'view:courses',
+    'view:lessons',
+    'view:blog',
+    'view:products',
+  ],
+  [ROLES.SPONSOR]: [
+    'donate:projects',
+    'view:blog',
+    'view:courses',
+    'view:products',
+    'download:resources',
+  ],
+  [ROLES.BROWSER]: [
     'view:products',
     'view:blog',
     'view:courses',
+    'download:resources',
   ],
 }
 
@@ -284,7 +330,7 @@ export const rolePermissions: Record<PrismaRole, string[]> = {
  *   // User can manage users
  * }
  */
-export function hasPermission(role: PrismaRole, permission: string): boolean {
+export function hasPermission(role: RoleType, permission: string): boolean {
   return rolePermissions[role]?.includes(permission) ?? false
 }
 
@@ -296,7 +342,7 @@ export function hasPermission(role: PrismaRole, permission: string): boolean {
  * @param permission - Permission to check
  * @throws AuthorizationError if permission denied
  */
-export function requirePermission(role: PrismaRole, permission: string): void {
+export function requirePermission(role: RoleType, permission: string): void {
   if (!hasPermission(role, permission)) {
     throw new AuthorizationError(
       403,

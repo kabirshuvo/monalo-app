@@ -1,4 +1,5 @@
-import { PrismaClient, Role } from '@prisma/client'
+import { PrismaClient, Role, ProductCategory } from '@prisma/client'
+import { KIDS_BLOG_POSTS } from './data/kids-blog-posts'
 
 // Seed/migrate always use direct Postgres (not Accelerate)
 const db = new PrismaClient({
@@ -54,28 +55,67 @@ async function main() {
 
 	const products = [
 		{
+			name: 'Gypsum Lotus Planter',
+			slug: 'gypsum-lotus-planter',
+			description: 'Hand-sculpted gypsum planter with a soft matte finish. Made in MonAlo craft workshops.',
+			price: 3200,
+			stock: 12,
+			imageUrl: null,
+			category: ProductCategory.GYPSUM_POTTERY,
+		},
+		{
+			name: 'Lavender Pillar Candle',
+			slug: 'lavender-pillar-candle',
+			description: 'Decorative pillar candle with a calm lavender scent and layered pastel wax.',
+			price: 2400,
+			stock: 20,
+			imageUrl: null,
+			category: ProductCategory.CANDLES,
+		},
+		{
+			name: 'Hand-Carved Wooden Bowl',
+			slug: 'hand-carved-wooden-bowl',
+			description: 'Small serving bowl carved from local timber and finished with natural oil.',
+			price: 3800,
+			stock: 9,
+			imageUrl: null,
+			category: ProductCategory.WOOD_CRAFT,
+		},
+		{
+			name: 'Bamboo Wind Chime',
+			slug: 'bamboo-wind-chime',
+			description: 'Light bamboo tubes tuned for a gentle outdoor sound. Woven hanger included.',
+			price: 2800,
+			stock: 14,
+			imageUrl: null,
+			category: ProductCategory.BAMBOO_CRAFT,
+		},
+		{
+			name: 'MonAlo Nature Journal',
+			slug: 'monalo-nature-journal',
+			description: 'Illustrated workbook for young naturalists — field notes, sketches, and gentle prompts.',
+			price: 1600,
+			stock: 30,
+			imageUrl: null,
+			category: ProductCategory.BOOKS,
+		},
+		{
+			name: 'Stories from the Hill',
+			slug: 'stories-from-the-hill',
+			description: 'A paperback collection of student writing and folklore from MonAlo School.',
+			price: 1400,
+			stock: 18,
+			imageUrl: null,
+			category: ProductCategory.BOOKS,
+		},
+		{
 			name: 'Handwoven Journal',
 			slug: 'handwoven-journal',
 			description: 'Soft-cover journal with handwoven detail. Supports student art programs.',
 			price: 1800,
 			stock: 24,
 			imageUrl: null,
-		},
-		{
-			name: 'Ceramic Studio Mug',
-			slug: 'ceramic-studio-mug',
-			description: 'Wheel-thrown mug from Monalo craft workshops.',
-			price: 2200,
-			stock: 15,
-			imageUrl: null,
-		},
-		{
-			name: 'Natural Dye Scarf',
-			slug: 'natural-dye-scarf',
-			description: 'Lightweight scarf dyed with local plants. Limited run.',
-			price: 4500,
-			stock: 8,
-			imageUrl: null,
+			category: ProductCategory.OTHER_CRAFT,
 		},
 	]
 
@@ -118,7 +158,6 @@ async function main() {
 	console.log('\n📝 Seeding blog posts...')
 
 	const writer = await db.user.findFirst({ where: { role: 'WRITER' } })
-	const { KIDS_BLOG_POSTS } = await import('./data/kids-blog-posts')
 
 	for (const p of KIDS_BLOG_POSTS) {
 		const exists = await db.blog.findFirst({ where: { slug: p.slug } })

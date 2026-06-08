@@ -136,7 +136,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           token.avatarUrl = dbUser.avatarUrl
           token.level = dbUser.level
           token.totalPoints = dbUser.totalPoints
-          if (!token.role) token.role = dbUser.role
+          token.role = dbUser.role
           if (dbUser.emailVerified) token.emailVerified = dbUser.emailVerified
         }
       }

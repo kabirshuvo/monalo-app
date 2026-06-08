@@ -2,95 +2,70 @@ import React, { Suspense } from 'react'
 import PublicLayout from '@/components/layouts/PublicLayout'
 import Link from 'next/link'
 import Button from '@/components/ui/Button'
+import HomeSurfaceHero from '@/components/home/HomeSurfaceHero'
 import WelcomeDetectorClient from './WelcomeDetectorClient'
+import { RouteLoader } from '@/components/ui/LoadingState'
+import { HOME_SURFACE_HEROES } from '@/lib/home/surface-heroes'
 
 export default function HomePage() {
   return (
     <PublicLayout currentPath="/home">
-      <main className="bg-amber-50">
-        <Suspense fallback={null}>
+      <main>
+        <Suspense fallback={<RouteLoader variant="page" className="min-h-[20vh]" />}>
           <WelcomeDetectorClient />
         </Suspense>
-        {/* Hero Section */}
-        <section className="px-4 py-32 sm:py-40 lg:py-48">
+
+        {/* School hero */}
+        <section className="px-4 py-32 sm:py-40 lg:py-48 bg-amber-50/90 dark:bg-amber-950/20">
           <div className="mx-auto max-w-2xl text-center space-y-12">
             <div className="space-y-6">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 leading-tight tracking-tight">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light text-content leading-tight tracking-tight">
                 Monalo School
               </h1>
-              <p className="text-lg sm:text-xl text-gray-600 leading-relaxed font-normal">
+              <p className="text-lg sm:text-xl text-content-secondary leading-relaxed font-normal">
                 An online school supported by craft, art, courses, and a freelancing team — every purchase and project helps students learn.
               </p>
             </div>
             <div className="pt-8 flex flex-wrap justify-center gap-4">
               <Link href="/courses">
-                <Button variant="primary" size="lg" className="bg-purple-500 hover:bg-purple-600 text-white px-8">
+                <Button variant="primary" size="lg" className="px-8">
                   Explore courses
                 </Button>
               </Link>
               <Link href="/shop">
-                <Button variant="secondary" size="lg">Craft shop</Button>
+                <Button variant="secondary" size="lg">
+                  Craft shop
+                </Button>
               </Link>
             </div>
           </div>
         </section>
 
-        {/* Surfaces */}
-        <section className="px-4 py-24 sm:py-32 lg:py-40 bg-white">
-          <div className="mx-auto max-w-5xl space-y-16">
-            <div className="text-center space-y-4">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">One school, many ways to grow</h2>
-              <p className="text-gray-700 max-w-2xl mx-auto text-lg">
-                Each surface funds Monalo School programs and student learning.
-              </p>
-            </div>
+        {/* Surface heroes — blog, shop, gallery, team, learn */}
+        {HOME_SURFACE_HEROES.map((hero) => (
+          <HomeSurfaceHero key={hero.href} {...hero} />
+        ))}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                { href: '/courses', title: 'Learn', desc: 'Courses for students building real skills.' },
-                { href: '/shop', title: 'Craft shop', desc: 'Handmade goods from our community.' },
-                { href: '/gallery', title: 'Gallery', desc: 'Art sales supporting the school.' },
-                { href: '/blog', title: 'Blog', desc: 'Ideas, SEO, and stories from Monalo.' },
-                { href: '/team', title: 'Team', desc: 'Freelance services — dev, design, video, PA.' },
-                { href: '/about', title: 'About', desc: 'Mission, people, and how we work.' },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="block rounded-xl border border-gray-200 p-6 hover:border-blue-300 hover:shadow-md transition-all"
-                >
-                  <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
-                  <p className="text-gray-600 mt-2 text-sm">{item.desc}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="px-4 py-24 sm:py-32 lg:py-40 bg-amber-50">
+        {/* Closing CTA */}
+        <section className="px-4 py-24 sm:py-32 lg:py-40 bg-surface-muted">
           <div className="mx-auto max-w-3xl text-center space-y-8">
             <div className="space-y-4">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
+              <h2 className="text-3xl sm:text-4xl font-bold text-content">
                 Ready to begin?
               </h2>
-              <p className="text-lg text-gray-700">
-                Start exploring courses, or browse our shop for learning resources. There's no rush—we'll be here.
+              <p className="text-lg text-content-secondary">
+                Pick any path above — courses, craft, art, stories, or team services. There&apos;s no rush; we&apos;ll be here.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/courses">
-                <Button 
-                  variant="primary" 
-                  size="lg"
-                  className="bg-purple-500 hover:bg-purple-600 text-white"
-                >
-                  Browse courses
+              <Link href="/register">
+                <Button variant="primary" size="lg">
+                  Start today
                 </Button>
               </Link>
-              <Link href="/blog">
+              <Link href="/about">
                 <Button variant="ghost" size="lg">
-                  Read the blog
+                  About MonAlo
                 </Button>
               </Link>
             </div>

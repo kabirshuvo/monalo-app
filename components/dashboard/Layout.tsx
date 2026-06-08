@@ -73,6 +73,16 @@ const navigationItems: NavItem[] = [
     roles: ['SELLER', 'ADMIN']
   },
   {
+    label: 'Shop orders',
+    href: '/dashboard/seller/orders',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+      </svg>
+    ),
+    roles: ['SELLER', 'ADMIN']
+  },
+  {
     label: 'My Products',
     href: '/dashboard/seller/products',
     icon: (
@@ -112,6 +122,36 @@ const navigationItems: NavItem[] = [
       </svg>
     ),
     roles: ['CUSTOMER', 'LEARNER', 'WRITER', 'ADMIN', 'SELLER']
+  },
+  {
+    label: 'Shop products',
+    href: '/dashboard/admin/products',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+    ),
+    roles: ['ADMIN']
+  },
+  {
+    label: 'Shop orders',
+    href: '/dashboard/admin/orders',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+      </svg>
+    ),
+    roles: ['ADMIN']
+  },
+  {
+    label: 'Users & roles',
+    href: '/dashboard/admin/users',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    ),
+    roles: ['ADMIN']
   },
   {
     label: 'Gallery review',
@@ -159,9 +199,9 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Top Bar */}
-      <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-30">
+      <header className="bg-surface border-b border-subtle fixed top-0 left-0 right-0 z-30">
         <div className="flex items-center justify-between h-16 px-4 lg:px-6">
           {/* Mobile menu button */}
           <button
@@ -243,7 +283,7 @@ export default function DashboardLayout({
 
       <div className="flex pt-16">
         {/* Sidebar - Desktop */}
-        <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 bg-white border-r border-gray-200 overflow-y-auto">
+        <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 bg-surface border-r border-subtle overflow-y-auto">
           <nav className="p-4" aria-label="Dashboard navigation">
             <ul className="space-y-1">
               {filteredNavItems.map((item) => {
@@ -277,7 +317,7 @@ export default function DashboardLayout({
               onClick={() => setSidebarOpen(false)}
               aria-hidden="true"
             />
-            <aside className="lg:hidden fixed left-0 top-16 bottom-0 w-64 bg-white border-r border-gray-200 z-40 overflow-y-auto">
+            <aside className="lg:hidden fixed left-0 top-16 bottom-0 w-64 bg-surface border-r border-subtle z-40 overflow-y-auto">
               <nav className="p-4" aria-label="Dashboard navigation">
                 <ul className="space-y-1">
                   {filteredNavItems.map((item) => {

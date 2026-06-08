@@ -44,6 +44,7 @@ model User {
   passwordResetTokens      PasswordResetToken[]  @relation("UserPasswordResetTokens")
   pointEvents              PointEvent[]          @relation("UserPointEvents")
   blogReactions            BlogReaction[]        @relation("UserBlogReactions")
+  roleApplications         RoleApplication[]     @relation("UserRoleApplications")
 
   @@map("users")
   @@index([email])
@@ -59,6 +60,7 @@ model Product {
   sku         String?  @unique @db.VarChar(100) @map("sku") // Stock keeping unit
   stock       Int      @default(0) @map("stock") // Quantity available
   status      ProductStatus @default(ACTIVE) @map("status") // ACTIVE, INACTIVE, DISCONTINUED
+  category    ProductCategory @default(OTHER_CRAFT) @map("category")
   imageUrl    String?  @db.Text @map("image_url") // Primary image
   deletedAt   DateTime?     @map("deleted_at") @db.Timestamp() // Soft delete
   createdBy   String?       @map("created_by") // User ID who created this product
@@ -79,6 +81,8 @@ model Product {
   @@index([deletedAt]) // For filtering active products
   @@index([status, stock]) // Composite: inventory queries
   @@index([status, createdAt]) // Composite: product listings
+  @@index([category])
+  @@index([status, category])
   @@map("products")
 }
 
@@ -424,6 +428,15 @@ enum ProductStatus {
   DISCONTINUED
 }
 
+enum ProductCategory {
+  GYPSUM_POTTERY
+  CANDLES
+  WOOD_CRAFT
+  BAMBOO_CRAFT
+  BOOKS
+  OTHER_CRAFT
+}
+
 enum ArtworkStatus {
   DRAFT
   PENDING_REVIEW
@@ -454,7 +467,36 @@ enum Role {
   WRITER
   SELLER
   DONOR
+  GUARDIAN
+  SPONSOR
   BROWSER
+}
+
+enum RoleApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model RoleApplication {
+  id             String                @id @default(cuid()) @map("id")
+  userId         String                @map("user_id")
+  requestedRoles Role[]                @map("requested_roles")
+  message        String?               @db.Text @map("message")
+  status         RoleApplicationStatus @default(PENDING) @map("status")
+  assignedRole   Role?                 @map("assigned_role")
+  reviewedBy     String?               @map("reviewed_by")
+  reviewedAt     DateTime?             @map("reviewed_at") @db.Timestamp()
+  adminNote      String?               @db.Text @map("admin_note")
+  createdAt      DateTime              @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt      DateTime              @updatedAt @map("updated_at") @db.Timestamp()
+
+  user User @relation("UserRoleApplications", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("role_applications")
 }
 
 // NextAuth models (compatible with NextAuth Prisma Adapter)

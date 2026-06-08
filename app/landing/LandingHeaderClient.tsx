@@ -7,7 +7,7 @@ import { clientSignOut } from '@/lib/auth/client-sign-out'
 import { useAuthNav } from '@/lib/auth/use-auth-nav'
 import AvatarVisual from '@/components/profile/AvatarVisual'
 import { getUserAvatarFromSession } from '@/lib/auth/user-avatar'
-import { ThemeToggle } from '@/components/ui'
+import { ThemeToggle, InlineLoading } from '@/components/ui'
 import Button from '@/components/ui/Button'
 import TotalPointsBadge from '@/components/nav/TotalPointsBadge'
 import SignInNavButton from '@/components/auth/SignInNavButton'
@@ -78,7 +78,9 @@ export default function LandingHeaderClient() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
 
-          {isLoading || signingOut ? null : showSignedInNav ? (
+          {isLoading ? (
+            <InlineLoading message="Loading..." />
+          ) : signingOut ? null : showSignedInNav ? (
             <>
               <TotalPointsBadge />
               <Link href="/profile">

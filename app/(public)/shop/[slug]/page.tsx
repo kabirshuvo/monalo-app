@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import PublicLayout from '@/components/layouts/PublicLayout'
-import { prisma } from '@/lib/db'
 import { formatPriceCents } from '@/lib/format'
 import ProductDetailClient from './ProductDetailClient'
+import ProductCategoryBadge from '@/components/shop/ProductCategoryBadge'
+import { getActiveShopProductBySlug } from '@/lib/shop/queries'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,9 +12,7 @@ type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params
-  const product = await prisma.product.findFirst({
-    where: { slug, deletedAt: null, status: 'ACTIVE' },
-  })
+  const product = await getActiveShopProductBySlug(slug)
   if (!product) return { title: 'Product not found' }
   return {
     title: `${product.name} - Monalo Shop`,
@@ -23,12 +22,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function ProductDetailPage({ params }: Props) {
   const { slug } = await params
-  const product = await prisma.product.findFirst({
-    where: { slug, deletedAt: null, status: 'ACTIVE' },
-    include: {
-      images: { where: { deletedAt: null }, orderBy: { order: 'asc' } },
-    },
-  })
+  const product = await getActiveShopProductBySlug(slug)
 
   if (!product) notFound()
 
@@ -55,7 +49,12 @@ export default async function ProductDetailPage({ params }: Props) {
 
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+              <ProductCategoryBadge
+                category={product.category}
+                linked
+                size="md"
+              />
+              <h1 className="text-3xl font-bold text-gray-900 mt-3">{product.name}</h1>
               <p className="text-2xl font-semibold text-gray-800 mt-2">
                 {formatPriceCents(product.price)}
               </p>
