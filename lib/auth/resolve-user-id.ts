@@ -1,6 +1,17 @@
 import type { JWT } from '@auth/core/jwt'
 import { prisma } from '@/lib/db'
 
+function isDbConnectionError(error: unknown): boolean {
+  const msg = error instanceof Error ? error.message : String(error ?? '')
+  return (
+    msg.includes("Can't reach database server") ||
+    msg.includes('Failed to connect') ||
+    msg.includes('ECONNREFUSED') ||
+    msg.includes('ECONNRESET') ||
+    msg.includes('ETIMEDOUT')
+  )
+}
+
 export type ResolveUserIdInput = {
   id?: string | null
   email?: string | null
@@ -16,46 +27,55 @@ export async function resolveDatabaseUserId(
   input: ResolveUserIdInput
 ): Promise<string | null> {
   const id = typeof input.id === 'string' ? input.id.trim() : ''
-  if (id) {
-    const byId = await prisma.user.findUnique({
-      where: { id },
-      select: { id: true },
-    })
-    if (byId) return byId.id
-
-    const byAccountId = await prisma.account.findFirst({
-      where: { providerAccountId: id },
-      select: { userId: true },
-    })
-    if (byAccountId) return byAccountId.userId
-  }
-
   const email =
     typeof input.email === 'string' ? input.email.trim().toLowerCase() : ''
-  if (email) {
-    const byEmail = await prisma.user.findUnique({
-      where: { email },
-      select: { id: true },
-    })
-    if (byEmail) return byEmail.id
+
+  try {
+    if (id) {
+      const byId = await prisma.user.findUnique({
+        where: { id },
+        select: { id: true },
+      })
+      if (byId) return byId.id
+
+      const byAccountId = await prisma.account.findFirst({
+        where: { providerAccountId: id },
+        select: { userId: true },
+      })
+      if (byAccountId) return byAccountId.userId
+    }
+
+    if (email) {
+      const byEmail = await prisma.user.findUnique({
+        where: { email },
+        select: { id: true },
+      })
+      if (byEmail) return byEmail.id
+    }
+
+    const sub = typeof input.sub === 'string' ? input.sub.trim() : ''
+    if (sub && sub !== id) {
+      const bySubUser = await prisma.user.findUnique({
+        where: { id: sub },
+        select: { id: true },
+      })
+      if (bySubUser) return bySubUser.id
+
+      const bySubAccount = await prisma.account.findFirst({
+        where: { providerAccountId: sub },
+        select: { userId: true },
+      })
+      if (bySubAccount) return bySubAccount.userId
+    }
+
+    return null
+  } catch (error) {
+    if (isDbConnectionError(error)) {
+      console.error('[Auth] Database unreachable during user id resolve — using cached id')
+      return id || null
+    }
+    throw error
   }
-
-  const sub = typeof input.sub === 'string' ? input.sub.trim() : ''
-  if (sub && sub !== id) {
-    const bySubUser = await prisma.user.findUnique({
-      where: { id: sub },
-      select: { id: true },
-    })
-    if (bySubUser) return bySubUser.id
-
-    const bySubAccount = await prisma.account.findFirst({
-      where: { providerAccountId: sub },
-      select: { userId: true },
-    })
-    if (bySubAccount) return bySubAccount.userId
-  }
-
-  return null
 }
 
 export async function resolveDatabaseUserIdFromJwt(

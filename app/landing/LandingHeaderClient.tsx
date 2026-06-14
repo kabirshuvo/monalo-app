@@ -13,12 +13,26 @@ import TotalPointsBadge from '@/components/nav/TotalPointsBadge'
 import SignInNavButton from '@/components/auth/SignInNavButton'
 import StartTodayButton from '@/components/landing/StartTodayButton'
 
+function AuthNavPlaceholder() {
+  return (
+    <div className="flex items-center gap-3" aria-hidden>
+      <div className="h-9 w-[4.5rem] rounded-lg border border-transparent" />
+      <div className="h-9 w-[6.5rem] rounded-lg border border-transparent" />
+    </div>
+  )
+}
+
 export default function LandingHeaderClient() {
   const { session, isAuthenticated, isLoading } = useAuthNav()
+  const [mounted, setMounted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
   const menuRef = useRef<HTMLDivElement | null>(null)
   const showSignedInNav = isAuthenticated && !signingOut
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const displayName = () => {
     const user = session?.user
@@ -78,7 +92,9 @@ export default function LandingHeaderClient() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
 
-          {isLoading ? (
+          {!mounted ? (
+            <AuthNavPlaceholder />
+          ) : isLoading ? (
             <InlineLoading message="Loading..." />
           ) : signingOut ? null : showSignedInNav ? (
             <>

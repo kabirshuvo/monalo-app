@@ -13,6 +13,8 @@
     "db:migrate": "node scripts/db-migrate.mjs",
     "db:reset": "bash scripts/db-reset.sh",
     "make-admin": "ts-node scripts/make-admin.ts",
+    "make-admin:production": "node scripts/make-admin-production.mjs",
+    "db:migrate:production": "node scripts/db-migrate-production.mjs",
     "postinstall": "prisma generate",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",

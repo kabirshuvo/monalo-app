@@ -22,16 +22,60 @@ function isLegacyAccelerateUrl(url: string | undefined): boolean {
   return url.startsWith('prisma://') || url.startsWith('prisma+postgres://')
 }
 
-/** Direct Neon URL for local dev / migrations (not Accelerate). */
-function directPostgresUrl(): string | undefined {
+/** Local app runtime — pooled Neon URL first (more reliable than unpooled for dev). */
+function devRuntimePostgresUrl(): string | undefined {
   for (const url of [
+    process.env.DATABASE_URL,
+    process.env.POSTGRES_URL,
     process.env.DATABASE_URL_UNPOOLED,
     process.env.POSTGRES_URL_NON_POOLING,
-    process.env.DATABASE_URL,
   ]) {
     if (url && !isLegacyAccelerateUrl(url)) return url
   }
   return undefined
+}
+
+const isTransientConnError = (e: unknown): boolean => {
+  const msg = e instanceof Error ? e.message : String(e ?? '')
+  return (
+    msg.includes('Failed to connect to upstream database') ||
+    msg.includes("Can't reach database server") ||
+    msg.includes('Connection terminated') ||
+    msg.includes('Connection refused') ||
+    msg.includes('ECONNREFUSED') ||
+    msg.includes('ECONNRESET') ||
+    msg.includes('ETIMEDOUT')
+  )
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+function withTransientRetries<T extends { $extends: (ext: object) => unknown }>(
+  client: T
+): T {
+  return client.$extends({
+    query: {
+      async $allOperations({
+        args,
+        query,
+      }: {
+        args: unknown
+        query: (a: unknown) => Promise<unknown>
+      }) {
+        let lastErr: unknown
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            return await query(args)
+          } catch (e) {
+            if (!isTransientConnError(e)) throw e
+            lastErr = e
+            await sleep(200 * (attempt + 1))
+          }
+        }
+        throw lastErr
+      },
+    },
+  }) as T
 }
 
 function createPrismaClient(): PrismaClient {
@@ -47,15 +91,16 @@ function createPrismaClient(): PrismaClient {
 
   // Local dev: always prefer direct Postgres — Accelerate/WASM fail under Next dev.
   if (isDevelopment) {
-    const devUrl = directPostgresUrl()
+    const devUrl = devRuntimePostgresUrl()
     if (devUrl) {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { PrismaClient: PrismaClientNode } = require('@prisma/client')
-      return new PrismaClientNode({
+      const base = new PrismaClientNode({
         datasources: { db: { url: devUrl } },
         log,
         errorFormat,
       })
+      return withTransientRetries(base) as unknown as PrismaClient
     }
   }
 
@@ -111,42 +156,7 @@ function createPrismaClient(): PrismaClient {
   // pooler. That error means the query never reached the database, so it is safe
   // to retry. We only retry connection-establishment failures (never data errors),
   // which keeps writes idempotent.
-  const isTransientConnError = (e: unknown): boolean => {
-    const msg = e instanceof Error ? e.message : String(e ?? '')
-    return (
-      msg.includes('Failed to connect to upstream database') ||
-      msg.includes("Can't reach database server") ||
-      msg.includes('Connection terminated') ||
-      msg.includes('Connection refused') ||
-      msg.includes('ECONNREFUSED') ||
-      msg.includes('ECONNRESET')
-    )
-  }
-  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
-
-  return base.$extends({
-    query: {
-      async $allOperations({
-        args,
-        query,
-      }: {
-        args: unknown
-        query: (a: unknown) => Promise<unknown>
-      }) {
-        let lastErr: unknown
-        for (let attempt = 0; attempt < 3; attempt++) {
-          try {
-            return await query(args)
-          } catch (e) {
-            if (!isTransientConnError(e)) throw e
-            lastErr = e
-            await sleep(150 * (attempt + 1))
-          }
-        }
-        throw lastErr
-      },
-    },
-  }) as unknown as PrismaClient
+  return withTransientRetries(base) as unknown as PrismaClient
 }
 
 const client = global.prisma ?? createPrismaClient()
