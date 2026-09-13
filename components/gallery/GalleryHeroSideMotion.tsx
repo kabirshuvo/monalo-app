@@ -19,7 +19,7 @@ type Particle = {
   collected: boolean
   orbitAngle: number
   orbitRadius: number
-  el: HTMLElement | null
+  el: SVGSVGElement | null
 }
 
 type AvoidRect = {
