@@ -4,7 +4,7 @@ export function messageForAuthError(code: string | null | undefined): string | n
 
   switch (code) {
     case 'OAuthAccountNotLinked':
-      return 'This email is already registered with a password. Sign in with email and password, or use the same Google account after we link it (try Google again).'
+      return 'This email is already linked to another sign-in method. Try Continue with Google again, or contact support if it keeps failing.'
     case 'OAuthSignin':
     case 'OAuthCallback':
       return 'Google sign-in failed. Check that redirect URIs are configured in Google Cloud Console, then try again.'
@@ -17,8 +17,8 @@ export function messageForAuthError(code: string | null | undefined): string | n
     case 'EmailNotVerified':
       return 'Please verify your email before signing in.'
     case 'CredentialsSignin':
-      return "That email or password didn't work. Please try again."
+      return 'Sign-in failed. Please continue with Google.'
     default:
-      return 'Sign-in failed. Please try again or use email and password.'
+      return 'Sign-in failed. Please try Continue with Google again.'
   }
 }

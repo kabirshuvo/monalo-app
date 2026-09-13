@@ -3,7 +3,9 @@ import PublicLayout from '@/components/layouts/PublicLayout'
 import Link from 'next/link'
 import Button from '@/components/ui/Button'
 import HomeSurfaceHero from '@/components/home/HomeSurfaceHero'
+import HomePageSections from '@/components/home/HomePageSections'
 import WelcomeDetectorClient from './WelcomeDetectorClient'
+import { SoftReveal } from '@/components/motion/SoftReveal'
 import { RouteLoader } from '@/components/ui/LoadingState'
 import { HOME_SURFACE_HEROES } from '@/lib/home/surface-heroes'
 
@@ -16,61 +18,70 @@ export default function HomePage() {
         </Suspense>
 
         {/* School hero */}
-        <section className="px-4 py-32 sm:py-40 lg:py-48 bg-amber-50/90 dark:bg-amber-950/20">
-          <div className="mx-auto max-w-2xl text-center space-y-12">
-            <div className="space-y-6">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light text-content leading-tight tracking-tight">
-                Monalo School
-              </h1>
-              <p className="text-lg sm:text-xl text-content-secondary leading-relaxed font-normal">
-                An online school supported by craft, art, courses, and a freelancing team — every purchase and project helps students learn.
-              </p>
-            </div>
-            <div className="pt-8 flex flex-wrap justify-center gap-4">
-              <Link href="/courses">
-                <Button variant="primary" size="lg" className="px-8">
-                  Explore courses
-                </Button>
-              </Link>
-              <Link href="/shop">
-                <Button variant="secondary" size="lg">
-                  Craft shop
-                </Button>
-              </Link>
-            </div>
+        <SoftReveal
+          as="section"
+          variant="scale"
+          lines
+          className="bg-amber-50/90 px-4 py-32 dark:bg-amber-950/20 sm:py-40 lg:py-48"
+        >
+          <div className="mx-auto max-w-2xl space-y-6 text-center">
+            <h1 className="text-5xl font-light leading-tight tracking-tight text-content sm:text-6xl lg:text-7xl">
+              Monalo School
+            </h1>
+            <p className="text-lg font-normal leading-relaxed text-content-secondary sm:text-xl">
+              An online school supported by craft, art, courses, and a freelancing team — every
+              purchase and project helps students learn.
+            </p>
           </div>
-        </section>
+          <div className="mx-auto flex max-w-2xl flex-wrap justify-center gap-4 pt-8">
+            <Link href="/courses">
+              <Button variant="primary" size="lg" className="gallery-soft-cta px-8">
+                Explore courses
+              </Button>
+            </Link>
+            <Link href="/shop">
+              <Button variant="secondary" size="lg" className="gallery-soft-cta">
+                Craft shop
+              </Button>
+            </Link>
+          </div>
+        </SoftReveal>
+
+        <HomePageSections />
 
         {/* Surface heroes — blog, shop, gallery, team, learn */}
-        {HOME_SURFACE_HEROES.map((hero) => (
-          <HomeSurfaceHero key={hero.href} {...hero} />
+        {HOME_SURFACE_HEROES.map((hero, index) => (
+          <HomeSurfaceHero key={hero.href} {...hero} revealDelay={index * 40} />
         ))}
 
         {/* Closing CTA */}
-        <section className="px-4 py-24 sm:py-32 lg:py-40 bg-surface-muted">
-          <div className="mx-auto max-w-3xl text-center space-y-8">
+        <SoftReveal
+          as="section"
+          variant="up"
+          className="bg-surface-muted px-4 py-24 sm:py-32 lg:py-40"
+        >
+          <div className="mx-auto max-w-3xl space-y-8 text-center">
             <div className="space-y-4">
-              <h2 className="text-3xl sm:text-4xl font-bold text-content">
-                Ready to begin?
-              </h2>
+              <h2 className="font-serif text-3xl text-content sm:text-4xl">Ready to begin?</h2>
               <p className="text-lg text-content-secondary">
-                Pick any path above — courses, craft, art, stories, or team services. There&apos;s no rush; we&apos;ll be here.
+                Pick any path above — courses, craft, art, stories, or team services. There&apos;s
+                no rush; we&apos;ll be here.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/register">
-                <Button variant="primary" size="lg">
+                <Button variant="primary" size="lg" className="gallery-soft-cta">
                   Start today
                 </Button>
               </Link>
               <Link href="/about">
-                <Button variant="ghost" size="lg">
+                <Button variant="ghost" size="lg" className="gallery-soft-cta">
                   About MonAlo
                 </Button>
               </Link>
             </div>
           </div>
-        </section>
+        </SoftReveal>
       </main>
     </PublicLayout>
   )

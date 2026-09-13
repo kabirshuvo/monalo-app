@@ -1,8 +1,6 @@
 import Credentials from 'next-auth/providers/credentials'
 import Google from 'next-auth/providers/google'
 import type { GoogleProfile } from 'next-auth/providers/google'
-import Facebook from 'next-auth/providers/facebook'
-import Twitter from 'next-auth/providers/twitter'
 import type { Provider } from 'next-auth/providers'
 import type { EmailConfig } from 'next-auth/providers/email'
 import type { User } from 'next-auth'
@@ -37,7 +35,7 @@ function buildMagicLinkProvider(): Provider {
   } as EmailConfig
 }
 
-/** Only register OAuth providers that have credentials configured. */
+/** Google OAuth (primary) + credentials/email for existing accounts / server flows. */
 export function buildAuthProviders(): Provider[] {
   const providers: Provider[] = []
 
@@ -46,21 +44,13 @@ export function buildAuthProviders(): Provider[] {
       Google({
         clientId: process.env.GOOGLE_CLIENT_ID!,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-        // Link Google to an existing account with the same verified email (e.g. registered with password).
         allowDangerousEmailAccountLinking: true,
         authorization: {
           params: {
-            // Avoid silent re-login right after the user signed out of MonAlo.
             prompt: 'select_account',
           },
         },
-        // Map Google's profile to our schema. The default mapping emits an `image`
-        // field, but our User model uses `avatarUrl` and has no `image` column —
-        // passing `image` makes the PrismaAdapter's createUser() throw a validation
-        // error for every brand-new Google user (breaking first-time Google sign-in).
         profile(profile: GoogleProfile): User {
-          // Do not set `id` to Google's `sub` — the Prisma adapter assigns the real
-          // database cuid. Putting OAuth subject ids in the JWT breaks /api/profile.
           return {
             name: profile.name,
             email: profile.email,
@@ -68,24 +58,6 @@ export function buildAuthProviders(): Provider[] {
             emailVerified: profile.email_verified ? new Date() : null,
           } as User
         },
-      })
-    )
-  }
-
-  if (process.env.FACEBOOK_CLIENT_ID && process.env.FACEBOOK_CLIENT_SECRET) {
-    providers.push(
-      Facebook({
-        clientId: process.env.FACEBOOK_CLIENT_ID,
-        clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      })
-    )
-  }
-
-  if (process.env.TWITTER_CLIENT_ID && process.env.TWITTER_CLIENT_SECRET) {
-    providers.push(
-      Twitter({
-        clientId: process.env.TWITTER_CLIENT_ID,
-        clientSecret: process.env.TWITTER_CLIENT_SECRET,
       })
     )
   }

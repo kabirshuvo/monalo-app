@@ -13,6 +13,31 @@ import {
   SHOP_CATEGORY_SELECT_OPTIONS,
   type ShopCategoryId,
 } from '@/lib/shop/categories'
+import { MAX_PRODUCT_IMAGES } from '@/lib/shop/product-images'
+
+const IMAGE_SLOT_LABELS = [
+  'Hero image',
+  'Gallery image 2',
+  'Gallery image 3',
+  'Gallery image 4',
+  'Gallery image 5',
+] as const
+
+const IMAGE_SLOT_HINTS = [
+  'Main product photo — shown large on the product page and as the shop card thumbnail.',
+  'Optional detail or alternate angle.',
+  'Optional detail or alternate angle.',
+  'Optional detail or alternate angle.',
+  'Optional detail or alternate angle.',
+] as const
+
+function emptySlots(seed: string[] = []): string[] {
+  const slots = Array.from({ length: MAX_PRODUCT_IMAGES }, () => '')
+  seed.slice(0, MAX_PRODUCT_IMAGES).forEach((url, i) => {
+    slots[i] = url
+  })
+  return slots
+}
 
 type ProductFormProps = {
   mode: 'create' | 'edit'
@@ -23,6 +48,7 @@ type ProductFormProps = {
     price: number
     stock: number
     imageUrl: string | null
+    images?: string[]
     status: ProductStatus
     category: ShopCategoryId
   }
@@ -36,12 +62,24 @@ export default function ProductForm({ mode, slug, initial }: ProductFormProps) {
     initial ? (initial.price / 100).toFixed(2) : ''
   )
   const [stock, setStock] = useState(String(initial?.stock ?? 10))
-  const [imageUrl, setImageUrl] = useState(initial?.imageUrl ?? '')
+  const [imageSlots, setImageSlots] = useState(() => {
+    if (initial?.images?.length) return emptySlots(initial.images)
+    if (initial?.imageUrl) return emptySlots([initial.imageUrl])
+    return emptySlots()
+  })
   const [status, setStatus] = useState<ProductStatus>(initial?.status ?? 'ACTIVE')
   const [category, setCategory] = useState<ShopCategoryId>(initial?.category ?? 'OTHER_CRAFT')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  const setSlot = (index: number, url: string) => {
+    setImageSlots((prev) => {
+      const next = [...prev]
+      next[index] = url
+      return next
+    })
+  }
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,12 +94,18 @@ export default function ProductForm({ mode, slug, initial }: ProductFormProps) {
       return
     }
 
+    const images = imageSlots
+      .map((url) => url.trim())
+      .filter(Boolean)
+      .map((url, order) => ({ url, order }))
+
     const payload = {
       name: name.trim(),
       description: description.trim() || undefined,
       price,
       stock: parseInt(stock, 10) || 0,
-      imageUrl: imageUrl.trim() || undefined,
+      images,
+      imageUrl: images[0]?.url,
       status,
       category,
     }
@@ -85,7 +129,7 @@ export default function ProductForm({ mode, slug, initial }: ProductFormProps) {
         setDescription('')
         setPriceDollars('')
         setStock('10')
-        setImageUrl('')
+        setImageSlots(emptySlots())
         setStatus('ACTIVE')
         setCategory('OTHER_CRAFT')
       }
@@ -98,7 +142,7 @@ export default function ProductForm({ mode, slug, initial }: ProductFormProps) {
   }
 
   return (
-    <form onSubmit={submit} className="max-w-lg space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+    <form onSubmit={submit} className="max-w-2xl space-y-4 rounded-xl border border-gray-200 bg-white p-6">
       <h2 className="text-lg font-semibold text-gray-900">
         {mode === 'edit' ? 'Edit product' : 'Add product'}
       </h2>
@@ -148,7 +192,29 @@ export default function ProductForm({ mode, slug, initial }: ProductFormProps) {
           ]}
         />
       )}
-      <ImageUpload label="Product image" folder="shop" value={imageUrl} onChange={setImageUrl} />
+
+      <div className="space-y-4 border-t border-gray-100 pt-4">
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900">Product images</h3>
+          <p className="mt-1 text-xs text-gray-500">
+            Up to {MAX_PRODUCT_IMAGES} images. The first is the hero on the product page; the next four
+            appear as thumbnails underneath.
+          </p>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2">
+          {imageSlots.map((url, index) => (
+            <ImageUpload
+              key={index}
+              label={IMAGE_SLOT_LABELS[index]}
+              folder="shop"
+              value={url}
+              onChange={(next) => setSlot(index, next)}
+              hint={IMAGE_SLOT_HINTS[index]}
+            />
+          ))}
+        </div>
+      </div>
+
       <Button type="submit" disabled={loading}>
         {loading ? 'Saving…' : mode === 'edit' ? 'Save changes' : 'Create product'}
       </Button>

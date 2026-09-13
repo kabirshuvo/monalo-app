@@ -148,23 +148,45 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const resolvedId = await resolveDatabaseUserIdFromJwt(token)
         if (resolvedId) {
           session.user.id = resolvedId
+          try {
+            const dbUser = await prisma.user.findUnique({
+              where: { id: resolvedId },
+              select: {
+                role: true,
+                emailVerified: true,
+                avatarUrl: true,
+                level: true,
+                totalPoints: true,
+              },
+            })
+            if (dbUser) {
+              session.user.role = dbUser.role
+              if (dbUser.emailVerified) session.user.emailVerified = dbUser.emailVerified
+              session.user.avatarUrl = dbUser.avatarUrl
+              session.user.level = dbUser.level
+              session.user.totalPoints = dbUser.totalPoints
+            }
+          } catch (error) {
+            console.error('[Auth] Session role refresh failed — using cached token role')
+            if (token.role) session.user.role = token.role
+          }
         } else if (token.id) {
           session.user.id = token.id as string
-        }
-        if (token.role) {
+          if (token.role) session.user.role = token.role
+        } else if (token.role) {
           session.user.role = token.role
         }
         session.user.isFirstLogin = Boolean(token.isFirstLogin)
-        if (token.emailVerified) {
+        if (!session.user.emailVerified && token.emailVerified) {
           session.user.emailVerified = token.emailVerified as Date
         }
-        if (token.avatarUrl !== undefined) {
+        if (session.user.avatarUrl === undefined && token.avatarUrl !== undefined) {
           session.user.avatarUrl = token.avatarUrl as string | null
         }
-        if (token.level !== undefined) {
+        if (session.user.level === undefined && token.level !== undefined) {
           session.user.level = token.level as number
         }
-        if (token.totalPoints !== undefined) {
+        if (session.user.totalPoints === undefined && token.totalPoints !== undefined) {
           session.user.totalPoints = token.totalPoints as number
         }
       }

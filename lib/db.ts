@@ -110,11 +110,12 @@ function createPrismaClient(): PrismaClient {
     const { PrismaClient: PrismaClientEdge } = require('@prisma/client/edge')
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { withAccelerate } = require('@prisma/extension-accelerate')
-    return new PrismaClientEdge({
+    const base = new PrismaClientEdge({
       datasourceUrl: dbUrl,
       log,
       errorFormat,
-    }).$extends(withAccelerate()) as unknown as PrismaClient
+    }).$extends(withAccelerate())
+    return withTransientRetries(base) as unknown as PrismaClient
   }
 
   // Cloudflare Workers: WASM engine + PrismaPg driver adapter.

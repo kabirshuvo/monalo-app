@@ -1,477 +1,85 @@
 "use client"
-import React, { useState, useEffect, Suspense } from 'react'
-import { signIn, useSession, getSession } from 'next-auth/react'
+
+import React, { useEffect, useState, Suspense } from 'react'
+import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Form, FormSection, FormActions, Input, Button, Alert, AuthLoadingScreen } from '@/components/ui'
+import { AuthLoadingScreen } from '@/components/ui'
+import { AuthShell } from '@/components/auth/AuthShell'
 import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton'
-import { logEvent } from '@/lib/analytics'
 import { messageForAuthError } from '@/lib/auth/oauth-errors'
-import {
-  getLastSignInMethod,
-  rememberSignInMethod,
-  type SignInMethod,
-} from '@/lib/auth/last-method'
-import { beginExplicitSignIn, clearSignedOutFlag } from '@/lib/auth/client-sign-out'
+import { rememberSignInMethod } from '@/lib/auth/last-method'
 import { sanitizeAuthCallbackUrl } from '@/lib/auth/post-auth'
-
-const magicLinkEnabled = process.env.NEXT_PUBLIC_MAGIC_LINK_ENABLED === 'true'
 
 function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const sessionData = useSession()
-  const session = sessionData?.data
-  const status = sessionData?.status
-  
-  const [identifier, setIdentifier] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [formMessage, setFormMessage] = useState('')
-  const [fieldErrors, setFieldErrors] = useState<{ identifier?: string; password?: string }>({})
+  const { data: session, status } = useSession()
   const [isMounted, setIsMounted] = useState(false)
-  const [lastMethod, setLastMethod] = useState<SignInMethod | null>(null)
-  const [showRegisterCta, setShowRegisterCta] = useState(false)
+  const [error, setError] = useState('')
 
-  // Magic-link (passwordless) state
-  const [magicEmail, setMagicEmail] = useState('')
-  const [magicLoading, setMagicLoading] = useState(false)
-  const [magicError, setMagicError] = useState('')
-
-  // Set mounted flag for hydration + load last-used method
   useEffect(() => {
     setIsMounted(true)
-    setLastMethod(getLastSignInMethod())
   }, [])
 
-  // Already signed in? Skip the login page entirely.
   useEffect(() => {
     if (!isMounted) return
     if (status === 'authenticated' && session) {
-      const target = sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl'))
-      router.replace(target)
+      router.replace(sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl')))
     }
   }, [status, session, router, searchParams, isMounted])
 
-  // Prefill identifier if provided (e.g. after registration)
-  useEffect(() => {
-    const registeredIdentifier = searchParams?.get('identifier') || searchParams?.get('email')
-    if (registeredIdentifier) setIdentifier(registeredIdentifier)
-  }, [searchParams])
-
-  // Surface registration / verification messages from URL
   useEffect(() => {
     if (!isMounted) return
-    if (searchParams?.get('registered') === 'true') {
-      setFormMessage('Account created. If you registered with email, check your inbox to verify before signing in.')
-    }
     const authError = searchParams?.get('error')
-    const unverifiedEmail = searchParams?.get('email')
-    if (authError === 'EmailNotVerified') {
-      const msg = unverifiedEmail
-        ? `Please verify ${decodeURIComponent(unverifiedEmail)} before signing in. Check your inbox for the verification link.`
-        : 'Please verify your email before signing in. Check your inbox for the verification link.'
-      setError(msg)
-      setFormMessage(msg)
-    } else if (authError) {
+    if (authError) {
       const msg = messageForAuthError(authError)
-      if (msg) {
-        setError(msg)
-        setFormMessage(msg)
-      }
+      if (msg) setError(msg)
     }
   }, [searchParams, isMounted])
 
-  const validateForm = () => {
-    const errors: { identifier?: string; password?: string } = {}
-
-    const trimmed = identifier.trim()
-    if (!trimmed) {
-      errors.identifier = 'Please enter your email or phone number'
-    } else {
-      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)
-      const isPhone = /^\+?\d{10,15}$/.test(trimmed)
-      if (!isEmail && !isPhone) {
-        errors.identifier = 'That doesn’t look like a valid email or phone number'
-      }
-    }
-
-    if (!password) {
-      errors.password = 'Please enter your password'
-    }
-
-    setFieldErrors(errors)
-    return Object.keys(errors).length === 0
-  }
-
-  const handleMagicLink = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setMagicError('')
-    const email = magicEmail.trim().toLowerCase()
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setMagicError('Please enter a valid email address')
-      return
-    }
-    setMagicLoading(true)
-    try {
-      const callbackUrl = sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl'))
-      beginExplicitSignIn()
-      const result = await signIn('email', { email, callbackUrl, redirect: false })
-      if (result?.error) {
-        setMagicError('We couldn’t send the link. Please try again in a moment.')
-        return
-      }
-      try {
-        rememberSignInMethod('email')
-        logEvent('login_link_sent', { identifier: email, method: 'email' })
-      } catch {}
-      router.push(`/verify-request?email=${encodeURIComponent(email)}`)
-    } catch {
-      setMagicError('We couldn’t send the link. Please try again in a moment.')
-    } finally {
-      setMagicLoading(false)
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setFormMessage('')
-    setShowRegisterCta(false)
-
-    if (!validateForm()) {
-      return
-    }
-
-    setIsLoading(true)
-    beginExplicitSignIn()
-
-    try {
-      const trimmedIdentifier = identifier.trim()
-      const result = await signIn('credentials', {
-        identifier: trimmedIdentifier,
-        password,
-        // Use SPA sign-in but explicitly revalidate before navigation.
-        redirect: false,
-      })
-
-      // Dev-only diagnostics: log signIn result and check session endpoint
-      if (process.env.NODE_ENV === 'development') {
-        try {
-          console.log('[DEV signIn result]', result)
-        } catch (e) {}
-        try {
-          const resp = await fetch('/api/auth/session', { credentials: 'same-origin' })
-          const json = await resp.json().catch(() => null)
-          console.log('[DEV /api/auth/session]', resp.status, json)
-        } catch (e) {
-          console.log('[DEV /api/auth/session] fetch error', e)
-        }
-        try {
-          console.log('[DEV document.cookie]', typeof document !== 'undefined' ? document.cookie : '<no-document>')
-        } catch (e) {}
-      }
-
-      if (result?.error) {
-        // Friendly authentication messages
-        try {
-          logEvent('login_failed', { identifier: trimmedIdentifier, reason: result.error, method: 'credentials' })
-        } catch {}
-
-        if (result.error === 'CredentialsSignin') {
-          const msg = "Whoops — that didn't work. Double-check your email/phone and password and try again."
-          setError(msg)
-          setFormMessage(msg)
-        } else if (result.error === 'EmailNotVerified') {
-          const msg = 'Please verify your email before signing in. Check your inbox for the verification link.'
-          setError(msg)
-          setFormMessage(msg)
-        } else if (result.error === 'NoAccount' || result.error === 'No user' || result.error === 'No user found') {
-          const msg = "We couldn’t find an account for that email or phone. Want to create one?"
-          setError(msg)
-          setFormMessage(msg)
-          setShowRegisterCta(true)
-        } else {
-          const msg = 'Oops — something went wrong. Please try again in a moment.'
-          setError(msg)
-          setFormMessage(msg)
-        }
-      } else if (result?.ok) {
-        clearSignedOutFlag()
-        // Success - record login start and event
-        try { sessionStorage.setItem('monalo_login_start', Date.now().toString()) } catch {}
-        try { rememberSignInMethod('credentials') } catch {}
-        try {
-          const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)
-          const isPhone = /^\+?\d{10,15}$/.test(trimmedIdentifier)
-          const identifierType = isEmail ? 'email' : (isPhone ? 'phone' : 'unknown')
-          logEvent('login_success', { identifier: trimmedIdentifier, identifierType, method: 'credentials' })
-        } catch {}
-
-        // Ensure the client SessionProvider picks up the updated session
-        // BEFORE we navigate. Call `getSession()` and retry briefly if
-        // the session hasn't propagated yet — this avoids the UI race.
-        try {
-          let sess = await getSession()
-          let attempts = 0
-          while (!sess && attempts < 5) {
-            // small backoff
-            await new Promise((r) => setTimeout(r, 200))
-            sess = await getSession()
-            attempts += 1
-          }
-        } catch (e) {}
-
-        // Now perform client navigation to the callback or /home.
-        router.push(sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl')))
-      }
-    } catch (err) {
-      const msg = 'Oops — something went wrong. Please try again in a moment.'
-      setError(msg)
-      setFormMessage(msg)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  // Show loading state while checking authentication
   if (status === 'loading') {
     return <AuthLoadingScreen />
   }
 
-  // Don't show form if already authenticated
   if (status === 'authenticated') {
     return null
   }
 
+  const callbackUrl = sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl'))
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-2xl font-semibold text-gray-900 mb-2">
-            <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-            </svg>
-            <span>MonAlo</span>
+    <AuthShell
+      title="Welcome back"
+      subtitle="Sign in with Google to continue learning and creating on MonAlo."
+      footer={
+        <>
+          New here?{' '}
+          <Link href="/register" className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400">
+            Create an account
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h1>
-          <p className="text-gray-600">Continue your learning journey</p>
+        </>
+      }
+    >
+      {error ? (
+        <div
+          role="alert"
+          className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-200"
+        >
+          {error}
         </div>
+      ) : null}
 
-        {/* Card */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-          {/* Error Alert */}
-          {error && (
-            <Alert 
-              variant="danger" 
-              dismissible 
-              onDismiss={() => setError('')}
-              className="mb-6"
-            >
-              {error}
-            </Alert>
-          )}
+      <GoogleSignInButton
+        callbackUrl={callbackUrl}
+        label="Continue with Google"
+        onBeforeSignIn={() => rememberSignInMethod('google')}
+      />
 
-          {/* Form */}
-          <Form onSubmit={handleSubmit}>
-            <FormSection>
-              <Input
-                label="Email or phone"
-                type="text"
-                placeholder="you@example.com or +1 555 555 5555"
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                error={fieldErrors.identifier}
-                disabled={isLoading}
-                autoComplete="username"
-                required
-                leftIcon={
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                  </svg>
-                }
-              />
-
-              <Input
-                label="Password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                error={fieldErrors.password}
-                disabled={isLoading}
-                autoComplete="current-password"
-                required
-                leftIcon={
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                }
-              />
-
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
-                  />
-                  <span className="text-gray-700">Remember me</span>
-                </label>
-                <Link 
-                  href="/forgot-password" 
-                  className="text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-            </FormSection>
-
-            {formMessage && (
-              <div className="mb-4 text-center text-sm text-red-600">{formMessage}</div>
-            )}
-            {showRegisterCta && (
-              <div className="mb-4 text-center">
-                <Link
-                  href={`/register?identifier=${encodeURIComponent(identifier.trim())}`}
-                  className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700"
-                >
-                  Create an account with this email →
-                </Link>
-              </div>
-            )}
-            <FormActions>
-              <Button 
-                type="submit" 
-                variant="primary" 
-                fullWidth 
-                isLoading={isLoading}
-                disabled={isLoading}
-              >
-                {isLoading ? 'Signing in...' : 'Sign in'}
-              </Button>
-            </FormActions>
-          </Form>
-
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">Or continue with</span>
-            </div>
-          </div>
-
-          {/* Social Login Buttons */}
-          <div className="space-y-3">
-            <div className="relative">
-              {lastMethod === 'google' && (
-                <span className="absolute -top-2 right-3 z-10 rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white shadow">
-                  Last used
-                </span>
-              )}
-              <GoogleSignInButton
-                callbackUrl={sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl'))}
-                disabled={isLoading}
-                onBeforeSignIn={() => rememberSignInMethod('google')}
-              />
-            </div>
-
-            {/* Facebook */}
-            <Button
-              type="button"
-              variant="secondary"
-              fullWidth
-              onClick={() =>
-                signIn('facebook', {
-                  callbackUrl: sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl')),
-                })
-              }
-              disabled={isLoading}
-              className="flex items-center justify-center gap-3"
-            >
-              <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-              <span>Continue with Facebook</span>
-            </Button>
-
-            {/* X (Twitter) */}
-            <Button
-              type="button"
-              variant="secondary"
-              fullWidth
-              onClick={() =>
-                signIn('twitter', {
-                  callbackUrl: sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl')),
-                })
-              }
-              disabled={isLoading}
-              className="flex items-center justify-center gap-3"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-              <span>Continue with X</span>
-            </Button>
-          </div>
-
-          {/* Passwordless magic link */}
-          {magicLinkEnabled && (
-            <div className="mt-6 border-t border-gray-200 pt-6">
-              <div className="mb-2 flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-700">No password? Email me a sign-in link</p>
-                {lastMethod === 'email' && (
-                  <span className="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
-                    Last used
-                  </span>
-                )}
-              </div>
-              {magicError && (
-                <div className="mb-2 text-sm text-red-600">{magicError}</div>
-              )}
-              <form onSubmit={handleMagicLink} className="flex flex-col gap-2 sm:flex-row">
-                <input
-                  type="email"
-                  value={magicEmail}
-                  onChange={(e) => setMagicEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  disabled={magicLoading}
-                  autoComplete="email"
-                  className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <Button type="submit" variant="secondary" isLoading={magicLoading} disabled={magicLoading}>
-                  {magicLoading ? 'Sending…' : 'Send link'}
-                </Button>
-              </form>
-            </div>
-          )}
-        </div>
-
-        {/* Register Link */}
-        <p className="mt-6 text-center text-sm text-gray-600">
-          New to MonAlo?{' '}
-          <Link 
-            href="/register" 
-            className="text-blue-600 hover:text-blue-700 font-medium"
-          >
-            Create your account
-          </Link>
-        </p>
-
-        {/* Back to Home */}
-        <div className="mt-4 text-center">
-          <Link 
-            href="/" 
-            className="text-sm text-gray-500 hover:text-gray-700"
-          >
-            ← Back to landing
-          </Link>
-        </div>
-      </div>
-    </div>
+      <p className="mt-6 text-center text-xs leading-relaxed text-content-muted">
+        By continuing, you agree to use MonAlo with the Google account you choose.
+      </p>
+    </AuthShell>
   )
 }
 
@@ -482,4 +90,3 @@ export default function LoginPage() {
     </Suspense>
   )
 }
-

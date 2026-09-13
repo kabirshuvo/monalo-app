@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import PublicLayout from '@/components/layouts/PublicLayout'
-import { formatPriceCents } from '@/lib/format'
-import ProductDetailClient from './ProductDetailClient'
-import ProductCategoryBadge from '@/components/shop/ProductCategoryBadge'
+import ProductHeroGallery from '@/components/shop/ProductHeroGallery'
 import { getActiveShopProductBySlug } from '@/lib/shop/queries'
+import { resolveProductDisplayImages } from '@/lib/shop/product-images'
+import type { ShopCategoryId } from '@/lib/shop/categories'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,56 +26,31 @@ export default async function ProductDetailPage({ params }: Props) {
 
   if (!product) notFound()
 
+  const images = resolveProductDisplayImages(product)
+
   return (
     <PublicLayout>
-      <main className="mx-auto max-w-4xl px-4 py-12">
-        <Link href="/shop" className="text-sm text-blue-600 hover:underline mb-6 inline-block">
-          ← Back to shop
+      <main className="mx-auto max-w-5xl px-4 py-10 sm:py-12">
+        <Link href="/shop" className="mb-6 inline-block text-sm text-blue-600 hover:underline">
+          ← Back to craft shop
         </Link>
 
-        <div className="grid gap-10 md:grid-cols-2">
-          <div className="aspect-square rounded-xl bg-gray-50 overflow-hidden">
-            {product.imageUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center text-gray-400">No image</div>
-            )}
-          </div>
+        <ProductHeroGallery
+          productId={product.id}
+          name={product.name}
+          description={product.description}
+          price={product.price}
+          stock={product.stock}
+          category={product.category as ShopCategoryId}
+          images={images}
+        />
 
-          <div className="space-y-6">
-            <div>
-              <ProductCategoryBadge
-                category={product.category}
-                linked
-                size="md"
-              />
-              <h1 className="text-3xl font-bold text-gray-900 mt-3">{product.name}</h1>
-              <p className="text-2xl font-semibold text-gray-800 mt-2">
-                {formatPriceCents(product.price)}
-              </p>
-            </div>
-
-            {product.description && (
-              <p className="text-gray-600 leading-relaxed">{product.description}</p>
-            )}
-
-            <p className="text-sm text-gray-500">
-              {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-            </p>
-
-            <ProductDetailClient
-              productId={product.id}
-              name={product.name}
-              price={product.price}
-              inStock={product.stock > 0}
-            />
-          </div>
-        </div>
+        {product.description ? (
+          <section className="mt-10 max-w-3xl">
+            <h2 className="text-lg font-semibold text-gray-900">About this piece</h2>
+            <p className="mt-3 leading-relaxed text-gray-600">{product.description}</p>
+          </section>
+        ) : null}
       </main>
     </PublicLayout>
   )

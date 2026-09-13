@@ -4,6 +4,7 @@ import Link from 'next/link'
 import DashboardLayout from '@/components/dashboard/Layout'
 import { prisma } from '@/lib/db'
 import AdminUserRoleSelect from '@/components/admin/AdminUserRoleSelect'
+import AdminUserDeleteButton from '@/components/admin/AdminUserDeleteButton'
 import RoleApplicationReviewCard from '@/components/admin/RoleApplicationReviewCard'
 import Badge from '@/components/ui/Badge'
 import type { Role } from '@prisma/client'
@@ -16,6 +17,8 @@ export default async function AdminUsersPage() {
   const session = await auth()
   if (!session?.user) redirect('/login')
   if ((session.user as { role?: Role }).role !== 'ADMIN') redirect('/dashboard')
+
+  const adminUserId = (session.user as { id?: string }).id
 
   const [users, pendingApplications] = await Promise.all([
     prisma.user.findMany({
@@ -89,6 +92,9 @@ export default async function AdminUsersPage() {
                   <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">
                     Role
                   </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">
+                    Delete
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
@@ -103,6 +109,13 @@ export default async function AdminUsersPage() {
                     </td>
                     <td className="px-4 py-3">
                       <AdminUserRoleSelect userId={user.id} currentRole={user.role} />
+                    </td>
+                    <td className="px-4 py-3">
+                      <AdminUserDeleteButton
+                        userId={user.id}
+                        email={user.email}
+                        disabled={user.id === adminUserId}
+                      />
                     </td>
                   </tr>
                 ))}

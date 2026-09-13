@@ -4,6 +4,7 @@ import { requireRole, AuthorizationError } from '@/lib/auth/role'
 import { withUpdatedBy } from '@/lib/auth/audit'
 import { canManageProduct } from '@/lib/shop/access'
 import { isShopCategoryId } from '@/lib/shop/categories'
+import { normalizeProductImages } from '@/lib/shop/product-images'
 import type { Role, ProductCategory } from '@prisma/client'
 
 type Params = { params: Promise<{ slug: string }> }
@@ -63,7 +64,6 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       data.price = price
     }
     if (body.stock !== undefined) data.stock = Number(body.stock)
-    if (body.imageUrl !== undefined) data.imageUrl = body.imageUrl ? String(body.imageUrl) : null
     if (body.status !== undefined) data.status = body.status
     if (body.category !== undefined) {
       const category = String(body.category)
@@ -73,9 +73,43 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       data.category = category as ProductCategory
     }
 
-    const product = await prisma.product.update({
-      where: { id: existing.id },
-      data: withUpdatedBy(data, userId),
+    const hasImagesArray = body.images !== undefined
+    const images = hasImagesArray ? normalizeProductImages(body.images) : null
+
+    if (hasImagesArray) {
+      data.imageUrl = images?.[0]?.url ?? null
+    } else if (body.imageUrl !== undefined) {
+      data.imageUrl = body.imageUrl ? String(body.imageUrl) : null
+    }
+
+    const product = await prisma.$transaction(async (tx) => {
+      if (hasImagesArray) {
+        await tx.productImage.updateMany({
+          where: { productId: existing.id, deletedAt: null },
+          data: { deletedAt: new Date() },
+        })
+        if (images && images.length > 0) {
+          await tx.productImage.createMany({
+            data: images.map((img) => ({
+              productId: existing.id,
+              url: img.url,
+              order: img.order,
+              alt: img.alt ?? null,
+            })),
+          })
+        }
+      }
+
+      return tx.product.update({
+        where: { id: existing.id },
+        data: withUpdatedBy(data, userId),
+        include: {
+          images: {
+            where: { deletedAt: null },
+            orderBy: { order: 'asc' },
+          },
+        },
+      })
     })
 
     return NextResponse.json(product)

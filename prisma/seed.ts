@@ -208,6 +208,8 @@ async function main() {
 				dimensions: '18 × 24 in',
 				year: 2025,
 				status: 'ACTIVE' as const,
+				imageUrl:
+					'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80',
 			},
 			{
 				title: 'Study in Indigo',
@@ -218,16 +220,68 @@ async function main() {
 				dimensions: '16 × 20 in',
 				year: 2026,
 				status: 'ACTIVE' as const,
+				imageUrl:
+					'https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=1200&q=80',
 			},
 			{
 				title: 'Thread and Memory',
 				slug: 'thread-and-memory',
-				description: 'Textile-inspired mixed media — pending public release.',
+				description: 'Textile-inspired mixed media celebrating craft and story.',
 				price: 15000,
 				medium: 'Mixed media',
 				dimensions: '12 × 16 in',
 				year: 2024,
-				status: 'PENDING_REVIEW' as const,
+				status: 'ACTIVE' as const,
+				imageUrl:
+					'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=1200&q=80',
+			},
+			{
+				title: 'Lotus on Still Water',
+				slug: 'lotus-still-water',
+				description: 'Quiet botanical study in soft greens and cream.',
+				price: 9800,
+				medium: 'Gouache',
+				dimensions: '11 × 14 in',
+				year: 2025,
+				status: 'ACTIVE' as const,
+				imageUrl:
+					'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1200&q=80',
+			},
+			{
+				title: 'Village Evening Market',
+				slug: 'village-evening-market',
+				description: 'Warm lights and crowded stalls — a memory of home.',
+				price: 14200,
+				medium: 'Oil on canvas',
+				dimensions: '20 × 24 in',
+				year: 2025,
+				status: 'ACTIVE' as const,
+				imageUrl:
+					'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1200&q=80',
+			},
+			{
+				title: 'Clay Hands at Work',
+				slug: 'clay-hands-at-work',
+				description: 'Studio moment — hands shaping gypsum and clay.',
+				price: 7600,
+				medium: 'Photography print',
+				dimensions: '16 × 20 in',
+				year: 2026,
+				status: 'ACTIVE' as const,
+				imageUrl:
+					'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=1200&q=80',
+			},
+			{
+				title: 'Monsoon Window',
+				slug: 'monsoon-window',
+				description: 'Rain on glass, soft blues — contemplation in a frame.',
+				price: 11000,
+				medium: 'Watercolor',
+				dimensions: '14 × 18 in',
+				year: 2026,
+				status: 'ACTIVE' as const,
+				imageUrl:
+					'https://images.unsplash.com/photo-1515405295579-ba7b45403062?auto=format&fit=crop&w=1200&q=80',
 			},
 		]
 
@@ -235,7 +289,23 @@ async function main() {
 			const exists = await db.artwork.findFirst({
 				where: { slug: a.slug, deletedAt: null },
 			})
-			if (exists) continue
+			if (exists) {
+				await db.artwork.update({
+					where: { id: exists.id },
+					data: {
+						title: a.title,
+						description: a.description,
+						price: a.price,
+						medium: a.medium,
+						dimensions: a.dimensions,
+						year: a.year,
+						status: a.status,
+						imageUrl: a.imageUrl,
+					},
+				})
+				console.log(`~ Upserted artwork: ${a.title}`)
+				continue
+			}
 			await db.artwork.create({
 				data: { ...a, artistId: seller.id },
 			})

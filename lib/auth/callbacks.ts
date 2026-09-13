@@ -107,10 +107,10 @@ export async function handleOAuthSignIn(
  */
 export async function configureNewOAuthUser(userId: string, email?: string | null): Promise<void> {
   try {
+    // Never overwrite role — admins promoted via script/UI must keep access after OAuth sign-in.
     await prisma.user.update({
       where: { id: userId },
       data: {
-        role: 'LEARNER',
         lastLoginAt: new Date(),
         ...(email ? { emailVerified: new Date() } : {}),
       },

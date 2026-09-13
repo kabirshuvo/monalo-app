@@ -52,3 +52,40 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     return NextResponse.json({ error: 'Failed to update user role' }, { status: 500 })
   }
 }
+
+export async function DELETE(_request: NextRequest, context: RouteContext) {
+  try {
+    const session = await auth()
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const adminId = (session.user as { id?: string }).id
+    const adminRole = (session.user as { role?: Role }).role
+    if (adminRole !== 'ADMIN' || !adminId) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    const { id } = await context.params
+
+    const target = await prisma.user.findUnique({
+      where: { id },
+      select: { id: true, email: true },
+    })
+
+    if (!target) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    if (target.id === adminId) {
+      return NextResponse.json({ error: 'You cannot delete your own account' }, { status: 400 })
+    }
+
+    await prisma.user.delete({ where: { id } })
+
+    return NextResponse.json({ ok: true, email: target.email })
+  } catch (error) {
+    console.error('[DELETE /api/admin/users/[id]]', error)
+    return NextResponse.json({ error: 'Failed to delete user' }, { status: 500 })
+  }
+}

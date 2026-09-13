@@ -72,7 +72,7 @@ export default function LandingHeaderClient() {
   }, [menuOpen])
 
   return (
-    <header className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <header className="relative z-20 px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         <Link
           href="/"

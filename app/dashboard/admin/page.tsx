@@ -34,23 +34,42 @@ export default async function DashboardAdmin() {
     redirect('/dashboard')
   }
 
-  const [userCount, productCount, pendingOrders, revenueAgg] = await Promise.all([
-    prisma.user.count(),
-    prisma.product.count({ where: { deletedAt: null, status: 'ACTIVE' } }),
-    prisma.order.count({ where: { deletedAt: null, status: 'PENDING' } }),
-    prisma.order.aggregate({
-      where: { deletedAt: null, paymentStatus: 'PAID' },
-      _sum: { totalAmount: true },
-    }),
-  ])
+  let userCount = 0
+  let productCount = 0
+  let pendingOrders = 0
+  let revenue = 0
+  let recentUsers: Array<{
+    id: string
+    name: string | null
+    email: string | null
+    role: string
+    createdAt: Date
+  }> = []
+  let statsError: string | null = null
 
-  const revenue = revenueAgg._sum.totalAmount ?? 0
-
-  const recentUsers = await prisma.user.findMany({
-    take: 8,
-    orderBy: { createdAt: 'desc' },
-    select: { id: true, name: true, email: true, role: true, createdAt: true },
-  })
+  try {
+    const [users, products, pending, revenueAgg] = await Promise.all([
+      prisma.user.count(),
+      prisma.product.count({ where: { deletedAt: null, status: 'ACTIVE' } }),
+      prisma.order.count({ where: { deletedAt: null, status: 'PENDING' } }),
+      prisma.order.aggregate({
+        where: { deletedAt: null, paymentStatus: 'PAID' },
+        _sum: { totalAmount: true },
+      }),
+    ])
+    userCount = users
+    productCount = products
+    pendingOrders = pending
+    revenue = Number(revenueAgg._sum.totalAmount ?? 0)
+    recentUsers = await prisma.user.findMany({
+      take: 8,
+      orderBy: { createdAt: 'desc' },
+      select: { id: true, name: true, email: true, role: true, createdAt: true },
+    })
+  } catch (error) {
+    console.error('[Admin dashboard] stats query failed:', error)
+    statsError = 'Some stats are temporarily unavailable. Sub-pages below should still work.'
+  }
 
   return (
     <DashboardLayout
@@ -62,6 +81,11 @@ export default async function DashboardAdmin() {
         <div className="mb-10">
           <h1 className="text-4xl font-light text-gray-900">Platform dashboard</h1>
           <p className="text-gray-600 mt-2 text-lg">Overview and management tools</p>
+          {statsError ? (
+            <p className="mt-3 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2">
+              {statsError}
+            </p>
+          ) : null}
         </div>
 
         {/* Key Metrics */}
@@ -107,7 +131,7 @@ export default async function DashboardAdmin() {
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">{user.name ?? '—'}</td>
                       <td className="px-6 py-4 text-sm text-gray-700">{user.email}</td>
                       <td className="px-6 py-4 text-sm text-gray-700">
-                        <RoleBadge role={user.role as 'ADMIN' | 'WRITER' | 'LEARNER' | 'CUSTOMER' | 'SELLER'} />
+                        <RoleBadge role={user.role} />
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-700">
                         {new Date(user.createdAt).toLocaleDateString()}
@@ -175,7 +199,7 @@ export default async function DashboardAdmin() {
   )
 }
 
-function RoleBadge({ role }: { role: 'ADMIN' | 'WRITER' | 'LEARNER' | 'CUSTOMER' | 'SELLER' }) {
+function RoleBadge({ role }: { role: string }) {
   const variant =
     role === 'ADMIN'
       ? 'danger'

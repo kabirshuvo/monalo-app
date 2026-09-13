@@ -5,6 +5,7 @@ import { withCreatedBy } from '@/lib/auth/audit'
 import { slugify } from '@/lib/format'
 import { isShopCategoryId } from '@/lib/shop/categories'
 import { listActiveShopProducts } from '@/lib/shop/queries'
+import { normalizeProductImages } from '@/lib/shop/product-images'
 import type { ProductCategory } from '@prisma/client'
 
 /**
@@ -27,6 +28,7 @@ export async function GET() {
 
 /**
  * POST /api/products — ADMIN or SELLER
+ * Body may include `images: [{ url, order?, alt? }]` (max 5). First image is the hero.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -53,6 +55,10 @@ export async function POST(request: NextRequest) {
       ? categoryRaw
       : 'OTHER_CRAFT'
 
+    const images = normalizeProductImages(body.images)
+    const imageUrl =
+      images[0]?.url ?? (body.imageUrl ? String(body.imageUrl).trim() || null : null)
+
     const product = await prisma.product.create({
       data: withCreatedBy(
         {
@@ -61,12 +67,29 @@ export async function POST(request: NextRequest) {
           description: body.description ? String(body.description) : null,
           price,
           stock: Number.isInteger(stock) ? stock : 0,
-          imageUrl: body.imageUrl ? String(body.imageUrl) : null,
+          imageUrl,
           status: body.status === 'INACTIVE' ? 'INACTIVE' : 'ACTIVE',
           category,
+          ...(images.length > 0
+            ? {
+                images: {
+                  create: images.map((img) => ({
+                    url: img.url,
+                    order: img.order,
+                    alt: img.alt ?? null,
+                  })),
+                },
+              }
+            : {}),
         },
         userId
       ),
+      include: {
+        images: {
+          where: { deletedAt: null },
+          orderBy: { order: 'asc' },
+        },
+      },
     })
 
     return NextResponse.json(product, { status: 201 })

@@ -1,7 +1,9 @@
 import { Suspense } from 'react'
 import LandingHeaderClient from './landing/LandingHeaderClient'
 import LandingHeroClient from './landing/LandingHeroClient'
+import LandingPageSections from '@/components/landing/LandingPageSections'
 import SessionResetOnSignOut from '@/components/auth/SessionResetOnSignOut'
+import { SoftReveal } from '@/components/motion/SoftReveal'
 import { RouteLoader } from '@/components/ui/LoadingState'
 
 // Force the root landing page to be statically rendered and public
@@ -14,26 +16,26 @@ export const metadata = {
 
 export default function LaunchPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white dark:from-zinc-950 dark:to-zinc-900 flex flex-col">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-amber-50 to-[#fafaf9] dark:from-zinc-950 dark:to-zinc-900">
       <Suspense fallback={<RouteLoader variant="page" className="min-h-[50vh]" />}>
         <SessionResetOnSignOut />
       </Suspense>
       <LandingHeaderClient />
 
-      {/* Main Content */}
-      <main className="flex-1 flex items-center px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
-        <div className="max-w-6xl w-full mx-auto">
+      <main className="flex-1">
+        <section className="relative w-full pb-8 sm:pb-12">
           <LandingHeroClient />
-        </div>
+        </section>
+
+        <LandingPageSections />
       </main>
 
-      {/* Footer */}
-      <footer className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 border-t border-gray-100 dark:border-zinc-800">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-sm text-gray-600 dark:text-zinc-400 text-center">
+      <footer className="border-t border-gray-100 px-4 py-8 sm:px-6 sm:py-12 dark:border-zinc-800 lg:px-8">
+        <SoftReveal variant="fade" className="mx-auto max-w-6xl">
+          <p className="text-center text-sm text-gray-600 dark:text-zinc-400">
             A learning platform for everyone. No pressure. No rush.
           </p>
-        </div>
+        </SoftReveal>
       </footer>
     </div>
   )

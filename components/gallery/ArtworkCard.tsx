@@ -34,31 +34,33 @@ export default function ArtworkCard({ artwork }: { artwork: ArtworkListItem }) {
   return (
     <ArtworkCardLink
       slug={slug}
-      className="group flex flex-col rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+      className="gallery-soft-card group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
     >
-      <div className="aspect-[4/5] bg-gray-50 overflow-hidden">
+      <div className="aspect-[4/5] overflow-hidden bg-gray-50">
         {imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={imageUrl}
             alt={title}
-            className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+            className="gallery-soft-media h-full w-full object-cover group-hover:scale-[1.035]"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-gray-300 text-sm">
+          <div className="flex h-full items-center justify-center text-sm text-gray-300">
             Artwork image
           </div>
         )}
       </div>
-      <div className="p-4 space-y-2">
+      <div className="space-y-2 p-4">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600">{title}</h3>
-          <span className="text-sm font-bold text-gray-900 shrink-0">{formatPriceCents(price)}</span>
+          <h3 className="gallery-soft-link text-lg font-semibold text-gray-900 group-hover:text-blue-600">
+            {title}
+          </h3>
+          <span className="shrink-0 text-sm font-bold text-gray-900">{formatPriceCents(price)}</span>
         </div>
         <p className="text-xs text-gray-500">{artistName(artwork)}</p>
         {medium && <Badge size="sm" variant="info">{medium}</Badge>}
         {description && (
-          <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
+          <p className="line-clamp-2 text-sm text-gray-600">{description}</p>
         )}
       </div>
     </ArtworkCardLink>

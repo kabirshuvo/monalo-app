@@ -33,9 +33,23 @@ export default async function EditProductPage({ params }: PageProps) {
 
   const product = await prisma.product.findFirst({
     where: { slug, deletedAt: null },
+    include: {
+      images: {
+        where: { deletedAt: null },
+        orderBy: { order: 'asc' },
+        select: { url: true },
+      },
+    },
   })
   if (!product) notFound()
   if (!canManageProduct(role, userId, product)) redirect('/dashboard/seller/products')
+
+  const imageUrls =
+    product.images.length > 0
+      ? product.images.map((img) => img.url)
+      : product.imageUrl
+        ? [product.imageUrl]
+        : []
 
   return (
     <DashboardLayout
@@ -56,6 +70,7 @@ export default async function EditProductPage({ params }: PageProps) {
             price: product.price,
             stock: product.stock,
             imageUrl: product.imageUrl,
+            images: imageUrls,
             status: product.status,
             category: product.category as ShopCategoryId,
           }}
