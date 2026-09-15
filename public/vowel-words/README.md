@@ -7,12 +7,14 @@ Drop final art here (overwrite placeholders):
 
 Paths in `data/vowel-words/words.json` and `vowels.json` look like `/images/a/cat.webp` and resolve to `/vowel-words/images/...` (see `lib/vowel-words/assets.ts`). Update the `image` fields if you change extensions or folders.
 
-Optional audio (speech synthesis is the fallback):
+## Audio
 
-- `audio/word/{vowel}/{slug}.mp3`
-- `audio/phoneme/{vowel}.mp3`
-- `audio/question/{vowel}.mp3`
-- `audio/success/{vowel}/{slug}.mp3`
-- `audio/error/{vowel}.mp3`
+Clips live under `audio/` mirroring the paths in JSON. Generate with:
+
+```bash
+npm run learning:generate-audio -- vowel-words
+```
+
+Uses Edge neural TTS (`en-US-AnaNeural`). Re-run with `--force` to overwrite. Speech synthesis remains the fallback if a file is missing.
 
 Served at `/vowel-words/...` in local/dev.
