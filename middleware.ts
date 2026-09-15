@@ -17,7 +17,8 @@ export default auth((request) => {
     pathname.startsWith('/dashboard') ||
     pathname === '/profile' ||
     pathname === '/settings' ||
-    pathname.startsWith('/learning/ecopenguin')
+    pathname === '/learning' ||
+    pathname.startsWith('/learning/')
 
   if (needsAuth && !request.auth?.user) {
     const loginUrl = new URL('/login', request.url)
@@ -34,7 +35,8 @@ export default auth((request) => {
 export const config = {
   matcher: [
     '/dashboard/:path*',
-    '/learning/ecopenguin/:path*',
-    '/((?!_next/static|_next/image|favicon.ico|api/media|ecopenguin|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp3|webp)$).*)',
+    '/learning',
+    '/learning/:path*',
+    '/((?!_next/static|_next/image|favicon.ico|api/media|ecopenguin|vowel-words|digraphs|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp3|webp)$).*)',
   ],
 }

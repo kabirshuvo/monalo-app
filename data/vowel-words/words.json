@@ -1,0 +1,1012 @@
+{
+  "a": [
+    {
+      "id": "cat",
+      "word": "cat",
+      "slug": "cat",
+      "pattern": "CVC",
+      "graphemes": [
+        "c",
+        "a",
+        "t"
+      ],
+      "image": "/images/a/cat.webp",
+      "audio": {
+        "word": "/audio/word/a/cat.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/cat.mp3",
+        "error": "/audio/error/a.mp3"
+      },
+      "speakWord": "cat"
+    },
+    {
+      "id": "bat",
+      "word": "bat",
+      "slug": "bat",
+      "pattern": "CVC",
+      "graphemes": [
+        "b",
+        "a",
+        "t"
+      ],
+      "image": "/images/a/bat.webp",
+      "audio": {
+        "word": "/audio/word/a/bat.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/bat.mp3",
+        "error": "/audio/error/a.mp3"
+      },
+      "speakWord": "bat"
+    },
+    {
+      "id": "hat",
+      "word": "hat",
+      "slug": "hat",
+      "pattern": "CVC",
+      "graphemes": [
+        "h",
+        "a",
+        "t"
+      ],
+      "image": "/images/a/hat.webp",
+      "audio": {
+        "word": "/audio/word/a/hat.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/hat.mp3",
+        "error": "/audio/error/a.mp3"
+      },
+      "speakWord": "hat"
+    },
+    {
+      "id": "map",
+      "word": "map",
+      "slug": "map",
+      "pattern": "CVC",
+      "graphemes": [
+        "m",
+        "a",
+        "p"
+      ],
+      "image": "/images/a/map.webp",
+      "audio": {
+        "word": "/audio/word/a/map.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/map.mp3",
+        "error": "/audio/error/a.mp3"
+      },
+      "speakWord": "map"
+    },
+    {
+      "id": "bag",
+      "word": "bag",
+      "slug": "bag",
+      "pattern": "CVC",
+      "graphemes": [
+        "b",
+        "a",
+        "g"
+      ],
+      "image": "/images/a/bag.webp",
+      "audio": {
+        "word": "/audio/word/a/bag.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/bag.mp3",
+        "error": "/audio/error/a.mp3"
+      },
+      "speakWord": "bag"
+    },
+    {
+      "id": "jam",
+      "word": "jam",
+      "slug": "jam",
+      "pattern": "CVC",
+      "graphemes": [
+        "j",
+        "a",
+        "m"
+      ],
+      "image": "/images/a/jam.webp",
+      "audio": {
+        "word": "/audio/word/a/jam.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/jam.mp3",
+        "error": "/audio/error/a.mp3"
+      },
+      "speakWord": "jam"
+    },
+    {
+      "id": "pan",
+      "word": "pan",
+      "slug": "pan",
+      "pattern": "CVC",
+      "graphemes": [
+        "p",
+        "a",
+        "n"
+      ],
+      "image": "/images/a/pan.webp",
+      "audio": {
+        "word": "/audio/word/a/pan.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/pan.mp3",
+        "error": "/audio/error/a.mp3"
+      },
+      "speakWord": "pan"
+    },
+    {
+      "id": "tap",
+      "word": "tap",
+      "slug": "tap",
+      "pattern": "CVC",
+      "graphemes": [
+        "t",
+        "a",
+        "p"
+      ],
+      "image": "/images/a/tap.webp",
+      "audio": {
+        "word": "/audio/word/a/tap.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/tap.mp3",
+        "error": "/audio/error/a.mp3"
+      },
+      "speakWord": "tap"
+    },
+    {
+      "id": "van",
+      "word": "van",
+      "slug": "van",
+      "pattern": "CVC",
+      "graphemes": [
+        "v",
+        "a",
+        "n"
+      ],
+      "image": "/images/a/van.webp",
+      "audio": {
+        "word": "/audio/word/a/van.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/van.mp3",
+        "error": "/audio/error/a.mp3"
+      },
+      "speakWord": "van"
+    },
+    {
+      "id": "mad",
+      "word": "mad",
+      "slug": "mad",
+      "pattern": "CVC",
+      "graphemes": [
+        "m",
+        "a",
+        "d"
+      ],
+      "image": "/images/a/mad.webp",
+      "audio": {
+        "word": "/audio/word/a/mad.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/mad.mp3",
+        "error": "/audio/error/a.mp3"
+      },
+      "speakWord": "mad"
+    }
+  ],
+  "e": [
+    {
+      "id": "bed",
+      "word": "bed",
+      "slug": "bed",
+      "pattern": "CVC",
+      "graphemes": [
+        "b",
+        "e",
+        "d"
+      ],
+      "image": "/images/e/bed.webp",
+      "audio": {
+        "word": "/audio/word/e/bed.mp3",
+        "phoneme": "/audio/phoneme/e.mp3",
+        "question": "/audio/question/e.mp3",
+        "success": "/audio/success/e/bed.mp3",
+        "error": "/audio/error/e.mp3"
+      },
+      "speakWord": "bed"
+    },
+    {
+      "id": "red",
+      "word": "red",
+      "slug": "red",
+      "pattern": "CVC",
+      "graphemes": [
+        "r",
+        "e",
+        "d"
+      ],
+      "image": "/images/e/red.webp",
+      "audio": {
+        "word": "/audio/word/e/red.mp3",
+        "phoneme": "/audio/phoneme/e.mp3",
+        "question": "/audio/question/e.mp3",
+        "success": "/audio/success/e/red.mp3",
+        "error": "/audio/error/e.mp3"
+      },
+      "speakWord": "red"
+    },
+    {
+      "id": "hen",
+      "word": "hen",
+      "slug": "hen",
+      "pattern": "CVC",
+      "graphemes": [
+        "h",
+        "e",
+        "n"
+      ],
+      "image": "/images/e/hen.webp",
+      "audio": {
+        "word": "/audio/word/e/hen.mp3",
+        "phoneme": "/audio/phoneme/e.mp3",
+        "question": "/audio/question/e.mp3",
+        "success": "/audio/success/e/hen.mp3",
+        "error": "/audio/error/e.mp3"
+      },
+      "speakWord": "hen"
+    },
+    {
+      "id": "pen",
+      "word": "pen",
+      "slug": "pen",
+      "pattern": "CVC",
+      "graphemes": [
+        "p",
+        "e",
+        "n"
+      ],
+      "image": "/images/e/pen.webp",
+      "audio": {
+        "word": "/audio/word/e/pen.mp3",
+        "phoneme": "/audio/phoneme/e.mp3",
+        "question": "/audio/question/e.mp3",
+        "success": "/audio/success/e/pen.mp3",
+        "error": "/audio/error/e.mp3"
+      },
+      "speakWord": "pen"
+    },
+    {
+      "id": "ten",
+      "word": "ten",
+      "slug": "ten",
+      "pattern": "CVC",
+      "graphemes": [
+        "t",
+        "e",
+        "n"
+      ],
+      "image": "/images/e/ten.webp",
+      "audio": {
+        "word": "/audio/word/e/ten.mp3",
+        "phoneme": "/audio/phoneme/e.mp3",
+        "question": "/audio/question/e.mp3",
+        "success": "/audio/success/e/ten.mp3",
+        "error": "/audio/error/e.mp3"
+      },
+      "speakWord": "ten"
+    },
+    {
+      "id": "jet",
+      "word": "jet",
+      "slug": "jet",
+      "pattern": "CVC",
+      "graphemes": [
+        "j",
+        "e",
+        "t"
+      ],
+      "image": "/images/e/jet.webp",
+      "audio": {
+        "word": "/audio/word/e/jet.mp3",
+        "phoneme": "/audio/phoneme/e.mp3",
+        "question": "/audio/question/e.mp3",
+        "success": "/audio/success/e/jet.mp3",
+        "error": "/audio/error/e.mp3"
+      },
+      "speakWord": "jet"
+    },
+    {
+      "id": "net",
+      "word": "net",
+      "slug": "net",
+      "pattern": "CVC",
+      "graphemes": [
+        "n",
+        "e",
+        "t"
+      ],
+      "image": "/images/e/net.webp",
+      "audio": {
+        "word": "/audio/word/e/net.mp3",
+        "phoneme": "/audio/phoneme/e.mp3",
+        "question": "/audio/question/e.mp3",
+        "success": "/audio/success/e/net.mp3",
+        "error": "/audio/error/e.mp3"
+      },
+      "speakWord": "net"
+    },
+    {
+      "id": "wet",
+      "word": "wet",
+      "slug": "wet",
+      "pattern": "CVC",
+      "graphemes": [
+        "w",
+        "e",
+        "t"
+      ],
+      "image": "/images/e/wet.webp",
+      "audio": {
+        "word": "/audio/word/e/wet.mp3",
+        "phoneme": "/audio/phoneme/e.mp3",
+        "question": "/audio/question/e.mp3",
+        "success": "/audio/success/e/wet.mp3",
+        "error": "/audio/error/e.mp3"
+      },
+      "speakWord": "wet"
+    },
+    {
+      "id": "leg",
+      "word": "leg",
+      "slug": "leg",
+      "pattern": "CVC",
+      "graphemes": [
+        "l",
+        "e",
+        "g"
+      ],
+      "image": "/images/e/leg.webp",
+      "audio": {
+        "word": "/audio/word/e/leg.mp3",
+        "phoneme": "/audio/phoneme/e.mp3",
+        "question": "/audio/question/e.mp3",
+        "success": "/audio/success/e/leg.mp3",
+        "error": "/audio/error/e.mp3"
+      },
+      "speakWord": "leg"
+    },
+    {
+      "id": "pet",
+      "word": "pet",
+      "slug": "pet",
+      "pattern": "CVC",
+      "graphemes": [
+        "p",
+        "e",
+        "t"
+      ],
+      "image": "/images/e/pet.webp",
+      "audio": {
+        "word": "/audio/word/e/pet.mp3",
+        "phoneme": "/audio/phoneme/e.mp3",
+        "question": "/audio/question/e.mp3",
+        "success": "/audio/success/e/pet.mp3",
+        "error": "/audio/error/e.mp3"
+      },
+      "speakWord": "pet"
+    }
+  ],
+  "i": [
+    {
+      "id": "sit",
+      "word": "sit",
+      "slug": "sit",
+      "pattern": "CVC",
+      "graphemes": [
+        "s",
+        "i",
+        "t"
+      ],
+      "image": "/images/i/sit.webp",
+      "audio": {
+        "word": "/audio/word/i/sit.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/sit.mp3",
+        "error": "/audio/error/i.mp3"
+      },
+      "speakWord": "sit"
+    },
+    {
+      "id": "big",
+      "word": "big",
+      "slug": "big",
+      "pattern": "CVC",
+      "graphemes": [
+        "b",
+        "i",
+        "g"
+      ],
+      "image": "/images/i/big.webp",
+      "audio": {
+        "word": "/audio/word/i/big.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/big.mp3",
+        "error": "/audio/error/i.mp3"
+      },
+      "speakWord": "big"
+    },
+    {
+      "id": "pig",
+      "word": "pig",
+      "slug": "pig",
+      "pattern": "CVC",
+      "graphemes": [
+        "p",
+        "i",
+        "g"
+      ],
+      "image": "/images/i/pig.webp",
+      "audio": {
+        "word": "/audio/word/i/pig.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/pig.mp3",
+        "error": "/audio/error/i.mp3"
+      },
+      "speakWord": "pig"
+    },
+    {
+      "id": "dig",
+      "word": "dig",
+      "slug": "dig",
+      "pattern": "CVC",
+      "graphemes": [
+        "d",
+        "i",
+        "g"
+      ],
+      "image": "/images/i/dig.webp",
+      "audio": {
+        "word": "/audio/word/i/dig.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/dig.mp3",
+        "error": "/audio/error/i.mp3"
+      },
+      "speakWord": "dig"
+    },
+    {
+      "id": "win",
+      "word": "win",
+      "slug": "win",
+      "pattern": "CVC",
+      "graphemes": [
+        "w",
+        "i",
+        "n"
+      ],
+      "image": "/images/i/win.webp",
+      "audio": {
+        "word": "/audio/word/i/win.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/win.mp3",
+        "error": "/audio/error/i.mp3"
+      },
+      "speakWord": "win"
+    },
+    {
+      "id": "lip",
+      "word": "lip",
+      "slug": "lip",
+      "pattern": "CVC",
+      "graphemes": [
+        "l",
+        "i",
+        "p"
+      ],
+      "image": "/images/i/lip.webp",
+      "audio": {
+        "word": "/audio/word/i/lip.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/lip.mp3",
+        "error": "/audio/error/i.mp3"
+      },
+      "speakWord": "lip"
+    },
+    {
+      "id": "kid",
+      "word": "kid",
+      "slug": "kid",
+      "pattern": "CVC",
+      "graphemes": [
+        "k",
+        "i",
+        "d"
+      ],
+      "image": "/images/i/kid.webp",
+      "audio": {
+        "word": "/audio/word/i/kid.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/kid.mp3",
+        "error": "/audio/error/i.mp3"
+      },
+      "speakWord": "kid"
+    },
+    {
+      "id": "pin",
+      "word": "pin",
+      "slug": "pin",
+      "pattern": "CVC",
+      "graphemes": [
+        "p",
+        "i",
+        "n"
+      ],
+      "image": "/images/i/pin.webp",
+      "audio": {
+        "word": "/audio/word/i/pin.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/pin.mp3",
+        "error": "/audio/error/i.mp3"
+      },
+      "speakWord": "pin"
+    },
+    {
+      "id": "six",
+      "word": "six",
+      "slug": "six",
+      "pattern": "CVC",
+      "graphemes": [
+        "s",
+        "i",
+        "x"
+      ],
+      "image": "/images/i/six.webp",
+      "audio": {
+        "word": "/audio/word/i/six.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/six.mp3",
+        "error": "/audio/error/i.mp3"
+      },
+      "speakWord": "six"
+    },
+    {
+      "id": "mix",
+      "word": "mix",
+      "slug": "mix",
+      "pattern": "CVC",
+      "graphemes": [
+        "m",
+        "i",
+        "x"
+      ],
+      "image": "/images/i/mix.webp",
+      "audio": {
+        "word": "/audio/word/i/mix.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/mix.mp3",
+        "error": "/audio/error/i.mp3"
+      },
+      "speakWord": "mix"
+    }
+  ],
+  "o": [
+    {
+      "id": "hop",
+      "word": "hop",
+      "slug": "hop",
+      "pattern": "CVC",
+      "graphemes": [
+        "h",
+        "o",
+        "p"
+      ],
+      "image": "/images/o/hop.webp",
+      "audio": {
+        "word": "/audio/word/o/hop.mp3",
+        "phoneme": "/audio/phoneme/o.mp3",
+        "question": "/audio/question/o.mp3",
+        "success": "/audio/success/o/hop.mp3",
+        "error": "/audio/error/o.mp3"
+      },
+      "speakWord": "hop"
+    },
+    {
+      "id": "top",
+      "word": "top",
+      "slug": "top",
+      "pattern": "CVC",
+      "graphemes": [
+        "t",
+        "o",
+        "p"
+      ],
+      "image": "/images/o/top.webp",
+      "audio": {
+        "word": "/audio/word/o/top.mp3",
+        "phoneme": "/audio/phoneme/o.mp3",
+        "question": "/audio/question/o.mp3",
+        "success": "/audio/success/o/top.mp3",
+        "error": "/audio/error/o.mp3"
+      },
+      "speakWord": "top"
+    },
+    {
+      "id": "dog",
+      "word": "dog",
+      "slug": "dog",
+      "pattern": "CVC",
+      "graphemes": [
+        "d",
+        "o",
+        "g"
+      ],
+      "image": "/images/o/dog.webp",
+      "audio": {
+        "word": "/audio/word/o/dog.mp3",
+        "phoneme": "/audio/phoneme/o.mp3",
+        "question": "/audio/question/o.mp3",
+        "success": "/audio/success/o/dog.mp3",
+        "error": "/audio/error/o.mp3"
+      },
+      "speakWord": "dog"
+    },
+    {
+      "id": "log",
+      "word": "log",
+      "slug": "log",
+      "pattern": "CVC",
+      "graphemes": [
+        "l",
+        "o",
+        "g"
+      ],
+      "image": "/images/o/log.webp",
+      "audio": {
+        "word": "/audio/word/o/log.mp3",
+        "phoneme": "/audio/phoneme/o.mp3",
+        "question": "/audio/question/o.mp3",
+        "success": "/audio/success/o/log.mp3",
+        "error": "/audio/error/o.mp3"
+      },
+      "speakWord": "log"
+    },
+    {
+      "id": "hot",
+      "word": "hot",
+      "slug": "hot",
+      "pattern": "CVC",
+      "graphemes": [
+        "h",
+        "o",
+        "t"
+      ],
+      "image": "/images/o/hot.webp",
+      "audio": {
+        "word": "/audio/word/o/hot.mp3",
+        "phoneme": "/audio/phoneme/o.mp3",
+        "question": "/audio/question/o.mp3",
+        "success": "/audio/success/o/hot.mp3",
+        "error": "/audio/error/o.mp3"
+      },
+      "speakWord": "hot"
+    },
+    {
+      "id": "pot",
+      "word": "pot",
+      "slug": "pot",
+      "pattern": "CVC",
+      "graphemes": [
+        "p",
+        "o",
+        "t"
+      ],
+      "image": "/images/o/pot.webp",
+      "audio": {
+        "word": "/audio/word/o/pot.mp3",
+        "phoneme": "/audio/phoneme/o.mp3",
+        "question": "/audio/question/o.mp3",
+        "success": "/audio/success/o/pot.mp3",
+        "error": "/audio/error/o.mp3"
+      },
+      "speakWord": "pot"
+    },
+    {
+      "id": "box",
+      "word": "box",
+      "slug": "box",
+      "pattern": "CVC",
+      "graphemes": [
+        "b",
+        "o",
+        "x"
+      ],
+      "image": "/images/o/box.webp",
+      "audio": {
+        "word": "/audio/word/o/box.mp3",
+        "phoneme": "/audio/phoneme/o.mp3",
+        "question": "/audio/question/o.mp3",
+        "success": "/audio/success/o/box.mp3",
+        "error": "/audio/error/o.mp3"
+      },
+      "speakWord": "box"
+    },
+    {
+      "id": "fox",
+      "word": "fox",
+      "slug": "fox",
+      "pattern": "CVC",
+      "graphemes": [
+        "f",
+        "o",
+        "x"
+      ],
+      "image": "/images/o/fox.webp",
+      "audio": {
+        "word": "/audio/word/o/fox.mp3",
+        "phoneme": "/audio/phoneme/o.mp3",
+        "question": "/audio/question/o.mp3",
+        "success": "/audio/success/o/fox.mp3",
+        "error": "/audio/error/o.mp3"
+      },
+      "speakWord": "fox"
+    },
+    {
+      "id": "mop",
+      "word": "mop",
+      "slug": "mop",
+      "pattern": "CVC",
+      "graphemes": [
+        "m",
+        "o",
+        "p"
+      ],
+      "image": "/images/o/mop.webp",
+      "audio": {
+        "word": "/audio/word/o/mop.mp3",
+        "phoneme": "/audio/phoneme/o.mp3",
+        "question": "/audio/question/o.mp3",
+        "success": "/audio/success/o/mop.mp3",
+        "error": "/audio/error/o.mp3"
+      },
+      "speakWord": "mop"
+    },
+    {
+      "id": "job",
+      "word": "job",
+      "slug": "job",
+      "pattern": "CVC",
+      "graphemes": [
+        "j",
+        "o",
+        "b"
+      ],
+      "image": "/images/o/job.webp",
+      "audio": {
+        "word": "/audio/word/o/job.mp3",
+        "phoneme": "/audio/phoneme/o.mp3",
+        "question": "/audio/question/o.mp3",
+        "success": "/audio/success/o/job.mp3",
+        "error": "/audio/error/o.mp3"
+      },
+      "speakWord": "job"
+    }
+  ],
+  "u": [
+    {
+      "id": "sun",
+      "word": "sun",
+      "slug": "sun",
+      "pattern": "CVC",
+      "graphemes": [
+        "s",
+        "u",
+        "n"
+      ],
+      "image": "/images/u/sun.webp",
+      "audio": {
+        "word": "/audio/word/u/sun.mp3",
+        "phoneme": "/audio/phoneme/u.mp3",
+        "question": "/audio/question/u.mp3",
+        "success": "/audio/success/u/sun.mp3",
+        "error": "/audio/error/u.mp3"
+      },
+      "speakWord": "sun"
+    },
+    {
+      "id": "run",
+      "word": "run",
+      "slug": "run",
+      "pattern": "CVC",
+      "graphemes": [
+        "r",
+        "u",
+        "n"
+      ],
+      "image": "/images/u/run.webp",
+      "audio": {
+        "word": "/audio/word/u/run.mp3",
+        "phoneme": "/audio/phoneme/u.mp3",
+        "question": "/audio/question/u.mp3",
+        "success": "/audio/success/u/run.mp3",
+        "error": "/audio/error/u.mp3"
+      },
+      "speakWord": "run"
+    },
+    {
+      "id": "bun",
+      "word": "bun",
+      "slug": "bun",
+      "pattern": "CVC",
+      "graphemes": [
+        "b",
+        "u",
+        "n"
+      ],
+      "image": "/images/u/bun.webp",
+      "audio": {
+        "word": "/audio/word/u/bun.mp3",
+        "phoneme": "/audio/phoneme/u.mp3",
+        "question": "/audio/question/u.mp3",
+        "success": "/audio/success/u/bun.mp3",
+        "error": "/audio/error/u.mp3"
+      },
+      "speakWord": "bun"
+    },
+    {
+      "id": "cup",
+      "word": "cup",
+      "slug": "cup",
+      "pattern": "CVC",
+      "graphemes": [
+        "c",
+        "u",
+        "p"
+      ],
+      "image": "/images/u/cup.webp",
+      "audio": {
+        "word": "/audio/word/u/cup.mp3",
+        "phoneme": "/audio/phoneme/u.mp3",
+        "question": "/audio/question/u.mp3",
+        "success": "/audio/success/u/cup.mp3",
+        "error": "/audio/error/u.mp3"
+      },
+      "speakWord": "cup"
+    },
+    {
+      "id": "bus",
+      "word": "bus",
+      "slug": "bus",
+      "pattern": "CVC",
+      "graphemes": [
+        "b",
+        "u",
+        "s"
+      ],
+      "image": "/images/u/bus.webp",
+      "audio": {
+        "word": "/audio/word/u/bus.mp3",
+        "phoneme": "/audio/phoneme/u.mp3",
+        "question": "/audio/question/u.mp3",
+        "success": "/audio/success/u/bus.mp3",
+        "error": "/audio/error/u.mp3"
+      },
+      "speakWord": "bus"
+    },
+    {
+      "id": "hug",
+      "word": "hug",
+      "slug": "hug",
+      "pattern": "CVC",
+      "graphemes": [
+        "h",
+        "u",
+        "g"
+      ],
+      "image": "/images/u/hug.webp",
+      "audio": {
+        "word": "/audio/word/u/hug.mp3",
+        "phoneme": "/audio/phoneme/u.mp3",
+        "question": "/audio/question/u.mp3",
+        "success": "/audio/success/u/hug.mp3",
+        "error": "/audio/error/u.mp3"
+      },
+      "speakWord": "hug"
+    },
+    {
+      "id": "mud",
+      "word": "mud",
+      "slug": "mud",
+      "pattern": "CVC",
+      "graphemes": [
+        "m",
+        "u",
+        "d"
+      ],
+      "image": "/images/u/mud.webp",
+      "audio": {
+        "word": "/audio/word/u/mud.mp3",
+        "phoneme": "/audio/phoneme/u.mp3",
+        "question": "/audio/question/u.mp3",
+        "success": "/audio/success/u/mud.mp3",
+        "error": "/audio/error/u.mp3"
+      },
+      "speakWord": "mud"
+    },
+    {
+      "id": "tub",
+      "word": "tub",
+      "slug": "tub",
+      "pattern": "CVC",
+      "graphemes": [
+        "t",
+        "u",
+        "b"
+      ],
+      "image": "/images/u/tub.webp",
+      "audio": {
+        "word": "/audio/word/u/tub.mp3",
+        "phoneme": "/audio/phoneme/u.mp3",
+        "question": "/audio/question/u.mp3",
+        "success": "/audio/success/u/tub.mp3",
+        "error": "/audio/error/u.mp3"
+      },
+      "speakWord": "tub"
+    },
+    {
+      "id": "gum",
+      "word": "gum",
+      "slug": "gum",
+      "pattern": "CVC",
+      "graphemes": [
+        "g",
+        "u",
+        "m"
+      ],
+      "image": "/images/u/gum.webp",
+      "audio": {
+        "word": "/audio/word/u/gum.mp3",
+        "phoneme": "/audio/phoneme/u.mp3",
+        "question": "/audio/question/u.mp3",
+        "success": "/audio/success/u/gum.mp3",
+        "error": "/audio/error/u.mp3"
+      },
+      "speakWord": "gum"
+    },
+    {
+      "id": "pup",
+      "word": "pup",
+      "slug": "pup",
+      "pattern": "CVC",
+      "graphemes": [
+        "p",
+        "u",
+        "p"
+      ],
+      "image": "/images/u/pup.webp",
+      "audio": {
+        "word": "/audio/word/u/pup.mp3",
+        "phoneme": "/audio/phoneme/u.mp3",
+        "question": "/audio/question/u.mp3",
+        "success": "/audio/success/u/pup.mp3",
+        "error": "/audio/error/u.mp3"
+      },
+      "speakWord": "pup"
+    }
+  ]
+}

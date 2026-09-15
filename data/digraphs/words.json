@@ -1,0 +1,826 @@
+{
+  "sh": [
+    {
+      "id": "ship",
+      "word": "ship",
+      "slug": "ship",
+      "digraph": "sh",
+      "graphemes": [
+        "sh",
+        "i",
+        "p"
+      ],
+      "image": "/images/words/sh/ship.svg",
+      "audio": {
+        "word": "/audio/word/sh/ship.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/ship.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "ship"
+    },
+    {
+      "id": "shop",
+      "word": "shop",
+      "slug": "shop",
+      "digraph": "sh",
+      "graphemes": [
+        "sh",
+        "o",
+        "p"
+      ],
+      "image": "/images/words/sh/shop.svg",
+      "audio": {
+        "word": "/audio/word/sh/shop.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/shop.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "shop"
+    },
+    {
+      "id": "fish",
+      "word": "fish",
+      "slug": "fish",
+      "digraph": "sh",
+      "graphemes": [
+        "f",
+        "i",
+        "sh"
+      ],
+      "image": "/images/words/sh/fish.svg",
+      "audio": {
+        "word": "/audio/word/sh/fish.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/fish.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "fish"
+    },
+    {
+      "id": "dish",
+      "word": "dish",
+      "slug": "dish",
+      "digraph": "sh",
+      "graphemes": [
+        "d",
+        "i",
+        "sh"
+      ],
+      "image": "/images/words/sh/dish.svg",
+      "audio": {
+        "word": "/audio/word/sh/dish.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/dish.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "dish"
+    },
+    {
+      "id": "shell",
+      "word": "shell",
+      "slug": "shell",
+      "digraph": "sh",
+      "graphemes": [
+        "sh",
+        "e",
+        "l",
+        "l"
+      ],
+      "image": "/images/words/sh/shell.svg",
+      "audio": {
+        "word": "/audio/word/sh/shell.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/shell.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "shell"
+    },
+    {
+      "id": "brush",
+      "word": "brush",
+      "slug": "brush",
+      "digraph": "sh",
+      "graphemes": [
+        "b",
+        "r",
+        "u",
+        "sh"
+      ],
+      "image": "/images/words/sh/brush.svg",
+      "audio": {
+        "word": "/audio/word/sh/brush.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/brush.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "brush"
+    },
+    {
+      "id": "crash",
+      "word": "crash",
+      "slug": "crash",
+      "digraph": "sh",
+      "graphemes": [
+        "c",
+        "r",
+        "a",
+        "sh"
+      ],
+      "image": "/images/words/sh/crash.svg",
+      "audio": {
+        "word": "/audio/word/sh/crash.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/crash.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "crash"
+    },
+    {
+      "id": "shut",
+      "word": "shut",
+      "slug": "shut",
+      "digraph": "sh",
+      "graphemes": [
+        "sh",
+        "u",
+        "t"
+      ],
+      "image": "/images/words/sh/shut.svg",
+      "audio": {
+        "word": "/audio/word/sh/shut.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/shut.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "shut"
+    },
+    {
+      "id": "mash",
+      "word": "mash",
+      "slug": "mash",
+      "digraph": "sh",
+      "graphemes": [
+        "m",
+        "a",
+        "sh"
+      ],
+      "image": "/images/words/sh/mash.svg",
+      "audio": {
+        "word": "/audio/word/sh/mash.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/mash.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "mash"
+    },
+    {
+      "id": "wish",
+      "word": "wish",
+      "slug": "wish",
+      "digraph": "sh",
+      "graphemes": [
+        "w",
+        "i",
+        "sh"
+      ],
+      "image": "/images/words/sh/wish.svg",
+      "audio": {
+        "word": "/audio/word/sh/wish.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/wish.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "wish"
+    }
+  ],
+  "ch": [
+    {
+      "id": "chip",
+      "word": "chip",
+      "slug": "chip",
+      "digraph": "ch",
+      "graphemes": [
+        "ch",
+        "i",
+        "p"
+      ],
+      "image": "/images/words/ch/chip.svg",
+      "audio": {
+        "word": "/audio/word/ch/chip.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/chip.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "chip"
+    },
+    {
+      "id": "chop",
+      "word": "chop",
+      "slug": "chop",
+      "digraph": "ch",
+      "graphemes": [
+        "ch",
+        "o",
+        "p"
+      ],
+      "image": "/images/words/ch/chop.svg",
+      "audio": {
+        "word": "/audio/word/ch/chop.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/chop.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "chop"
+    },
+    {
+      "id": "chin",
+      "word": "chin",
+      "slug": "chin",
+      "digraph": "ch",
+      "graphemes": [
+        "ch",
+        "i",
+        "n"
+      ],
+      "image": "/images/words/ch/chin.svg",
+      "audio": {
+        "word": "/audio/word/ch/chin.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/chin.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "chin"
+    },
+    {
+      "id": "chat",
+      "word": "chat",
+      "slug": "chat",
+      "digraph": "ch",
+      "graphemes": [
+        "ch",
+        "a",
+        "t"
+      ],
+      "image": "/images/words/ch/chat.svg",
+      "audio": {
+        "word": "/audio/word/ch/chat.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/chat.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "chat"
+    },
+    {
+      "id": "much",
+      "word": "much",
+      "slug": "much",
+      "digraph": "ch",
+      "graphemes": [
+        "m",
+        "u",
+        "ch"
+      ],
+      "image": "/images/words/ch/much.svg",
+      "audio": {
+        "word": "/audio/word/ch/much.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/much.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "much"
+    },
+    {
+      "id": "rich",
+      "word": "rich",
+      "slug": "rich",
+      "digraph": "ch",
+      "graphemes": [
+        "r",
+        "i",
+        "ch"
+      ],
+      "image": "/images/words/ch/rich.svg",
+      "audio": {
+        "word": "/audio/word/ch/rich.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/rich.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "rich"
+    },
+    {
+      "id": "lunch",
+      "word": "lunch",
+      "slug": "lunch",
+      "digraph": "ch",
+      "graphemes": [
+        "l",
+        "u",
+        "n",
+        "ch"
+      ],
+      "image": "/images/words/ch/lunch.svg",
+      "audio": {
+        "word": "/audio/word/ch/lunch.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/lunch.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "lunch"
+    },
+    {
+      "id": "chick",
+      "word": "chick",
+      "slug": "chick",
+      "digraph": "ch",
+      "graphemes": [
+        "ch",
+        "i",
+        "c",
+        "k"
+      ],
+      "image": "/images/words/ch/chick.svg",
+      "audio": {
+        "word": "/audio/word/ch/chick.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/chick.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "chick"
+    },
+    {
+      "id": "chest",
+      "word": "chest",
+      "slug": "chest",
+      "digraph": "ch",
+      "graphemes": [
+        "ch",
+        "e",
+        "s",
+        "t"
+      ],
+      "image": "/images/words/ch/chest.svg",
+      "audio": {
+        "word": "/audio/word/ch/chest.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/chest.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "chest"
+    },
+    {
+      "id": "chill",
+      "word": "chill",
+      "slug": "chill",
+      "digraph": "ch",
+      "graphemes": [
+        "ch",
+        "i",
+        "l",
+        "l"
+      ],
+      "image": "/images/words/ch/chill.svg",
+      "audio": {
+        "word": "/audio/word/ch/chill.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/chill.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "chill"
+    }
+  ],
+  "th": [
+    {
+      "id": "thin",
+      "word": "thin",
+      "slug": "thin",
+      "digraph": "th",
+      "graphemes": [
+        "th",
+        "i",
+        "n"
+      ],
+      "image": "/images/words/th/thin.svg",
+      "audio": {
+        "word": "/audio/word/th/thin.mp3",
+        "phoneme": "/audio/phoneme/th.mp3",
+        "question": "/audio/question/th.mp3",
+        "success": "/audio/success/th/thin.mp3",
+        "error": "/audio/error/th.mp3"
+      },
+      "speakWord": "thin"
+    },
+    {
+      "id": "thick",
+      "word": "thick",
+      "slug": "thick",
+      "digraph": "th",
+      "graphemes": [
+        "th",
+        "i",
+        "c",
+        "k"
+      ],
+      "image": "/images/words/th/thick.svg",
+      "audio": {
+        "word": "/audio/word/th/thick.mp3",
+        "phoneme": "/audio/phoneme/th.mp3",
+        "question": "/audio/question/th.mp3",
+        "success": "/audio/success/th/thick.mp3",
+        "error": "/audio/error/th.mp3"
+      },
+      "speakWord": "thick"
+    },
+    {
+      "id": "this",
+      "word": "this",
+      "slug": "this",
+      "digraph": "th",
+      "graphemes": [
+        "th",
+        "i",
+        "s"
+      ],
+      "image": "/images/words/th/this.svg",
+      "audio": {
+        "word": "/audio/word/th/this.mp3",
+        "phoneme": "/audio/phoneme/th.mp3",
+        "question": "/audio/question/th.mp3",
+        "success": "/audio/success/th/this.mp3",
+        "error": "/audio/error/th.mp3"
+      },
+      "speakWord": "this"
+    },
+    {
+      "id": "that",
+      "word": "that",
+      "slug": "that",
+      "digraph": "th",
+      "graphemes": [
+        "th",
+        "a",
+        "t"
+      ],
+      "image": "/images/words/th/that.svg",
+      "audio": {
+        "word": "/audio/word/th/that.mp3",
+        "phoneme": "/audio/phoneme/th.mp3",
+        "question": "/audio/question/th.mp3",
+        "success": "/audio/success/th/that.mp3",
+        "error": "/audio/error/th.mp3"
+      },
+      "speakWord": "that"
+    },
+    {
+      "id": "path",
+      "word": "path",
+      "slug": "path",
+      "digraph": "th",
+      "graphemes": [
+        "p",
+        "a",
+        "th"
+      ],
+      "image": "/images/words/th/path.svg",
+      "audio": {
+        "word": "/audio/word/th/path.mp3",
+        "phoneme": "/audio/phoneme/th.mp3",
+        "question": "/audio/question/th.mp3",
+        "success": "/audio/success/th/path.mp3",
+        "error": "/audio/error/th.mp3"
+      },
+      "speakWord": "path"
+    },
+    {
+      "id": "bath",
+      "word": "bath",
+      "slug": "bath",
+      "digraph": "th",
+      "graphemes": [
+        "b",
+        "a",
+        "th"
+      ],
+      "image": "/images/words/th/bath.svg",
+      "audio": {
+        "word": "/audio/word/th/bath.mp3",
+        "phoneme": "/audio/phoneme/th.mp3",
+        "question": "/audio/question/th.mp3",
+        "success": "/audio/success/th/bath.mp3",
+        "error": "/audio/error/th.mp3"
+      },
+      "speakWord": "bath"
+    },
+    {
+      "id": "math",
+      "word": "math",
+      "slug": "math",
+      "digraph": "th",
+      "graphemes": [
+        "m",
+        "a",
+        "th"
+      ],
+      "image": "/images/words/th/math.svg",
+      "audio": {
+        "word": "/audio/word/th/math.mp3",
+        "phoneme": "/audio/phoneme/th.mp3",
+        "question": "/audio/question/th.mp3",
+        "success": "/audio/success/th/math.mp3",
+        "error": "/audio/error/th.mp3"
+      },
+      "speakWord": "math"
+    },
+    {
+      "id": "with",
+      "word": "with",
+      "slug": "with",
+      "digraph": "th",
+      "graphemes": [
+        "w",
+        "i",
+        "th"
+      ],
+      "image": "/images/words/th/with.svg",
+      "audio": {
+        "word": "/audio/word/th/with.mp3",
+        "phoneme": "/audio/phoneme/th.mp3",
+        "question": "/audio/question/th.mp3",
+        "success": "/audio/success/th/with.mp3",
+        "error": "/audio/error/th.mp3"
+      },
+      "speakWord": "with"
+    },
+    {
+      "id": "three",
+      "word": "three",
+      "slug": "three",
+      "digraph": "th",
+      "graphemes": [
+        "th",
+        "r",
+        "e",
+        "e"
+      ],
+      "image": "/images/words/th/three.svg",
+      "audio": {
+        "word": "/audio/word/th/three.mp3",
+        "phoneme": "/audio/phoneme/th.mp3",
+        "question": "/audio/question/th.mp3",
+        "success": "/audio/success/th/three.mp3",
+        "error": "/audio/error/th.mp3"
+      },
+      "speakWord": "three"
+    },
+    {
+      "id": "thumb",
+      "word": "thumb",
+      "slug": "thumb",
+      "digraph": "th",
+      "graphemes": [
+        "th",
+        "u",
+        "m",
+        "b"
+      ],
+      "image": "/images/words/th/thumb.svg",
+      "audio": {
+        "word": "/audio/word/th/thumb.mp3",
+        "phoneme": "/audio/phoneme/th.mp3",
+        "question": "/audio/question/th.mp3",
+        "success": "/audio/success/th/thumb.mp3",
+        "error": "/audio/error/th.mp3"
+      },
+      "speakWord": "thumb"
+    }
+  ],
+  "wh": [
+    {
+      "id": "when",
+      "word": "when",
+      "slug": "when",
+      "digraph": "wh",
+      "graphemes": [
+        "wh",
+        "e",
+        "n"
+      ],
+      "image": "/images/words/wh/when.svg",
+      "audio": {
+        "word": "/audio/word/wh/when.mp3",
+        "phoneme": "/audio/phoneme/wh.mp3",
+        "question": "/audio/question/wh.mp3",
+        "success": "/audio/success/wh/when.mp3",
+        "error": "/audio/error/wh.mp3"
+      },
+      "speakWord": "when"
+    },
+    {
+      "id": "what",
+      "word": "what",
+      "slug": "what",
+      "digraph": "wh",
+      "graphemes": [
+        "wh",
+        "a",
+        "t"
+      ],
+      "image": "/images/words/wh/what.svg",
+      "audio": {
+        "word": "/audio/word/wh/what.mp3",
+        "phoneme": "/audio/phoneme/wh.mp3",
+        "question": "/audio/question/wh.mp3",
+        "success": "/audio/success/wh/what.mp3",
+        "error": "/audio/error/wh.mp3"
+      },
+      "speakWord": "what"
+    },
+    {
+      "id": "whip",
+      "word": "whip",
+      "slug": "whip",
+      "digraph": "wh",
+      "graphemes": [
+        "wh",
+        "i",
+        "p"
+      ],
+      "image": "/images/words/wh/whip.svg",
+      "audio": {
+        "word": "/audio/word/wh/whip.mp3",
+        "phoneme": "/audio/phoneme/wh.mp3",
+        "question": "/audio/question/wh.mp3",
+        "success": "/audio/success/wh/whip.mp3",
+        "error": "/audio/error/wh.mp3"
+      },
+      "speakWord": "whip"
+    },
+    {
+      "id": "whiz",
+      "word": "whiz",
+      "slug": "whiz",
+      "digraph": "wh",
+      "graphemes": [
+        "wh",
+        "i",
+        "z"
+      ],
+      "image": "/images/words/wh/whiz.svg",
+      "audio": {
+        "word": "/audio/word/wh/whiz.mp3",
+        "phoneme": "/audio/phoneme/wh.mp3",
+        "question": "/audio/question/wh.mp3",
+        "success": "/audio/success/wh/whiz.mp3",
+        "error": "/audio/error/wh.mp3"
+      },
+      "speakWord": "whiz"
+    },
+    {
+      "id": "which",
+      "word": "which",
+      "slug": "which",
+      "digraph": "wh",
+      "graphemes": [
+        "wh",
+        "i",
+        "c",
+        "h"
+      ],
+      "image": "/images/words/wh/which.svg",
+      "audio": {
+        "word": "/audio/word/wh/which.mp3",
+        "phoneme": "/audio/phoneme/wh.mp3",
+        "question": "/audio/question/wh.mp3",
+        "success": "/audio/success/wh/which.mp3",
+        "error": "/audio/error/wh.mp3"
+      },
+      "speakWord": "which"
+    },
+    {
+      "id": "whale",
+      "word": "whale",
+      "slug": "whale",
+      "digraph": "wh",
+      "graphemes": [
+        "wh",
+        "a",
+        "l",
+        "e"
+      ],
+      "image": "/images/words/wh/whale.svg",
+      "audio": {
+        "word": "/audio/word/wh/whale.mp3",
+        "phoneme": "/audio/phoneme/wh.mp3",
+        "question": "/audio/question/wh.mp3",
+        "success": "/audio/success/wh/whale.mp3",
+        "error": "/audio/error/wh.mp3"
+      },
+      "speakWord": "whale"
+    },
+    {
+      "id": "wheat",
+      "word": "wheat",
+      "slug": "wheat",
+      "digraph": "wh",
+      "graphemes": [
+        "wh",
+        "e",
+        "a",
+        "t"
+      ],
+      "image": "/images/words/wh/wheat.svg",
+      "audio": {
+        "word": "/audio/word/wh/wheat.mp3",
+        "phoneme": "/audio/phoneme/wh.mp3",
+        "question": "/audio/question/wh.mp3",
+        "success": "/audio/success/wh/wheat.mp3",
+        "error": "/audio/error/wh.mp3"
+      },
+      "speakWord": "wheat"
+    },
+    {
+      "id": "white",
+      "word": "white",
+      "slug": "white",
+      "digraph": "wh",
+      "graphemes": [
+        "wh",
+        "i",
+        "t",
+        "e"
+      ],
+      "image": "/images/words/wh/white.svg",
+      "audio": {
+        "word": "/audio/word/wh/white.mp3",
+        "phoneme": "/audio/phoneme/wh.mp3",
+        "question": "/audio/question/wh.mp3",
+        "success": "/audio/success/wh/white.mp3",
+        "error": "/audio/error/wh.mp3"
+      },
+      "speakWord": "white"
+    },
+    {
+      "id": "wheel",
+      "word": "wheel",
+      "slug": "wheel",
+      "digraph": "wh",
+      "graphemes": [
+        "wh",
+        "e",
+        "e",
+        "l"
+      ],
+      "image": "/images/words/wh/wheel.svg",
+      "audio": {
+        "word": "/audio/word/wh/wheel.mp3",
+        "phoneme": "/audio/phoneme/wh.mp3",
+        "question": "/audio/question/wh.mp3",
+        "success": "/audio/success/wh/wheel.mp3",
+        "error": "/audio/error/wh.mp3"
+      },
+      "speakWord": "wheel"
+    },
+    {
+      "id": "where",
+      "word": "where",
+      "slug": "where",
+      "digraph": "wh",
+      "graphemes": [
+        "wh",
+        "e",
+        "r",
+        "e"
+      ],
+      "image": "/images/words/wh/where.svg",
+      "audio": {
+        "word": "/audio/word/wh/where.mp3",
+        "phoneme": "/audio/phoneme/wh.mp3",
+        "question": "/audio/question/wh.mp3",
+        "success": "/audio/success/wh/where.mp3",
+        "error": "/audio/error/wh.mp3"
+      },
+      "speakWord": "where"
+    }
+  ]
+}

@@ -49,17 +49,17 @@ export default async function LearnerDashboardPage() {
           <p className="text-gray-600 mt-2 text-lg">Pick up where you left off</p>
         </div>
 
-        <Card className="mb-12 border-teal-200 bg-gradient-to-r from-sky-50 to-teal-50">
+        <Card className="mb-12 border-violet-200 bg-gradient-to-r from-sky-50 via-violet-50 to-amber-50">
           <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-6">
             <div>
-              <p className="text-2xl mb-1" aria-hidden>🐧</p>
-              <h2 className="text-lg font-semibold text-teal-900">Eco Penguin</h2>
-              <p className="text-sm text-teal-800/80 mt-1">
-                Early English games — This Is &amp; Which Is, rebuilt for MonAlo.
+              <p className="text-2xl mb-1" aria-hidden>🐧 Aa</p>
+              <h2 className="text-lg font-semibold text-violet-900">Kids learning playroom</h2>
+              <p className="text-sm text-violet-800/80 mt-1">
+                Eco Penguin, Vowel Words, Digraphs, and Build the word — one place to play.
               </p>
             </div>
-            <Link href="/learning/ecopenguin">
-              <Button>Open Eco Penguin</Button>
+            <Link href="/learning">
+              <Button>Open kids learning</Button>
             </Link>
           </CardContent>
         </Card>

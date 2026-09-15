@@ -11,6 +11,12 @@ export const POINTS_CONFIG = {
   lessonCompleteMax: 10,
   /** Points for a first-time correct Eco Penguin answer */
   ecoPenguinCorrect: 2,
+  /** Points for a first-time correct Vowel Words answer */
+  vowelWordsCorrect: 2,
+  /** Points for a first-time correct Digraphs answer */
+  digraphsCorrect: 2,
+  /** Points for a first-time Build-the-word spelling */
+  buildWordCorrect: 2,
 } as const
 
 export function pointsFromPurchaseTaka(taka: number): number {
@@ -38,6 +44,18 @@ export function pointsForLessonComplete(): number {
 
 export function pointsForEcoPenguinCorrect(): number {
   return POINTS_CONFIG.ecoPenguinCorrect
+}
+
+export function pointsForVowelWordsCorrect(): number {
+  return POINTS_CONFIG.vowelWordsCorrect
+}
+
+export function pointsForDigraphsCorrect(): number {
+  return POINTS_CONFIG.digraphsCorrect
+}
+
+export function pointsForBuildWordCorrect(): number {
+  return POINTS_CONFIG.buildWordCorrect
 }
 
 export function levelFromTotalPoints(totalPoints: number): number {

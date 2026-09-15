@@ -25,7 +25,7 @@ export default function ThisIsSection({ items, page }: ThisIsSectionProps) {
   return (
     <section className={`${ecoTheme.card} border-amber-100 p-4 sm:p-5`}>
       <div className="mb-4 flex items-center justify-center gap-2">
-        <span className={`${ecoTheme.pill} bg-amber-100 text-amber-900`}>Step 1</span>
+        <span className={`${ecoTheme.pill} bg-amber-100 text-amber-900`}>Learn</span>
         <h3 className="text-lg font-extrabold text-amber-950 sm:text-xl">This is…</h3>
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">

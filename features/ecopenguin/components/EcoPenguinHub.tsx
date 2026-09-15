@@ -5,15 +5,25 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ecoTheme, ECO_PENGUIN_IMAGE_ASPECT } from '@/features/ecopenguin/eco-theme'
 import { ECO_PENGUIN_BASE_PATH, ECO_PENGUIN_CATEGORIES_PER_PAGE } from '@/lib/ecopenguin/constants'
+import { readEcoPenguinSession, type EcoPenguinSession } from '@/lib/ecopenguin/session'
 import type { EcoPenguinCategory } from '@/lib/ecopenguin/types'
+
+export type CategoryProgress = {
+  slug: string
+  name: string
+  total: number
+  mastered: number
+}
 
 type EcoPenguinHubProps = {
   categories: EcoPenguinCategory[]
+  progress?: CategoryProgress[]
 }
 
-export default function EcoPenguinHub({ categories }: EcoPenguinHubProps) {
+export default function EcoPenguinHub({ categories, progress = [] }: EcoPenguinHubProps) {
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(ECO_PENGUIN_CATEGORIES_PER_PAGE)
+  const [session, setSession] = useState<EcoPenguinSession | null>(null)
 
   useEffect(() => {
     const update = () => {
@@ -24,6 +34,16 @@ export default function EcoPenguinHub({ categories }: EcoPenguinHubProps) {
     return () => window.removeEventListener('resize', update)
   }, [])
 
+  useEffect(() => {
+    setSession(readEcoPenguinSession())
+  }, [])
+
+  const progressBySlug = useMemo(() => {
+    const map = new Map<string, CategoryProgress>()
+    for (const row of progress) map.set(row.slug, row)
+    return map
+  }, [progress])
+
   const totalPages = Math.max(1, Math.ceil(categories.length / perPage))
   const safePage = Math.min(page, totalPages)
 
@@ -31,6 +51,14 @@ export default function EcoPenguinHub({ categories }: EcoPenguinHubProps) {
     const start = (safePage - 1) * perPage
     return categories.slice(start, start + perPage)
   }, [categories, safePage, perPage])
+
+  const continueCategory = session
+    ? categories.find((c) => c.slug === session.categorySlug)
+    : null
+
+  const continueHref = session
+    ? `${ECO_PENGUIN_BASE_PATH}/categories/${session.categorySlug}?page=${session.page}&mode=${session.mode}`
+    : ECO_PENGUIN_BASE_PATH
 
   return (
     <div className="space-y-8">
@@ -50,7 +78,7 @@ export default function EcoPenguinHub({ categories }: EcoPenguinHubProps) {
           Learn English with Eco Penguin
         </h2>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-sky-800/85 sm:text-base">
-          Pick a topic, tap the pictures, and play the listening games. Great for curious kids!
+          Pick a topic, learn the pictures, then play the listening game. Great for curious kids!
         </p>
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
           <span className={`${ecoTheme.pill} bg-amber-100 text-amber-900`}>👂 Listen</span>
@@ -59,34 +87,74 @@ export default function EcoPenguinHub({ categories }: EcoPenguinHubProps) {
         </div>
       </section>
 
-      <div>
+      {continueCategory && session && (
+        <section
+          className={`${ecoTheme.card} flex flex-col items-center gap-4 border-teal-200 bg-gradient-to-r from-teal-50 to-sky-50 p-5 sm:flex-row sm:justify-between sm:p-6`}
+        >
+          <div className="text-center sm:text-left">
+            <p className="text-xs font-bold uppercase tracking-widest text-teal-700">Continue</p>
+            <h3 className="mt-1 text-xl font-extrabold text-sky-950">
+              Keep going with {continueCategory.name}
+            </h3>
+            <p className="mt-1 text-sm text-sky-800/80">
+              Page {session.page} · {session.mode === 'play' ? 'Listening game' : 'Learn mode'}
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            <Link href={continueHref} className={`${ecoTheme.btnPrimary} px-6 py-3`}>
+              Continue {continueCategory.name} →
+            </Link>
+            <Link href="#categories" className={ecoTheme.btnSecondary}>
+              Pick another topic
+            </Link>
+          </div>
+        </section>
+      )}
+
+      <div id="categories">
         <h3 className="mb-4 text-center text-sm font-bold uppercase tracking-widest text-sky-700/80">
           Choose a category
         </h3>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-          {visible.map((category) => (
-            <Link
-              key={category.id}
-              href={`${ECO_PENGUIN_BASE_PATH}/categories/${category.slug}`}
-              className={`${ecoTheme.cardSoft} group p-3 transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-lg`}
-            >
-              <div
-                className={`relative mb-3 overflow-hidden rounded-2xl bg-gradient-to-br from-sky-50 to-emerald-50 ${ECO_PENGUIN_IMAGE_ASPECT}`}
-              >
-                <Image
-                  src={category.image}
-                  alt={category.name}
-                  fill
-                  className={`${ecoTheme.image} transition duration-300 group-hover:scale-[1.02]`}
-                  sizes="(max-width: 768px) 45vw, 180px"
-                />
-              </div>
-              <p className="text-center text-sm font-extrabold text-sky-950 sm:text-base">
-                {category.name}
-              </p>
-            </Link>
-          ))}
-        </div>
+        {categories.length === 0 ? (
+          <p className={`${ecoTheme.cardSoft} py-12 text-center text-sky-800`}>
+            No categories yet. Check back soon!
+          </p>
+        ) : (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+            {visible.map((category) => {
+              const stats = progressBySlug.get(category.slug)
+              const mastered = stats?.mastered ?? 0
+              const total = stats?.total ?? 0
+              return (
+                <Link
+                  key={category.id}
+                  href={`${ECO_PENGUIN_BASE_PATH}/categories/${category.slug}`}
+                  className={`${ecoTheme.cardSoft} group p-3 transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-lg`}
+                >
+                  <div
+                    className={`relative mb-3 overflow-hidden rounded-2xl bg-gradient-to-br from-sky-50 to-emerald-50 ${ECO_PENGUIN_IMAGE_ASPECT}`}
+                  >
+                    <Image
+                      src={category.image}
+                      alt={category.name}
+                      fill
+                      className={`${ecoTheme.image} transition duration-300 group-hover:scale-[1.02]`}
+                      sizes="(max-width: 768px) 45vw, 180px"
+                    />
+                  </div>
+                  <p className="text-center text-sm font-extrabold text-sky-950 sm:text-base">
+                    {category.name}
+                  </p>
+                  {total > 0 && (
+                    <p className="mt-1 text-center text-xs font-bold text-amber-700">
+                      ⭐ {mastered} of {total}
+                    </p>
+                  )}
+                </Link>
+              )
+            })}
+          </div>
+        )}
       </div>
 
       {totalPages > 1 && (
@@ -95,7 +163,7 @@ export default function EcoPenguinHub({ categories }: EcoPenguinHubProps) {
             type="button"
             disabled={safePage <= 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className={ecoTheme.btnSecondary}
+            className={`${ecoTheme.btnSecondary} min-h-11 px-5`}
           >
             ← Previous
           </button>
@@ -106,7 +174,7 @@ export default function EcoPenguinHub({ categories }: EcoPenguinHubProps) {
             type="button"
             disabled={safePage >= totalPages}
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            className={ecoTheme.btnPrimary}
+            className={`${ecoTheme.btnPrimary} min-h-11 px-5`}
           >
             Next →
           </button>

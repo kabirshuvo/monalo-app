@@ -28,3 +28,22 @@ export function pickRandomItem(items: EcoPenguinItem[]): EcoPenguinItem | null {
 export function pickRandomItemName(items: EcoPenguinItem[]): string {
   return pickRandomItem(items)?.name ?? ''
 }
+
+/** Shuffled no-repeat deck of word names for a play round. */
+export function buildRoundDeck(names: string[]): string[] {
+  return shuffleItems([...new Set(names.filter(Boolean))])
+}
+
+/** Peek current target; remaining keeps the full deck including target until correct. */
+export function takeNextTarget(deck: string[]): { target: string; remaining: string[] } {
+  if (deck.length === 0) return { target: '', remaining: [] }
+  const [target, ...rest] = deck
+  return { target, remaining: rest }
+}
+
+/** True when every name in `allowed` is present in `deck` (order ignored). */
+export function deckMatchesPool(deck: string[], allowed: string[]): boolean {
+  if (deck.length === 0) return false
+  const allow = new Set(allowed)
+  return deck.every((name) => allow.has(name))
+}

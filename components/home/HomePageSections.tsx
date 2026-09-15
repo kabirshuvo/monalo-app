@@ -48,8 +48,8 @@ export default function HomePageSections() {
             },
             {
               title: 'Young explorers',
-              body: 'Eco Penguin turns curiosity into calm practice.',
-              href: '/learning/ecopenguin',
+              body: 'Kids learning playroom — vowels, digraphs, and Eco Penguin.',
+              href: '/learning',
             },
             {
               title: 'Supporters',

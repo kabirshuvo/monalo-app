@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useStopEcoPenguinAudioOnUnmount } from '@/features/ecopenguin/hooks/useEcoPenguinAudio'
+import { EcoPenguinUiProvider, useEcoPenguinUi } from '@/features/ecopenguin/context/EcoPenguinUiContext'
 import { ecoTheme } from '@/features/ecopenguin/eco-theme'
 import { ECO_PENGUIN_BASE_PATH } from '@/lib/ecopenguin/constants'
 
@@ -11,12 +12,13 @@ type EcoPenguinShellProps = {
   backHref?: string
 }
 
-export default function EcoPenguinShell({
+function ShellChrome({
   children,
   title,
-  backHref = ECO_PENGUIN_BASE_PATH,
+  backHref,
 }: EcoPenguinShellProps) {
   useStopEcoPenguinAudioOnUnmount()
+  const { muted, toggleMute } = useEcoPenguinUi()
 
   return (
     <div className={ecoTheme.shell}>
@@ -24,8 +26,8 @@ export default function EcoPenguinShell({
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <Link
-              href={backHref}
-              className={`${ecoTheme.btnSecondary} shrink-0 px-3 py-2 text-xs sm:text-sm`}
+              href={backHref ?? ECO_PENGUIN_BASE_PATH}
+              className={`${ecoTheme.btnSecondary} shrink-0 px-3 py-2.5 text-xs sm:text-sm`}
             >
               ← Back
             </Link>
@@ -42,6 +44,15 @@ export default function EcoPenguinShell({
             </Link>
           </div>
           <nav className="flex shrink-0 items-center gap-1.5 text-xs sm:gap-2 sm:text-sm">
+            <button
+              type="button"
+              onClick={toggleMute}
+              className={`${ecoTheme.btnSecondary} min-h-11 min-w-11 px-3 py-2`}
+              aria-label={muted ? 'Unmute sound' : 'Mute sound'}
+              title={muted ? 'Unmute' : 'Mute'}
+            >
+              {muted ? '🔇' : '🔊'}
+            </button>
             <Link
               href="/dashboard/learning"
               className="rounded-xl px-2 py-1.5 font-semibold text-sky-800 hover:bg-sky-50 sm:px-3"
@@ -64,5 +75,13 @@ export default function EcoPenguinShell({
       </header>
       <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">{children}</main>
     </div>
+  )
+}
+
+export default function EcoPenguinShell(props: EcoPenguinShellProps) {
+  return (
+    <EcoPenguinUiProvider>
+      <ShellChrome {...props} />
+    </EcoPenguinUiProvider>
   )
 }

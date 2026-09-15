@@ -1,0 +1,54 @@
+[
+  {
+    "id": "sh",
+    "digraph": "sh",
+    "letter": "SH",
+    "phoneme": "/ʃ/",
+    "label": "SH",
+    "example": "ship",
+    "speak": {
+      "phoneme": "sh as in ship",
+      "question": "Which word has the sh sound?"
+    },
+    "image": "/images/digraphs/sh.svg"
+  },
+  {
+    "id": "ch",
+    "digraph": "ch",
+    "letter": "CH",
+    "phoneme": "/tʃ/",
+    "label": "CH",
+    "example": "chip",
+    "speak": {
+      "phoneme": "ch as in chip",
+      "question": "Which word has the ch sound?"
+    },
+    "image": "/images/digraphs/ch.svg"
+  },
+  {
+    "id": "th",
+    "digraph": "th",
+    "letter": "TH",
+    "phoneme": "/θ/",
+    "label": "TH",
+    "example": "thin",
+    "speak": {
+      "phoneme": "th as in thin",
+      "question": "Which word has the th sound?"
+    },
+    "image": "/images/digraphs/th.svg"
+  },
+  {
+    "id": "wh",
+    "digraph": "wh",
+    "letter": "WH",
+    "phoneme": "/w/",
+    "label": "WH",
+    "example": "whip",
+    "speak": {
+      "phoneme": "wh as in whip",
+      "question": "Which word has the wh sound?"
+    },
+    "image": "/images/digraphs/wh.svg"
+  }
+]

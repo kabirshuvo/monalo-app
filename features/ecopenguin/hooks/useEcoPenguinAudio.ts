@@ -10,6 +10,8 @@ export {
   playEcoPenguinAudio,
   playEcoPenguinSequence,
   stopEcoPenguinAudio,
+  setEcoPenguinMuted,
+  isEcoPenguinMuted,
 } from '@/features/ecopenguin/hooks/ecoPenguinAudioManager'
 
 export function useEcoPenguinAudio(src: string | null) {

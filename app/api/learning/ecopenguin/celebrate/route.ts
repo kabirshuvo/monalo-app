@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth-server'
 import { getEcoPenguinItemBySlug } from '@/lib/ecopenguin/data'
 import { awardEcoPenguinCorrect, getPointsBreakdown } from '@/lib/points/service'
+import { ECO_PENGUIN_BASE_PATH } from '@/lib/ecopenguin/constants'
 
 export async function POST(request: Request) {
   try {
@@ -31,10 +33,14 @@ export async function POST(request: Request) {
     )
     const breakdown = await getPointsBreakdown(session.user.id)
 
+    revalidatePath(ECO_PENGUIN_BASE_PATH)
+    revalidatePath(`${ECO_PENGUIN_BASE_PATH}/categories/${categorySlug}`)
+
     return NextResponse.json({
       ok: true,
       awarded: result.awarded,
       points: result.points,
+      alreadyMastered: !result.awarded,
       breakdown,
     })
   } catch (error) {

@@ -5,6 +5,9 @@ import {
   levelFromTotalPoints,
   pointsForLessonComplete,
   pointsForEcoPenguinCorrect,
+  pointsForVowelWordsCorrect,
+  pointsForDigraphsCorrect,
+  pointsForBuildWordCorrect,
   pointsFromBlogMinutes,
   pointsFromLearningMinutes,
   pointsFromPurchaseTaka,
@@ -267,4 +270,192 @@ export async function getRecentPointEvents(userId: string, limit = 10) {
     orderBy: { createdAt: 'desc' },
     take: limit,
   })
+}
+
+/** Eco Penguin mastery from point events (`ecopenguin:category:item`). */
+export type EcoPenguinMastery = {
+  /** Keys like `animals:lion` */
+  masteredKeys: string[]
+  /** Count of mastered items per category slug */
+  byCategory: Record<string, number>
+}
+
+export async function getEcoPenguinMastery(userId: string): Promise<EcoPenguinMastery> {
+  const events = await prisma.pointEvent.findMany({
+    where: {
+      userId,
+      category: 'LEARNING',
+      referenceId: { startsWith: 'ecopenguin:' },
+    },
+    select: { referenceId: true },
+  })
+
+  const masteredKeys: string[] = []
+  const byCategory: Record<string, number> = {}
+
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const parts = ref.split(':')
+    if (parts.length < 3 || parts[0] !== 'ecopenguin') continue
+    const categorySlug = parts[1]
+    const itemSlug = parts.slice(2).join(':')
+    if (!categorySlug || !itemSlug) continue
+    const key = `${categorySlug}:${itemSlug}`
+    masteredKeys.push(key)
+    byCategory[categorySlug] = (byCategory[categorySlug] ?? 0) + 1
+  }
+
+  return { masteredKeys, byCategory }
+}
+
+/** Award points for a first-time correct Vowel Words answer (once per word). */
+export async function awardVowelWordsCorrect(
+  userId: string,
+  vowelId: string,
+  wordSlug: string,
+  word: string
+): Promise<{ awarded: boolean; points: number }> {
+  const pts = pointsForVowelWordsCorrect()
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pts,
+    description: `Vowel Words: ${word}`,
+    referenceId: `vowel-words:${vowelId}:${wordSlug}`,
+  })
+}
+
+/** Vowel Words mastery from point events (`vowel-words:vowel:slug`). */
+export type VowelWordsMastery = {
+  masteredKeys: string[]
+  byVowel: Record<string, number>
+}
+
+export async function getVowelWordsMastery(userId: string): Promise<VowelWordsMastery> {
+  const events = await prisma.pointEvent.findMany({
+    where: {
+      userId,
+      category: 'LEARNING',
+      referenceId: { startsWith: 'vowel-words:' },
+    },
+    select: { referenceId: true },
+  })
+
+  const masteredKeys: string[] = []
+  const byVowel: Record<string, number> = {}
+
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const parts = ref.split(':')
+    if (parts.length < 3 || parts[0] !== 'vowel-words') continue
+    const vowelId = parts[1]
+    const wordSlug = parts.slice(2).join(':')
+    if (!vowelId || !wordSlug) continue
+    const key = `${vowelId}:${wordSlug}`
+    masteredKeys.push(key)
+    byVowel[vowelId] = (byVowel[vowelId] ?? 0) + 1
+  }
+
+  return { masteredKeys, byVowel }
+}
+
+/** Award points for a first-time correct Digraphs answer (once per word). */
+export async function awardDigraphsCorrect(
+  userId: string,
+  digraphId: string,
+  wordSlug: string,
+  word: string
+): Promise<{ awarded: boolean; points: number }> {
+  const pts = pointsForDigraphsCorrect()
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pts,
+    description: `Digraphs: ${word}`,
+    referenceId: `digraphs:${digraphId}:${wordSlug}`,
+  })
+}
+
+/** Digraphs mastery from point events (`digraphs:id:slug`). */
+export type DigraphsMastery = {
+  masteredKeys: string[]
+  byDigraph: Record<string, number>
+}
+
+export async function getDigraphsMastery(userId: string): Promise<DigraphsMastery> {
+  const events = await prisma.pointEvent.findMany({
+    where: {
+      userId,
+      category: 'LEARNING',
+      referenceId: { startsWith: 'digraphs:' },
+    },
+    select: { referenceId: true },
+  })
+
+  const masteredKeys: string[] = []
+  const byDigraph: Record<string, number> = {}
+
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const parts = ref.split(':')
+    if (parts.length < 3 || parts[0] !== 'digraphs') continue
+    const digraphId = parts[1]
+    const wordSlug = parts.slice(2).join(':')
+    if (!digraphId || !wordSlug) continue
+    const key = `${digraphId}:${wordSlug}`
+    masteredKeys.push(key)
+    byDigraph[digraphId] = (byDigraph[digraphId] ?? 0) + 1
+  }
+
+  return { masteredKeys, byDigraph }
+}
+
+/** Award points for first-time Build-the-word spelling. */
+export async function awardBuildWordCorrect(
+  userId: string,
+  vowelId: string,
+  wordSlug: string,
+  word: string
+): Promise<{ awarded: boolean; points: number }> {
+  const pts = pointsForBuildWordCorrect()
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pts,
+    description: `Build the word: ${word}`,
+    referenceId: `build-word:${vowelId}:${wordSlug}`,
+  })
+}
+
+export type BuildWordMastery = {
+  masteredKeys: string[]
+  byVowel: Record<string, number>
+}
+
+export async function getBuildWordMastery(userId: string): Promise<BuildWordMastery> {
+  const events = await prisma.pointEvent.findMany({
+    where: {
+      userId,
+      category: 'LEARNING',
+      referenceId: { startsWith: 'build-word:' },
+    },
+    select: { referenceId: true },
+  })
+
+  const masteredKeys: string[] = []
+  const byVowel: Record<string, number> = {}
+
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const parts = ref.split(':')
+    if (parts.length < 3 || parts[0] !== 'build-word') continue
+    const vowelId = parts[1]
+    const wordSlug = parts.slice(2).join(':')
+    if (!vowelId || !wordSlug) continue
+    masteredKeys.push(`${vowelId}:${wordSlug}`)
+    byVowel[vowelId] = (byVowel[vowelId] ?? 0) + 1
+  }
+
+  return { masteredKeys, byVowel }
 }

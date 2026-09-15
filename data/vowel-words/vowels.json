@@ -1,0 +1,62 @@
+[
+  {
+    "id": "a",
+    "letter": "A",
+    "phoneme": "/æ/",
+    "label": "Short A",
+    "example": "cat",
+    "image": "/images/vowels/a.svg",
+    "speak": {
+      "phoneme": "a as in apple",
+      "question": "Which word has the short a sound?"
+    }
+  },
+  {
+    "id": "e",
+    "letter": "E",
+    "phoneme": "/ɛ/",
+    "label": "Short E",
+    "example": "bed",
+    "image": "/images/vowels/e.svg",
+    "speak": {
+      "phoneme": "e as in elephant",
+      "question": "Which word has the short e sound?"
+    }
+  },
+  {
+    "id": "i",
+    "letter": "I",
+    "phoneme": "/ɪ/",
+    "label": "Short I",
+    "example": "sit",
+    "image": "/images/vowels/i.svg",
+    "speak": {
+      "phoneme": "i as in igloo",
+      "question": "Which word has the short i sound?"
+    }
+  },
+  {
+    "id": "o",
+    "letter": "O",
+    "phoneme": "/ɒ/",
+    "label": "Short O",
+    "example": "hop",
+    "image": "/images/vowels/o.svg",
+    "speak": {
+      "phoneme": "o as in octopus",
+      "question": "Which word has the short o sound?"
+    }
+  },
+  {
+    "id": "u",
+    "letter": "U",
+    "phoneme": "/ʌ/",
+    "label": "Short U",
+    "example": "sun",
+    "image": "/images/vowels/u.svg",
+    "speak": {
+      "phoneme": "u as in umbrella",
+      "question": "Which word has the short u sound?"
+    }
+  }
+]
