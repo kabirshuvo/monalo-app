@@ -146,8 +146,8 @@ export default function LandingPageSections() {
             Progress without the panic
           </h2>
           <p className="mt-4 leading-relaxed text-content-secondary">
-            Courses and the kids learning playroom are built for steady growth — short sessions,
-            clear paths, and room to breathe.
+            Courses and Eco Penguin are built for steady growth — short sessions, clear paths, and
+            room to breathe.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -160,7 +160,7 @@ export default function LandingPageSections() {
               href="/learning"
               className="gallery-soft-cta inline-flex rounded-full border border-subtle bg-surface px-5 py-2.5 text-sm font-medium text-content hover:bg-surface-hover"
             >
-              Kids learning
+              Eco Penguin
             </Link>
           </div>
         </SoftReveal>

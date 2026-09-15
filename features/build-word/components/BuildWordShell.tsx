@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { buildWordTheme } from '@/features/build-word/build-word-theme'
 import { BUILD_WORD_BASE_PATH } from '@/lib/build-word/session'
+import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
 
 type Props = {
   children: React.ReactNode
@@ -13,7 +14,7 @@ type Props = {
 export default function BuildWordShell({
   children,
   title,
-  backHref = BUILD_WORD_BASE_PATH,
+  backHref = LEARNING_HUB_PATH,
 }: Props) {
   return (
     <div className={buildWordTheme.shell}>
@@ -27,9 +28,17 @@ export default function BuildWordShell({
               Build the word
             </Link>
           </div>
-          <Link href="/learning" className="text-sm font-semibold text-sky-800 hover:underline">
-            Playroom
-          </Link>
+          <nav className="flex shrink-0 items-center gap-2 text-sm">
+            <Link href={LEARNING_HUB_PATH} className="font-semibold text-sky-800 hover:underline">
+              {ECO_PENGUIN_APP_NAME}
+            </Link>
+            <Link
+              href="/dashboard/learning"
+              className="hidden font-semibold text-sky-800 hover:underline sm:inline"
+            >
+              Courses
+            </Link>
+          </nav>
         </div>
         {title && (
           <div className="border-t border-sky-100 bg-sky-50/80 px-4 py-3 text-center">

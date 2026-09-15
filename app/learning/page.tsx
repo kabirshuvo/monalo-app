@@ -4,18 +4,19 @@ import type { LearningGameCard } from '@/lib/learning/kids-hub'
 import ActivityTracker from '@/components/points/ActivityTracker'
 
 export const metadata: Metadata = {
-  title: 'Kids Learning · MonAlo',
-  description: 'Eco Penguin, Vowel Words, Digraphs, and Build the word — early reading play on MonAlo',
+  title: 'Eco Penguin · MonAlo',
+  description:
+    'Eco Penguin — kids early reading: Explore pictures, Vowel Words, Digraphs, and Build the word',
 }
 
 const GAMES: LearningGameCard[] = [
   {
     id: 'ecopenguin',
-    title: 'Eco Penguin',
+    title: 'Explore',
     blurb: 'Tap pictures, hear names, then play Which Is listening games.',
     href: '/learning/ecopenguin',
     accent: 'from-teal-400 to-emerald-500',
-    badge: 'Vocab',
+    badge: 'Pictures',
     live: true,
   },
   {

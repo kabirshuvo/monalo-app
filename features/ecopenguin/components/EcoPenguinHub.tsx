@@ -75,10 +75,11 @@ export default function EcoPenguinHub({ categories, progress = [] }: EcoPenguinH
           🐧
         </p>
         <h2 className="mt-3 text-2xl font-extrabold text-sky-950 sm:text-3xl">
-          Learn English with Eco Penguin
+          Explore
         </h2>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-sky-800/85 sm:text-base">
-          Pick a topic, learn the pictures, then play the listening game. Great for curious kids!
+          Pick a topic, learn the pictures, then play the listening game — Eco Penguin&apos;s picture
+          room.
         </p>
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
           <span className={`${ecoTheme.pill} bg-amber-100 text-amber-900`}>👂 Listen</span>

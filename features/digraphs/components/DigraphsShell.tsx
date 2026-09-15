@@ -8,6 +8,7 @@ import {
 } from '@/features/digraphs/context/DigraphsUiContext'
 import { digraphTheme } from '@/features/digraphs/digraph-theme'
 import { DIGRAPHS_BASE_PATH } from '@/lib/digraphs/constants'
+import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
 
 type Props = {
   children: React.ReactNode
@@ -25,7 +26,7 @@ function ShellChrome({ children, title, backHref }: Props) {
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <Link
-              href={backHref ?? DIGRAPHS_BASE_PATH}
+              href={backHref ?? LEARNING_HUB_PATH}
               className={`${digraphTheme.btnSecondary} shrink-0 px-3 py-2.5 text-xs sm:text-sm`}
             >
               ← Back
@@ -52,16 +53,16 @@ function ShellChrome({ children, title, backHref }: Props) {
               {muted ? '🔇' : '🔊'}
             </button>
             <Link
-              href="/learning"
+              href={LEARNING_HUB_PATH}
               className="rounded-xl px-2 py-1.5 font-semibold text-amber-900 hover:bg-amber-50 sm:px-3"
             >
-              Playroom
+              {ECO_PENGUIN_APP_NAME}
             </Link>
             <Link
               href="/dashboard/learning"
-              className="rounded-xl px-2 py-1.5 font-semibold text-amber-900 hover:bg-amber-50 sm:px-3"
+              className="hidden rounded-xl px-2 py-1.5 font-semibold text-amber-900 hover:bg-amber-50 sm:inline sm:px-3"
             >
-              Learning
+              Courses
             </Link>
           </nav>
         </div>

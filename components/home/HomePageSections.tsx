@@ -48,7 +48,7 @@ export default function HomePageSections() {
             },
             {
               title: 'Young explorers',
-              body: 'Kids learning playroom — vowels, digraphs, and Eco Penguin.',
+              body: 'Eco Penguin — pictures, vowels, digraphs, and spelling for kids.',
               href: '/learning',
             },
             {

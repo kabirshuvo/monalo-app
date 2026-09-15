@@ -50,7 +50,7 @@ export const HOME_SURFACE_HEROES: HomeSurfaceHeroProps[] = [
       'Structured lessons, progress tracking, and Eco Penguin for young learners — study at your pace with MonAlo courses.',
     href: '/courses',
     cta: 'Explore courses',
-    secondaryHref: '/learning/ecopenguin',
+    secondaryHref: '/learning',
     secondaryCta: 'Eco Penguin',
     emoji: '📚',
     gradient: 'from-sky-50/80 to-blue-50/60 dark:from-sky-950/35 dark:to-blue-950/25',

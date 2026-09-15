@@ -5,6 +5,7 @@ import { useStopEcoPenguinAudioOnUnmount } from '@/features/ecopenguin/hooks/use
 import { EcoPenguinUiProvider, useEcoPenguinUi } from '@/features/ecopenguin/context/EcoPenguinUiContext'
 import { ecoTheme } from '@/features/ecopenguin/eco-theme'
 import { ECO_PENGUIN_BASE_PATH } from '@/lib/ecopenguin/constants'
+import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
 
 type EcoPenguinShellProps = {
   children: React.ReactNode
@@ -26,7 +27,7 @@ function ShellChrome({
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <Link
-              href={backHref ?? ECO_PENGUIN_BASE_PATH}
+              href={backHref ?? LEARNING_HUB_PATH}
               className={`${ecoTheme.btnSecondary} shrink-0 px-3 py-2.5 text-xs sm:text-sm`}
             >
               ← Back
@@ -39,7 +40,7 @@ function ShellChrome({
                 🐧
               </span>
               <span className="truncate text-base font-extrabold text-sky-950 sm:text-lg">
-                Eco Penguin
+                Explore
               </span>
             </Link>
           </div>
@@ -54,16 +55,16 @@ function ShellChrome({
               {muted ? '🔇' : '🔊'}
             </button>
             <Link
-              href="/dashboard/learning"
+              href={LEARNING_HUB_PATH}
               className="rounded-xl px-2 py-1.5 font-semibold text-sky-800 hover:bg-sky-50 sm:px-3"
             >
-              Learning
+              {ECO_PENGUIN_APP_NAME}
             </Link>
             <Link
-              href="/dashboard"
+              href="/dashboard/learning"
               className="hidden rounded-xl px-2 py-1.5 font-semibold text-sky-800 hover:bg-sky-50 sm:inline sm:px-3"
             >
-              Home
+              Courses
             </Link>
           </nav>
         </div>

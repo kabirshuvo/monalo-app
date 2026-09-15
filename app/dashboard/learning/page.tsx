@@ -52,14 +52,14 @@ export default async function LearnerDashboardPage() {
         <Card className="mb-12 border-violet-200 bg-gradient-to-r from-sky-50 via-violet-50 to-amber-50">
           <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-6">
             <div>
-              <p className="text-2xl mb-1" aria-hidden>🐧 Aa</p>
-              <h2 className="text-lg font-semibold text-violet-900">Kids learning playroom</h2>
+              <p className="text-2xl mb-1" aria-hidden>🐧</p>
+              <h2 className="text-lg font-semibold text-violet-900">Eco Penguin</h2>
               <p className="text-sm text-violet-800/80 mt-1">
-                Eco Penguin, Vowel Words, Digraphs, and Build the word — one place to play.
+                Explore pictures, vowels, digraphs, and spelling — one kids learning app.
               </p>
             </div>
             <Link href="/learning">
-              <Button>Open kids learning</Button>
+              <Button>Open Eco Penguin</Button>
             </Link>
           </CardContent>
         </Card>

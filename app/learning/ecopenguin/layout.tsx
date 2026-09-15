@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import ActivityTracker from '@/components/points/ActivityTracker'
 
 export const metadata: Metadata = {
-  title: 'Eco Penguin · MonAlo',
-  description: 'Early English learning games for kids — Eco Penguin on MonAlo',
+  title: 'Explore · Eco Penguin · MonAlo',
+  description: 'Eco Penguin Explore — tap pictures, hear names, then play Which Is listening games',
 }
 
 export default function EcoPenguinLayout({ children }: { children: React.ReactNode }) {
