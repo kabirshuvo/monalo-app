@@ -23,7 +23,7 @@
       "phoneme": "ch as in chip",
       "question": "Which word has the ch sound?"
     },
-    "image": "/images/digraphs/ch.svg"
+    "image": "/images/digraphs/ch.webp"
   },
   {
     "id": "th",
@@ -36,7 +36,7 @@
       "phoneme": "th as in thin",
       "question": "Which word has the th sound?"
     },
-    "image": "/images/digraphs/th.svg"
+    "image": "/images/digraphs/th.webp"
   },
   {
     "id": "wh",
@@ -49,6 +49,6 @@
       "phoneme": "wh as in whip",
       "question": "Which word has the wh sound?"
     },
-    "image": "/images/digraphs/wh.svg"
+    "image": "/images/digraphs/wh.webp"
   }
 ]

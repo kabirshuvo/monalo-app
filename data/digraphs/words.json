@@ -215,7 +215,7 @@
         "i",
         "p"
       ],
-      "image": "/images/words/ch/chip.svg",
+      "image": "/images/words/ch/chip.webp",
       "audio": {
         "word": "/audio/word/ch/chip.mp3",
         "phoneme": "/audio/phoneme/ch.mp3",
@@ -235,7 +235,7 @@
         "o",
         "p"
       ],
-      "image": "/images/words/ch/chop.svg",
+      "image": "/images/words/ch/chop.webp",
       "audio": {
         "word": "/audio/word/ch/chop.mp3",
         "phoneme": "/audio/phoneme/ch.mp3",
@@ -255,7 +255,7 @@
         "i",
         "n"
       ],
-      "image": "/images/words/ch/chin.svg",
+      "image": "/images/words/ch/chin.webp",
       "audio": {
         "word": "/audio/word/ch/chin.mp3",
         "phoneme": "/audio/phoneme/ch.mp3",
@@ -275,7 +275,7 @@
         "a",
         "t"
       ],
-      "image": "/images/words/ch/chat.svg",
+      "image": "/images/words/ch/chat.webp",
       "audio": {
         "word": "/audio/word/ch/chat.mp3",
         "phoneme": "/audio/phoneme/ch.mp3",
@@ -295,7 +295,7 @@
         "u",
         "ch"
       ],
-      "image": "/images/words/ch/much.svg",
+      "image": "/images/words/ch/much.webp",
       "audio": {
         "word": "/audio/word/ch/much.mp3",
         "phoneme": "/audio/phoneme/ch.mp3",
@@ -315,7 +315,7 @@
         "i",
         "ch"
       ],
-      "image": "/images/words/ch/rich.svg",
+      "image": "/images/words/ch/rich.webp",
       "audio": {
         "word": "/audio/word/ch/rich.mp3",
         "phoneme": "/audio/phoneme/ch.mp3",
@@ -336,7 +336,7 @@
         "n",
         "ch"
       ],
-      "image": "/images/words/ch/lunch.svg",
+      "image": "/images/words/ch/lunch.webp",
       "audio": {
         "word": "/audio/word/ch/lunch.mp3",
         "phoneme": "/audio/phoneme/ch.mp3",
@@ -357,7 +357,7 @@
         "c",
         "k"
       ],
-      "image": "/images/words/ch/chick.svg",
+      "image": "/images/words/ch/chick.webp",
       "audio": {
         "word": "/audio/word/ch/chick.mp3",
         "phoneme": "/audio/phoneme/ch.mp3",
@@ -378,7 +378,7 @@
         "s",
         "t"
       ],
-      "image": "/images/words/ch/chest.svg",
+      "image": "/images/words/ch/chest.webp",
       "audio": {
         "word": "/audio/word/ch/chest.mp3",
         "phoneme": "/audio/phoneme/ch.mp3",
@@ -399,7 +399,7 @@
         "l",
         "l"
       ],
-      "image": "/images/words/ch/chill.svg",
+      "image": "/images/words/ch/chill.webp",
       "audio": {
         "word": "/audio/word/ch/chill.mp3",
         "phoneme": "/audio/phoneme/ch.mp3",
@@ -421,7 +421,7 @@
         "i",
         "n"
       ],
-      "image": "/images/words/th/thin.svg",
+      "image": "/images/words/th/thin.webp",
       "audio": {
         "word": "/audio/word/th/thin.mp3",
         "phoneme": "/audio/phoneme/th.mp3",
@@ -442,7 +442,7 @@
         "c",
         "k"
       ],
-      "image": "/images/words/th/thick.svg",
+      "image": "/images/words/th/thick.webp",
       "audio": {
         "word": "/audio/word/th/thick.mp3",
         "phoneme": "/audio/phoneme/th.mp3",
@@ -462,7 +462,7 @@
         "i",
         "s"
       ],
-      "image": "/images/words/th/this.svg",
+      "image": "/images/words/th/this.webp",
       "audio": {
         "word": "/audio/word/th/this.mp3",
         "phoneme": "/audio/phoneme/th.mp3",
@@ -482,7 +482,7 @@
         "a",
         "t"
       ],
-      "image": "/images/words/th/that.svg",
+      "image": "/images/words/th/that.webp",
       "audio": {
         "word": "/audio/word/th/that.mp3",
         "phoneme": "/audio/phoneme/th.mp3",
@@ -502,7 +502,7 @@
         "a",
         "th"
       ],
-      "image": "/images/words/th/path.svg",
+      "image": "/images/words/th/path.webp",
       "audio": {
         "word": "/audio/word/th/path.mp3",
         "phoneme": "/audio/phoneme/th.mp3",
@@ -522,7 +522,7 @@
         "a",
         "th"
       ],
-      "image": "/images/words/th/bath.svg",
+      "image": "/images/words/th/bath.webp",
       "audio": {
         "word": "/audio/word/th/bath.mp3",
         "phoneme": "/audio/phoneme/th.mp3",
@@ -542,7 +542,7 @@
         "a",
         "th"
       ],
-      "image": "/images/words/th/math.svg",
+      "image": "/images/words/th/math.webp",
       "audio": {
         "word": "/audio/word/th/math.mp3",
         "phoneme": "/audio/phoneme/th.mp3",
@@ -562,7 +562,7 @@
         "i",
         "th"
       ],
-      "image": "/images/words/th/with.svg",
+      "image": "/images/words/th/with.webp",
       "audio": {
         "word": "/audio/word/th/with.mp3",
         "phoneme": "/audio/phoneme/th.mp3",
@@ -583,7 +583,7 @@
         "e",
         "e"
       ],
-      "image": "/images/words/th/three.svg",
+      "image": "/images/words/th/three.webp",
       "audio": {
         "word": "/audio/word/th/three.mp3",
         "phoneme": "/audio/phoneme/th.mp3",
@@ -604,7 +604,7 @@
         "m",
         "b"
       ],
-      "image": "/images/words/th/thumb.svg",
+      "image": "/images/words/th/thumb.webp",
       "audio": {
         "word": "/audio/word/th/thumb.mp3",
         "phoneme": "/audio/phoneme/th.mp3",
@@ -626,7 +626,7 @@
         "e",
         "n"
       ],
-      "image": "/images/words/wh/when.svg",
+      "image": "/images/words/wh/when.webp",
       "audio": {
         "word": "/audio/word/wh/when.mp3",
         "phoneme": "/audio/phoneme/wh.mp3",
@@ -646,7 +646,7 @@
         "a",
         "t"
       ],
-      "image": "/images/words/wh/what.svg",
+      "image": "/images/words/wh/what.webp",
       "audio": {
         "word": "/audio/word/wh/what.mp3",
         "phoneme": "/audio/phoneme/wh.mp3",
@@ -666,7 +666,7 @@
         "i",
         "p"
       ],
-      "image": "/images/words/wh/whip.svg",
+      "image": "/images/words/wh/whip.webp",
       "audio": {
         "word": "/audio/word/wh/whip.mp3",
         "phoneme": "/audio/phoneme/wh.mp3",
@@ -686,7 +686,7 @@
         "i",
         "z"
       ],
-      "image": "/images/words/wh/whiz.svg",
+      "image": "/images/words/wh/whiz.webp",
       "audio": {
         "word": "/audio/word/wh/whiz.mp3",
         "phoneme": "/audio/phoneme/wh.mp3",
@@ -707,7 +707,7 @@
         "c",
         "h"
       ],
-      "image": "/images/words/wh/which.svg",
+      "image": "/images/words/wh/which.webp",
       "audio": {
         "word": "/audio/word/wh/which.mp3",
         "phoneme": "/audio/phoneme/wh.mp3",
@@ -728,7 +728,7 @@
         "l",
         "e"
       ],
-      "image": "/images/words/wh/whale.svg",
+      "image": "/images/words/wh/whale.webp",
       "audio": {
         "word": "/audio/word/wh/whale.mp3",
         "phoneme": "/audio/phoneme/wh.mp3",
@@ -749,7 +749,7 @@
         "a",
         "t"
       ],
-      "image": "/images/words/wh/wheat.svg",
+      "image": "/images/words/wh/wheat.webp",
       "audio": {
         "word": "/audio/word/wh/wheat.mp3",
         "phoneme": "/audio/phoneme/wh.mp3",
@@ -770,7 +770,7 @@
         "t",
         "e"
       ],
-      "image": "/images/words/wh/white.svg",
+      "image": "/images/words/wh/white.webp",
       "audio": {
         "word": "/audio/word/wh/white.mp3",
         "phoneme": "/audio/phoneme/wh.mp3",
@@ -791,7 +791,7 @@
         "e",
         "l"
       ],
-      "image": "/images/words/wh/wheel.svg",
+      "image": "/images/words/wh/wheel.webp",
       "audio": {
         "word": "/audio/word/wh/wheel.mp3",
         "phoneme": "/audio/phoneme/wh.mp3",
@@ -812,7 +812,7 @@
         "r",
         "e"
       ],
-      "image": "/images/words/wh/where.svg",
+      "image": "/images/words/wh/where.webp",
       "audio": {
         "word": "/audio/word/wh/where.mp3",
         "phoneme": "/audio/phoneme/wh.mp3",
