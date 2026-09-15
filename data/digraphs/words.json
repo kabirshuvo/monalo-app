@@ -10,7 +10,7 @@
         "i",
         "p"
       ],
-      "image": "/images/words/sh/ship.svg",
+      "image": "/images/words/sh/ship.webp",
       "audio": {
         "word": "/audio/word/sh/ship.mp3",
         "phoneme": "/audio/phoneme/sh.mp3",
@@ -30,7 +30,7 @@
         "o",
         "p"
       ],
-      "image": "/images/words/sh/shop.svg",
+      "image": "/images/words/sh/shop.webp",
       "audio": {
         "word": "/audio/word/sh/shop.mp3",
         "phoneme": "/audio/phoneme/sh.mp3",
@@ -50,7 +50,7 @@
         "i",
         "sh"
       ],
-      "image": "/images/words/sh/fish.svg",
+      "image": "/images/words/sh/fish.webp",
       "audio": {
         "word": "/audio/word/sh/fish.mp3",
         "phoneme": "/audio/phoneme/sh.mp3",
@@ -70,7 +70,7 @@
         "i",
         "sh"
       ],
-      "image": "/images/words/sh/dish.svg",
+      "image": "/images/words/sh/dish.webp",
       "audio": {
         "word": "/audio/word/sh/dish.mp3",
         "phoneme": "/audio/phoneme/sh.mp3",
@@ -91,7 +91,7 @@
         "l",
         "l"
       ],
-      "image": "/images/words/sh/shell.svg",
+      "image": "/images/words/sh/shell.webp",
       "audio": {
         "word": "/audio/word/sh/shell.mp3",
         "phoneme": "/audio/phoneme/sh.mp3",
@@ -112,7 +112,7 @@
         "u",
         "sh"
       ],
-      "image": "/images/words/sh/brush.svg",
+      "image": "/images/words/sh/brush.webp",
       "audio": {
         "word": "/audio/word/sh/brush.mp3",
         "phoneme": "/audio/phoneme/sh.mp3",
@@ -133,7 +133,7 @@
         "a",
         "sh"
       ],
-      "image": "/images/words/sh/crash.svg",
+      "image": "/images/words/sh/crash.webp",
       "audio": {
         "word": "/audio/word/sh/crash.mp3",
         "phoneme": "/audio/phoneme/sh.mp3",
@@ -153,7 +153,7 @@
         "u",
         "t"
       ],
-      "image": "/images/words/sh/shut.svg",
+      "image": "/images/words/sh/shut.webp",
       "audio": {
         "word": "/audio/word/sh/shut.mp3",
         "phoneme": "/audio/phoneme/sh.mp3",
@@ -173,7 +173,7 @@
         "a",
         "sh"
       ],
-      "image": "/images/words/sh/mash.svg",
+      "image": "/images/words/sh/mash.webp",
       "audio": {
         "word": "/audio/word/sh/mash.mp3",
         "phoneme": "/audio/phoneme/sh.mp3",
@@ -193,7 +193,7 @@
         "i",
         "sh"
       ],
-      "image": "/images/words/sh/wish.svg",
+      "image": "/images/words/sh/wish.webp",
       "audio": {
         "word": "/audio/word/sh/wish.mp3",
         "phoneme": "/audio/phoneme/sh.mp3",

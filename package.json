@@ -21,6 +21,9 @@
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "ecopenguin:upload-r2": "node scripts/upload-ecopenguin-r2.mjs",
+    "learning:generate-audio": "node scripts/generate-learning-audio.mjs",
+    "digraphs:sync-images": "node scripts/sync-digraphs-image-paths.mjs --write",
+    "digraphs:upload-r2": "node scripts/upload-digraphs-r2.mjs",
     "ecopenguin:sync-monalomedia": "node scripts/copy-ecopenguin-to-monalomedia.mjs",
     "ecopenguin:configure-cors": "node scripts/configure-ecopenguin-r2-cors.mjs"
   },
@@ -56,6 +59,7 @@
     "autoprefixer": "^10.4.23",
     "eslint": "^9",
     "eslint-config-next": "^16.2.6",
+    "node-edge-tts": "^1.2.10",
     "postcss": "^8.5.6",
     "prisma": "^6.19.1",
     "tailwindcss": "^4.1.18",
