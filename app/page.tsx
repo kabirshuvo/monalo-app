@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
 import LandingHeaderClient from './landing/LandingHeaderClient'
 import LandingHeroClient from './landing/LandingHeroClient'
 import LandingPageSections from '@/components/landing/LandingPageSections'
@@ -33,7 +34,10 @@ export default function LaunchPage() {
       <footer className="border-t border-gray-100 px-4 py-8 sm:px-6 sm:py-12 dark:border-zinc-800 lg:px-8">
         <SoftReveal variant="fade" className="mx-auto max-w-6xl">
           <p className="text-center text-sm text-gray-600 dark:text-zinc-400">
-            A learning platform for everyone. No pressure. No rush.
+            A learning platform for everyone. No pressure. No rush.{' '}
+            <Link href="/learning" className="font-semibold text-sky-700 hover:underline dark:text-sky-300">
+              Eco Penguin
+            </Link>
           </p>
         </SoftReveal>
       </footer>

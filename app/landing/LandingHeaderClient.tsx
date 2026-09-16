@@ -90,6 +90,12 @@ export default function LandingHeaderClient() {
         </Link>
 
         <div className="flex items-center gap-3">
+          <Link
+            href="/learning"
+            className="hidden rounded-full bg-sky-50 px-3 py-1.5 text-sm font-semibold text-sky-900 hover:bg-sky-100 sm:inline-flex dark:bg-sky-950/50 dark:text-sky-100 dark:hover:bg-sky-900/60"
+          >
+            Eco Penguin
+          </Link>
           <ThemeToggle />
 
           {!mounted ? (
@@ -133,6 +139,13 @@ export default function LandingHeaderClient() {
                       className="block px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900"
                     >
                       Dashboard
+                    </Link>
+                    <Link
+                      href="/learning"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900"
+                    >
+                      Eco Penguin
                     </Link>
                     <button
                       onClick={handleLogout}

@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import PublicLayout from '@/components/layouts/PublicLayout'
+import Link from 'next/link'
 import CourseCard, { type Course } from '@/components/courses/CourseCard'
 import EmptyState from '@/components/ui/EmptyState'
 import { prisma } from '@/lib/db'
@@ -80,7 +81,12 @@ export default async function CoursesPage() {
           <p className="text-sm font-semibold text-blue-600">Learn</p>
           <h1 className="text-3xl font-bold text-gray-900">Courses for focused learning</h1>
           <p className="text-gray-600 max-w-3xl">
-            Build skills at your own pace. Enrolled courses show your progress here.
+            Build skills at your own pace. Enrolled courses show your progress here. Younger readers
+            can start in{' '}
+            <Link href="/learning" className="font-semibold text-sky-700 hover:underline">
+              Eco Penguin
+            </Link>
+            .
           </p>
         </div>
 

@@ -39,6 +39,11 @@ export default function LandingHeroClient() {
             Home
           </Button>
         </Link>
+        <Link href="/learning">
+          <Button variant="ghost" size="lg" className="gallery-soft-cta">
+            Eco Penguin
+          </Button>
+        </Link>
       </div>
     </SoftReveal>
   ) : (
@@ -59,6 +64,11 @@ export default function LandingHeroClient() {
         <Link href="/home">
           <Button variant="secondary" size="lg" className="gallery-soft-cta">
             Home
+          </Button>
+        </Link>
+        <Link href="/learning">
+          <Button variant="ghost" size="lg" className="gallery-soft-cta">
+            Eco Penguin
           </Button>
         </Link>
       </div>

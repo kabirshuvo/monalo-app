@@ -34,13 +34,18 @@ export default function HomePage() {
             </p>
           </div>
           <div className="mx-auto flex max-w-2xl flex-wrap justify-center gap-4 pt-8">
-            <Link href="/courses">
+            <Link href="/learning">
               <Button variant="primary" size="lg" className="gallery-soft-cta px-8">
+                Eco Penguin
+              </Button>
+            </Link>
+            <Link href="/courses">
+              <Button variant="secondary" size="lg" className="gallery-soft-cta">
                 Explore courses
               </Button>
             </Link>
             <Link href="/shop">
-              <Button variant="secondary" size="lg" className="gallery-soft-cta">
+              <Button variant="ghost" size="lg" className="gallery-soft-cta">
                 Craft shop
               </Button>
             </Link>
@@ -69,8 +74,13 @@ export default function HomePage() {
               </p>
             </div>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link href="/register">
+              <Link href="/learning">
                 <Button variant="primary" size="lg" className="gallery-soft-cta">
+                  Open Eco Penguin
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button variant="secondary" size="lg" className="gallery-soft-cta">
                   Start today
                 </Button>
               </Link>

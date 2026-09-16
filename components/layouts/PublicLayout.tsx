@@ -21,6 +21,7 @@ export interface PublicLayoutProps {
 const defaultNav = [
   { label: 'School', href: '/home' },
   { label: 'Learn', href: '/courses' },
+  { label: 'Eco Penguin', href: '/learning' },
   { label: 'Shop', href: '/shop' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Team', href: '/team' },
@@ -31,6 +32,7 @@ const defaultNav = [
 const galleryNav = [
   { label: 'Gallery', href: '/' },
   { label: 'Monalo School', href: '/home' },
+  { label: 'Eco Penguin', href: '/learning' },
   { label: 'Shop', href: '/shop' },
   { label: 'Contact', href: '/contact' },
 ]
@@ -39,6 +41,7 @@ const blogNav = [
   { label: 'Articles', href: '/' },
   { label: 'Monalo School', href: '/home' },
   { label: 'Learn', href: '/courses' },
+  { label: 'Eco Penguin', href: '/learning' },
   { label: 'Contact', href: '/contact' },
 ]
 
@@ -376,6 +379,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
               <h3 className="font-semibold text-gray-900 mb-4">Explore</h3>
               <ul className="space-y-2">
                 <li><Link href="/courses" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Learn</Link></li>
+                <li><Link href="/learning" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Eco Penguin</Link></li>
                 <li><Link href="/shop" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Craft shop</Link></li>
                 <li><Link href="/gallery" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Gallery</Link></li>
                 <li><Link href="/team" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Team services</Link></li>

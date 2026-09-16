@@ -33,6 +33,17 @@ const navigationItems: NavItem[] = [
     roles: ['CUSTOMER', 'LEARNER', 'WRITER', 'ADMIN']
   },
   {
+    label: 'Eco Penguin',
+    href: '/learning',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3c2.5 2 4 4.2 4 7a4 4 0 11-8 0c0-2.8 1.5-5 4-7z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 14c-2 1.2-3 3-3 5h14c0-2-1-3.8-3-5" />
+      </svg>
+    ),
+    roles: ['CUSTOMER', 'LEARNER', 'WRITER', 'ADMIN', 'SELLER']
+  },
+  {
     label: 'My Learning',
     href: '/dashboard/learning',
     icon: (
@@ -226,8 +237,13 @@ export default function DashboardLayout({
 
           {/* User menu */}
           <div className="flex items-center gap-3">
-            <Link href="/home">
+            <Link href="/learning">
               <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
+                Eco Penguin
+              </Button>
+            </Link>
+            <Link href="/home">
+              <Button variant="ghost" size="sm" className="hidden md:inline-flex">
                 Back to home
               </Button>
             </Link>
@@ -253,6 +269,7 @@ export default function DashboardLayout({
               {menuOpen && (
                 <div className="absolute right-0 top-12 w-40 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-40">
                   <Link href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Dashboard</Link>
+                  <Link href="/learning" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Eco Penguin</Link>
                   <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
                   <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Settings</Link>
                   <button

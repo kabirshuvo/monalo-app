@@ -3,6 +3,12 @@ import { SoftReveal } from '@/components/motion/SoftReveal'
 
 const PATHS = [
   {
+    label: 'Kids',
+    title: 'Eco Penguin',
+    href: '/learning',
+    body: 'Pictures, vowels, digraphs, and spelling for young readers.',
+  },
+  {
     label: 'Learn',
     title: 'Courses at your pace',
     href: '/courses',
@@ -67,7 +73,7 @@ export default function LandingPageSections() {
             Choose how you arrive
           </h2>
           <p className="mt-2 text-content-secondary">
-            Five surfaces of the same school — pick what fits today.
+            Courses, Eco Penguin, craft, art, team, and journal — pick what fits today.
           </p>
         </SoftReveal>
         <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
