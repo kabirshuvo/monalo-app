@@ -6,10 +6,19 @@ import ActivityTracker from '@/components/points/ActivityTracker'
 export const metadata: Metadata = {
   title: 'Eco Penguin · MonAlo',
   description:
-    'Eco Penguin — kids early reading: Explore pictures, Vowel Words, Digraphs, and Build the word',
+    'Eco Penguin — kids early reading: letter sounds, pictures, vowels, digraphs, and spelling',
 }
 
 const GAMES: LearningGameCard[] = [
+  {
+    id: 'letter-sounds',
+    title: 'Letter sounds',
+    blurb: 'All 26 letter sounds, then a listen-and-tap quiz. Sounds, not letter names.',
+    href: '/learning/letter-sounds',
+    accent: 'from-lime-400 to-emerald-500',
+    badge: 'Sounds',
+    live: true,
+  },
   {
     id: 'ecopenguin',
     title: 'Explore',

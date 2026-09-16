@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { readEcoPenguinSession } from '@/lib/ecopenguin/session'
 import { readVowelWordsSession } from '@/lib/vowel-words/session'
 import { ECO_PENGUIN_BASE_PATH } from '@/lib/ecopenguin/constants'
+import { LETTER_SOUNDS_BASE_PATH, LETTER_SOUNDS_QUIZ_PATH } from '@/lib/letter-sounds/constants'
+import { readLetterSoundsSession } from '@/lib/letter-sounds/session'
 import { VOWEL_WORDS_BASE_PATH } from '@/lib/vowel-words/constants'
 import { ECO_PENGUIN_APP_NAME, type LearningGameCard } from '@/lib/learning/kids-hub'
 
@@ -27,6 +29,15 @@ export default function KidsLearningHub({ games }: Props) {
 
   useEffect(() => {
     const items: ContinueItem[] = []
+    const letters = readLetterSoundsSession()
+    if (letters) {
+      items.push({
+        id: 'letters',
+        label: `Letter sounds · ${letters.letterId}`,
+        detail: letters.mode === 'quiz' ? 'Quiz' : `Last sound: ${letters.keyword}`,
+        href: letters.mode === 'quiz' ? LETTER_SOUNDS_QUIZ_PATH : LETTER_SOUNDS_BASE_PATH,
+      })
+    }
     const eco = readEcoPenguinSession()
     if (eco) {
       items.push({
@@ -114,8 +125,8 @@ export default function KidsLearningHub({ games }: Props) {
             Welcome to {ECO_PENGUIN_APP_NAME}
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-sky-900/80 sm:text-base">
-            See pictures, hear vowels and digraphs, then spell words — pick a room and play a little
-            each day.
+            Hear letter sounds, see pictures, then vowels, digraphs, and spelling — pick a room and
+            play a little each day.
           </p>
         </section>
 

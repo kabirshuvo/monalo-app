@@ -8,6 +8,7 @@ import {
   pointsForVowelWordsCorrect,
   pointsForDigraphsCorrect,
   pointsForBuildWordCorrect,
+  pointsForLetterSoundsCorrect,
   pointsFromBlogMinutes,
   pointsFromLearningMinutes,
   pointsFromPurchaseTaka,
@@ -458,4 +459,42 @@ export async function getBuildWordMastery(userId: string): Promise<BuildWordMast
   }
 
   return { masteredKeys, byVowel }
+}
+
+/** Award points for a first-time correct letter-sound quiz answer. */
+export async function awardLetterSoundsCorrect(
+  userId: string,
+  letterId: string,
+  keyword: string
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForLetterSoundsCorrect(),
+    description: `Letter sounds: ${keyword}`,
+    referenceId: `letter-sounds:${letterId}`,
+  })
+}
+
+export type LetterSoundsMastery = {
+  masteredKeys: string[]
+}
+
+export async function getLetterSoundsMastery(userId: string): Promise<LetterSoundsMastery> {
+  const events = await prisma.pointEvent.findMany({
+    where: {
+      userId,
+      category: 'LEARNING',
+      referenceId: { startsWith: 'letter-sounds:' },
+    },
+    select: { referenceId: true },
+  })
+
+  const masteredKeys: string[] = []
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const letterId = ref.slice('letter-sounds:'.length)
+    if (letterId) masteredKeys.push(letterId)
+  }
+  return { masteredKeys }
 }

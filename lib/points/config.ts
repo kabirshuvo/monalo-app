@@ -17,6 +17,8 @@ export const POINTS_CONFIG = {
   digraphsCorrect: 2,
   /** Points for a first-time Build-the-word spelling */
   buildWordCorrect: 2,
+  /** Points for a first-time correct letter-sound quiz answer */
+  letterSoundsCorrect: 2,
 } as const
 
 export function pointsFromPurchaseTaka(taka: number): number {
@@ -56,6 +58,10 @@ export function pointsForDigraphsCorrect(): number {
 
 export function pointsForBuildWordCorrect(): number {
   return POINTS_CONFIG.buildWordCorrect
+}
+
+export function pointsForLetterSoundsCorrect(): number {
+  return POINTS_CONFIG.letterSoundsCorrect
 }
 
 export function levelFromTotalPoints(totalPoints: number): number {

@@ -6,6 +6,7 @@
  * Usage:
  *   node scripts/generate-learning-audio.mjs digraphs
  *   node scripts/generate-learning-audio.mjs vowel-words
+ *   node scripts/generate-learning-audio.mjs letter-sounds
  *   node scripts/generate-learning-audio.mjs all
  *   node scripts/generate-learning-audio.mjs digraphs --force
  */
@@ -122,16 +123,55 @@ async function generateVowelWords() {
   console.log(`Vowel Words audio done: ${ok} created, ${skip} skipped`)
 }
 
+async function generateLetterSounds() {
+  const baseDir = path.join(ROOT, 'public', 'letter-sounds')
+  const letters = JSON.parse(readFileSync(path.join(ROOT, 'data/letter-sounds/letters.json'), 'utf8'))
+
+  let ok = 0
+  let skip = 0
+
+  for (const letter of letters) {
+    for (const [key, text] of [
+      ['sound', letter.speak.sound],
+      ['keyword', letter.speak.keyword],
+    ]) {
+      const rel = `/audio/${key}/${letter.id}.mp3`
+      const result = await synth(text, audioPath(baseDir, rel))
+      if (result === 'ok') ok++
+      else if (result === 'skip') skip++
+      console.log(`[letter-sounds] ${letter.id} ${key}: ${result}`)
+    }
+  }
+
+  for (const [name, text] of [
+    ['question.mp3', 'Which letter makes this sound?'],
+    ['success.mp3', 'Great!'],
+    ['error.mp3', 'Try again'],
+  ]) {
+    const result = await synth(text, path.join(baseDir, 'audio', name))
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[letter-sounds] ${name}: ${result}`)
+  }
+
+  console.log(`Letter sounds audio done: ${ok} created, ${skip} skipped`)
+}
+
 const run = async () => {
   if (TARGET === 'all') {
     await generateDigraphs()
     await generateVowelWords()
+    await generateLetterSounds()
   } else if (TARGET === 'digraphs') {
     await generateDigraphs()
   } else if (TARGET === 'vowel-words') {
     await generateVowelWords()
+  } else if (TARGET === 'letter-sounds') {
+    await generateLetterSounds()
   } else {
-    console.error('Usage: node scripts/generate-learning-audio.mjs [digraphs|vowel-words|all] [--force]')
+    console.error(
+      'Usage: node scripts/generate-learning-audio.mjs [digraphs|vowel-words|letter-sounds|all] [--force]'
+    )
     process.exit(1)
   }
 }

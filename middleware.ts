@@ -37,6 +37,6 @@ export const config = {
     '/dashboard/:path*',
     '/learning',
     '/learning/:path*',
-    '/((?!_next/static|_next/image|favicon.ico|api/media|ecopenguin|vowel-words|digraphs|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp3|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api/media|ecopenguin|vowel-words|digraphs|letter-sounds|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp3|webp)$).*)',
   ],
 }
