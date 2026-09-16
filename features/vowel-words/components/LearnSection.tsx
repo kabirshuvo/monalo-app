@@ -35,7 +35,7 @@ export default function LearnSection({ vowel, words, page }: Props) {
           Words with {vowel.letter}
         </h3>
       </div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
         {visible.map((word) => {
           const isPlaying = playingId === word.id
           return (

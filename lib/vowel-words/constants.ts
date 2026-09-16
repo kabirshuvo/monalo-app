@@ -1,5 +1,5 @@
-/** Items shown per page in Learn / Play. */
-export const VOWEL_WORDS_PER_PAGE = 6
+/** All short-vowel CVC words for a vowel fit on one Learn / Play page. */
+export const VOWEL_WORDS_PER_PAGE = 10
 
 export const VOWEL_WORDS_BASE_PATH = '/learning/vowel-words'
 

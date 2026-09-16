@@ -155,44 +155,46 @@ export default function VowelPlay({
             This round: {pageMasteredCount} / {pageWords.length} got it
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex gap-1.5" role="tablist" aria-label="Word pages">
-            {Array.from({ length: pages }, (_, i) => (
-              <button
-                key={i}
-                type="button"
-                role="tab"
-                aria-selected={i + 1 === page}
-                aria-label={`Page ${i + 1}`}
-                onClick={() => goToPage(i + 1)}
-                className={`h-3.5 w-3.5 rounded-full transition ${
-                  i + 1 === page ? 'scale-110 bg-fuchsia-500' : 'bg-violet-200 hover:bg-violet-300'
-                }`}
-              />
-            ))}
+        {pages > 1 && (
+          <div className="flex items-center gap-2">
+            <div className="flex gap-1.5" role="tablist" aria-label="Word pages">
+              {Array.from({ length: pages }, (_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-selected={i + 1 === page}
+                  aria-label={`Page ${i + 1}`}
+                  onClick={() => goToPage(i + 1)}
+                  className={`h-3.5 w-3.5 rounded-full transition ${
+                    i + 1 === page ? 'scale-110 bg-fuchsia-500' : 'bg-violet-200 hover:bg-violet-300'
+                  }`}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              disabled={page <= 1}
+              onClick={() => goToPage(page - 1)}
+              className={`${vowelTheme.btnSecondary} min-h-11 min-w-11 px-3 py-2`}
+              aria-label="Previous page"
+            >
+              ←
+            </button>
+            <span className="min-w-[4.5rem] text-center text-xs font-bold text-violet-800">
+              {page} / {pages}
+            </span>
+            <button
+              type="button"
+              disabled={page >= pages}
+              onClick={() => goToPage(page + 1)}
+              className={`${vowelTheme.btnPrimary} min-h-11 min-w-11 px-3 py-2`}
+              aria-label="Next page"
+            >
+              →
+            </button>
           </div>
-          <button
-            type="button"
-            disabled={page <= 1}
-            onClick={() => goToPage(page - 1)}
-            className={`${vowelTheme.btnSecondary} min-h-11 min-w-11 px-3 py-2`}
-            aria-label="Previous page"
-          >
-            ←
-          </button>
-          <span className="min-w-[4.5rem] text-center text-xs font-bold text-violet-800">
-            {page} / {pages}
-          </span>
-          <button
-            type="button"
-            disabled={page >= pages}
-            onClick={() => goToPage(page + 1)}
-            className={`${vowelTheme.btnPrimary} min-h-11 min-w-11 px-3 py-2`}
-            aria-label="Next page"
-          >
-            →
-          </button>
-        </div>
+        )}
       </div>
 
       {mode === 'learn' && (
@@ -238,7 +240,7 @@ export default function VowelPlay({
           </p>
           <h2 className="text-2xl font-extrabold text-violet-950 sm:text-3xl">Round complete!</h2>
           <p className="text-sm text-violet-800/85 sm:text-base">
-            You got all {pageWords.length} {vowel.label} words on this page.
+            You got all {pageWords.length} {vowel.label} words.
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             {page < pages ? (
