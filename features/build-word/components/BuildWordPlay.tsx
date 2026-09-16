@@ -23,6 +23,12 @@ type Props = {
 
 type Tile = { id: string; letter: string; used: boolean }
 
+type Win = {
+  word: VowelWord
+  points: number | null
+  already: boolean
+}
+
 export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props) {
   const [spelled, setSpelled] = useState<string[]>([])
   const mastered = useMemo(() => {
@@ -53,6 +59,7 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
   const [slotTileIds, setSlotTileIds] = useState<(string | null)[]>([])
   const [message, setMessage] = useState<string | null>(null)
   const [checking, setChecking] = useState(false)
+  const [win, setWin] = useState<Win | null>(null)
 
   const startWord = useCallback(
     (word: VowelWord) => {
@@ -60,6 +67,7 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
       setTarget(word)
       setMessage(null)
       setChecking(false)
+      setWin(null)
       const letters = buildLetterTiles(word.word, 2)
       setTiles(letters.map((letter, i) => ({ id: `${letter}-${i}-${Math.random()}`, letter, used: false })))
       setSlots(Array(word.word.length).fill(null))
@@ -144,18 +152,35 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
     }
     setChecking(true)
     if (guess === target.word.toLowerCase()) {
-      setMessage('Great spelling! +2 points!')
-      playVowelWordsAudio(target.audio.success, { fallbackText: `Great! ${target.speakWord}` })
-      void api.post('/api/learning/build-the-word/celebrate', {
-        vowelId: vowel.id,
-        wordSlug: target.slug,
-      }).catch(() => undefined)
-      setSpelled((prev) => (prev.includes(target.slug) ? prev : [...prev, target.slug]))
-      const next = pickNext(target.slug)
+      const spelledWord = target
+      setWin({ word: spelledWord, points: 2, already: false })
+      playVowelWordsAudio(spelledWord.audio.success, {
+        fallbackText: `Great! ${spelledWord.speakWord}`,
+      })
+      void api
+        .post<{ awarded?: boolean; points?: number }>('/api/learning/build-the-word/celebrate', {
+          vowelId: vowel.id,
+          wordSlug: spelledWord.slug,
+        })
+        .then((res) => {
+          setWin((prev) => {
+            if (!prev || prev.word.slug !== spelledWord.slug) return prev
+            if (res.awarded) return { ...prev, points: res.points ?? 2, already: false }
+            return { ...prev, points: null, already: true }
+          })
+        })
+        .catch(() => undefined)
+      setSpelled((prev) =>
+        prev.includes(spelledWord.slug) ? prev : [...prev, spelledWord.slug]
+      )
+      const next = pickNext(spelledWord.slug)
       window.setTimeout(() => {
         if (next) startWord(next)
-        else setChecking(false)
-      }, 700)
+        else {
+          setWin(null)
+          setChecking(false)
+        }
+      }, 2200)
     } else {
       setMessage('Not quite — try again')
       playVowelWordsAudio(target.audio.error, { fallbackText: 'Try again' })
@@ -173,6 +198,24 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
 
   return (
     <div className="space-y-6">
+      {win && (
+        <div className="flex flex-col items-center gap-3" aria-live="polite">
+          <p className="text-4xl motion-safe:animate-bounce" aria-hidden>
+            🎉🔤⭐
+          </p>
+          {win.points !== null && (
+            <p className="rounded-full bg-amber-100 px-5 py-2 text-sm font-extrabold text-amber-950 shadow-sm">
+              +{win.points} points!
+            </p>
+          )}
+          {win.already && (
+            <p className="rounded-full bg-sky-100 px-5 py-2 text-sm font-extrabold text-sky-900 shadow-sm">
+              You&apos;ve spelled this one!
+            </p>
+          )}
+        </div>
+      )}
+
       <div className={`${buildWordTheme.card} mx-auto max-w-md space-y-4 p-5 text-center sm:p-6`}>
         <WordPicture
           src={target.image}
@@ -180,67 +223,79 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
           className="mx-auto aspect-square w-40 rounded-2xl sm:w-48"
           sizes="200px"
         />
-        <button
-          type="button"
-          onClick={() =>
-            playVowelWordsAudio(target.audio.word, { fallbackText: target.speakWord })
-          }
-          className={`${buildWordTheme.btnPrimary} px-6 py-3`}
-        >
-          🔊 Hear the word
-        </button>
-        <p className="text-xs font-medium text-sky-700/80">
-          Spelling for short {vowel.letter} — boxes only, no peeking
-        </p>
+        {win ? (
+          <>
+            <h2 className="text-4xl font-extrabold text-sky-950">
+              <VowelHighlight graphemes={win.word.graphemes} vowelLetter={vowel.letter} />
+            </h2>
+            <p className="text-sm font-bold text-indigo-700">Great spelling!</p>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={() =>
+                playVowelWordsAudio(target.audio.word, { fallbackText: target.speakWord })
+              }
+              className={`${buildWordTheme.btnPrimary} px-6 py-3`}
+            >
+              🔊 Hear the word
+            </button>
+            <p className="text-xs font-medium text-sky-700/80">
+              Spelling for short {vowel.letter} — boxes only, no peeking
+            </p>
+          </>
+        )}
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        {slots.map((letter, i) => (
-          <div key={i} className={buildWordTheme.slot}>
-            {letter ?? ''}
+      {!win && (
+        <>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {slots.map((letter, i) => (
+              <div key={i} className={buildWordTheme.slot}>
+                {letter ?? ''}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        {tiles.map((tile) => (
-          <button
-            key={tile.id}
-            type="button"
-            disabled={tile.used || checking}
-            onClick={() => tapTile(tile)}
-            className={`${buildWordTheme.tile} ${tile.used ? 'opacity-30' : 'hover:border-sky-400'}`}
-          >
-            {tile.letter}
-          </button>
-        ))}
-      </div>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {tiles.map((tile) => (
+              <button
+                key={tile.id}
+                type="button"
+                disabled={tile.used || checking}
+                onClick={() => tapTile(tile)}
+                className={`${buildWordTheme.tile} ${tile.used ? 'opacity-30' : 'hover:border-sky-400'}`}
+              >
+                {tile.letter}
+              </button>
+            ))}
+          </div>
 
-      {message && (
-        <p className="text-center text-sm font-extrabold text-indigo-800">{message}</p>
+          {message && (
+            <p className="text-center text-sm font-extrabold text-indigo-800">{message}</p>
+          )}
+
+          <div className="flex flex-wrap justify-center gap-3">
+            <button type="button" onClick={backspace} className={buildWordTheme.btnSecondary}>
+              ⌫ Back
+            </button>
+            <button type="button" onClick={clearAll} className={buildWordTheme.btnSecondary}>
+              Clear
+            </button>
+            <button
+              type="button"
+              onClick={check}
+              disabled={filledCount < target.word.length || checking}
+              className={buildWordTheme.btnPrimary}
+            >
+              Check spelling
+            </button>
+          </div>
+        </>
       )}
 
-      <div className="flex flex-wrap justify-center gap-3">
-        <button type="button" onClick={backspace} className={buildWordTheme.btnSecondary}>
-          ⌫ Back
-        </button>
-        <button type="button" onClick={clearAll} className={buildWordTheme.btnSecondary}>
-          Clear
-        </button>
-        <button
-          type="button"
-          onClick={check}
-          disabled={filledCount < target.word.length || checking}
-          className={buildWordTheme.btnPrimary}
-        >
-          Check spelling
-        </button>
-      </div>
-
-      <p className="text-center text-xs text-sky-700/70">
-        Parent tip: after a win you can show{' '}
-        <VowelHighlight graphemes={target.graphemes} vowelLetter={vowel.letter} />
-      </p>
+      {win && <p className="text-center text-sm font-bold text-indigo-700">Next word…</p>}
     </div>
   )
 }
