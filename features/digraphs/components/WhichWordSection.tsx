@@ -136,7 +136,7 @@ export default function WhichWordSection({
         <p className="mb-3 text-center text-sm font-extrabold text-rose-700">{coachMessage}</p>
       )}
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
         {pageWords.map((word, index) => {
           const isWrong = wrongIds.includes(word.id)
           return (

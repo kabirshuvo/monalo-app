@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { DIGRAPHS_BASE_PATH } from '@/lib/digraphs/constants'
 import {
   markRoundDeckFinished,
@@ -32,6 +32,7 @@ export default function WordCelebrate({
   showConfetti,
   resumePage = 1,
 }: Props) {
+  const router = useRouter()
   const [burst, setBurst] = useState(showConfetti ?? true)
   const [pointsAwarded, setPointsAwarded] = useState<number | null>(null)
   const [alreadyMastered, setAlreadyMastered] = useState(false)
@@ -88,7 +89,15 @@ export default function WordCelebrate({
     }
   }, [showConfetti, digraph.id, word.slug])
 
-  const keepHref = `${DIGRAPHS_BASE_PATH}/${digraph.id}?page=${resumePage}&mode=play`
+  const examHref = `${DIGRAPHS_BASE_PATH}/${digraph.id}?page=${resumePage}&mode=play`
+
+  useEffect(() => {
+    if (!showConfetti) return
+    const t = window.setTimeout(() => {
+      router.replace(examHref)
+    }, 1200)
+    return () => window.clearTimeout(t)
+  }, [showConfetti, examHref, router])
 
   return (
     <div className="flex min-h-[55vh] flex-col items-center justify-center gap-6 py-4">
@@ -127,14 +136,7 @@ export default function WordCelebrate({
           {digraph.letter} · {digraph.phoneme}
         </p>
       </div>
-      <div className="flex flex-wrap justify-center gap-3">
-        <Link href={keepHref} className={digraphTheme.btnPrimary}>
-          Keep playing →
-        </Link>
-        <Link href={DIGRAPHS_BASE_PATH} className={digraphTheme.btnSecondary}>
-          All digraphs
-        </Link>
-      </div>
+      <p className="text-sm font-bold text-amber-800">Back to the listening game…</p>
     </div>
   )
 }
