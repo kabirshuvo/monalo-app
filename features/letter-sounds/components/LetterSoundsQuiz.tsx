@@ -65,7 +65,8 @@ export default function LetterSoundsQuiz({
     setChecking(false)
     writeLetterSoundsSession({ letterId: letter.id, keyword: letter.keyword, mode: 'quiz' })
     playVowelWordsSequence([
-      { src: questionAudio, fallbackText: 'Which letter makes this sound?' },
+      { src: questionAudio, fallbackText: 'Listen. Which letter?' },
+      { src: letter.audio.keyword, fallbackText: letter.speak.keyword },
       { src: letter.audio.sound, fallbackText: letter.speak.sound },
     ])
   }, [questionAudio])
@@ -139,11 +140,14 @@ export default function LetterSoundsQuiz({
         ) : (
           <>
             <p className="text-sm font-bold uppercase tracking-widest text-emerald-700">Quiz</p>
-            <h2 className="text-2xl font-extrabold text-emerald-950">Which letter makes this sound?</h2>
+            <h2 className="text-2xl font-extrabold text-emerald-950">Listen. Which letter?</h2>
             <button
               type="button"
               onClick={() =>
-                playVowelWordsAudio(target.audio.sound, { fallbackText: target.speak.sound })
+                playVowelWordsSequence([
+                  { src: target.audio.keyword, fallbackText: target.speak.keyword },
+                  { src: target.audio.sound, fallbackText: target.speak.sound },
+                ])
               }
               className={`${letterSoundsTheme.btnPrimary} px-6 py-3`}
             >

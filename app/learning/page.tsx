@@ -13,7 +13,7 @@ const GAMES: LearningGameCard[] = [
   {
     id: 'letter-sounds',
     title: 'Letter sounds',
-    blurb: 'All 26 letter sounds, then a listen-and-tap quiz. Sounds, not letter names.',
+    blurb: 'S for sun — hear the word, then copy the sound. Built for kids learning English.',
     href: '/learning/letter-sounds',
     accent: 'from-lime-400 to-emerald-500',
     badge: 'Sounds',

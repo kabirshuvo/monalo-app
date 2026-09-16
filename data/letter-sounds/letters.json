@@ -1,28 +1,418 @@
 [
-  {"id":"s","group":"satpin","letter":"s","phoneme":"/s/","keyword":"sun","image":"/images/sun.webp","speak":{"sound":"ssss","keyword":"sun"},"audio":{"sound":"/audio/sound/s.mp3","keyword":"/audio/keyword/s.mp3"}},
-  {"id":"a","group":"satpin","letter":"a","phoneme":"/æ/","keyword":"apple","image":"/images/apple.webp","speak":{"sound":"app","keyword":"apple"},"audio":{"sound":"/audio/sound/a.mp3","keyword":"/audio/keyword/a.mp3"}},
-  {"id":"t","group":"satpin","letter":"t","phoneme":"/t/","keyword":"tap","image":"/images/tap.webp","speak":{"sound":"tuh","keyword":"tap"},"audio":{"sound":"/audio/sound/t.mp3","keyword":"/audio/keyword/t.mp3"}},
-  {"id":"p","group":"satpin","letter":"p","phoneme":"/p/","keyword":"pin","image":"/images/pin.webp","speak":{"sound":"puh","keyword":"pin"},"audio":{"sound":"/audio/sound/p.mp3","keyword":"/audio/keyword/p.mp3"}},
-  {"id":"i","group":"satpin","letter":"i","phoneme":"/ɪ/","keyword":"igloo","image":"/images/igloo.webp","speak":{"sound":"it","keyword":"igloo"},"audio":{"sound":"/audio/sound/i.mp3","keyword":"/audio/keyword/i.mp3"}},
-  {"id":"n","group":"satpin","letter":"n","phoneme":"/n/","keyword":"nest","image":"/images/nest.webp","speak":{"sound":"nnnn","keyword":"nest"},"audio":{"sound":"/audio/sound/n.mp3","keyword":"/audio/keyword/n.mp3"}},
-  {"id":"m","group":"mdgock","letter":"m","phoneme":"/m/","keyword":"map","image":"/images/map.webp","speak":{"sound":"mmmm","keyword":"map"},"audio":{"sound":"/audio/sound/m.mp3","keyword":"/audio/keyword/m.mp3"}},
-  {"id":"d","group":"mdgock","letter":"d","phoneme":"/d/","keyword":"dog","image":"/images/dog.webp","speak":{"sound":"duh","keyword":"dog"},"audio":{"sound":"/audio/sound/d.mp3","keyword":"/audio/keyword/d.mp3"}},
-  {"id":"g","group":"mdgock","letter":"g","phoneme":"/g/","keyword":"goat","image":"/images/goat.webp","speak":{"sound":"guh","keyword":"goat"},"audio":{"sound":"/audio/sound/g.mp3","keyword":"/audio/keyword/g.mp3"}},
-  {"id":"o","group":"mdgock","letter":"o","phoneme":"/ɒ/","keyword":"octopus","image":"/images/octopus.webp","speak":{"sound":"on","keyword":"octopus"},"audio":{"sound":"/audio/sound/o.mp3","keyword":"/audio/keyword/o.mp3"}},
-  {"id":"c","group":"mdgock","letter":"c","phoneme":"/k/","keyword":"cat","image":"/images/cat.webp","speak":{"sound":"cuh","keyword":"cat"},"audio":{"sound":"/audio/sound/c.mp3","keyword":"/audio/keyword/c.mp3"}},
-  {"id":"k","group":"mdgock","letter":"k","phoneme":"/k/","keyword":"kite","image":"/images/kite.webp","speak":{"sound":"kuh","keyword":"kite"},"audio":{"sound":"/audio/sound/k.mp3","keyword":"/audio/keyword/k.mp3"}},
-  {"id":"e","group":"eurhbf","letter":"e","phoneme":"/ɛ/","keyword":"egg","image":"/images/egg.webp","speak":{"sound":"ehh","keyword":"egg"},"audio":{"sound":"/audio/sound/e.mp3","keyword":"/audio/keyword/e.mp3"}},
-  {"id":"u","group":"eurhbf","letter":"u","phoneme":"/ʌ/","keyword":"umbrella","image":"/images/umbrella.webp","speak":{"sound":"uh","keyword":"umbrella"},"audio":{"sound":"/audio/sound/u.mp3","keyword":"/audio/keyword/u.mp3"}},
-  {"id":"r","group":"eurhbf","letter":"r","phoneme":"/r/","keyword":"red","image":"/images/red.webp","speak":{"sound":"rrrr","keyword":"red"},"audio":{"sound":"/audio/sound/r.mp3","keyword":"/audio/keyword/r.mp3"}},
-  {"id":"h","group":"eurhbf","letter":"h","phoneme":"/h/","keyword":"hat","image":"/images/hat.webp","speak":{"sound":"hhh","keyword":"hat"},"audio":{"sound":"/audio/sound/h.mp3","keyword":"/audio/keyword/h.mp3"}},
-  {"id":"b","group":"eurhbf","letter":"b","phoneme":"/b/","keyword":"bat","image":"/images/bat.webp","speak":{"sound":"buh","keyword":"bat"},"audio":{"sound":"/audio/sound/b.mp3","keyword":"/audio/keyword/b.mp3"}},
-  {"id":"f","group":"eurhbf","letter":"f","phoneme":"/f/","keyword":"fox","image":"/images/fox.webp","speak":{"sound":"ffff","keyword":"fox"},"audio":{"sound":"/audio/sound/f.mp3","keyword":"/audio/keyword/f.mp3"}},
-  {"id":"l","group":"rest","letter":"l","phoneme":"/l/","keyword":"leg","image":"/images/leg.webp","speak":{"sound":"llll","keyword":"leg"},"audio":{"sound":"/audio/sound/l.mp3","keyword":"/audio/keyword/l.mp3"}},
-  {"id":"j","group":"rest","letter":"j","phoneme":"/dʒ/","keyword":"jam","image":"/images/jam.webp","speak":{"sound":"juh","keyword":"jam"},"audio":{"sound":"/audio/sound/j.mp3","keyword":"/audio/keyword/j.mp3"}},
-  {"id":"v","group":"rest","letter":"v","phoneme":"/v/","keyword":"van","image":"/images/van.webp","speak":{"sound":"vvvv","keyword":"van"},"audio":{"sound":"/audio/sound/v.mp3","keyword":"/audio/keyword/v.mp3"}},
-  {"id":"w","group":"rest","letter":"w","phoneme":"/w/","keyword":"wet","image":"/images/wet.webp","speak":{"sound":"wuh","keyword":"wet"},"audio":{"sound":"/audio/sound/w.mp3","keyword":"/audio/keyword/w.mp3"}},
-  {"id":"x","group":"rest","letter":"x","phoneme":"/ks/","keyword":"box","image":"/images/box.webp","speak":{"sound":"ksss","keyword":"box"},"audio":{"sound":"/audio/sound/x.mp3","keyword":"/audio/keyword/x.mp3"}},
-  {"id":"y","group":"rest","letter":"y","phoneme":"/j/","keyword":"yak","image":"/images/yak.webp","speak":{"sound":"yuh","keyword":"yak"},"audio":{"sound":"/audio/sound/y.mp3","keyword":"/audio/keyword/y.mp3"}},
-  {"id":"z","group":"rest","letter":"z","phoneme":"/z/","keyword":"zebra","image":"/images/zebra.webp","speak":{"sound":"zzzz","keyword":"zebra"},"audio":{"sound":"/audio/sound/z.mp3","keyword":"/audio/keyword/z.mp3"}},
-  {"id":"q","group":"rest","letter":"q","phoneme":"/kw/","keyword":"queen","image":"/images/queen.webp","speak":{"sound":"kwuh","keyword":"queen"},"audio":{"sound":"/audio/sound/q.mp3","keyword":"/audio/keyword/q.mp3"}}
+  {
+    "id": "s",
+    "group": "satpin",
+    "letter": "s",
+    "phoneme": "/s/",
+    "keyword": "sun",
+    "image": "/images/sun.webp",
+    "speak": {
+      "sound": "ssss, ssss",
+      "keyword": "S for sun."
+    },
+    "audio": {
+      "sound": "/audio/sound/s.mp3",
+      "keyword": "/audio/keyword/s.mp3"
+    }
+  },
+  {
+    "id": "a",
+    "group": "satpin",
+    "letter": "a",
+    "phoneme": "/æ/",
+    "keyword": "apple",
+    "image": "/images/apple.webp",
+    "speak": {
+      "sound": "app, app",
+      "keyword": "A for apple."
+    },
+    "audio": {
+      "sound": "/audio/sound/a.mp3",
+      "keyword": "/audio/keyword/a.mp3"
+    }
+  },
+  {
+    "id": "t",
+    "group": "satpin",
+    "letter": "t",
+    "phoneme": "/t/",
+    "keyword": "tap",
+    "image": "/images/tap.webp",
+    "speak": {
+      "sound": "tuh, tuh",
+      "keyword": "T for tap."
+    },
+    "audio": {
+      "sound": "/audio/sound/t.mp3",
+      "keyword": "/audio/keyword/t.mp3"
+    }
+  },
+  {
+    "id": "p",
+    "group": "satpin",
+    "letter": "p",
+    "phoneme": "/p/",
+    "keyword": "pin",
+    "image": "/images/pin.webp",
+    "speak": {
+      "sound": "puh, puh",
+      "keyword": "P for pin."
+    },
+    "audio": {
+      "sound": "/audio/sound/p.mp3",
+      "keyword": "/audio/keyword/p.mp3"
+    }
+  },
+  {
+    "id": "i",
+    "group": "satpin",
+    "letter": "i",
+    "phoneme": "/ɪ/",
+    "keyword": "igloo",
+    "image": "/images/igloo.webp",
+    "speak": {
+      "sound": "it, it",
+      "keyword": "I for igloo."
+    },
+    "audio": {
+      "sound": "/audio/sound/i.mp3",
+      "keyword": "/audio/keyword/i.mp3"
+    }
+  },
+  {
+    "id": "n",
+    "group": "satpin",
+    "letter": "n",
+    "phoneme": "/n/",
+    "keyword": "nest",
+    "image": "/images/nest.webp",
+    "speak": {
+      "sound": "nnnn, nnnn",
+      "keyword": "N for nest."
+    },
+    "audio": {
+      "sound": "/audio/sound/n.mp3",
+      "keyword": "/audio/keyword/n.mp3"
+    }
+  },
+  {
+    "id": "m",
+    "group": "mdgock",
+    "letter": "m",
+    "phoneme": "/m/",
+    "keyword": "map",
+    "image": "/images/map.webp",
+    "speak": {
+      "sound": "mmmm, mmmm",
+      "keyword": "M for map."
+    },
+    "audio": {
+      "sound": "/audio/sound/m.mp3",
+      "keyword": "/audio/keyword/m.mp3"
+    }
+  },
+  {
+    "id": "d",
+    "group": "mdgock",
+    "letter": "d",
+    "phoneme": "/d/",
+    "keyword": "dog",
+    "image": "/images/dog.webp",
+    "speak": {
+      "sound": "duh, duh",
+      "keyword": "D for dog."
+    },
+    "audio": {
+      "sound": "/audio/sound/d.mp3",
+      "keyword": "/audio/keyword/d.mp3"
+    }
+  },
+  {
+    "id": "g",
+    "group": "mdgock",
+    "letter": "g",
+    "phoneme": "/g/",
+    "keyword": "goat",
+    "image": "/images/goat.webp",
+    "speak": {
+      "sound": "guh, guh",
+      "keyword": "G for goat."
+    },
+    "audio": {
+      "sound": "/audio/sound/g.mp3",
+      "keyword": "/audio/keyword/g.mp3"
+    }
+  },
+  {
+    "id": "o",
+    "group": "mdgock",
+    "letter": "o",
+    "phoneme": "/ɒ/",
+    "keyword": "octopus",
+    "image": "/images/octopus.webp",
+    "speak": {
+      "sound": "on, on",
+      "keyword": "O for octopus."
+    },
+    "audio": {
+      "sound": "/audio/sound/o.mp3",
+      "keyword": "/audio/keyword/o.mp3"
+    }
+  },
+  {
+    "id": "c",
+    "group": "mdgock",
+    "letter": "c",
+    "phoneme": "/k/",
+    "keyword": "cat",
+    "image": "/images/cat.webp",
+    "speak": {
+      "sound": "cuh, cuh",
+      "keyword": "C for cat."
+    },
+    "audio": {
+      "sound": "/audio/sound/c.mp3",
+      "keyword": "/audio/keyword/c.mp3"
+    }
+  },
+  {
+    "id": "k",
+    "group": "mdgock",
+    "letter": "k",
+    "phoneme": "/k/",
+    "keyword": "kite",
+    "image": "/images/kite.webp",
+    "speak": {
+      "sound": "kuh, kuh",
+      "keyword": "K for kite."
+    },
+    "audio": {
+      "sound": "/audio/sound/k.mp3",
+      "keyword": "/audio/keyword/k.mp3"
+    }
+  },
+  {
+    "id": "e",
+    "group": "eurhbf",
+    "letter": "e",
+    "phoneme": "/ɛ/",
+    "keyword": "egg",
+    "image": "/images/egg.webp",
+    "speak": {
+      "sound": "ehh, ehh",
+      "keyword": "E for egg."
+    },
+    "audio": {
+      "sound": "/audio/sound/e.mp3",
+      "keyword": "/audio/keyword/e.mp3"
+    }
+  },
+  {
+    "id": "u",
+    "group": "eurhbf",
+    "letter": "u",
+    "phoneme": "/ʌ/",
+    "keyword": "umbrella",
+    "image": "/images/umbrella.webp",
+    "speak": {
+      "sound": "uh, uh",
+      "keyword": "U for umbrella."
+    },
+    "audio": {
+      "sound": "/audio/sound/u.mp3",
+      "keyword": "/audio/keyword/u.mp3"
+    }
+  },
+  {
+    "id": "r",
+    "group": "eurhbf",
+    "letter": "r",
+    "phoneme": "/r/",
+    "keyword": "red",
+    "image": "/images/red.webp",
+    "speak": {
+      "sound": "rrrr, rrrr",
+      "keyword": "R for red."
+    },
+    "audio": {
+      "sound": "/audio/sound/r.mp3",
+      "keyword": "/audio/keyword/r.mp3"
+    }
+  },
+  {
+    "id": "h",
+    "group": "eurhbf",
+    "letter": "h",
+    "phoneme": "/h/",
+    "keyword": "hat",
+    "image": "/images/hat.webp",
+    "speak": {
+      "sound": "hhh, hhh",
+      "keyword": "H for hat."
+    },
+    "audio": {
+      "sound": "/audio/sound/h.mp3",
+      "keyword": "/audio/keyword/h.mp3"
+    }
+  },
+  {
+    "id": "b",
+    "group": "eurhbf",
+    "letter": "b",
+    "phoneme": "/b/",
+    "keyword": "bat",
+    "image": "/images/bat.webp",
+    "speak": {
+      "sound": "buh, buh",
+      "keyword": "B for bat."
+    },
+    "audio": {
+      "sound": "/audio/sound/b.mp3",
+      "keyword": "/audio/keyword/b.mp3"
+    }
+  },
+  {
+    "id": "f",
+    "group": "eurhbf",
+    "letter": "f",
+    "phoneme": "/f/",
+    "keyword": "fox",
+    "image": "/images/fox.webp",
+    "speak": {
+      "sound": "ffff, ffff",
+      "keyword": "F for fox."
+    },
+    "audio": {
+      "sound": "/audio/sound/f.mp3",
+      "keyword": "/audio/keyword/f.mp3"
+    }
+  },
+  {
+    "id": "l",
+    "group": "rest",
+    "letter": "l",
+    "phoneme": "/l/",
+    "keyword": "leg",
+    "image": "/images/leg.webp",
+    "speak": {
+      "sound": "llll, llll",
+      "keyword": "L for leg."
+    },
+    "audio": {
+      "sound": "/audio/sound/l.mp3",
+      "keyword": "/audio/keyword/l.mp3"
+    }
+  },
+  {
+    "id": "j",
+    "group": "rest",
+    "letter": "j",
+    "phoneme": "/dʒ/",
+    "keyword": "jam",
+    "image": "/images/jam.webp",
+    "speak": {
+      "sound": "juh, juh",
+      "keyword": "J for jam."
+    },
+    "audio": {
+      "sound": "/audio/sound/j.mp3",
+      "keyword": "/audio/keyword/j.mp3"
+    }
+  },
+  {
+    "id": "v",
+    "group": "rest",
+    "letter": "v",
+    "phoneme": "/v/",
+    "keyword": "van",
+    "image": "/images/van.webp",
+    "speak": {
+      "sound": "vvvv, vvvv",
+      "keyword": "V for van."
+    },
+    "audio": {
+      "sound": "/audio/sound/v.mp3",
+      "keyword": "/audio/keyword/v.mp3"
+    }
+  },
+  {
+    "id": "w",
+    "group": "rest",
+    "letter": "w",
+    "phoneme": "/w/",
+    "keyword": "wet",
+    "image": "/images/wet.webp",
+    "speak": {
+      "sound": "wuh, wuh",
+      "keyword": "W for wet."
+    },
+    "audio": {
+      "sound": "/audio/sound/w.mp3",
+      "keyword": "/audio/keyword/w.mp3"
+    }
+  },
+  {
+    "id": "x",
+    "group": "rest",
+    "letter": "x",
+    "phoneme": "/ks/",
+    "keyword": "box",
+    "image": "/images/box.webp",
+    "speak": {
+      "sound": "ksss, ksss",
+      "keyword": "X, as in box."
+    },
+    "audio": {
+      "sound": "/audio/sound/x.mp3",
+      "keyword": "/audio/keyword/x.mp3"
+    }
+  },
+  {
+    "id": "y",
+    "group": "rest",
+    "letter": "y",
+    "phoneme": "/j/",
+    "keyword": "yak",
+    "image": "/images/yak.webp",
+    "speak": {
+      "sound": "yuh, yuh",
+      "keyword": "Y for yak."
+    },
+    "audio": {
+      "sound": "/audio/sound/y.mp3",
+      "keyword": "/audio/keyword/y.mp3"
+    }
+  },
+  {
+    "id": "z",
+    "group": "rest",
+    "letter": "z",
+    "phoneme": "/z/",
+    "keyword": "zebra",
+    "image": "/images/zebra.webp",
+    "speak": {
+      "sound": "zzzz, zzzz",
+      "keyword": "Z for zebra."
+    },
+    "audio": {
+      "sound": "/audio/sound/z.mp3",
+      "keyword": "/audio/keyword/z.mp3"
+    }
+  },
+  {
+    "id": "q",
+    "group": "rest",
+    "letter": "q",
+    "phoneme": "/kw/",
+    "keyword": "queen",
+    "image": "/images/queen.webp",
+    "speak": {
+      "sound": "kwuh, kwuh",
+      "keyword": "Q for queen."
+    },
+    "audio": {
+      "sound": "/audio/sound/q.mp3",
+      "keyword": "/audio/keyword/q.mp3"
+    }
+  }
 ]

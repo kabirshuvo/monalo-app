@@ -46,12 +46,12 @@ export default function LetterSoundsLearn({ letters }: Props) {
     setHeard((prev) => (prev.includes(letter.id) ? prev : [...prev, letter.id]))
     writeLetterSoundsSession({ letterId: letter.id, keyword: letter.keyword, mode: 'learn' })
     playVowelWordsSequence([
-      { src: letter.audio.sound, fallbackText: letter.speak.sound },
       { src: letter.audio.keyword, fallbackText: letter.speak.keyword },
+      { src: letter.audio.sound, fallbackText: letter.speak.sound },
     ])
     window.setTimeout(() => {
       setPlayingId((current) => (current === letter.id ? null : current))
-    }, 4000)
+    }, 5500)
   }
 
   return (
@@ -60,7 +60,7 @@ export default function LetterSoundsLearn({ letters }: Props) {
         <p className="text-sm font-bold uppercase tracking-widest text-emerald-700">26 sounds</p>
         <h2 className="mt-2 text-2xl font-extrabold text-emerald-950 sm:text-3xl">Letter sounds</h2>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-emerald-900/80 sm:text-base">
-          Tap a letter to hear its sound, then the word. We say the sound, not the letter name.
+          Tap a letter and listen: S for sun, then the sound to copy. The word comes first, so you can hear the sound inside it.
         </p>
         <Link href={LETTER_SOUNDS_QUIZ_PATH} className={`${letterSoundsTheme.btnPrimary} mt-5 inline-flex px-6 py-3`}>
           Play the quiz →
@@ -93,7 +93,10 @@ export default function LetterSoundsLearn({ letters }: Props) {
                     className="mx-auto mt-3 aspect-square w-full rounded-2xl"
                     sizes="(max-width: 640px) 40vw, 180px"
                   />
-                  <p className="mt-3 text-lg font-extrabold text-emerald-950">
+                  <p className="mt-3 text-xs font-bold uppercase tracking-wide text-emerald-700">
+                    {letter.letter} for {letter.keyword}
+                  </p>
+                  <p className="text-lg font-extrabold text-emerald-950">
                     {parts.before}
                     <span className="rounded-lg bg-gradient-to-b from-amber-300 to-orange-400 px-1.5 text-white">
                       {parts.hit}

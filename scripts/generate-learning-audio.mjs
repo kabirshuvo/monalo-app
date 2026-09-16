@@ -30,11 +30,19 @@ const tts = new EdgeTTS({
   outputFormat: 'audio-24khz-48kbitrate-mono-mp3',
 })
 
-async function synth(text, outPath) {
+/** Slower so English learners can hear the word, then copy the sound. */
+const slowTts = new EdgeTTS({
+  voice: VOICE,
+  lang: 'en-US',
+  outputFormat: 'audio-24khz-48kbitrate-mono-mp3',
+  rate: '-20%',
+})
+
+async function synth(text, outPath, voice = tts) {
   if (!text?.trim()) return 'empty'
   if (!FORCE && existsSync(outPath)) return 'skip'
   mkdirSync(path.dirname(outPath), { recursive: true })
-  await tts.ttsPromise(text.trim(), outPath)
+  await voice.ttsPromise(text.trim(), outPath)
   return 'ok'
 }
 
@@ -136,7 +144,7 @@ async function generateLetterSounds() {
       ['keyword', letter.speak.keyword],
     ]) {
       const rel = `/audio/${key}/${letter.id}.mp3`
-      const result = await synth(text, audioPath(baseDir, rel))
+      const result = await synth(text, audioPath(baseDir, rel), slowTts)
       if (result === 'ok') ok++
       else if (result === 'skip') skip++
       console.log(`[letter-sounds] ${letter.id} ${key}: ${result}`)
@@ -144,11 +152,11 @@ async function generateLetterSounds() {
   }
 
   for (const [name, text] of [
-    ['question.mp3', 'Which letter makes this sound?'],
+    ['question.mp3', 'Listen. Which letter?'],
     ['success.mp3', 'Great!'],
-    ['error.mp3', 'Try again'],
+    ['error.mp3', 'Try again. Listen once more.'],
   ]) {
-    const result = await synth(text, path.join(baseDir, 'audio', name))
+    const result = await synth(text, path.join(baseDir, 'audio', name), slowTts)
     if (result === 'ok') ok++
     else if (result === 'skip') skip++
     console.log(`[letter-sounds] ${name}: ${result}`)
