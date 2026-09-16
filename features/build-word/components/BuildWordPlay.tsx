@@ -1,12 +1,10 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import WordPicture from '@/features/vowel-words/components/WordPicture'
 import { VowelHighlight } from '@/features/vowel-words/components/VowelHighlight'
 import { buildWordTheme } from '@/features/build-word/build-word-theme'
 import {
-  BUILD_WORD_BASE_PATH,
   buildLetterTiles,
   writeBuildWordSession,
 } from '@/lib/build-word/session'
@@ -14,6 +12,7 @@ import {
   playVowelWordsAudio,
   stopVowelWordsAudio,
 } from '@/features/vowel-words/hooks/vowelWordsAudioManager'
+import api from '@/lib/api'
 import type { VowelMeta, VowelWord } from '@/lib/vowel-words/types'
 
 type Props = {
@@ -25,19 +24,28 @@ type Props = {
 type Tile = { id: string; letter: string; used: boolean }
 
 export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props) {
-  const router = useRouter()
-  const mastered = useMemo(() => new Set(masteredKeys), [masteredKeys])
+  const [spelled, setSpelled] = useState<string[]>([])
+  const mastered = useMemo(() => {
+    const set = new Set(masteredKeys)
+    for (const slug of spelled) set.add(`${vowel.id}:${slug}`)
+    return set
+  }, [masteredKeys, spelled, vowel.id])
 
   const prefer = useMemo(
     () => words.filter((w) => !mastered.has(`${vowel.id}:${w.slug}`)),
     [words, mastered, vowel.id]
   )
 
-  const pickNext = useCallback(() => {
-    const pool = prefer.length > 0 ? prefer : words
-    if (pool.length === 0) return null
-    return pool[Math.floor(Math.random() * pool.length)]
-  }, [prefer, words])
+  const pickNext = useCallback(
+    (excludeSlug?: string) => {
+      const unseen = prefer.filter((w) => w.slug !== excludeSlug)
+      const others = words.filter((w) => w.slug !== excludeSlug)
+      const pool = unseen.length > 0 ? unseen : others.length > 0 ? others : words
+      if (pool.length === 0) return null
+      return pool[Math.floor(Math.random() * pool.length)]
+    },
+    [prefer, words]
+  )
 
   const [target, setTarget] = useState<VowelWord | null>(null)
   const [tiles, setTiles] = useState<Tile[]>([])
@@ -136,13 +144,18 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
     }
     setChecking(true)
     if (guess === target.word.toLowerCase()) {
-      setMessage('Great spelling!')
+      setMessage('Great spelling! +2 points!')
       playVowelWordsAudio(target.audio.success, { fallbackText: `Great! ${target.speakWord}` })
+      void api.post('/api/learning/build-the-word/celebrate', {
+        vowelId: vowel.id,
+        wordSlug: target.slug,
+      }).catch(() => undefined)
+      setSpelled((prev) => (prev.includes(target.slug) ? prev : [...prev, target.slug]))
+      const next = pickNext(target.slug)
       window.setTimeout(() => {
-        router.push(
-          `${BUILD_WORD_BASE_PATH}/${vowel.id}/${target.slug}?celebrate=1`
-        )
-      }, 600)
+        if (next) startWord(next)
+        else setChecking(false)
+      }, 700)
     } else {
       setMessage('Not quite — try again')
       playVowelWordsAudio(target.audio.error, { fallbackText: 'Try again' })
