@@ -178,11 +178,16 @@ export default function LetterSoundsQuiz({
         </div>
       )}
 
-      <p className="text-center">
-        <Link href={LETTER_SOUNDS_BASE_PATH} className="text-sm font-bold text-emerald-800 hover:underline">
+      <footer className={`${letterSoundsTheme.card} p-6 text-center sm:p-8`}>
+        <p className="text-sm font-bold uppercase tracking-widest text-emerald-700">Keep going</p>
+        <h2 className="mt-2 text-2xl font-extrabold text-emerald-950 sm:text-3xl">Need another listen?</h2>
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-emerald-900/80 sm:text-base">
+          Go back to the letters and hear S for sun, then the sound, before you try again.
+        </p>
+        <Link href={LETTER_SOUNDS_BASE_PATH} className={`${letterSoundsTheme.btnPrimary} mt-5 inline-flex px-6 py-3`}>
           Back to the letters
         </Link>
-      </p>
+      </footer>
     </div>
   )
 }
