@@ -140,8 +140,8 @@ async function generateLetterSounds() {
 
   for (const letter of letters) {
     for (const [key, text] of [
-      ['sound', letter.speak.sound],
       ['keyword', letter.speak.keyword],
+      ['sound', letter.speak.sound],
     ]) {
       const rel = `/audio/${key}/${letter.id}.mp3`
       const result = await synth(text, audioPath(baseDir, rel), slowTts)

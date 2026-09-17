@@ -23,8 +23,9 @@
     "keyword": "apple",
     "image": "/images/apple.webp",
     "speak": {
-      "sound": "Apple, apple.",
-      "keyword": "Listen to apple."
+      "sound": "a, a",
+      "keyword": "A for apple,",
+      "ipa": "æ"
     },
     "audio": {
       "sound": "/audio/sound/a.mp3",
@@ -55,8 +56,9 @@
     "keyword": "pin",
     "image": "/images/pin.webp",
     "speak": {
-      "sound": "Pin, pin.",
-      "keyword": "Listen to pin."
+      "sound": "p, p",
+      "keyword": "P for pin,",
+      "ipa": "p"
     },
     "audio": {
       "sound": "/audio/sound/p.mp3",
@@ -71,8 +73,9 @@
     "keyword": "igloo",
     "image": "/images/igloo.webp",
     "speak": {
-      "sound": "Igloo, igloo.",
-      "keyword": "Listen to igloo."
+      "sound": "i, i",
+      "keyword": "I for igloo,",
+      "ipa": "ɪ"
     },
     "audio": {
       "sound": "/audio/sound/i.mp3",
@@ -135,8 +138,9 @@
     "keyword": "goat",
     "image": "/images/goat.webp",
     "speak": {
-      "sound": "Goat, goat.",
-      "keyword": "Listen to goat."
+      "sound": "g, g",
+      "keyword": "G for goat,",
+      "ipa": "ɡ"
     },
     "audio": {
       "sound": "/audio/sound/g.mp3",
@@ -167,8 +171,9 @@
     "keyword": "cat",
     "image": "/images/cat.webp",
     "speak": {
-      "sound": "Cat, cat.",
-      "keyword": "Listen to cat."
+      "sound": "c, c",
+      "keyword": "C for cat,",
+      "ipa": "k"
     },
     "audio": {
       "sound": "/audio/sound/c.mp3",
@@ -183,8 +188,9 @@
     "keyword": "kite",
     "image": "/images/kite.webp",
     "speak": {
-      "sound": "Kite, kite.",
-      "keyword": "Listen to kite."
+      "sound": "k, k",
+      "keyword": "K for kite,",
+      "ipa": "k"
     },
     "audio": {
       "sound": "/audio/sound/k.mp3",
@@ -359,8 +365,9 @@
     "keyword": "box",
     "image": "/images/box.webp",
     "speak": {
-      "sound": "Box, box.",
-      "keyword": "Listen to the end of box."
+      "sound": "x, x",
+      "keyword": "X for box,",
+      "ipa": "ks"
     },
     "audio": {
       "sound": "/audio/sound/x.mp3",
