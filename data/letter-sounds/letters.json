@@ -23,8 +23,8 @@
     "keyword": "apple",
     "image": "/images/apple.webp",
     "speak": {
-      "sound": "app, app",
-      "keyword": "A for apple."
+      "sound": "Apple, apple.",
+      "keyword": "Listen to apple."
     },
     "audio": {
       "sound": "/audio/sound/a.mp3",
@@ -55,8 +55,8 @@
     "keyword": "pin",
     "image": "/images/pin.webp",
     "speak": {
-      "sound": "puh, puh",
-      "keyword": "P for pin."
+      "sound": "Pin, pin.",
+      "keyword": "Listen to pin."
     },
     "audio": {
       "sound": "/audio/sound/p.mp3",
@@ -71,8 +71,8 @@
     "keyword": "igloo",
     "image": "/images/igloo.webp",
     "speak": {
-      "sound": "it, it",
-      "keyword": "I for igloo."
+      "sound": "Igloo, igloo.",
+      "keyword": "Listen to igloo."
     },
     "audio": {
       "sound": "/audio/sound/i.mp3",
@@ -135,8 +135,8 @@
     "keyword": "goat",
     "image": "/images/goat.webp",
     "speak": {
-      "sound": "guh, guh",
-      "keyword": "G for goat."
+      "sound": "Goat, goat.",
+      "keyword": "Listen to goat."
     },
     "audio": {
       "sound": "/audio/sound/g.mp3",
@@ -167,8 +167,8 @@
     "keyword": "cat",
     "image": "/images/cat.webp",
     "speak": {
-      "sound": "cuh, cuh",
-      "keyword": "C for cat."
+      "sound": "Cat, cat.",
+      "keyword": "Listen to cat."
     },
     "audio": {
       "sound": "/audio/sound/c.mp3",
@@ -183,8 +183,8 @@
     "keyword": "kite",
     "image": "/images/kite.webp",
     "speak": {
-      "sound": "kuh, kuh",
-      "keyword": "K for kite."
+      "sound": "Kite, kite.",
+      "keyword": "Listen to kite."
     },
     "audio": {
       "sound": "/audio/sound/k.mp3",
@@ -359,8 +359,8 @@
     "keyword": "box",
     "image": "/images/box.webp",
     "speak": {
-      "sound": "ksss, ksss",
-      "keyword": "X, as in box."
+      "sound": "Box, box.",
+      "keyword": "Listen to the end of box."
     },
     "audio": {
       "sound": "/audio/sound/x.mp3",
