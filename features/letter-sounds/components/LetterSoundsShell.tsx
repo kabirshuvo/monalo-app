@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { letterSoundsTheme } from '@/features/letter-sounds/letter-sounds-theme'
-import { LETTER_SOUNDS_BASE_PATH } from '@/lib/letter-sounds/constants'
+import { LETTER_SOUNDS_BASE_PATH, LETTER_SOUNDS_QUIZ_PATH } from '@/lib/letter-sounds/constants'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
 
 type Props = {
@@ -49,7 +49,29 @@ export default function LetterSoundsShell({
           </div>
         )}
       </header>
-      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+      <main className="mx-auto max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+      <footer className="mt-8 border-t border-emerald-900/10 bg-emerald-950 text-emerald-50">
+        <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-end sm:justify-between sm:px-6">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">Eco Penguin</p>
+            <p className="mt-1 text-sm text-emerald-100/80">Letter sounds for kids learning English.</p>
+          </div>
+          <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold">
+            <Link href={LETTER_SOUNDS_BASE_PATH} className="hover:text-white">
+              Letters
+            </Link>
+            <Link href={LETTER_SOUNDS_QUIZ_PATH} className="hover:text-white">
+              Quiz
+            </Link>
+            <Link href={LEARNING_HUB_PATH} className="hover:text-white">
+              {ECO_PENGUIN_APP_NAME}
+            </Link>
+            <Link href="/dashboard/learning" className="hover:text-white">
+              Courses
+            </Link>
+          </nav>
+        </div>
+      </footer>
     </div>
   )
 }

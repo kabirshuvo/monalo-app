@@ -9,7 +9,6 @@ import {
   stopVowelWordsAudio,
 } from '@/features/vowel-words/hooks/vowelWordsAudioManager'
 import { LETTER_SOUND_GROUPS, LETTER_SOUNDS_QUIZ_PATH } from '@/lib/letter-sounds/constants'
-import { LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
 import { writeLetterSoundsSession } from '@/lib/letter-sounds/session'
 import type { LetterSound } from '@/lib/letter-sounds/types'
 
@@ -116,22 +115,6 @@ export default function LetterSoundsLearn({ letters }: Props) {
           </div>
         </section>
       ))}
-
-      <footer className={`${letterSoundsTheme.card} p-6 text-center sm:p-8`}>
-        <p className="text-sm font-bold uppercase tracking-widest text-emerald-700">Next</p>
-        <h2 className="mt-2 text-2xl font-extrabold text-emerald-950 sm:text-3xl">Hear it again</h2>
-        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-emerald-900/80 sm:text-base">
-          You have all 26 sounds. Tap a letter again, or listen and pick the letter in the quiz.
-        </p>
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-          <Link href={LETTER_SOUNDS_QUIZ_PATH} className={`${letterSoundsTheme.btnPrimary} px-6 py-3`}>
-            Play the quiz →
-          </Link>
-          <Link href={LEARNING_HUB_PATH} className={letterSoundsTheme.btnSecondary}>
-            Eco Penguin
-          </Link>
-        </div>
-      </footer>
     </div>
   )
 }

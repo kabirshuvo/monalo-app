@@ -1,5 +1,5 @@
 export const letterSoundsTheme = {
-  shell: 'min-h-screen bg-gradient-to-b from-lime-100 via-emerald-50 to-sky-50',
+  shell: 'flex min-h-screen flex-col bg-gradient-to-b from-lime-100 via-emerald-50 to-sky-50',
   header:
     'sticky top-0 z-20 border-b border-emerald-200/70 bg-white/85 backdrop-blur-md shadow-sm',
   card: 'rounded-3xl border-2 border-white bg-white/95 shadow-lg shadow-emerald-900/5',
