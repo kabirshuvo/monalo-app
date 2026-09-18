@@ -1,5 +1,53 @@
 [
   {
+    "id": "tap",
+    "word": "tap",
+    "vowelId": "a",
+    "graphemes": ["t", "a", "p"],
+    "image": "/images/a/tap.webp",
+    "speak": { "sounds": "t, a, p", "word": "tap" },
+    "audio": {
+      "sounds": "/audio/sounds/tap.mp3",
+      "word": "/audio/word/a/tap.mp3"
+    }
+  },
+  {
+    "id": "pan",
+    "word": "pan",
+    "vowelId": "a",
+    "graphemes": ["p", "a", "n"],
+    "image": "/images/a/pan.webp",
+    "speak": { "sounds": "p, a, n", "word": "pan" },
+    "audio": {
+      "sounds": "/audio/sounds/pan.mp3",
+      "word": "/audio/word/a/pan.mp3"
+    }
+  },
+  {
+    "id": "sit",
+    "word": "sit",
+    "vowelId": "i",
+    "graphemes": ["s", "i", "t"],
+    "image": "/images/i/sit.webp",
+    "speak": { "sounds": "s, i, t", "word": "sit" },
+    "audio": {
+      "sounds": "/audio/sounds/sit.mp3",
+      "word": "/audio/word/i/sit.mp3"
+    }
+  },
+  {
+    "id": "pin",
+    "word": "pin",
+    "vowelId": "i",
+    "graphemes": ["p", "i", "n"],
+    "image": "/images/i/pin.webp",
+    "speak": { "sounds": "p, i, n", "word": "pin" },
+    "audio": {
+      "sounds": "/audio/sounds/pin.mp3",
+      "word": "/audio/word/i/pin.mp3"
+    }
+  },
+  {
     "id": "cat",
     "word": "cat",
     "vowelId": "a",
@@ -12,15 +60,15 @@
     }
   },
   {
-    "id": "tap",
-    "word": "tap",
+    "id": "map",
+    "word": "map",
     "vowelId": "a",
-    "graphemes": ["t", "a", "p"],
-    "image": "/images/a/tap.webp",
-    "speak": { "sounds": "t, a, p", "word": "tap" },
+    "graphemes": ["m", "a", "p"],
+    "image": "/images/a/map.webp",
+    "speak": { "sounds": "m, a, p", "word": "map" },
     "audio": {
-      "sounds": "/audio/sounds/tap.mp3",
-      "word": "/audio/word/a/tap.mp3"
+      "sounds": "/audio/sounds/map.mp3",
+      "word": "/audio/word/a/map.mp3"
     }
   },
   {
@@ -45,30 +93,6 @@
     "audio": {
       "sounds": "/audio/sounds/hat.mp3",
       "word": "/audio/word/a/hat.mp3"
-    }
-  },
-  {
-    "id": "map",
-    "word": "map",
-    "vowelId": "a",
-    "graphemes": ["m", "a", "p"],
-    "image": "/images/a/map.webp",
-    "speak": { "sounds": "m, a, p", "word": "map" },
-    "audio": {
-      "sounds": "/audio/sounds/map.mp3",
-      "word": "/audio/word/a/map.mp3"
-    }
-  },
-  {
-    "id": "pan",
-    "word": "pan",
-    "vowelId": "a",
-    "graphemes": ["p", "a", "n"],
-    "image": "/images/a/pan.webp",
-    "speak": { "sounds": "p, a, n", "word": "pan" },
-    "audio": {
-      "sounds": "/audio/sounds/pan.mp3",
-      "word": "/audio/word/a/pan.mp3"
     }
   },
   {

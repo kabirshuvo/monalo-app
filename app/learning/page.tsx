@@ -1,15 +1,21 @@
 import type { Metadata } from 'next'
 import KidsLearningHub from '@/features/learning/components/KidsLearningHub'
 import type { LearningGameCard } from '@/lib/learning/kids-hub'
+import { LEARNING_PATH_STEPS, recommendNextRoom } from '@/lib/learning/learning-path'
 import ActivityTracker from '@/components/points/ActivityTracker'
 import { auth } from '@/lib/auth-server'
-import { getEcoPenguinStickers } from '@/lib/points/service'
+import { getBalloonLettersMastery, getEcoPenguinStickers } from '@/lib/points/service'
 
 export const metadata: Metadata = {
   title: 'Eco Penguin · MonAlo',
   description:
     'Eco Penguin — kids early reading: letter sounds, blending, pictures, vowels, digraphs, and spelling',
 }
+
+const STEP_BY_ID = Object.fromEntries(LEARNING_PATH_STEPS.map((s) => [s.id, s.step])) as Record<
+  string,
+  number
+>
 
 const GAMES: LearningGameCard[] = [
   {
@@ -20,6 +26,7 @@ const GAMES: LearningGameCard[] = [
     accent: 'from-sky-300 to-blue-700',
     badge: 'Sounds',
     live: true,
+    step: STEP_BY_ID['letter-sounds'],
   },
   {
     id: 'balloon-letters',
@@ -29,15 +36,17 @@ const GAMES: LearningGameCard[] = [
     accent: 'from-pink-300 to-sky-500',
     badge: 'Catch',
     live: true,
+    step: STEP_BY_ID['balloon-letters'],
   },
   {
     id: 'blend-the-word',
     title: 'Blend the word',
-    blurb: 'Hear c, a, t, then the word. Tap the picture that matches.',
+    blurb: 'Hear c, a, t, then the word. Tap the picture that matches. Packs match your letter sets.',
     href: '/learning/blend-the-word',
     accent: 'from-cyan-300 to-cyan-600',
     badge: 'Blend',
     live: true,
+    step: STEP_BY_ID['blend-the-word'],
   },
   {
     id: 'ecopenguin',
@@ -47,6 +56,7 @@ const GAMES: LearningGameCard[] = [
     accent: 'from-emerald-300 to-teal-600',
     badge: 'Pictures',
     live: true,
+    step: STEP_BY_ID['ecopenguin'],
   },
   {
     id: 'vowel-words',
@@ -56,6 +66,7 @@ const GAMES: LearningGameCard[] = [
     accent: 'from-amber-200 to-amber-600',
     badge: 'Vowels',
     live: true,
+    step: STEP_BY_ID['vowel-words'],
   },
   {
     id: 'digraphs',
@@ -65,6 +76,7 @@ const GAMES: LearningGameCard[] = [
     accent: 'from-orange-300 to-orange-700',
     badge: 'Teams',
     live: true,
+    step: STEP_BY_ID['digraphs'],
   },
   {
     id: 'build-the-word',
@@ -74,21 +86,34 @@ const GAMES: LearningGameCard[] = [
     accent: 'from-rose-300 to-red-700',
     badge: 'Spell',
     live: true,
+    step: STEP_BY_ID['build-the-word'],
   },
 ]
 
 export default async function KidsLearningPage() {
   const session = await auth()
   let earnedStickerIds: string[] = []
+  let masteredBalloonKeys: string[] = []
   if (session?.user?.id) {
-    const stickers = await getEcoPenguinStickers(session.user.id)
+    const [stickers, balloons] = await Promise.all([
+      getEcoPenguinStickers(session.user.id),
+      getBalloonLettersMastery(session.user.id),
+    ])
     earnedStickerIds = stickers.earnedIds
+    masteredBalloonKeys = balloons.masteredKeys
   }
+
+  const nextForYou = recommendNextRoom(masteredBalloonKeys, earnedStickerIds)
 
   return (
     <>
       <ActivityTracker type="learning" />
-      <KidsLearningHub games={GAMES} earnedStickerIds={earnedStickerIds} />
+      <KidsLearningHub
+        games={GAMES}
+        earnedStickerIds={earnedStickerIds}
+        nextForYou={nextForYou}
+        signedIn={Boolean(session?.user?.id)}
+      />
     </>
   )
 }

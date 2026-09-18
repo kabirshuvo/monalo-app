@@ -4,12 +4,12 @@ import {
   planetCard,
   planetCardSoft,
   planetHeader,
-  planetShell,
+  planetShellFlex,
 } from '@/lib/learning/planet-theme'
 
 /** Build the word — Mars red accent on dark sky. */
 export const buildWordTheme = {
-  shell: planetShell,
+  shell: `${planetShellFlex}`,
   header: planetHeader,
   card: planetCard,
   cardSoft: planetCardSoft,

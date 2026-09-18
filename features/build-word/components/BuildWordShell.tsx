@@ -5,6 +5,9 @@ import { buildWordTheme } from '@/features/build-word/build-word-theme'
 import { BUILD_WORD_BASE_PATH } from '@/lib/build-word/session'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
 import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
+import { planetFooter } from '@/lib/learning/planet-theme'
+import { VOWEL_WORDS_BASE_PATH } from '@/lib/vowel-words/constants'
+import { BLEND_WORD_BASE_PATH } from '@/lib/blend-the-word/constants'
 
 type Props = {
   children: React.ReactNode
@@ -48,7 +51,32 @@ export default function BuildWordShell({
           </div>
         )}
       </header>
-      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+      <main className="mx-auto max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+      <footer className={planetFooter}>
+        <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-end sm:justify-between sm:px-6">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-rose-300">Eco Penguin</p>
+            <p className="mt-1 text-sm text-[#d6d3d1]">Hear a word, then spell it yourself.</p>
+          </div>
+          <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold text-rose-200">
+            <Link href={BUILD_WORD_BASE_PATH} className="hover:text-[#fafaf9]">
+              Build
+            </Link>
+            <Link href={BLEND_WORD_BASE_PATH} className="hover:text-[#fafaf9]">
+              Blend
+            </Link>
+            <Link href={VOWEL_WORDS_BASE_PATH} className="hover:text-[#fafaf9]">
+              Vowels
+            </Link>
+            <Link href={LEARNING_HUB_PATH} className="hover:text-[#fafaf9]">
+              {ECO_PENGUIN_APP_NAME}
+            </Link>
+            <Link href="/dashboard/learning" className="hover:text-[#fafaf9]">
+              Courses
+            </Link>
+          </nav>
+        </div>
+      </footer>
     </div>
   )
 }

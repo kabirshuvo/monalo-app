@@ -19,4 +19,6 @@ export type LearningGameCard = {
   accent: string
   badge: string
   live: boolean
+  /** Soft path order 1–7 on the hub. */
+  step: number
 }

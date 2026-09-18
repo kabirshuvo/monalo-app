@@ -12,7 +12,11 @@ import { readBalloonLettersSession } from '@/lib/balloon-letters/session'
 import { LETTER_SOUNDS_BASE_PATH, LETTER_SOUNDS_QUIZ_PATH } from '@/lib/letter-sounds/constants'
 import { readLetterSoundsSession } from '@/lib/letter-sounds/session'
 import { VOWEL_WORDS_BASE_PATH } from '@/lib/vowel-words/constants'
+import { DIGRAPHS_BASE_PATH } from '@/lib/digraphs/constants'
+import { readDigraphsSession } from '@/lib/digraphs/session'
+import { BUILD_WORD_BASE_PATH, readBuildWordSession } from '@/lib/build-word/session'
 import { ECO_PENGUIN_APP_NAME, type LearningGameCard } from '@/lib/learning/kids-hub'
+import type { NextForYou } from '@/lib/learning/learning-path'
 import {
   planetBtn,
   planetBtnSecondary,
@@ -26,9 +30,6 @@ import {
 import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
 import EcoPenguinStickerStrip from '@/features/learning/components/EcoPenguinStickerStrip'
 
-const DIGRAPHS_BASE = '/learning/digraphs'
-const BUILD_WORD_BASE = '/learning/build-the-word'
-
 type ContinueItem = {
   id: string
   label: string
@@ -39,9 +40,16 @@ type ContinueItem = {
 type Props = {
   games: LearningGameCard[]
   earnedStickerIds?: string[]
+  nextForYou: NextForYou
+  signedIn?: boolean
 }
 
-export default function KidsLearningHub({ games, earnedStickerIds = [] }: Props) {
+export default function KidsLearningHub({
+  games,
+  earnedStickerIds = [],
+  nextForYou,
+  signedIn = false,
+}: Props) {
   const [continues, setContinues] = useState<ContinueItem[]>([])
 
   useEffect(() => {
@@ -91,42 +99,23 @@ export default function KidsLearningHub({ games, earnedStickerIds = [] }: Props)
         href: `${VOWEL_WORDS_BASE_PATH}/${vowels.vowelId}?page=${vowels.page}&mode=${vowels.mode}`,
       })
     }
-    try {
-      const dig = window.localStorage.getItem('digraphs:session')
-      if (dig) {
-        const parsed = JSON.parse(dig) as {
-          digraphId?: string
-          digraphLabel?: string
-          page?: number
-          mode?: string
-        }
-        if (parsed.digraphId && parsed.digraphLabel) {
-          items.push({
-            id: 'digraphs',
-            label: `Digraphs · ${parsed.digraphLabel}`,
-            detail: `Page ${parsed.page ?? 1} · ${parsed.mode === 'play' ? 'Play' : 'Learn'}`,
-            href: `${DIGRAPHS_BASE}/${parsed.digraphId}?page=${parsed.page ?? 1}&mode=${parsed.mode === 'play' ? 'play' : 'learn'}`,
-          })
-        }
-      }
-      const build = window.localStorage.getItem('build-word:session')
-      if (build) {
-        const parsed = JSON.parse(build) as {
-          vowelId?: string
-          vowelLabel?: string
-          wordSlug?: string
-        }
-        if (parsed.vowelId && parsed.vowelLabel) {
-          items.push({
-            id: 'build',
-            label: `Build the word · ${parsed.vowelLabel}`,
-            detail: parsed.wordSlug ? `Last: ${parsed.wordSlug}` : 'Keep spelling',
-            href: `${BUILD_WORD_BASE}/${parsed.vowelId}`,
-          })
-        }
-      }
-    } catch {
-      // ignore
+    const dig = readDigraphsSession()
+    if (dig) {
+      items.push({
+        id: 'digraphs',
+        label: `Digraphs · ${dig.digraphLabel}`,
+        detail: `Page ${dig.page} · ${dig.mode === 'play' ? 'Play' : 'Learn'}`,
+        href: `${DIGRAPHS_BASE_PATH}/${dig.digraphId}?page=${dig.page}&mode=${dig.mode}`,
+      })
+    }
+    const build = readBuildWordSession()
+    if (build) {
+      items.push({
+        id: 'build',
+        label: `Build the word · ${build.vowelLabel}`,
+        detail: build.wordSlug ? `Last: ${build.wordSlug}` : 'Keep spelling',
+        href: `${BUILD_WORD_BASE_PATH}/${build.vowelId}`,
+      })
     }
     setContinues(items)
   }, [])
@@ -158,9 +147,32 @@ export default function KidsLearningHub({ games, earnedStickerIds = [] }: Props)
             Welcome to {ECO_PENGUIN_APP_NAME}
           </h2>
           <p className={`mx-auto mt-3 max-w-lg text-sm leading-relaxed sm:text-base ${planetTextMuted}`}>
-            Hear letter sounds, catch balloons, blend a word, then pictures, vowels, and spelling —
-            pick a room and play a little each day.
+            Sounds → Balloons → Blend → Explore → Vowels → Digraphs → Build. Play a little each day.
           </p>
+          {!signedIn && (
+            <p className="mx-auto mt-4 max-w-md rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm font-semibold text-amber-100">
+              Play free —{' '}
+              <Link href="/login?callbackUrl=/learning" className="underline hover:text-[#fafaf9]">
+                sign in
+              </Link>{' '}
+              to keep stickers and unlocks.
+            </p>
+          )}
+        </section>
+
+        <section className="space-y-3">
+          <h3 className={`text-center text-sm font-bold uppercase tracking-widest ${planetTextDim}`}>
+            Next for you
+          </h3>
+          <Link
+            href={nextForYou.href}
+            className={`${planetCard} block border-amber-400/40 bg-gradient-to-br from-amber-400/15 to-transparent p-6 transition hover:-translate-y-0.5 hover:border-amber-300/60 sm:p-8`}
+          >
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-300">Recommended</p>
+            <p className="mt-2 text-2xl font-extrabold text-[#fafaf9]">{nextForYou.title}</p>
+            <p className={`mt-2 text-sm sm:text-base ${planetTextMuted}`}>{nextForYou.detail}</p>
+            <p className="mt-4 text-sm font-bold text-amber-300">Let&apos;s go →</p>
+          </Link>
         </section>
 
         {continues.length > 0 && (
@@ -199,10 +211,17 @@ export default function KidsLearningHub({ games, earnedStickerIds = [] }: Props)
                   game.live ? 'hover:bg-[#292524]' : 'border-dashed opacity-90'
                 }`}
               >
-                <div
-                  className={`inline-flex rounded-2xl bg-gradient-to-br ${game.accent} px-3 py-1 text-xs font-bold text-[#0c0a09]`}
-                >
-                  {game.badge}
+                <div className="flex flex-wrap items-center gap-2">
+                  {typeof game.step === 'number' && (
+                    <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-full bg-[#fafaf9]/15 text-xs font-black text-[#fafaf9]">
+                      {game.step}
+                    </span>
+                  )}
+                  <div
+                    className={`inline-flex rounded-2xl bg-gradient-to-br ${game.accent} px-3 py-1 text-xs font-bold text-[#0c0a09]`}
+                  >
+                    {game.badge}
+                  </div>
                 </div>
                 <h4 className="mt-3 text-xl font-extrabold text-[#fafaf9]">{game.title}</h4>
                 <p className={`mt-2 text-sm leading-relaxed ${planetTextMuted}`}>{game.blurb}</p>
@@ -229,7 +248,7 @@ export default function KidsLearningHub({ games, earnedStickerIds = [] }: Props)
           </div>
           <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold text-sky-200">
             <Link href={LETTER_SOUNDS_BASE_PATH} className="hover:text-[#fafaf9]">
-              Letter sounds
+              Sounds
             </Link>
             <Link href={BALLOON_LETTERS_BASE_PATH} className="hover:text-[#fafaf9]">
               Balloons
@@ -237,8 +256,17 @@ export default function KidsLearningHub({ games, earnedStickerIds = [] }: Props)
             <Link href={BLEND_WORD_BASE_PATH} className="hover:text-[#fafaf9]">
               Blend
             </Link>
+            <Link href={ECO_PENGUIN_BASE_PATH} className="hover:text-[#fafaf9]">
+              Explore
+            </Link>
             <Link href={VOWEL_WORDS_BASE_PATH} className="hover:text-[#fafaf9]">
               Vowels
+            </Link>
+            <Link href={DIGRAPHS_BASE_PATH} className="hover:text-[#fafaf9]">
+              Digraphs
+            </Link>
+            <Link href={BUILD_WORD_BASE_PATH} className="hover:text-[#fafaf9]">
+              Build
             </Link>
             <Link href="/dashboard/learning" className="hover:text-[#fafaf9]">
               Courses

@@ -10,6 +10,9 @@ import { digraphTheme } from '@/features/digraphs/digraph-theme'
 import { DIGRAPHS_BASE_PATH } from '@/lib/digraphs/constants'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
 import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
+import { planetFooter } from '@/lib/learning/planet-theme'
+import { LETTER_SOUNDS_BASE_PATH } from '@/lib/letter-sounds/constants'
+import { BALLOON_LETTERS_BASE_PATH } from '@/lib/balloon-letters/constants'
 
 type Props = {
   children: React.ReactNode
@@ -74,7 +77,32 @@ function ShellChrome({ children, title, backHref }: Props) {
           </div>
         )}
       </header>
-      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+      <main className="mx-auto max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+      <footer className={planetFooter}>
+        <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-end sm:justify-between sm:px-6">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-orange-300">Eco Penguin</p>
+            <p className="mt-1 text-sm text-[#d6d3d1]">Team letters — sh, ch, th, wh.</p>
+          </div>
+          <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold text-orange-200">
+            <Link href={DIGRAPHS_BASE_PATH} className="hover:text-[#fafaf9]">
+              Digraphs
+            </Link>
+            <Link href={LETTER_SOUNDS_BASE_PATH} className="hover:text-[#fafaf9]">
+              Sounds
+            </Link>
+            <Link href={BALLOON_LETTERS_BASE_PATH} className="hover:text-[#fafaf9]">
+              Balloons
+            </Link>
+            <Link href={LEARNING_HUB_PATH} className="hover:text-[#fafaf9]">
+              {ECO_PENGUIN_APP_NAME}
+            </Link>
+            <Link href="/dashboard/learning" className="hover:text-[#fafaf9]">
+              Courses
+            </Link>
+          </nav>
+        </div>
+      </footer>
     </div>
   )
 }

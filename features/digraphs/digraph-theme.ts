@@ -4,12 +4,12 @@ import {
   planetCard,
   planetCardSoft,
   planetHeader,
-  planetShell,
+  planetShellFlex,
 } from '@/lib/learning/planet-theme'
 
 /** Digraphs — Saturn / sun orange accent on dark sky. */
 export const digraphTheme = {
-  shell: planetShell,
+  shell: `${planetShellFlex}`,
   header: planetHeader,
   card: planetCard,
   cardSoft: planetCardSoft,
