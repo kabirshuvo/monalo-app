@@ -9,6 +9,7 @@ import {
 import { vowelTheme } from '@/features/vowel-words/vowel-theme'
 import { VOWEL_WORDS_BASE_PATH } from '@/lib/vowel-words/constants'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
+import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
 
 type Props = {
   children: React.ReactNode
@@ -22,6 +23,7 @@ function ShellChrome({ children, title, backHref }: Props) {
 
   return (
     <div className={vowelTheme.shell}>
+      <EcoPenguinGuide room="vowel-words" />
       <header className={vowelTheme.header}>
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">

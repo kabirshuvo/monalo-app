@@ -6,6 +6,7 @@ import { EcoPenguinUiProvider, useEcoPenguinUi } from '@/features/ecopenguin/con
 import { ecoTheme } from '@/features/ecopenguin/eco-theme'
 import { ECO_PENGUIN_BASE_PATH } from '@/lib/ecopenguin/constants'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
+import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
 
 type EcoPenguinShellProps = {
   children: React.ReactNode
@@ -23,6 +24,7 @@ function ShellChrome({
 
   return (
     <div className={ecoTheme.shell}>
+      <EcoPenguinGuide room="ecopenguin" />
       <header className={ecoTheme.header}>
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">

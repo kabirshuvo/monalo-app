@@ -23,6 +23,8 @@ import {
   planetTextDim,
   planetTextMuted,
 } from '@/lib/learning/planet-theme'
+import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
+import EcoPenguinStickerStrip from '@/features/learning/components/EcoPenguinStickerStrip'
 
 const DIGRAPHS_BASE = '/learning/digraphs'
 const BUILD_WORD_BASE = '/learning/build-the-word'
@@ -36,9 +38,10 @@ type ContinueItem = {
 
 type Props = {
   games: LearningGameCard[]
+  earnedStickerIds?: string[]
 }
 
-export default function KidsLearningHub({ games }: Props) {
+export default function KidsLearningHub({ games, earnedStickerIds = [] }: Props) {
   const [continues, setContinues] = useState<ContinueItem[]>([])
 
   useEffect(() => {
@@ -130,6 +133,7 @@ export default function KidsLearningHub({ games }: Props) {
 
   return (
     <div className={`flex min-h-screen flex-col ${planetShell}`}>
+      <EcoPenguinGuide room="hub" />
       <header className={planetHeader}>
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <div>
@@ -180,6 +184,8 @@ export default function KidsLearningHub({ games }: Props) {
             </div>
           </section>
         )}
+
+        <EcoPenguinStickerStrip earnedIds={earnedStickerIds} />
 
         <section className="space-y-4">
           <h3 className={`text-center text-sm font-bold uppercase tracking-widest ${planetTextDim}`}>

@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import KidsLearningHub from '@/features/learning/components/KidsLearningHub'
 import type { LearningGameCard } from '@/lib/learning/kids-hub'
 import ActivityTracker from '@/components/points/ActivityTracker'
+import { auth } from '@/lib/auth-server'
+import { getEcoPenguinStickers } from '@/lib/points/service'
 
 export const metadata: Metadata = {
   title: 'Eco Penguin · MonAlo',
@@ -22,7 +24,7 @@ const GAMES: LearningGameCard[] = [
   {
     id: 'balloon-letters',
     title: 'Balloon letters',
-    blurb: 'Hear a letter, then tap the matching balloon as it floats up.',
+    blurb: 'Hear a letter, then tap the matching balloon as it floats up. Finish a set for a sticker.',
     href: '/learning/balloon-letters',
     accent: 'from-pink-300 to-sky-500',
     badge: 'Catch',
@@ -75,11 +77,18 @@ const GAMES: LearningGameCard[] = [
   },
 ]
 
-export default function KidsLearningPage() {
+export default async function KidsLearningPage() {
+  const session = await auth()
+  let earnedStickerIds: string[] = []
+  if (session?.user?.id) {
+    const stickers = await getEcoPenguinStickers(session.user.id)
+    earnedStickerIds = stickers.earnedIds
+  }
+
   return (
     <>
       <ActivityTracker type="learning" />
-      <KidsLearningHub games={GAMES} />
+      <KidsLearningHub games={GAMES} earnedStickerIds={earnedStickerIds} />
     </>
   )
 }

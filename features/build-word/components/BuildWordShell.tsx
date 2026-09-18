@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { buildWordTheme } from '@/features/build-word/build-word-theme'
 import { BUILD_WORD_BASE_PATH } from '@/lib/build-word/session'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
+import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
 
 type Props = {
   children: React.ReactNode
@@ -18,6 +19,7 @@ export default function BuildWordShell({
 }: Props) {
   return (
     <div className={buildWordTheme.shell}>
+      <EcoPenguinGuide room="build-the-word" />
       <header className={buildWordTheme.header}>
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2">

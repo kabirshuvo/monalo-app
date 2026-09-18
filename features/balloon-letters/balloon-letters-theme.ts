@@ -8,13 +8,13 @@ import {
 
 /** Balloon letters — sky / Earth blue accent on dark planet sky. */
 export const balloonLettersTheme = {
-  shell: planetShellFlex,
+  shell: `${planetShellFlex} h-dvh max-h-dvh overflow-hidden`,
   header: planetHeader,
   card: planetCard,
   btnPrimary: planetBtn.earth,
   btnSecondary: planetBtnSecondary,
   playfield:
-    'relative h-[min(70vh,520px)] w-full overflow-hidden rounded-3xl border border-[#fafaf9]/20 bg-[#0c0a09] bg-[radial-gradient(ellipse_at_50%_100%,rgba(56,189,248,0.18),transparent_55%),radial-gradient(ellipse_at_80%_20%,rgba(251,191,36,0.12),transparent_45%)]',
+    'relative min-h-[240px] w-full flex-1 overflow-hidden border-y border-[#fafaf9]/20 bg-[#0c0a09] bg-[radial-gradient(ellipse_at_50%_100%,rgba(56,189,248,0.18),transparent_55%),radial-gradient(ellipse_at_80%_20%,rgba(251,191,36,0.12),transparent_45%)] sm:rounded-3xl sm:border',
 } as const
 
 export const BALLOON_COLORS = [

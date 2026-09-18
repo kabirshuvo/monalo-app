@@ -3,17 +3,26 @@ import LetterSoundsQuiz from '@/features/letter-sounds/components/LetterSoundsQu
 import { resolveLetterSoundsAsset } from '@/lib/letter-sounds/assets'
 import { LETTER_SOUNDS_BASE_PATH } from '@/lib/letter-sounds/constants'
 import { getLetterSounds } from '@/lib/letter-sounds/data'
+import { computePhonicsProgress } from '@/lib/learning/phonics-progress'
 import { auth } from '@/lib/auth-server'
-import { getLetterSoundsMastery } from '@/lib/points/service'
+import { getBalloonLettersMastery, getLetterSoundsMastery } from '@/lib/points/service'
 
 export default async function LetterSoundsQuizPage() {
-  const letters = await getLetterSounds()
+  const all = await getLetterSounds()
   const session = await auth()
   let masteredKeys: string[] = []
+  let unlockedGroupIds = computePhonicsProgress([]).unlockedGroupIds
   if (session?.user?.id) {
-    const mastery = await getLetterSoundsMastery(session.user.id)
-    masteredKeys = mastery.masteredKeys
+    const [quizMastery, balloonMastery] = await Promise.all([
+      getLetterSoundsMastery(session.user.id),
+      getBalloonLettersMastery(session.user.id),
+    ])
+    masteredKeys = quizMastery.masteredKeys
+    unlockedGroupIds = computePhonicsProgress(balloonMastery.masteredKeys).unlockedGroupIds
   }
+  const letters = all.filter((letter) =>
+    unlockedGroupIds.includes(letter.group as (typeof unlockedGroupIds)[number])
+  )
 
   return (
     <LetterSoundsShell title="Which letter?" backHref={LETTER_SOUNDS_BASE_PATH}>

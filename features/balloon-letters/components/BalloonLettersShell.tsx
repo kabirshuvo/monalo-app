@@ -20,7 +20,7 @@ export default function BalloonLettersShell({
 }: Props) {
   return (
     <div className={balloonLettersTheme.shell}>
-      <header className={balloonLettersTheme.header}>
+      <header className={`${balloonLettersTheme.header} shrink-0`}>
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2">
             <Link
@@ -54,9 +54,9 @@ export default function BalloonLettersShell({
           </div>
         )}
       </header>
-      <main className="mx-auto max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</main>
-      <footer className={planetFooter}>
-        <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-end sm:justify-between sm:px-6">
+      <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+      <footer className={`${planetFooter} mt-0 shrink-0`}>
+        <div className="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-end sm:justify-between sm:px-6">
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-sky-300">Eco Penguin</p>
             <p className="mt-1 text-sm text-[#d6d3d1]">Listen, then tap the matching balloon.</p>

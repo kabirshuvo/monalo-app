@@ -24,6 +24,7 @@
     "learning:generate-audio": "node scripts/generate-learning-audio.mjs",
     "digraphs:sync-images": "node scripts/sync-digraphs-image-paths.mjs --write",
     "digraphs:upload-r2": "node scripts/upload-digraphs-r2.mjs",
+    "letter-sounds:upload-r2": "node scripts/upload-letter-sounds-r2.mjs",
     "ecopenguin:sync-monalomedia": "node scripts/copy-ecopenguin-to-monalomedia.mjs",
     "ecopenguin:configure-cors": "node scripts/configure-ecopenguin-r2-cors.mjs"
   },

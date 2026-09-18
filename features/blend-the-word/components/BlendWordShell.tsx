@@ -6,6 +6,7 @@ import { BLEND_WORD_BASE_PATH } from '@/lib/blend-the-word/constants'
 import { LETTER_SOUNDS_BASE_PATH } from '@/lib/letter-sounds/constants'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
 import { planetFooter } from '@/lib/learning/planet-theme'
+import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
 
 type Props = {
   children: React.ReactNode
@@ -20,6 +21,7 @@ export default function BlendWordShell({
 }: Props) {
   return (
     <div className={blendWordTheme.shell}>
+      <EcoPenguinGuide room="blend-the-word" />
       <header className={blendWordTheme.header}>
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2">

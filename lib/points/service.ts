@@ -11,6 +11,7 @@ import {
   pointsForLetterSoundsCorrect,
   pointsForBlendWordCorrect,
   pointsForBalloonLettersCorrect,
+  pointsForPhonicsGroupSticker,
   pointsFromBlogMinutes,
   pointsFromLearningMinutes,
   pointsFromPurchaseTaka,
@@ -575,4 +576,42 @@ export async function getBalloonLettersMastery(userId: string): Promise<BalloonL
     if (letterId) masteredKeys.push(letterId)
   }
   return { masteredKeys }
+}
+
+/** Award a one-time sticker gift for completing a phonics group in Balloon letters. */
+export async function awardPhonicsGroupSticker(
+  userId: string,
+  groupId: string,
+  label: string
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForPhonicsGroupSticker(),
+    description: `Sticker gift: ${label}`,
+    referenceId: `sticker:${groupId}`,
+  })
+}
+
+export type EcoPenguinStickerState = {
+  earnedIds: string[]
+}
+
+export async function getEcoPenguinStickers(userId: string): Promise<EcoPenguinStickerState> {
+  const events = await prisma.pointEvent.findMany({
+    where: {
+      userId,
+      category: 'LEARNING',
+      referenceId: { startsWith: 'sticker:' },
+    },
+    select: { referenceId: true },
+  })
+
+  const earnedIds: string[] = []
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const id = ref.slice('sticker:'.length)
+    if (id) earnedIds.push(id)
+  }
+  return { earnedIds }
 }

@@ -2,8 +2,22 @@ import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth-server'
 import { BALLOON_LETTERS_BASE_PATH } from '@/lib/balloon-letters/constants'
+import { LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
+import {
+  computePhonicsProgress,
+  getStickerForGroup,
+  isGroupComplete,
+  isPhonicsGroupId,
+  type PhonicsGroupId,
+} from '@/lib/learning/phonics-progress'
 import { getLetterSoundById } from '@/lib/letter-sounds/data'
-import { awardBalloonLettersCorrect, getPointsBreakdown } from '@/lib/points/service'
+import { LETTER_SOUNDS_BASE_PATH } from '@/lib/letter-sounds/constants'
+import {
+  awardBalloonLettersCorrect,
+  awardPhonicsGroupSticker,
+  getBalloonLettersMastery,
+  getPointsBreakdown,
+} from '@/lib/points/service'
 
 export async function POST(request: Request) {
   try {
@@ -20,15 +34,55 @@ export async function POST(request: Request) {
     if (!letter) {
       return NextResponse.json({ error: 'Letter not found' }, { status: 404 })
     }
+
     const result = await awardBalloonLettersCorrect(session.user.id, letter.id, letter.letter)
+    const mastery = await getBalloonLettersMastery(session.user.id)
+    const progress = computePhonicsProgress(mastery.masteredKeys)
+
+    let stickerAwarded = false
+    let stickerPoints = 0
+    let stickerId: string | null = null
+    let stickerLabel: string | null = null
+    let stickerEmoji: string | null = null
+    let nextGroupId: PhonicsGroupId | null = null
+    let completedGroupId: PhonicsGroupId | null = null
+
+    const groupId = letter.group
+    if (isPhonicsGroupId(groupId) && isGroupComplete(groupId, mastery.masteredKeys)) {
+      const sticker = getStickerForGroup(groupId)
+      if (sticker) {
+        const gift = await awardPhonicsGroupSticker(session.user.id, sticker.id, sticker.label)
+        stickerAwarded = gift.awarded
+        stickerPoints = gift.points
+        stickerId = sticker.id
+        stickerLabel = sticker.label
+        stickerEmoji = sticker.emoji
+        completedGroupId = groupId
+        const after = computePhonicsProgress(mastery.masteredKeys)
+        nextGroupId =
+          after.unlockedGroupIds.find((id) => !after.completedGroupIds.includes(id)) ?? null
+      }
+    }
+
     const breakdown = await getPointsBreakdown(session.user.id)
     revalidatePath(BALLOON_LETTERS_BASE_PATH)
+    revalidatePath(LETTER_SOUNDS_BASE_PATH)
+    revalidatePath(LEARNING_HUB_PATH)
+
     return NextResponse.json({
       ok: true,
       awarded: result.awarded,
       points: result.points,
       alreadyMastered: !result.awarded,
       breakdown,
+      progress,
+      stickerAwarded,
+      stickerPoints,
+      stickerId,
+      stickerLabel,
+      stickerEmoji,
+      completedGroupId,
+      nextGroupId,
     })
   } catch (error) {
     console.error('[POST /api/learning/balloon-letters/celebrate]', error)

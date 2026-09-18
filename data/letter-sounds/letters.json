@@ -23,8 +23,8 @@
     "keyword": "apple",
     "image": "/images/apple.webp",
     "speak": {
-      "sound": "a, a",
-      "keyword": "A for apple,",
+      "sound": "ae, ae",
+      "keyword": "A for apple.",
       "ipa": "æ"
     },
     "audio": {
@@ -40,7 +40,7 @@
     "keyword": "tap",
     "image": "/images/tap.webp",
     "speak": {
-      "sound": "tuh, tuh",
+      "sound": "t, t",
       "keyword": "T for tap."
     },
     "audio": {
@@ -57,7 +57,7 @@
     "image": "/images/pin.webp",
     "speak": {
       "sound": "p, p",
-      "keyword": "P for pin,",
+      "keyword": "P for pin.",
       "ipa": "p"
     },
     "audio": {
@@ -73,8 +73,8 @@
     "keyword": "igloo",
     "image": "/images/igloo.webp",
     "speak": {
-      "sound": "i, i",
-      "keyword": "I for igloo,",
+      "sound": "ih, ih",
+      "keyword": "I for igloo.",
       "ipa": "ɪ"
     },
     "audio": {
@@ -122,7 +122,7 @@
     "keyword": "dog",
     "image": "/images/dog.webp",
     "speak": {
-      "sound": "duh, duh",
+      "sound": "d, d",
       "keyword": "D for dog."
     },
     "audio": {
@@ -139,7 +139,7 @@
     "image": "/images/goat.webp",
     "speak": {
       "sound": "g, g",
-      "keyword": "G for goat,",
+      "keyword": "G for goat.",
       "ipa": "ɡ"
     },
     "audio": {
@@ -155,7 +155,7 @@
     "keyword": "octopus",
     "image": "/images/octopus.webp",
     "speak": {
-      "sound": "on, on",
+      "sound": "ah, ah",
       "keyword": "O for octopus."
     },
     "audio": {
@@ -171,8 +171,8 @@
     "keyword": "cat",
     "image": "/images/cat.webp",
     "speak": {
-      "sound": "c, c",
-      "keyword": "C for cat,",
+      "sound": "k, k",
+      "keyword": "C for cat.",
       "ipa": "k"
     },
     "audio": {
@@ -189,7 +189,7 @@
     "image": "/images/kite.webp",
     "speak": {
       "sound": "k, k",
-      "keyword": "K for kite,",
+      "keyword": "K for kite.",
       "ipa": "k"
     },
     "audio": {
@@ -205,7 +205,7 @@
     "keyword": "egg",
     "image": "/images/egg.webp",
     "speak": {
-      "sound": "ehh, ehh",
+      "sound": "eh, eh",
       "keyword": "E for egg."
     },
     "audio": {
@@ -253,7 +253,7 @@
     "keyword": "hat",
     "image": "/images/hat.webp",
     "speak": {
-      "sound": "hhh, hhh",
+      "sound": "h, h",
       "keyword": "H for hat."
     },
     "audio": {
@@ -269,7 +269,7 @@
     "keyword": "bat",
     "image": "/images/bat.webp",
     "speak": {
-      "sound": "buh, buh",
+      "sound": "b, b",
       "keyword": "B for bat."
     },
     "audio": {
@@ -317,7 +317,7 @@
     "keyword": "jam",
     "image": "/images/jam.webp",
     "speak": {
-      "sound": "juh, juh",
+      "sound": "j, j",
       "keyword": "J for jam."
     },
     "audio": {
@@ -349,7 +349,7 @@
     "keyword": "wet",
     "image": "/images/wet.webp",
     "speak": {
-      "sound": "wuh, wuh",
+      "sound": "w, w",
       "keyword": "W for wet."
     },
     "audio": {
@@ -365,8 +365,8 @@
     "keyword": "box",
     "image": "/images/box.webp",
     "speak": {
-      "sound": "x, x",
-      "keyword": "X for box,",
+      "sound": "ks, ks",
+      "keyword": "X for box.",
       "ipa": "ks"
     },
     "audio": {
@@ -382,7 +382,7 @@
     "keyword": "yak",
     "image": "/images/yak.webp",
     "speak": {
-      "sound": "yuh, yuh",
+      "sound": "y, y",
       "keyword": "Y for yak."
     },
     "audio": {
@@ -414,7 +414,7 @@
     "keyword": "queen",
     "image": "/images/queen.webp",
     "speak": {
-      "sound": "kwuh, kwuh",
+      "sound": "kw, kw",
       "keyword": "Q for queen."
     },
     "audio": {
