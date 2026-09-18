@@ -190,7 +190,7 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
 
   if (!target) {
     return (
-      <p className={`${buildWordTheme.cardSoft} py-12 text-center font-semibold text-sky-800`}>
+      <p className={`${buildWordTheme.cardSoft} py-12 text-center font-semibold text-[#d6d3d1]`}>
         No words to spell yet.
       </p>
     )
@@ -204,12 +204,12 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
             🎉🔤⭐
           </p>
           {win.points !== null && (
-            <p className="rounded-full bg-amber-100 px-5 py-2 text-sm font-extrabold text-amber-950 shadow-sm">
+            <p className="rounded-full bg-amber-400/20 px-5 py-2 text-sm font-extrabold text-[#fafaf9] shadow-sm">
               +{win.points} points!
             </p>
           )}
           {win.already && (
-            <p className="rounded-full bg-sky-100 px-5 py-2 text-sm font-extrabold text-sky-900 shadow-sm">
+            <p className="rounded-full bg-sky-400/20 px-5 py-2 text-sm font-extrabold text-sky-200 shadow-sm">
               You&apos;ve spelled this one!
             </p>
           )}
@@ -225,10 +225,10 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
         />
         {win ? (
           <>
-            <h2 className="text-4xl font-extrabold text-sky-950">
+            <h2 className="text-4xl font-extrabold text-[#fafaf9]">
               <VowelHighlight graphemes={win.word.graphemes} vowelLetter={vowel.letter} />
             </h2>
-            <p className="text-sm font-bold text-indigo-700">Great spelling!</p>
+            <p className="text-sm font-bold text-rose-200">Great spelling!</p>
           </>
         ) : (
           <>
@@ -241,7 +241,7 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
             >
               🔊 Hear the word
             </button>
-            <p className="text-xs font-medium text-sky-700/80">
+            <p className="text-xs font-medium text-sky-300/80">
               Spelling for short {vowel.letter} — boxes only, no peeking
             </p>
           </>
@@ -273,7 +273,7 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
           </div>
 
           {message && (
-            <p className="text-center text-sm font-extrabold text-indigo-800">{message}</p>
+            <p className="text-center text-sm font-extrabold text-rose-100">{message}</p>
           )}
 
           <div className="flex flex-wrap justify-center gap-3">
@@ -295,7 +295,7 @@ export default function BuildWordPlay({ vowel, words, masteredKeys = [] }: Props
         </>
       )}
 
-      {win && <p className="text-center text-sm font-bold text-indigo-700">Next word…</p>}
+      {win && <p className="text-center text-sm font-bold text-rose-200">Next word…</p>}
     </div>
   )
 }

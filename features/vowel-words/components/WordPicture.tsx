@@ -30,7 +30,7 @@ export default function WordPicture({
   if (failed || !src) {
     return (
       <div
-        className={`flex items-center justify-center bg-gradient-to-br from-violet-50 to-amber-50 text-4xl ${className}`}
+        className={`flex items-center justify-center bg-gradient-to-br from-[#fafaf9]/10 to-[#fafaf9]/15 text-4xl ${className}`}
         role="img"
         aria-label={label}
       >
@@ -40,7 +40,7 @@ export default function WordPicture({
   }
 
   return (
-    <div className={`relative overflow-hidden bg-white ${className}`}>
+    <div className={`relative overflow-hidden bg-[#fafaf9] ${className}`}>
       <Image
         src={src}
         alt={label}

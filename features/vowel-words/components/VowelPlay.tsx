@@ -11,7 +11,7 @@ import {
   writeVowelWordsSession,
 } from '@/lib/vowel-words/session'
 import { vowelTheme } from '@/features/vowel-words/vowel-theme'
-import { stopVowelWordsAudio } from '@/features/vowel-words/hooks/useVowelWordsAudio'
+import { playVowelWordsAudio, stopVowelWordsAudio } from '@/features/vowel-words/hooks/useVowelWordsAudio'
 import LearnSection from '@/features/vowel-words/components/LearnSection'
 import WhichWordSection from '@/features/vowel-words/components/WhichWordSection'
 import type { VowelMeta, VowelWord } from '@/lib/vowel-words/types'
@@ -78,7 +78,12 @@ export default function VowelPlay({
 
   useEffect(() => {
     stopVowelWordsAudio()
-  }, [page, mode])
+    if (mode !== 'learn') return
+    const key = `vowel-words:welcomed:${vowel.id}`
+    if (window.sessionStorage.getItem(key)) return
+    window.sessionStorage.setItem(key, '1')
+    playVowelWordsAudio(vowel.audio.welcome, { fallbackText: vowel.speak.welcome })
+  }, [page, mode, vowel.id, vowel.audio.welcome, vowel.speak.welcome])
 
   useEffect(() => {
     writeVowelWordsSession({
@@ -148,10 +153,10 @@ export default function VowelPlay({
         className={`${vowelTheme.cardSoft} flex flex-wrap items-center justify-between gap-3 px-4 py-3`}
       >
         <div className="space-y-1">
-          <p className="text-sm font-semibold text-violet-900">
+          <p className="text-sm font-semibold text-amber-200">
             {words.length} words · {totalMastered} starred
           </p>
-          <p className="text-xs font-medium text-violet-700/80">
+          <p className="text-xs font-medium text-amber-300/80">
             This round: {pageMasteredCount} / {pageWords.length} got it
           </p>
         </div>
@@ -167,7 +172,7 @@ export default function VowelPlay({
                   aria-label={`Page ${i + 1}`}
                   onClick={() => goToPage(i + 1)}
                   className={`h-3.5 w-3.5 rounded-full transition ${
-                    i + 1 === page ? 'scale-110 bg-fuchsia-500' : 'bg-violet-200 hover:bg-violet-300'
+                    i + 1 === page ? 'scale-110 bg-fuchsia-500' : 'bg-[#fafaf9]/20 hover:bg-[#fafaf9]/35'
                   }`}
                 />
               ))}
@@ -181,7 +186,7 @@ export default function VowelPlay({
             >
               ←
             </button>
-            <span className="min-w-[4.5rem] text-center text-xs font-bold text-violet-800">
+            <span className="min-w-[4.5rem] text-center text-xs font-bold text-amber-200">
               {page} / {pages}
             </span>
             <button
@@ -200,9 +205,9 @@ export default function VowelPlay({
       {mode === 'learn' && (
         <>
           <LearnSection vowel={vowel} words={words} page={page} />
-          <div className="flex flex-col items-center gap-3 rounded-3xl border-2 border-fuchsia-200 bg-fuchsia-50/80 px-4 py-5 text-center">
-            <p className="text-sm font-semibold text-violet-900 sm:text-base">
-              Ready to hear {vowel.phoneme} and find the words?
+          <div className="flex flex-col items-center gap-3 rounded-3xl border-2 border-[#fafaf9]/20 bg-fuchsia-950/40 px-4 py-5 text-center">
+            <p className="text-sm font-semibold text-amber-200 sm:text-base">
+              Ready to tap the picture that matches the word?
             </p>
             <button type="button" onClick={startPlay} className={`${vowelTheme.btnPrimary} px-6 py-3`}>
               I&apos;m ready to play →
@@ -217,7 +222,7 @@ export default function VowelPlay({
             <button type="button" onClick={backToLearn} className={vowelTheme.btnSecondary}>
               ← Back to learn
             </button>
-            <p className="text-xs font-bold uppercase tracking-wide text-fuchsia-800">
+            <p className="text-xs font-bold uppercase tracking-wide text-amber-200">
               Listening game
             </p>
           </div>
@@ -238,8 +243,8 @@ export default function VowelPlay({
           <p className="text-4xl" aria-hidden>
             ⭐🔤🎉
           </p>
-          <h2 className="text-2xl font-extrabold text-violet-950 sm:text-3xl">Round complete!</h2>
-          <p className="text-sm text-violet-800/85 sm:text-base">
+          <h2 className="text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">Round complete!</h2>
+          <p className="text-sm text-[#d6d3d1] sm:text-base">
             You got all {pageWords.length} {vowel.label} words.
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-2">

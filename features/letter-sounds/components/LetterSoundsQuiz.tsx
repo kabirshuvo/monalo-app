@@ -110,7 +110,7 @@ export default function LetterSoundsQuiz({
 
   if (!target) {
     return (
-      <p className={`${letterSoundsTheme.card} py-12 text-center font-semibold text-emerald-800`}>
+      <p className={`${letterSoundsTheme.card} py-12 text-center font-semibold text-sky-300`}>
         No letters to quiz yet.
       </p>
     )
@@ -125,22 +125,22 @@ export default function LetterSoundsQuiz({
               🎉🔤⭐
             </p>
             {win.points !== null && (
-              <p className="mx-auto w-fit rounded-full bg-amber-100 px-5 py-2 text-sm font-extrabold text-amber-950">
+              <p className="mx-auto w-fit rounded-full bg-amber-400/20 px-5 py-2 text-sm font-extrabold text-[#fafaf9]">
                 +{win.points} points!
               </p>
             )}
             {win.already && (
-              <p className="mx-auto w-fit rounded-full bg-emerald-100 px-5 py-2 text-sm font-extrabold text-emerald-900">
+              <p className="mx-auto w-fit rounded-full bg-emerald-400/20 px-5 py-2 text-sm font-extrabold text-sky-200">
                 You&apos;ve got this one!
               </p>
             )}
-            <p className="text-6xl font-black text-emerald-950">{win.letter.letter}</p>
-            <p className="text-sm font-bold text-emerald-700">Next letter…</p>
+            <p className="text-6xl font-black text-[#fafaf9]">{win.letter.letter}</p>
+            <p className="text-sm font-bold text-sky-300">Next letter…</p>
           </>
         ) : (
           <>
-            <p className="text-sm font-bold uppercase tracking-widest text-emerald-700">Quiz</p>
-            <h2 className="text-2xl font-extrabold text-emerald-950">Listen. Which letter?</h2>
+            <p className="text-sm font-bold uppercase tracking-widest text-sky-300">Quiz</p>
+            <h2 className="text-2xl font-extrabold text-[#fafaf9]">Listen. Which letter?</h2>
             <button
               type="button"
               onClick={() =>
@@ -167,8 +167,8 @@ export default function LetterSoundsQuiz({
                 type="button"
                 onClick={() => choose(letter)}
                 disabled={checking}
-                className={`${letterSoundsTheme.card} py-3 text-2xl font-black text-emerald-950 transition active:scale-95 sm:text-3xl ${
-                  isWrong ? 'ring-4 ring-rose-300' : 'hover:ring-2 hover:ring-emerald-300'
+                className={`${letterSoundsTheme.card} py-3 text-2xl font-black text-[#fafaf9] transition active:scale-95 sm:text-3xl ${
+                  isWrong ? 'ring-4 ring-rose-300' : 'hover:ring-2 hover:ring-sky-400'
                 }`}
               >
                 {letter.letter}
@@ -179,7 +179,7 @@ export default function LetterSoundsQuiz({
       )}
 
       <p className="text-center">
-        <Link href={LETTER_SOUNDS_BASE_PATH} className="text-sm font-bold text-emerald-800 hover:underline">
+        <Link href={LETTER_SOUNDS_BASE_PATH} className="text-sm font-bold text-sky-300 hover:underline">
           Back to the letters
         </Link>
       </p>

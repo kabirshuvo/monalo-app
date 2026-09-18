@@ -7,6 +7,7 @@
  *   node scripts/generate-learning-audio.mjs digraphs
  *   node scripts/generate-learning-audio.mjs vowel-words
  *   node scripts/generate-learning-audio.mjs letter-sounds
+ *   node scripts/generate-learning-audio.mjs blend-the-word
  *   node scripts/generate-learning-audio.mjs all
  *   node scripts/generate-learning-audio.mjs digraphs --force
  */
@@ -111,7 +112,13 @@ async function generateVowelWords() {
       else if (result === 'skip') skip++
       console.log(`[vowel-words] ${v.id} ${key}: ${result}`)
     }
+    const welcome = await synth(v.speak.welcome, audioPath(baseDir, v.audio.welcome), slowTts)
+    if (welcome === 'ok') ok++
+    else if (welcome === 'skip') skip++
+    console.log(`[vowel-words] ${v.id} welcome: ${welcome}`)
   }
+
+  const successOpeners = ['Well done', 'Perfect', 'Exactly', 'Yes']
 
   for (const [vowelId, list] of Object.entries(words)) {
     for (const w of list) {
@@ -124,6 +131,24 @@ async function generateVowelWords() {
         if (result === 'ok') ok++
         else if (result === 'skip') skip++
         console.log(`[vowel-words] ${vowelId}/${w.slug} ${key}: ${result}`)
+      }
+
+      const learn = await synth(w.speak.learn, audioPath(baseDir, w.audio.learn), slowTts)
+      if (learn === 'ok') ok++
+      else if (learn === 'skip') skip++
+      console.log(`[vowel-words] ${vowelId}/${w.slug} learn: ${learn}`)
+
+      const quiz = await synth(w.speak.quiz, audioPath(baseDir, w.audio.quiz), slowTts)
+      if (quiz === 'ok') ok++
+      else if (quiz === 'skip') skip++
+      console.log(`[vowel-words] ${vowelId}/${w.slug} quiz: ${quiz}`)
+
+      for (let i = 0; i < successOpeners.length; i++) {
+        const text = w.speak.success[i] ?? `${successOpeners[i]}. This is the ${w.word}.`
+        const result = await synth(text, audioPath(baseDir, w.audio.successes[i]), slowTts)
+        if (result === 'ok') ok++
+        else if (result === 'skip') skip++
+        console.log(`[vowel-words] ${vowelId}/${w.slug} success ${i}: ${result}`)
       }
     }
   }
@@ -165,20 +190,51 @@ async function generateLetterSounds() {
   console.log(`Letter sounds audio done: ${ok} created, ${skip} skipped`)
 }
 
+async function generateBlendWord() {
+  const baseDir = path.join(ROOT, 'public', 'blend-the-word')
+  const words = JSON.parse(readFileSync(path.join(ROOT, 'data/blend-the-word/words.json'), 'utf8'))
+
+  let ok = 0
+  let skip = 0
+
+  for (const word of words) {
+    const rel = word.audio.sounds
+    const result = await synth(word.speak.sounds, audioPath(baseDir, rel), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[blend-the-word] ${word.id} sounds: ${result}`)
+  }
+
+  for (const [name, text] of [
+    ['success.mp3', 'Great!'],
+    ['error.mp3', 'Try again. Listen once more.'],
+  ]) {
+    const result = await synth(text, path.join(baseDir, 'audio', name), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[blend-the-word] ${name}: ${result}`)
+  }
+
+  console.log(`Blend the word audio done: ${ok} created, ${skip} skipped`)
+}
+
 const run = async () => {
   if (TARGET === 'all') {
     await generateDigraphs()
     await generateVowelWords()
     await generateLetterSounds()
+    await generateBlendWord()
   } else if (TARGET === 'digraphs') {
     await generateDigraphs()
   } else if (TARGET === 'vowel-words') {
     await generateVowelWords()
   } else if (TARGET === 'letter-sounds') {
     await generateLetterSounds()
+  } else if (TARGET === 'blend-the-word') {
+    await generateBlendWord()
   } else {
     console.error(
-      'Usage: node scripts/generate-learning-audio.mjs [digraphs|vowel-words|letter-sounds|all] [--force]'
+      'Usage: node scripts/generate-learning-audio.mjs [digraphs|vowel-words|letter-sounds|blend-the-word|all] [--force]'
     )
     process.exit(1)
   }

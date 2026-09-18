@@ -64,40 +64,40 @@ export default function EcoPenguinHub({ categories, progress = [] }: EcoPenguinH
     <div className="space-y-8">
       <section className={`${ecoTheme.card} relative overflow-hidden p-6 text-center sm:p-8`}>
         <div
-          className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-sky-100/80"
+          className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-sky-400/20/80"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute -bottom-10 -left-6 h-28 w-28 rounded-full bg-emerald-100/70"
+          className="pointer-events-none absolute -bottom-10 -left-6 h-28 w-28 rounded-full bg-emerald-400/20/70"
           aria-hidden
         />
         <p className="text-5xl sm:text-6xl" aria-hidden>
           🐧
         </p>
-        <h2 className="mt-3 text-2xl font-extrabold text-sky-950 sm:text-3xl">
+        <h2 className="mt-3 text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">
           Explore
         </h2>
-        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-sky-800/85 sm:text-base">
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#d6d3d1] sm:text-base">
           Pick a topic, learn the pictures, then play the listening game — Eco Penguin&apos;s picture
           room.
         </p>
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-          <span className={`${ecoTheme.pill} bg-amber-100 text-amber-900`}>👂 Listen</span>
-          <span className={`${ecoTheme.pill} bg-sky-100 text-sky-900`}>👀 Look</span>
-          <span className={`${ecoTheme.pill} bg-emerald-100 text-emerald-900`}>🎯 Play</span>
+          <span className={`${ecoTheme.pill} bg-amber-400/20 text-orange-200`}>👂 Listen</span>
+          <span className={`${ecoTheme.pill} bg-sky-400/20 text-sky-200`}>👀 Look</span>
+          <span className={`${ecoTheme.pill} bg-emerald-400/20 text-sky-200`}>🎯 Play</span>
         </div>
       </section>
 
       {continueCategory && session && (
         <section
-          className={`${ecoTheme.card} flex flex-col items-center gap-4 border-teal-200 bg-gradient-to-r from-teal-50 to-sky-50 p-5 sm:flex-row sm:justify-between sm:p-6`}
+          className={`${ecoTheme.card} flex flex-col items-center gap-4 border-[#fafaf9]/20 bg-gradient-to-r from-[#fafaf9]/10 to-[#fafaf9]/15 p-5 sm:flex-row sm:justify-between sm:p-6`}
         >
           <div className="text-center sm:text-left">
-            <p className="text-xs font-bold uppercase tracking-widest text-teal-700">Continue</p>
-            <h3 className="mt-1 text-xl font-extrabold text-sky-950">
+            <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">Continue</p>
+            <h3 className="mt-1 text-xl font-extrabold text-[#fafaf9]">
               Keep going with {continueCategory.name}
             </h3>
-            <p className="mt-1 text-sm text-sky-800/80">
+            <p className="mt-1 text-sm text-[#d6d3d1]">
               Page {session.page} · {session.mode === 'play' ? 'Listening game' : 'Learn mode'}
             </p>
           </div>
@@ -113,11 +113,11 @@ export default function EcoPenguinHub({ categories, progress = [] }: EcoPenguinH
       )}
 
       <div id="categories">
-        <h3 className="mb-4 text-center text-sm font-bold uppercase tracking-widest text-sky-700/80">
+        <h3 className="mb-4 text-center text-sm font-bold uppercase tracking-widest text-sky-300/80">
           Choose a category
         </h3>
         {categories.length === 0 ? (
-          <p className={`${ecoTheme.cardSoft} py-12 text-center text-sky-800`}>
+          <p className={`${ecoTheme.cardSoft} py-12 text-center text-[#d6d3d1]`}>
             No categories yet. Check back soon!
           </p>
         ) : (
@@ -130,7 +130,7 @@ export default function EcoPenguinHub({ categories, progress = [] }: EcoPenguinH
                 <Link
                   key={category.id}
                   href={`${ECO_PENGUIN_BASE_PATH}/categories/${category.slug}`}
-                  className={`${ecoTheme.cardSoft} group p-3 transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-lg`}
+                  className={`${ecoTheme.cardSoft} group p-3 transition hover:-translate-y-0.5 hover:border-sky-400/60 hover:shadow-lg`}
                 >
                   <div
                     className={`relative mb-3 overflow-hidden rounded-2xl bg-gradient-to-br from-sky-50 to-emerald-50 ${ECO_PENGUIN_IMAGE_ASPECT}`}
@@ -143,11 +143,11 @@ export default function EcoPenguinHub({ categories, progress = [] }: EcoPenguinH
                       sizes="(max-width: 768px) 45vw, 180px"
                     />
                   </div>
-                  <p className="text-center text-sm font-extrabold text-sky-950 sm:text-base">
+                  <p className="text-center text-sm font-extrabold text-[#fafaf9] sm:text-base">
                     {category.name}
                   </p>
                   {total > 0 && (
-                    <p className="mt-1 text-center text-xs font-bold text-amber-700">
+                    <p className="mt-1 text-center text-xs font-bold text-amber-300">
                       ⭐ {mastered} of {total}
                     </p>
                   )}
@@ -168,7 +168,7 @@ export default function EcoPenguinHub({ categories, progress = [] }: EcoPenguinH
           >
             ← Previous
           </button>
-          <span className="rounded-full bg-white px-4 py-2 text-sm font-bold text-sky-900 shadow-sm">
+          <span className="rounded-full bg-[#fafaf9]/12 px-4 py-2 text-sm font-bold text-emerald-200 shadow-sm">
             {safePage} / {totalPages}
           </span>
           <button

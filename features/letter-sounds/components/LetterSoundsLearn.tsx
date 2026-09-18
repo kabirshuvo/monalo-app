@@ -57,9 +57,9 @@ export default function LetterSoundsLearn({ letters }: Props) {
   return (
     <div className="space-y-8">
       <section className={`${letterSoundsTheme.card} p-6 text-center sm:p-8`}>
-        <p className="text-sm font-bold uppercase tracking-widest text-emerald-700">26 sounds</p>
-        <h2 className="mt-2 text-2xl font-extrabold text-emerald-950 sm:text-3xl">Letter sounds</h2>
-        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-emerald-900/80 sm:text-base">
+        <p className="text-sm font-bold uppercase tracking-widest text-sky-300">26 sounds</p>
+        <h2 className="mt-2 text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">Letter sounds</h2>
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-sky-200/80 sm:text-base">
           Tap a letter and listen: S for sun, then the sound to copy. The word comes first, so you can hear the sound inside it.
         </p>
         <Link href={LETTER_SOUNDS_QUIZ_PATH} className={`${letterSoundsTheme.btnPrimary} mt-5 inline-flex px-6 py-3`}>
@@ -69,7 +69,7 @@ export default function LetterSoundsLearn({ letters }: Props) {
 
       {groups.map((group) => (
         <section key={group.id} className="space-y-3">
-          <h3 className="text-center text-sm font-bold uppercase tracking-widest text-emerald-700">
+          <h3 className="text-center text-sm font-bold uppercase tracking-widest text-sky-300">
             {group.label}
           </h3>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -86,28 +86,28 @@ export default function LetterSoundsLearn({ letters }: Props) {
                     isPlaying ? 'ring-4 ring-emerald-300' : 'hover:shadow-md'
                   }`}
                 >
-                  <p className="text-5xl font-black text-emerald-950">{letter.letter}</p>
+                  <p className="text-5xl font-black text-[#fafaf9]">{letter.letter}</p>
                   <WordPicture
                     src={letter.image}
                     word={letter.keyword}
                     className="mx-auto mt-3 aspect-square w-full rounded-2xl"
                     sizes="(max-width: 640px) 40vw, 180px"
                   />
-                  <p className="mt-3 text-xs font-bold uppercase tracking-wide text-emerald-700">
+                  <p className="mt-3 text-xs font-bold uppercase tracking-wide text-sky-300">
                     {letter.letter} for {letter.keyword}
                   </p>
-                  <p className="text-lg font-extrabold text-emerald-950">
+                  <p className="text-lg font-extrabold text-[#fafaf9]">
                     {parts.before}
-                    <span className="rounded-lg bg-gradient-to-b from-amber-300 to-orange-400 px-1.5 text-white">
+                    <span className="rounded-lg bg-gradient-to-b from-amber-300 to-orange-400 px-1.5 text-[#fafaf9]">
                       {parts.hit}
                     </span>
                     {parts.after}
                   </p>
                   {isPlaying && (
-                    <span className="mt-1 inline-block text-xs font-bold text-emerald-700">Listening…</span>
+                    <span className="mt-1 inline-block text-xs font-bold text-sky-300">Listening…</span>
                   )}
                   {!isPlaying && wasHeard && (
-                    <span className="mt-1 inline-block text-xs font-bold text-emerald-700">Heard</span>
+                    <span className="mt-1 inline-block text-xs font-bold text-sky-300">Heard</span>
                   )}
                 </button>
               )

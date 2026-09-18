@@ -19,6 +19,10 @@ export const POINTS_CONFIG = {
   buildWordCorrect: 2,
   /** Points for a first-time correct letter-sound quiz answer */
   letterSoundsCorrect: 2,
+  /** Points for a first-time correct blend-the-word answer */
+  blendWordCorrect: 2,
+  /** Points for a first-time correct balloon-letters catch */
+  balloonLettersCorrect: 2,
 } as const
 
 export function pointsFromPurchaseTaka(taka: number): number {
@@ -62,6 +66,14 @@ export function pointsForBuildWordCorrect(): number {
 
 export function pointsForLetterSoundsCorrect(): number {
   return POINTS_CONFIG.letterSoundsCorrect
+}
+
+export function pointsForBlendWordCorrect(): number {
+  return POINTS_CONFIG.blendWordCorrect
+}
+
+export function pointsForBalloonLettersCorrect(): number {
+  return POINTS_CONFIG.balloonLettersCorrect
 }
 
 export function levelFromTotalPoints(totalPoints: number): number {

@@ -30,8 +30,8 @@ export default function LearnSection({ digraph, words, page }: Props) {
   return (
     <section className={`${digraphTheme.card} border-orange-100 p-4 sm:p-5`}>
       <div className="mb-4 flex items-center justify-center gap-2">
-        <span className={`${digraphTheme.pill} bg-orange-100 text-orange-900`}>Learn</span>
-        <h3 className="text-lg font-extrabold text-amber-950 sm:text-xl">
+        <span className={`${digraphTheme.pill} bg-orange-400/20 text-orange-200`}>Learn</span>
+        <h3 className="text-lg font-extrabold text-[#fafaf9] sm:text-xl">
           Words with {digraph.letter}
         </h3>
       </div>
@@ -55,7 +55,7 @@ export default function LearnSection({ digraph, words, page }: Props) {
                 className="mx-auto aspect-square w-full rounded-xl shadow-inner"
                 sizes="(max-width: 768px) 40vw, 120px"
               />
-              <p className="mt-2 text-lg font-extrabold text-amber-950">
+              <p className="mt-2 text-lg font-extrabold text-[#fafaf9]">
                 <DigraphHighlight graphemes={word.graphemes} digraph={digraph.digraph} />
               </p>
               {isPlaying && (
@@ -65,7 +65,7 @@ export default function LearnSection({ digraph, words, page }: Props) {
           )
         })}
       </div>
-      <p className="mt-4 text-center text-xs font-medium text-amber-800/75 sm:text-sm">
+      <p className="mt-4 text-center text-xs font-medium text-orange-200/75 sm:text-sm">
         Tap a word to hear it — the highlighted letters are the digraph team
       </p>
     </section>

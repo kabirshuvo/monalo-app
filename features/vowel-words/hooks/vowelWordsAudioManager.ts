@@ -43,7 +43,7 @@ function speakFallback(text: string, onEnded?: () => void): void {
 
 export function playVowelWordsAudio(
   src: string,
-  options?: { fallbackText?: string; onEnded?: () => void }
+  options?: { fallbackText?: string; onEnded?: () => void; onBlocked?: () => void }
 ): void {
   stopVowelWordsAudio()
   if (muted) {
@@ -70,6 +70,7 @@ export function playVowelWordsAudio(
   audio.addEventListener('ended', finish, { once: true })
   void audio.play().catch(() => {
     if (currentAudio === audio) currentAudio = null
+    options?.onBlocked?.()
     if (options?.fallbackText) {
       speakFallback(options.fallbackText, options.onEnded)
     } else {

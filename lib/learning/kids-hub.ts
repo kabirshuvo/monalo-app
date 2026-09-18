@@ -4,6 +4,8 @@ export const ECO_PENGUIN_APP_NAME = 'Eco Penguin'
 
 export type LearningGameId =
   | 'letter-sounds'
+  | 'balloon-letters'
+  | 'blend-the-word'
   | 'ecopenguin'
   | 'vowel-words'
   | 'digraphs'

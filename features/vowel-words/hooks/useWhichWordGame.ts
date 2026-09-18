@@ -5,7 +5,6 @@ import { VOWEL_WORDS_PER_PAGE } from '@/lib/vowel-words/constants'
 import { buildRoundDeck, paginateItems, shuffleItems, totalPages } from '@/lib/vowel-words/game'
 import {
   playVowelWordsAudio,
-  playVowelWordsSequence,
   stopVowelWordsAudio,
 } from '@/features/vowel-words/hooks/useVowelWordsAudio'
 import { useVowelWordsUi } from '@/features/vowel-words/context/VowelWordsUiContext'
@@ -138,24 +137,11 @@ export function useWhichWordGame({
     if (!targetWord || isLocked || muted) return
     setNeedsTapToListen(false)
     const target = pageWords.find((w) => w.word === targetWord)
-    playVowelWordsSequence(
-      [
-        {
-          src: target?.audio.phoneme ?? '',
-          fallbackText: vowel.speak.phoneme,
-        },
-        {
-          src: target?.audio.question ?? '',
-          fallbackText: vowel.speak.question,
-        },
-        {
-          src: target?.audio.word ?? '',
-          fallbackText: targetWord,
-        },
-      ],
-      { onBlocked: () => setNeedsTapToListen(true) }
-    )
-  }, [targetWord, isLocked, muted, vowel.speak, pageWords])
+    playVowelWordsAudio(target?.audio.quiz ?? '', {
+      fallbackText: target?.speak.quiz ?? `Which one is the ${targetWord}?`,
+      onBlocked: () => setNeedsTapToListen(true),
+    })
+  }, [targetWord, isLocked, muted, pageWords])
 
   useEffect(() => {
     if (!enabled || !targetWord || isLocked) return
@@ -172,10 +158,10 @@ export function useWhichWordGame({
     if (!targetWord || isLocked) return
     setNeedsTapToListen(false)
     setCoachMessage(null)
-    playVowelWordsAudio(
-      pageWords.find((w) => w.word === targetWord)?.audio.word ?? '',
-      { fallbackText: targetWord }
-    )
+    const target = pageWords.find((w) => w.word === targetWord)
+    playVowelWordsAudio(target?.audio.quiz ?? '', {
+      fallbackText: target?.speak.quiz ?? `Which one is the ${targetWord}?`,
+    })
   }, [targetWord, isLocked, pageWords])
 
   const handleGuess = useCallback(
@@ -205,12 +191,15 @@ export function useWhichWordGame({
         fallbackText: 'Try again',
         onEnded: () => {
           if (!muted) {
-            playVowelWordsAudio(word.audio.word, { fallbackText: targetWord })
+            const target = pageWords.find((w) => w.word === targetWord)
+            playVowelWordsAudio(target?.audio.quiz ?? '', {
+              fallbackText: target?.speak.quiz ?? `Which one is the ${targetWord}?`,
+            })
           }
         },
       })
     },
-    [targetWord, vowel.id, page, isLocked, onCorrect, enabled, muted]
+    [targetWord, vowel.id, page, pageWords, isLocked, onCorrect, enabled, muted]
   )
 
   return {

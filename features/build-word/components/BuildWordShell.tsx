@@ -24,25 +24,25 @@ export default function BuildWordShell({
             <Link href={backHref} className={`${buildWordTheme.btnSecondary} px-3 py-2 text-xs sm:text-sm`}>
               ← Back
             </Link>
-            <Link href={BUILD_WORD_BASE_PATH} className="truncate text-base font-extrabold text-sky-950 sm:text-lg">
+            <Link href={BUILD_WORD_BASE_PATH} className="truncate text-base font-extrabold text-[#fafaf9] sm:text-lg">
               Build the word
             </Link>
           </div>
           <nav className="flex shrink-0 items-center gap-2 text-sm">
-            <Link href={LEARNING_HUB_PATH} className="font-semibold text-sky-800 hover:underline">
+            <Link href={LEARNING_HUB_PATH} className="font-semibold text-rose-300 hover:underline">
               {ECO_PENGUIN_APP_NAME}
             </Link>
             <Link
               href="/dashboard/learning"
-              className="hidden font-semibold text-sky-800 hover:underline sm:inline"
+              className="hidden font-semibold text-rose-300 hover:underline sm:inline"
             >
               Courses
             </Link>
           </nav>
         </div>
         {title && (
-          <div className="border-t border-sky-100 bg-sky-50/80 px-4 py-3 text-center">
-            <h1 className="text-lg font-extrabold text-sky-950">{title}</h1>
+          <div className="border-t border-[#fafaf9]/15 bg-rose-950/30 px-4 py-3 text-center">
+            <h1 className="text-lg font-extrabold text-[#fafaf9]">{title}</h1>
           </div>
         )}
       </header>

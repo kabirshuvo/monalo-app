@@ -34,12 +34,12 @@ function ShellChrome({
             </Link>
             <Link
               href={ECO_PENGUIN_BASE_PATH}
-              className="flex min-w-0 items-center gap-2 rounded-2xl bg-sky-50 px-2 py-1.5 sm:px-3"
+              className="flex min-w-0 items-center gap-2 rounded-2xl bg-[#fafaf9]/12 px-2 py-1.5 sm:px-3"
             >
               <span className="text-3xl leading-none" aria-hidden>
                 🐧
               </span>
-              <span className="truncate text-base font-extrabold text-sky-950 sm:text-lg">
+              <span className="truncate text-base font-extrabold text-[#fafaf9] sm:text-lg">
                 Explore
               </span>
             </Link>
@@ -56,21 +56,21 @@ function ShellChrome({
             </button>
             <Link
               href={LEARNING_HUB_PATH}
-              className="rounded-xl px-2 py-1.5 font-semibold text-sky-800 hover:bg-sky-50 sm:px-3"
+              className="rounded-xl px-2 py-1.5 font-semibold text-emerald-300 hover:bg-[#292524] sm:px-3"
             >
               {ECO_PENGUIN_APP_NAME}
             </Link>
             <Link
               href="/dashboard/learning"
-              className="hidden rounded-xl px-2 py-1.5 font-semibold text-sky-800 hover:bg-sky-50 sm:inline sm:px-3"
+              className="hidden rounded-xl px-2 py-1.5 font-semibold text-emerald-300 hover:bg-[#292524] sm:inline sm:px-3"
             >
               Courses
             </Link>
           </nav>
         </div>
         {title && (
-          <div className="border-t border-sky-100 bg-gradient-to-r from-sky-50 to-emerald-50 px-4 py-3 text-center">
-            <h1 className="text-lg font-extrabold text-sky-950 sm:text-xl">{title}</h1>
+          <div className="border-t border-[#fafaf9]/15 bg-emerald-950/30 px-4 py-3 text-center">
+            <h1 className="text-lg font-extrabold text-[#fafaf9] sm:text-xl">{title}</h1>
           </div>
         )}
       </header>

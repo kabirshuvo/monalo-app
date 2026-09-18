@@ -46,32 +46,32 @@ export default function DigraphsHub({ digraphs, progress = [] }: Props) {
   return (
     <div className="space-y-8">
       <section className={`${digraphTheme.card} relative overflow-hidden p-6 text-center sm:p-8`}>
-        <p className="text-5xl font-black tracking-tight text-amber-600" aria-hidden>
+        <p className="text-5xl font-black tracking-tight text-orange-300" aria-hidden>
           sh ch th wh
         </p>
-        <h2 className="mt-3 text-2xl font-extrabold text-amber-950 sm:text-3xl">
+        <h2 className="mt-3 text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">
           Digraphs Practice
         </h2>
-        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-amber-900/80 sm:text-base">
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#d6d3d1] sm:text-base">
           Hear the letter team, learn the words, then pick the matching picture.
         </p>
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-          <span className={`${digraphTheme.pill} bg-amber-100 text-amber-900`}>👂 Listen</span>
-          <span className={`${digraphTheme.pill} bg-orange-100 text-orange-900`}>🔤 See</span>
-          <span className={`${digraphTheme.pill} bg-yellow-100 text-yellow-900`}>🎯 Play</span>
+          <span className={`${digraphTheme.pill} bg-amber-400/20 text-orange-200`}>👂 Listen</span>
+          <span className={`${digraphTheme.pill} bg-orange-400/20 text-orange-200`}>🔤 See</span>
+          <span className={`${digraphTheme.pill} bg-amber-400/20 text-amber-200`}>🎯 Play</span>
         </div>
       </section>
 
       {continueDigraph && session && (
         <section
-          className={`${digraphTheme.card} flex flex-col items-center gap-4 border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 p-5 sm:flex-row sm:justify-between sm:p-6`}
+          className={`${digraphTheme.card} flex flex-col items-center gap-4 border-[#fafaf9]/20 bg-gradient-to-r from-[#fafaf9]/10 to-[#fafaf9]/15 p-5 sm:flex-row sm:justify-between sm:p-6`}
         >
           <div className="text-center sm:text-left">
-            <p className="text-xs font-bold uppercase tracking-widest text-amber-700">Continue</p>
-            <h3 className="mt-1 text-xl font-extrabold text-amber-950">
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-300">Continue</p>
+            <h3 className="mt-1 text-xl font-extrabold text-[#fafaf9]">
               Keep going with {continueDigraph.label}
             </h3>
-            <p className="mt-1 text-sm text-amber-800/80">
+            <p className="mt-1 text-sm text-[#d6d3d1]">
               Page {session.page} · {session.mode === 'play' ? 'Listening game' : 'Learn mode'}
             </p>
           </div>
@@ -87,7 +87,7 @@ export default function DigraphsHub({ digraphs, progress = [] }: Props) {
       )}
 
       <div id="digraphs">
-        <h3 className="mb-4 text-center text-sm font-bold uppercase tracking-widest text-amber-700/80">
+        <h3 className="mb-4 text-center text-sm font-bold uppercase tracking-widest text-amber-300/80">
           Choose a digraph
         </h3>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
@@ -99,7 +99,7 @@ export default function DigraphsHub({ digraphs, progress = [] }: Props) {
               <Link
                 key={digraph.id}
                 href={`${DIGRAPHS_BASE_PATH}/${digraph.id}`}
-                className={`${digraphTheme.cardSoft} group p-4 text-center transition hover:-translate-y-0.5 hover:border-amber-300 hover:shadow-lg`}
+                className={`${digraphTheme.cardSoft} group p-4 text-center transition hover:-translate-y-0.5 hover:border-orange-400/70/60 hover:shadow-lg`}
               >
                 <div className="relative mx-auto h-20 w-20 overflow-hidden rounded-3xl shadow-md transition group-hover:scale-105">
                   <Image
@@ -111,10 +111,10 @@ export default function DigraphsHub({ digraphs, progress = [] }: Props) {
                     unoptimized
                   />
                 </div>
-                <p className="mt-3 text-sm font-extrabold text-amber-950 sm:text-base">
+                <p className="mt-3 text-sm font-extrabold text-[#fafaf9] sm:text-base">
                   {digraph.label}
                 </p>
-                <p className="mt-0.5 text-xs font-medium text-amber-700/75">
+                <p className="mt-0.5 text-xs font-medium text-amber-300/75">
                   as in {digraph.example}
                 </p>
                 {total > 0 && (

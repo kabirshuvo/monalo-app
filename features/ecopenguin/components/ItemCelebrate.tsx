@@ -119,12 +119,12 @@ export default function ItemCelebrate({
         </div>
       )}
       {pointsAwarded !== null && (
-        <p className="animate-eco-pop rounded-full bg-gradient-to-r from-amber-200 to-yellow-200 px-5 py-2 text-sm font-extrabold text-amber-950 shadow-sm">
+        <p className="animate-eco-pop rounded-full bg-gradient-to-r from-amber-200 to-yellow-200 px-5 py-2 text-sm font-extrabold text-[#fafaf9] shadow-sm">
           +{pointsAwarded} points!
         </p>
       )}
       {alreadyMastered && (
-        <p className="animate-eco-pop rounded-full bg-sky-100 px-5 py-2 text-sm font-extrabold text-sky-900 shadow-sm">
+        <p className="animate-eco-pop rounded-full bg-sky-400/20 px-5 py-2 text-sm font-extrabold text-sky-200 shadow-sm">
           You&apos;ve got this one!
         </p>
       )}
@@ -140,15 +140,15 @@ export default function ItemCelebrate({
             sizes="320px"
           />
         </div>
-        <p className="mt-2 text-xs font-bold uppercase tracking-widest text-emerald-700">
+        <p className="mt-2 text-xs font-bold uppercase tracking-widest text-sky-300">
           Great job!
         </p>
-        <h2 className="mt-3 text-4xl font-extrabold tracking-wide text-sky-950 sm:text-5xl">
+        <h2 className="mt-3 text-4xl font-extrabold tracking-wide text-[#fafaf9] sm:text-5xl">
           <span className="text-rose-500">{first}</span>
           {rest}
         </h2>
         {item.description && (
-          <p className="mt-3 text-sm leading-relaxed text-sky-800/80">{item.description}</p>
+          <p className="mt-3 text-sm leading-relaxed text-[#d6d3d1]">{item.description}</p>
         )}
       </div>
       <div className="flex flex-wrap justify-center gap-3">

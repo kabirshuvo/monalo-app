@@ -10,6 +10,9 @@ function mapVowel(meta: VowelMeta): VowelMeta {
   return {
     ...meta,
     image: resolveVowelWordsAsset(meta.image),
+    audio: {
+      welcome: resolveVowelWordsAsset(meta.audio.welcome),
+    },
   }
 }
 
@@ -23,6 +26,9 @@ function mapWord(word: VowelWord): VowelWord {
       question: resolveVowelWordsAsset(word.audio.question),
       success: resolveVowelWordsAsset(word.audio.success),
       error: resolveVowelWordsAsset(word.audio.error),
+      learn: resolveVowelWordsAsset(word.audio.learn),
+      quiz: resolveVowelWordsAsset(word.audio.quiz),
+      successes: word.audio.successes.map((src) => resolveVowelWordsAsset(src)),
     },
   }
 }

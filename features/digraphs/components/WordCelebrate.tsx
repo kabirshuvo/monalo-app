@@ -109,12 +109,12 @@ export default function WordCelebrate({
         </div>
       )}
       {pointsAwarded !== null && (
-        <p className="rounded-full bg-gradient-to-r from-amber-200 to-yellow-200 px-5 py-2 text-sm font-extrabold text-amber-950 shadow-sm">
+        <p className="rounded-full bg-gradient-to-r from-amber-200 to-yellow-200 px-5 py-2 text-sm font-extrabold text-[#fafaf9] shadow-sm">
           +{pointsAwarded} points!
         </p>
       )}
       {alreadyMastered && (
-        <p className="rounded-full bg-orange-100 px-5 py-2 text-sm font-extrabold text-orange-900 shadow-sm">
+        <p className="rounded-full bg-orange-400/20 px-5 py-2 text-sm font-extrabold text-orange-200 shadow-sm">
           You&apos;ve got this one!
         </p>
       )}
@@ -129,14 +129,14 @@ export default function WordCelebrate({
         <p className="mt-3 text-xs font-bold uppercase tracking-widest text-orange-700">
           Great job!
         </p>
-        <h2 className="mt-3 text-4xl font-extrabold tracking-wide text-amber-950 sm:text-5xl">
+        <h2 className="mt-3 text-4xl font-extrabold tracking-wide text-[#fafaf9] sm:text-5xl">
           <DigraphHighlight graphemes={word.graphemes} digraph={digraph.digraph} />
         </h2>
-        <p className="mt-2 text-sm text-amber-800/80">
+        <p className="mt-2 text-sm text-[#d6d3d1]">
           {digraph.letter} · {digraph.phoneme}
         </p>
       </div>
-      <p className="text-sm font-bold text-amber-800">Back to the listening game…</p>
+      <p className="text-sm font-bold text-orange-200">Back to the listening game…</p>
     </div>
   )
 }

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "cat",
+    "word": "cat",
+    "vowelId": "a",
+    "graphemes": ["c", "a", "t"],
+    "image": "/images/a/cat.webp",
+    "speak": { "sounds": "c, a, t", "word": "cat" },
+    "audio": {
+      "sounds": "/audio/sounds/cat.mp3",
+      "word": "/audio/word/a/cat.mp3"
+    }
+  },
+  {
+    "id": "tap",
+    "word": "tap",
+    "vowelId": "a",
+    "graphemes": ["t", "a", "p"],
+    "image": "/images/a/tap.webp",
+    "speak": { "sounds": "t, a, p", "word": "tap" },
+    "audio": {
+      "sounds": "/audio/sounds/tap.mp3",
+      "word": "/audio/word/a/tap.mp3"
+    }
+  },
+  {
+    "id": "bat",
+    "word": "bat",
+    "vowelId": "a",
+    "graphemes": ["b", "a", "t"],
+    "image": "/images/a/bat.webp",
+    "speak": { "sounds": "b, a, t", "word": "bat" },
+    "audio": {
+      "sounds": "/audio/sounds/bat.mp3",
+      "word": "/audio/word/a/bat.mp3"
+    }
+  },
+  {
+    "id": "hat",
+    "word": "hat",
+    "vowelId": "a",
+    "graphemes": ["h", "a", "t"],
+    "image": "/images/a/hat.webp",
+    "speak": { "sounds": "h, a, t", "word": "hat" },
+    "audio": {
+      "sounds": "/audio/sounds/hat.mp3",
+      "word": "/audio/word/a/hat.mp3"
+    }
+  },
+  {
+    "id": "map",
+    "word": "map",
+    "vowelId": "a",
+    "graphemes": ["m", "a", "p"],
+    "image": "/images/a/map.webp",
+    "speak": { "sounds": "m, a, p", "word": "map" },
+    "audio": {
+      "sounds": "/audio/sounds/map.mp3",
+      "word": "/audio/word/a/map.mp3"
+    }
+  },
+  {
+    "id": "pan",
+    "word": "pan",
+    "vowelId": "a",
+    "graphemes": ["p", "a", "n"],
+    "image": "/images/a/pan.webp",
+    "speak": { "sounds": "p, a, n", "word": "pan" },
+    "audio": {
+      "sounds": "/audio/sounds/pan.mp3",
+      "word": "/audio/word/a/pan.mp3"
+    }
+  },
+  {
+    "id": "bag",
+    "word": "bag",
+    "vowelId": "a",
+    "graphemes": ["b", "a", "g"],
+    "image": "/images/a/bag.webp",
+    "speak": { "sounds": "b, a, g", "word": "bag" },
+    "audio": {
+      "sounds": "/audio/sounds/bag.mp3",
+      "word": "/audio/word/a/bag.mp3"
+    }
+  },
+  {
+    "id": "jam",
+    "word": "jam",
+    "vowelId": "a",
+    "graphemes": ["j", "a", "m"],
+    "image": "/images/a/jam.webp",
+    "speak": { "sounds": "j, a, m", "word": "jam" },
+    "audio": {
+      "sounds": "/audio/sounds/jam.mp3",
+      "word": "/audio/word/a/jam.mp3"
+    }
+  },
+  {
+    "id": "van",
+    "word": "van",
+    "vowelId": "a",
+    "graphemes": ["v", "a", "n"],
+    "image": "/images/a/van.webp",
+    "speak": { "sounds": "v, a, n", "word": "van" },
+    "audio": {
+      "sounds": "/audio/sounds/van.mp3",
+      "word": "/audio/word/a/van.mp3"
+    }
+  }
+]

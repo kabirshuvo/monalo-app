@@ -69,7 +69,7 @@ export default function WhichIsSection({
   }
 
   return (
-    <section className={`${ecoTheme.card} relative border-emerald-100 p-4 sm:p-5`}>
+    <section className={`${ecoTheme.card} relative border-[#fafaf9]/15 p-4 sm:p-5`}>
       {!audioUnlocked && enabled && (
         <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-emerald-950/45 p-4 backdrop-blur-[2px]">
           <button
@@ -84,8 +84,8 @@ export default function WhichIsSection({
 
       <div className="mb-4 flex flex-col items-center gap-3">
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className={`${ecoTheme.pill} bg-emerald-100 text-emerald-900`}>Play</span>
-          <h3 className="text-lg font-extrabold text-emerald-950 sm:text-xl">Which is…?</h3>
+          <span className={`${ecoTheme.pill} bg-emerald-400/20 text-sky-200`}>Play</span>
+          <h3 className="text-lg font-extrabold text-[#fafaf9] sm:text-xl">Which is…?</h3>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-2">
@@ -111,18 +111,18 @@ export default function WhichIsSection({
         </div>
 
         {showWord && targetName ? (
-          <span className="rounded-2xl bg-gradient-to-r from-rose-400 to-orange-400 px-4 py-1.5 text-lg font-extrabold text-white shadow-sm sm:text-xl">
+          <span className="rounded-2xl bg-gradient-to-r from-rose-400 to-orange-400 px-4 py-1.5 text-lg font-extrabold text-[#fafaf9] shadow-sm sm:text-xl">
             {targetName}
           </span>
         ) : (
-          <p className="text-sm font-semibold text-emerald-800/80">
+          <p className="text-sm font-semibold text-[#d6d3d1]">
             Listen carefully, then tap the picture
           </p>
         )}
       </div>
 
       {needsTapToListen && audioUnlocked && (
-        <p className="mb-3 text-center text-sm font-bold text-amber-800">
+        <p className="mb-3 text-center text-sm font-bold text-orange-200">
           Sound was blocked — tap Listen again
         </p>
       )}
@@ -165,7 +165,7 @@ export default function WhichIsSection({
           )
         })}
       </div>
-      <p className="mt-4 text-center text-xs font-medium text-emerald-800/75 sm:text-sm">
+      <p className="mt-4 text-center text-xs font-medium text-sky-300/75 sm:text-sm">
         Wrong answers stay dimmed so you can try again
       </p>
     </section>

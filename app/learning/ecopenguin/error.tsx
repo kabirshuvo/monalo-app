@@ -17,8 +17,8 @@ export default function EcoPenguinError({
         <p className="text-5xl" aria-hidden>
           🐧
         </p>
-        <h2 className="text-2xl font-extrabold text-sky-950">Something went wrong</h2>
-        <p className="text-sm text-sky-800/85">
+        <h2 className="text-2xl font-extrabold text-[#fafaf9]">Something went wrong</h2>
+        <p className="text-sm text-[#d6d3d1]">
           Explore hit a snag. You can try again or head back to {ECO_PENGUIN_APP_NAME}.
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">

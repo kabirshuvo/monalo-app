@@ -19,7 +19,7 @@ export function DigraphHighlight({
             key={`${g}-${i}`}
             className={
               isTeam
-                ? 'mx-0.5 rounded-lg bg-gradient-to-b from-amber-400 to-orange-500 px-1.5 text-white shadow-sm'
+                ? 'mx-0.5 rounded-lg bg-gradient-to-b from-amber-400 to-orange-500 px-1.5 text-[#fafaf9] shadow-sm'
                 : 'text-inherit'
             }
           >

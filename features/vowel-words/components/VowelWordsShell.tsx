@@ -33,12 +33,12 @@ function ShellChrome({ children, title, backHref }: Props) {
             </Link>
             <Link
               href={VOWEL_WORDS_BASE_PATH}
-              className="flex min-w-0 items-center gap-2 rounded-2xl bg-violet-50 px-2 py-1.5 sm:px-3"
+              className="flex min-w-0 items-center gap-2 rounded-2xl bg-[#fafaf9]/12 px-2 py-1.5 sm:px-3"
             >
-              <span className="text-2xl font-black text-violet-600" aria-hidden>
+              <span className="text-2xl font-black text-amber-300" aria-hidden>
                 Aa
               </span>
-              <span className="truncate text-base font-extrabold text-violet-950 sm:text-lg">
+              <span className="truncate text-base font-extrabold text-[#fafaf9] sm:text-lg">
                 Vowel Words
               </span>
             </Link>
@@ -54,21 +54,21 @@ function ShellChrome({ children, title, backHref }: Props) {
             </button>
             <Link
               href={LEARNING_HUB_PATH}
-              className="rounded-xl px-2 py-1.5 font-semibold text-violet-900 hover:bg-violet-50 sm:px-3"
+              className="rounded-xl px-2 py-1.5 font-semibold text-amber-200 hover:bg-[#292524] sm:px-3"
             >
               {ECO_PENGUIN_APP_NAME}
             </Link>
             <Link
               href="/dashboard/learning"
-              className="hidden rounded-xl px-2 py-1.5 font-semibold text-violet-900 hover:bg-violet-50 sm:inline sm:px-3"
+              className="hidden rounded-xl px-2 py-1.5 font-semibold text-amber-200 hover:bg-[#292524] sm:inline sm:px-3"
             >
               Courses
             </Link>
           </nav>
         </div>
         {title && (
-          <div className="border-t border-violet-100 bg-gradient-to-r from-violet-50 to-amber-50 px-4 py-3 text-center">
-            <h1 className="text-lg font-extrabold text-violet-950 sm:text-xl">{title}</h1>
+          <div className="border-t border-[#fafaf9]/15 bg-amber-950/30 px-4 py-3 text-center">
+            <h1 className="text-lg font-extrabold text-[#fafaf9] sm:text-xl">{title}</h1>
           </div>
         )}
       </header>

@@ -62,7 +62,7 @@ export default function WhichWordSection({
   if (deckEmpty) return null
 
   return (
-    <section className={`${vowelTheme.card} relative border-fuchsia-100 p-4 sm:p-5`}>
+    <section className={`${vowelTheme.card} relative border-[#fafaf9]/15 p-4 sm:p-5`}>
       {!audioUnlocked && enabled && (
         <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-violet-950/45 p-4 backdrop-blur-[2px]">
           <button
@@ -80,9 +80,9 @@ export default function WhichWordSection({
 
       <div className="mb-4 flex flex-col items-center gap-3">
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className={`${vowelTheme.pill} bg-fuchsia-100 text-fuchsia-900`}>Play</span>
-          <h3 className="text-lg font-extrabold text-violet-950 sm:text-xl">
-            Which word has {vowel.phoneme}?
+          <span className={`${vowelTheme.pill} bg-fuchsia-400/20 text-amber-100`}>Play</span>
+          <h3 className="text-lg font-extrabold text-[#fafaf9] sm:text-xl">
+            Tap the picture
           </h3>
         </div>
 
@@ -109,23 +109,23 @@ export default function WhichWordSection({
 
         {showWord && targetWord ? (
           <span
-            className={`rounded-2xl bg-gradient-to-r ${accent} px-4 py-1.5 text-lg font-extrabold text-white shadow-sm sm:text-xl`}
+            className={`rounded-2xl bg-gradient-to-r ${accent} px-4 py-1.5 text-lg font-extrabold text-[#fafaf9] shadow-sm sm:text-xl`}
           >
             <VowelHighlight
               graphemes={targetWord.split('')}
               vowelLetter={vowel.letter}
-              className="text-white"
+              className="text-[#fafaf9]"
             />
           </span>
         ) : (
-          <p className="text-sm font-semibold text-violet-800/80">
+          <p className="text-sm font-semibold text-[#d6d3d1]">
             Listen for the vowel, then tap the matching word
           </p>
         )}
       </div>
 
       {needsTapToListen && audioUnlocked && (
-        <p className="mb-3 text-center text-sm font-bold text-amber-800">
+        <p className="mb-3 text-center text-sm font-bold text-orange-200">
           Sound was blocked — tap Listen again
         </p>
       )}
@@ -148,7 +148,7 @@ export default function WhichWordSection({
                   ? 'animate-pulse border-rose-400 bg-rose-50'
                   : isWrong
                     ? 'border-rose-200 bg-rose-50/70 opacity-50'
-                    : 'border-transparent bg-violet-50/80 hover:border-violet-400 hover:shadow-md'
+                    : 'border-transparent bg-[#fafaf9]/10 hover:border-amber-400/70 hover:shadow-md'
               }`}
             >
               <WordPicture
@@ -163,7 +163,7 @@ export default function WhichWordSection({
           )
         })}
       </div>
-      <p className="mt-4 text-center text-xs font-medium text-violet-800/75 sm:text-sm">
+      <p className="mt-4 text-center text-xs font-medium text-[#d6d3d1] sm:text-sm">
         Wrong answers stay dimmed so you can try again
       </p>
     </section>

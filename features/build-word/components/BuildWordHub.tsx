@@ -37,8 +37,8 @@ export default function BuildWordHub({ vowels, progress = [] }: Props) {
         <p className="text-5xl" aria-hidden>
           🔤
         </p>
-        <h2 className="mt-3 text-2xl font-extrabold text-sky-950 sm:text-3xl">Build the word</h2>
-        <p className="mx-auto mt-3 max-w-md text-sm text-sky-800/85 sm:text-base">
+        <h2 className="mt-3 text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">Build the word</h2>
+        <p className="mx-auto mt-3 max-w-md text-sm text-[#d6d3d1] sm:text-base">
           Hear a short-vowel word, then tap letters to spell it. Practice after Vowel Words.
         </p>
       </section>
@@ -46,11 +46,11 @@ export default function BuildWordHub({ vowels, progress = [] }: Props) {
       {continueHref && (
         <Link
           href={continueHref}
-          className={`${buildWordTheme.card} flex flex-col items-center gap-2 border-sky-200 bg-sky-50 p-5 sm:flex-row sm:justify-between`}
+          className={`${buildWordTheme.card} flex flex-col items-center gap-2 border-[#fafaf9]/20 bg-[#fafaf9]/10 p-5 sm:flex-row sm:justify-between`}
         >
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-sky-700">Continue</p>
-            <p className="text-lg font-extrabold text-sky-950">{continueLabel}</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-sky-300">Continue</p>
+            <p className="text-lg font-extrabold text-[#fafaf9]">{continueLabel}</p>
           </div>
           <span className={buildWordTheme.btnPrimary}>Keep spelling →</span>
         </Link>
@@ -67,13 +67,13 @@ export default function BuildWordHub({ vowels, progress = [] }: Props) {
               className={`${buildWordTheme.cardSoft} p-4 text-center transition hover:-translate-y-0.5 hover:shadow-lg`}
             >
               <div
-                className={`mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${accent} text-3xl font-black text-white`}
+                className={`mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${accent} text-3xl font-black text-[#fafaf9]`}
               >
                 {v.letter}
               </div>
-              <p className="mt-2 font-extrabold text-sky-950">{v.label}</p>
+              <p className="mt-2 font-extrabold text-[#fafaf9]">{v.label}</p>
               {stats && (
-                <p className="mt-1 text-xs font-bold text-amber-700">
+                <p className="mt-1 text-xs font-bold text-amber-300">
                   ⭐ {stats.mastered} of {stats.total}
                 </p>
               )}

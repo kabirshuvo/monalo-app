@@ -33,12 +33,12 @@ function ShellChrome({ children, title, backHref }: Props) {
             </Link>
             <Link
               href={DIGRAPHS_BASE_PATH}
-              className="flex min-w-0 items-center gap-2 rounded-2xl bg-amber-50 px-2 py-1.5 sm:px-3"
+              className="flex min-w-0 items-center gap-2 rounded-2xl bg-[#fafaf9]/12 px-2 py-1.5 sm:px-3"
             >
-              <span className="text-2xl font-black text-amber-600" aria-hidden>
+              <span className="text-2xl font-black text-orange-300" aria-hidden>
                 sh
               </span>
-              <span className="truncate text-base font-extrabold text-amber-950 sm:text-lg">
+              <span className="truncate text-base font-extrabold text-[#fafaf9] sm:text-lg">
                 Digraphs
               </span>
             </Link>
@@ -54,21 +54,21 @@ function ShellChrome({ children, title, backHref }: Props) {
             </button>
             <Link
               href={LEARNING_HUB_PATH}
-              className="rounded-xl px-2 py-1.5 font-semibold text-amber-900 hover:bg-amber-50 sm:px-3"
+              className="rounded-xl px-2 py-1.5 font-semibold text-orange-200 hover:bg-[#292524] sm:px-3"
             >
               {ECO_PENGUIN_APP_NAME}
             </Link>
             <Link
               href="/dashboard/learning"
-              className="hidden rounded-xl px-2 py-1.5 font-semibold text-amber-900 hover:bg-amber-50 sm:inline sm:px-3"
+              className="hidden rounded-xl px-2 py-1.5 font-semibold text-orange-200 hover:bg-[#292524] sm:inline sm:px-3"
             >
               Courses
             </Link>
           </nav>
         </div>
         {title && (
-          <div className="border-t border-amber-100 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-3 text-center">
-            <h1 className="text-lg font-extrabold text-amber-950 sm:text-xl">{title}</h1>
+          <div className="border-t border-[#fafaf9]/15 bg-orange-950/30 px-4 py-3 text-center">
+            <h1 className="text-lg font-extrabold text-[#fafaf9] sm:text-xl">{title}</h1>
           </div>
         )}
       </header>

@@ -148,10 +148,10 @@ export default function DigraphPlay({
         className={`${digraphTheme.cardSoft} flex flex-wrap items-center justify-between gap-3 px-4 py-3`}
       >
         <div className="space-y-1">
-          <p className="text-sm font-semibold text-amber-900">
+          <p className="text-sm font-semibold text-orange-200">
             {words.length} words · {totalMastered} starred
           </p>
-          <p className="text-xs font-medium text-amber-700/80">
+          <p className="text-xs font-medium text-amber-300/80">
             This round: {pageMasteredCount} / {pageWords.length} got it
           </p>
         </div>
@@ -167,7 +167,7 @@ export default function DigraphPlay({
                   aria-label={`Page ${i + 1}`}
                   onClick={() => goToPage(i + 1)}
                   className={`h-3.5 w-3.5 rounded-full transition ${
-                    i + 1 === page ? 'scale-110 bg-orange-500' : 'bg-amber-200 hover:bg-amber-300'
+                    i + 1 === page ? 'scale-110 bg-orange-500' : 'bg-[#fafaf9]/20 hover:bg-[#fafaf9]/35'
                   }`}
                 />
               ))}
@@ -181,7 +181,7 @@ export default function DigraphPlay({
             >
               ←
             </button>
-            <span className="min-w-[4.5rem] text-center text-xs font-bold text-amber-800">
+            <span className="min-w-[4.5rem] text-center text-xs font-bold text-orange-200">
               {page} / {pages}
             </span>
             <button
@@ -201,7 +201,7 @@ export default function DigraphPlay({
         <>
           <LearnSection digraph={digraph} words={words} page={page} />
           <div className="flex flex-col items-center gap-3 rounded-3xl border-2 border-orange-200 bg-orange-50/80 px-4 py-5 text-center">
-            <p className="text-sm font-semibold text-amber-900 sm:text-base">
+            <p className="text-sm font-semibold text-orange-200 sm:text-base">
               Ready to hear {digraph.phoneme} and find the words?
             </p>
             <button type="button" onClick={startPlay} className={`${digraphTheme.btnPrimary} px-6 py-3`}>
@@ -238,8 +238,8 @@ export default function DigraphPlay({
           <p className="text-4xl" aria-hidden>
             ⭐🔤🎉
           </p>
-          <h2 className="text-2xl font-extrabold text-amber-950 sm:text-3xl">Round complete!</h2>
-          <p className="text-sm text-amber-800/85 sm:text-base">
+          <h2 className="text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">Round complete!</h2>
+          <p className="text-sm text-[#d6d3d1] sm:text-base">
             You got all {pageWords.length} {digraph.label} words.
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-2">

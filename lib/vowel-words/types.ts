@@ -6,6 +6,9 @@ export type VowelWordAudio = {
   question: string
   success: string
   error: string
+  learn: string
+  quiz: string
+  successes: string[]
 }
 
 export type VowelMeta = {
@@ -15,8 +18,12 @@ export type VowelMeta = {
   label: string
   example: string
   image: string
+  audio: {
+    welcome: string
+  }
   /** Spoken labels for speech-synthesis fallback */
   speak: {
+    welcome: string
     phoneme: string
     question: string
   }
@@ -32,4 +39,9 @@ export type VowelWord = {
   audio: VowelWordAudio
   /** Fallback when mp3 is missing */
   speakWord: string
+  speak: {
+    learn: string
+    quiz: string
+    success: string[]
+  }
 }

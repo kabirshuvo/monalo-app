@@ -169,13 +169,13 @@ export default function CategoryPlay({
         className={`${ecoTheme.cardSoft} flex flex-wrap items-center justify-between gap-3 px-4 py-3`}
       >
         <div className="space-y-1">
-          <p className="text-sm font-semibold text-sky-900">
+          <p className="text-sm font-semibold text-sky-200">
             <span className="mr-1" aria-hidden>
               📚
             </span>
             {items.length} words · {totalMastered} starred
           </p>
-          <p className="text-xs font-medium text-sky-700/80">
+          <p className="text-xs font-medium text-sky-300/80">
             This round: {pageMasteredCount} / {pageItems.length} got it
           </p>
         </div>
@@ -190,7 +190,7 @@ export default function CategoryPlay({
                 aria-label={`Page ${i + 1}`}
                 onClick={() => goToPage(i + 1)}
                 className={`h-3.5 w-3.5 rounded-full transition ${
-                  i + 1 === page ? 'scale-110 bg-teal-500' : 'bg-sky-200 hover:bg-sky-300'
+                  i + 1 === page ? 'scale-110 bg-teal-500' : 'bg-[#fafaf9]/20 hover:bg-[#fafaf9]/35'
                 }`}
               />
             ))}
@@ -204,7 +204,7 @@ export default function CategoryPlay({
           >
             ←
           </button>
-          <span className="min-w-[4.5rem] text-center text-xs font-bold text-sky-800">
+          <span className="min-w-[4.5rem] text-center text-xs font-bold text-[#d6d3d1]">
             {page} / {pages}
           </span>
           <button
@@ -222,8 +222,8 @@ export default function CategoryPlay({
       {mode === 'learn' && (
         <>
           <ThisIsSection items={items} page={page} />
-          <div className="flex flex-col items-center gap-3 rounded-3xl border-2 border-emerald-200 bg-emerald-50/80 px-4 py-5 text-center">
-            <p className="text-sm font-semibold text-emerald-900 sm:text-base">
+          <div className="flex flex-col items-center gap-3 rounded-3xl border-2 border-[#fafaf9]/20 bg-[#fafaf9]/10 px-4 py-5 text-center">
+            <p className="text-sm font-semibold text-sky-200 sm:text-base">
               Ready for a listening game with these pictures?
             </p>
             <button type="button" onClick={startPlay} className={`${ecoTheme.btnPrimary} px-6 py-3`}>
@@ -239,7 +239,7 @@ export default function CategoryPlay({
             <button type="button" onClick={backToLearn} className={ecoTheme.btnSecondary}>
               ← Back to learn
             </button>
-            <p className="text-xs font-bold uppercase tracking-wide text-emerald-800">
+            <p className="text-xs font-bold uppercase tracking-wide text-sky-300">
               Listening game
             </p>
           </div>
@@ -260,8 +260,8 @@ export default function CategoryPlay({
           <p className="text-4xl" aria-hidden>
             ⭐🐧🎉
           </p>
-          <h2 className="text-2xl font-extrabold text-sky-950 sm:text-3xl">Round complete!</h2>
-          <p className="text-sm text-sky-800/85 sm:text-base">
+          <h2 className="text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">Round complete!</h2>
+          <p className="text-sm text-[#d6d3d1] sm:text-base">
             You got all {pageItems.length} words on this page. Nice listening!
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-2">

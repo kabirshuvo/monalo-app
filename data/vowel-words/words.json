@@ -16,9 +16,27 @@
         "phoneme": "/audio/phoneme/a.mp3",
         "question": "/audio/question/a.mp3",
         "success": "/audio/success/a/cat.mp3",
-        "error": "/audio/error/a.mp3"
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/cat.mp3",
+        "quiz": "/audio/quiz/a/cat.mp3",
+        "successes": [
+          "/audio/success/a/cat-well-done.mp3",
+          "/audio/success/a/cat-perfect.mp3",
+          "/audio/success/a/cat-exactly.mp3",
+          "/audio/success/a/cat-yes.mp3"
+        ]
       },
-      "speakWord": "cat"
+      "speakWord": "cat",
+      "speak": {
+        "learn": "This is a cat.",
+        "quiz": "Which one is the cat?",
+        "success": [
+          "Well done. This is the cat.",
+          "Perfect. This is the cat.",
+          "Exactly. This is the cat.",
+          "Yes. This is the cat."
+        ]
+      }
     },
     {
       "id": "bat",
@@ -36,9 +54,27 @@
         "phoneme": "/audio/phoneme/a.mp3",
         "question": "/audio/question/a.mp3",
         "success": "/audio/success/a/bat.mp3",
-        "error": "/audio/error/a.mp3"
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/bat.mp3",
+        "quiz": "/audio/quiz/a/bat.mp3",
+        "successes": [
+          "/audio/success/a/bat-well-done.mp3",
+          "/audio/success/a/bat-perfect.mp3",
+          "/audio/success/a/bat-exactly.mp3",
+          "/audio/success/a/bat-yes.mp3"
+        ]
       },
-      "speakWord": "bat"
+      "speakWord": "bat",
+      "speak": {
+        "learn": "This is a bat.",
+        "quiz": "Which one is the bat?",
+        "success": [
+          "Well done. This is the bat.",
+          "Perfect. This is the bat.",
+          "Exactly. This is the bat.",
+          "Yes. This is the bat."
+        ]
+      }
     },
     {
       "id": "hat",
@@ -56,9 +92,27 @@
         "phoneme": "/audio/phoneme/a.mp3",
         "question": "/audio/question/a.mp3",
         "success": "/audio/success/a/hat.mp3",
-        "error": "/audio/error/a.mp3"
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/hat.mp3",
+        "quiz": "/audio/quiz/a/hat.mp3",
+        "successes": [
+          "/audio/success/a/hat-well-done.mp3",
+          "/audio/success/a/hat-perfect.mp3",
+          "/audio/success/a/hat-exactly.mp3",
+          "/audio/success/a/hat-yes.mp3"
+        ]
       },
-      "speakWord": "hat"
+      "speakWord": "hat",
+      "speak": {
+        "learn": "This is a hat.",
+        "quiz": "Which one is the hat?",
+        "success": [
+          "Well done. This is the hat.",
+          "Perfect. This is the hat.",
+          "Exactly. This is the hat.",
+          "Yes. This is the hat."
+        ]
+      }
     },
     {
       "id": "map",
@@ -76,9 +130,27 @@
         "phoneme": "/audio/phoneme/a.mp3",
         "question": "/audio/question/a.mp3",
         "success": "/audio/success/a/map.mp3",
-        "error": "/audio/error/a.mp3"
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/map.mp3",
+        "quiz": "/audio/quiz/a/map.mp3",
+        "successes": [
+          "/audio/success/a/map-well-done.mp3",
+          "/audio/success/a/map-perfect.mp3",
+          "/audio/success/a/map-exactly.mp3",
+          "/audio/success/a/map-yes.mp3"
+        ]
       },
-      "speakWord": "map"
+      "speakWord": "map",
+      "speak": {
+        "learn": "This is a map.",
+        "quiz": "Which one is the map?",
+        "success": [
+          "Well done. This is the map.",
+          "Perfect. This is the map.",
+          "Exactly. This is the map.",
+          "Yes. This is the map."
+        ]
+      }
     },
     {
       "id": "bag",
@@ -96,9 +168,27 @@
         "phoneme": "/audio/phoneme/a.mp3",
         "question": "/audio/question/a.mp3",
         "success": "/audio/success/a/bag.mp3",
-        "error": "/audio/error/a.mp3"
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/bag.mp3",
+        "quiz": "/audio/quiz/a/bag.mp3",
+        "successes": [
+          "/audio/success/a/bag-well-done.mp3",
+          "/audio/success/a/bag-perfect.mp3",
+          "/audio/success/a/bag-exactly.mp3",
+          "/audio/success/a/bag-yes.mp3"
+        ]
       },
-      "speakWord": "bag"
+      "speakWord": "bag",
+      "speak": {
+        "learn": "This is a bag.",
+        "quiz": "Which one is the bag?",
+        "success": [
+          "Well done. This is the bag.",
+          "Perfect. This is the bag.",
+          "Exactly. This is the bag.",
+          "Yes. This is the bag."
+        ]
+      }
     },
     {
       "id": "jam",
@@ -116,9 +206,27 @@
         "phoneme": "/audio/phoneme/a.mp3",
         "question": "/audio/question/a.mp3",
         "success": "/audio/success/a/jam.mp3",
-        "error": "/audio/error/a.mp3"
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/jam.mp3",
+        "quiz": "/audio/quiz/a/jam.mp3",
+        "successes": [
+          "/audio/success/a/jam-well-done.mp3",
+          "/audio/success/a/jam-perfect.mp3",
+          "/audio/success/a/jam-exactly.mp3",
+          "/audio/success/a/jam-yes.mp3"
+        ]
       },
-      "speakWord": "jam"
+      "speakWord": "jam",
+      "speak": {
+        "learn": "This is a jam.",
+        "quiz": "Which one is the jam?",
+        "success": [
+          "Well done. This is the jam.",
+          "Perfect. This is the jam.",
+          "Exactly. This is the jam.",
+          "Yes. This is the jam."
+        ]
+      }
     },
     {
       "id": "pan",
@@ -136,9 +244,27 @@
         "phoneme": "/audio/phoneme/a.mp3",
         "question": "/audio/question/a.mp3",
         "success": "/audio/success/a/pan.mp3",
-        "error": "/audio/error/a.mp3"
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/pan.mp3",
+        "quiz": "/audio/quiz/a/pan.mp3",
+        "successes": [
+          "/audio/success/a/pan-well-done.mp3",
+          "/audio/success/a/pan-perfect.mp3",
+          "/audio/success/a/pan-exactly.mp3",
+          "/audio/success/a/pan-yes.mp3"
+        ]
       },
-      "speakWord": "pan"
+      "speakWord": "pan",
+      "speak": {
+        "learn": "This is a pan.",
+        "quiz": "Which one is the pan?",
+        "success": [
+          "Well done. This is the pan.",
+          "Perfect. This is the pan.",
+          "Exactly. This is the pan.",
+          "Yes. This is the pan."
+        ]
+      }
     },
     {
       "id": "tap",
@@ -156,9 +282,27 @@
         "phoneme": "/audio/phoneme/a.mp3",
         "question": "/audio/question/a.mp3",
         "success": "/audio/success/a/tap.mp3",
-        "error": "/audio/error/a.mp3"
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/tap.mp3",
+        "quiz": "/audio/quiz/a/tap.mp3",
+        "successes": [
+          "/audio/success/a/tap-well-done.mp3",
+          "/audio/success/a/tap-perfect.mp3",
+          "/audio/success/a/tap-exactly.mp3",
+          "/audio/success/a/tap-yes.mp3"
+        ]
       },
-      "speakWord": "tap"
+      "speakWord": "tap",
+      "speak": {
+        "learn": "This is a tap.",
+        "quiz": "Which one is the tap?",
+        "success": [
+          "Well done. This is the tap.",
+          "Perfect. This is the tap.",
+          "Exactly. This is the tap.",
+          "Yes. This is the tap."
+        ]
+      }
     },
     {
       "id": "van",
@@ -176,9 +320,27 @@
         "phoneme": "/audio/phoneme/a.mp3",
         "question": "/audio/question/a.mp3",
         "success": "/audio/success/a/van.mp3",
-        "error": "/audio/error/a.mp3"
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/van.mp3",
+        "quiz": "/audio/quiz/a/van.mp3",
+        "successes": [
+          "/audio/success/a/van-well-done.mp3",
+          "/audio/success/a/van-perfect.mp3",
+          "/audio/success/a/van-exactly.mp3",
+          "/audio/success/a/van-yes.mp3"
+        ]
       },
-      "speakWord": "van"
+      "speakWord": "van",
+      "speak": {
+        "learn": "This is a van.",
+        "quiz": "Which one is the van?",
+        "success": [
+          "Well done. This is the van.",
+          "Perfect. This is the van.",
+          "Exactly. This is the van.",
+          "Yes. This is the van."
+        ]
+      }
     },
     {
       "id": "mad",
@@ -196,9 +358,27 @@
         "phoneme": "/audio/phoneme/a.mp3",
         "question": "/audio/question/a.mp3",
         "success": "/audio/success/a/mad.mp3",
-        "error": "/audio/error/a.mp3"
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/mad.mp3",
+        "quiz": "/audio/quiz/a/mad.mp3",
+        "successes": [
+          "/audio/success/a/mad-well-done.mp3",
+          "/audio/success/a/mad-perfect.mp3",
+          "/audio/success/a/mad-exactly.mp3",
+          "/audio/success/a/mad-yes.mp3"
+        ]
       },
-      "speakWord": "mad"
+      "speakWord": "mad",
+      "speak": {
+        "learn": "This is a mad.",
+        "quiz": "Which one is the mad?",
+        "success": [
+          "Well done. This is the mad.",
+          "Perfect. This is the mad.",
+          "Exactly. This is the mad.",
+          "Yes. This is the mad."
+        ]
+      }
     }
   ],
   "e": [
@@ -218,9 +398,27 @@
         "phoneme": "/audio/phoneme/e.mp3",
         "question": "/audio/question/e.mp3",
         "success": "/audio/success/e/bed.mp3",
-        "error": "/audio/error/e.mp3"
+        "error": "/audio/error/e.mp3",
+        "learn": "/audio/learn/e/bed.mp3",
+        "quiz": "/audio/quiz/e/bed.mp3",
+        "successes": [
+          "/audio/success/e/bed-well-done.mp3",
+          "/audio/success/e/bed-perfect.mp3",
+          "/audio/success/e/bed-exactly.mp3",
+          "/audio/success/e/bed-yes.mp3"
+        ]
       },
-      "speakWord": "bed"
+      "speakWord": "bed",
+      "speak": {
+        "learn": "This is a bed.",
+        "quiz": "Which one is the bed?",
+        "success": [
+          "Well done. This is the bed.",
+          "Perfect. This is the bed.",
+          "Exactly. This is the bed.",
+          "Yes. This is the bed."
+        ]
+      }
     },
     {
       "id": "red",
@@ -238,9 +436,27 @@
         "phoneme": "/audio/phoneme/e.mp3",
         "question": "/audio/question/e.mp3",
         "success": "/audio/success/e/red.mp3",
-        "error": "/audio/error/e.mp3"
+        "error": "/audio/error/e.mp3",
+        "learn": "/audio/learn/e/red.mp3",
+        "quiz": "/audio/quiz/e/red.mp3",
+        "successes": [
+          "/audio/success/e/red-well-done.mp3",
+          "/audio/success/e/red-perfect.mp3",
+          "/audio/success/e/red-exactly.mp3",
+          "/audio/success/e/red-yes.mp3"
+        ]
       },
-      "speakWord": "red"
+      "speakWord": "red",
+      "speak": {
+        "learn": "This is a red.",
+        "quiz": "Which one is the red?",
+        "success": [
+          "Well done. This is the red.",
+          "Perfect. This is the red.",
+          "Exactly. This is the red.",
+          "Yes. This is the red."
+        ]
+      }
     },
     {
       "id": "hen",
@@ -258,9 +474,27 @@
         "phoneme": "/audio/phoneme/e.mp3",
         "question": "/audio/question/e.mp3",
         "success": "/audio/success/e/hen.mp3",
-        "error": "/audio/error/e.mp3"
+        "error": "/audio/error/e.mp3",
+        "learn": "/audio/learn/e/hen.mp3",
+        "quiz": "/audio/quiz/e/hen.mp3",
+        "successes": [
+          "/audio/success/e/hen-well-done.mp3",
+          "/audio/success/e/hen-perfect.mp3",
+          "/audio/success/e/hen-exactly.mp3",
+          "/audio/success/e/hen-yes.mp3"
+        ]
       },
-      "speakWord": "hen"
+      "speakWord": "hen",
+      "speak": {
+        "learn": "This is a hen.",
+        "quiz": "Which one is the hen?",
+        "success": [
+          "Well done. This is the hen.",
+          "Perfect. This is the hen.",
+          "Exactly. This is the hen.",
+          "Yes. This is the hen."
+        ]
+      }
     },
     {
       "id": "pen",
@@ -278,9 +512,27 @@
         "phoneme": "/audio/phoneme/e.mp3",
         "question": "/audio/question/e.mp3",
         "success": "/audio/success/e/pen.mp3",
-        "error": "/audio/error/e.mp3"
+        "error": "/audio/error/e.mp3",
+        "learn": "/audio/learn/e/pen.mp3",
+        "quiz": "/audio/quiz/e/pen.mp3",
+        "successes": [
+          "/audio/success/e/pen-well-done.mp3",
+          "/audio/success/e/pen-perfect.mp3",
+          "/audio/success/e/pen-exactly.mp3",
+          "/audio/success/e/pen-yes.mp3"
+        ]
       },
-      "speakWord": "pen"
+      "speakWord": "pen",
+      "speak": {
+        "learn": "This is a pen.",
+        "quiz": "Which one is the pen?",
+        "success": [
+          "Well done. This is the pen.",
+          "Perfect. This is the pen.",
+          "Exactly. This is the pen.",
+          "Yes. This is the pen."
+        ]
+      }
     },
     {
       "id": "ten",
@@ -298,9 +550,27 @@
         "phoneme": "/audio/phoneme/e.mp3",
         "question": "/audio/question/e.mp3",
         "success": "/audio/success/e/ten.mp3",
-        "error": "/audio/error/e.mp3"
+        "error": "/audio/error/e.mp3",
+        "learn": "/audio/learn/e/ten.mp3",
+        "quiz": "/audio/quiz/e/ten.mp3",
+        "successes": [
+          "/audio/success/e/ten-well-done.mp3",
+          "/audio/success/e/ten-perfect.mp3",
+          "/audio/success/e/ten-exactly.mp3",
+          "/audio/success/e/ten-yes.mp3"
+        ]
       },
-      "speakWord": "ten"
+      "speakWord": "ten",
+      "speak": {
+        "learn": "This is a ten.",
+        "quiz": "Which one is the ten?",
+        "success": [
+          "Well done. This is the ten.",
+          "Perfect. This is the ten.",
+          "Exactly. This is the ten.",
+          "Yes. This is the ten."
+        ]
+      }
     },
     {
       "id": "jet",
@@ -318,9 +588,27 @@
         "phoneme": "/audio/phoneme/e.mp3",
         "question": "/audio/question/e.mp3",
         "success": "/audio/success/e/jet.mp3",
-        "error": "/audio/error/e.mp3"
+        "error": "/audio/error/e.mp3",
+        "learn": "/audio/learn/e/jet.mp3",
+        "quiz": "/audio/quiz/e/jet.mp3",
+        "successes": [
+          "/audio/success/e/jet-well-done.mp3",
+          "/audio/success/e/jet-perfect.mp3",
+          "/audio/success/e/jet-exactly.mp3",
+          "/audio/success/e/jet-yes.mp3"
+        ]
       },
-      "speakWord": "jet"
+      "speakWord": "jet",
+      "speak": {
+        "learn": "This is a jet.",
+        "quiz": "Which one is the jet?",
+        "success": [
+          "Well done. This is the jet.",
+          "Perfect. This is the jet.",
+          "Exactly. This is the jet.",
+          "Yes. This is the jet."
+        ]
+      }
     },
     {
       "id": "net",
@@ -338,9 +626,27 @@
         "phoneme": "/audio/phoneme/e.mp3",
         "question": "/audio/question/e.mp3",
         "success": "/audio/success/e/net.mp3",
-        "error": "/audio/error/e.mp3"
+        "error": "/audio/error/e.mp3",
+        "learn": "/audio/learn/e/net.mp3",
+        "quiz": "/audio/quiz/e/net.mp3",
+        "successes": [
+          "/audio/success/e/net-well-done.mp3",
+          "/audio/success/e/net-perfect.mp3",
+          "/audio/success/e/net-exactly.mp3",
+          "/audio/success/e/net-yes.mp3"
+        ]
       },
-      "speakWord": "net"
+      "speakWord": "net",
+      "speak": {
+        "learn": "This is a net.",
+        "quiz": "Which one is the net?",
+        "success": [
+          "Well done. This is the net.",
+          "Perfect. This is the net.",
+          "Exactly. This is the net.",
+          "Yes. This is the net."
+        ]
+      }
     },
     {
       "id": "wet",
@@ -358,9 +664,27 @@
         "phoneme": "/audio/phoneme/e.mp3",
         "question": "/audio/question/e.mp3",
         "success": "/audio/success/e/wet.mp3",
-        "error": "/audio/error/e.mp3"
+        "error": "/audio/error/e.mp3",
+        "learn": "/audio/learn/e/wet.mp3",
+        "quiz": "/audio/quiz/e/wet.mp3",
+        "successes": [
+          "/audio/success/e/wet-well-done.mp3",
+          "/audio/success/e/wet-perfect.mp3",
+          "/audio/success/e/wet-exactly.mp3",
+          "/audio/success/e/wet-yes.mp3"
+        ]
       },
-      "speakWord": "wet"
+      "speakWord": "wet",
+      "speak": {
+        "learn": "This is a wet.",
+        "quiz": "Which one is the wet?",
+        "success": [
+          "Well done. This is the wet.",
+          "Perfect. This is the wet.",
+          "Exactly. This is the wet.",
+          "Yes. This is the wet."
+        ]
+      }
     },
     {
       "id": "leg",
@@ -378,9 +702,27 @@
         "phoneme": "/audio/phoneme/e.mp3",
         "question": "/audio/question/e.mp3",
         "success": "/audio/success/e/leg.mp3",
-        "error": "/audio/error/e.mp3"
+        "error": "/audio/error/e.mp3",
+        "learn": "/audio/learn/e/leg.mp3",
+        "quiz": "/audio/quiz/e/leg.mp3",
+        "successes": [
+          "/audio/success/e/leg-well-done.mp3",
+          "/audio/success/e/leg-perfect.mp3",
+          "/audio/success/e/leg-exactly.mp3",
+          "/audio/success/e/leg-yes.mp3"
+        ]
       },
-      "speakWord": "leg"
+      "speakWord": "leg",
+      "speak": {
+        "learn": "This is a leg.",
+        "quiz": "Which one is the leg?",
+        "success": [
+          "Well done. This is the leg.",
+          "Perfect. This is the leg.",
+          "Exactly. This is the leg.",
+          "Yes. This is the leg."
+        ]
+      }
     },
     {
       "id": "pet",
@@ -398,9 +740,27 @@
         "phoneme": "/audio/phoneme/e.mp3",
         "question": "/audio/question/e.mp3",
         "success": "/audio/success/e/pet.mp3",
-        "error": "/audio/error/e.mp3"
+        "error": "/audio/error/e.mp3",
+        "learn": "/audio/learn/e/pet.mp3",
+        "quiz": "/audio/quiz/e/pet.mp3",
+        "successes": [
+          "/audio/success/e/pet-well-done.mp3",
+          "/audio/success/e/pet-perfect.mp3",
+          "/audio/success/e/pet-exactly.mp3",
+          "/audio/success/e/pet-yes.mp3"
+        ]
       },
-      "speakWord": "pet"
+      "speakWord": "pet",
+      "speak": {
+        "learn": "This is a pet.",
+        "quiz": "Which one is the pet?",
+        "success": [
+          "Well done. This is the pet.",
+          "Perfect. This is the pet.",
+          "Exactly. This is the pet.",
+          "Yes. This is the pet."
+        ]
+      }
     }
   ],
   "i": [
@@ -420,9 +780,27 @@
         "phoneme": "/audio/phoneme/i.mp3",
         "question": "/audio/question/i.mp3",
         "success": "/audio/success/i/sit.mp3",
-        "error": "/audio/error/i.mp3"
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/sit.mp3",
+        "quiz": "/audio/quiz/i/sit.mp3",
+        "successes": [
+          "/audio/success/i/sit-well-done.mp3",
+          "/audio/success/i/sit-perfect.mp3",
+          "/audio/success/i/sit-exactly.mp3",
+          "/audio/success/i/sit-yes.mp3"
+        ]
       },
-      "speakWord": "sit"
+      "speakWord": "sit",
+      "speak": {
+        "learn": "This is a sit.",
+        "quiz": "Which one is the sit?",
+        "success": [
+          "Well done. This is the sit.",
+          "Perfect. This is the sit.",
+          "Exactly. This is the sit.",
+          "Yes. This is the sit."
+        ]
+      }
     },
     {
       "id": "big",
@@ -440,9 +818,27 @@
         "phoneme": "/audio/phoneme/i.mp3",
         "question": "/audio/question/i.mp3",
         "success": "/audio/success/i/big.mp3",
-        "error": "/audio/error/i.mp3"
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/big.mp3",
+        "quiz": "/audio/quiz/i/big.mp3",
+        "successes": [
+          "/audio/success/i/big-well-done.mp3",
+          "/audio/success/i/big-perfect.mp3",
+          "/audio/success/i/big-exactly.mp3",
+          "/audio/success/i/big-yes.mp3"
+        ]
       },
-      "speakWord": "big"
+      "speakWord": "big",
+      "speak": {
+        "learn": "This is a big.",
+        "quiz": "Which one is the big?",
+        "success": [
+          "Well done. This is the big.",
+          "Perfect. This is the big.",
+          "Exactly. This is the big.",
+          "Yes. This is the big."
+        ]
+      }
     },
     {
       "id": "pig",
@@ -460,9 +856,27 @@
         "phoneme": "/audio/phoneme/i.mp3",
         "question": "/audio/question/i.mp3",
         "success": "/audio/success/i/pig.mp3",
-        "error": "/audio/error/i.mp3"
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/pig.mp3",
+        "quiz": "/audio/quiz/i/pig.mp3",
+        "successes": [
+          "/audio/success/i/pig-well-done.mp3",
+          "/audio/success/i/pig-perfect.mp3",
+          "/audio/success/i/pig-exactly.mp3",
+          "/audio/success/i/pig-yes.mp3"
+        ]
       },
-      "speakWord": "pig"
+      "speakWord": "pig",
+      "speak": {
+        "learn": "This is a pig.",
+        "quiz": "Which one is the pig?",
+        "success": [
+          "Well done. This is the pig.",
+          "Perfect. This is the pig.",
+          "Exactly. This is the pig.",
+          "Yes. This is the pig."
+        ]
+      }
     },
     {
       "id": "dig",
@@ -480,9 +894,27 @@
         "phoneme": "/audio/phoneme/i.mp3",
         "question": "/audio/question/i.mp3",
         "success": "/audio/success/i/dig.mp3",
-        "error": "/audio/error/i.mp3"
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/dig.mp3",
+        "quiz": "/audio/quiz/i/dig.mp3",
+        "successes": [
+          "/audio/success/i/dig-well-done.mp3",
+          "/audio/success/i/dig-perfect.mp3",
+          "/audio/success/i/dig-exactly.mp3",
+          "/audio/success/i/dig-yes.mp3"
+        ]
       },
-      "speakWord": "dig"
+      "speakWord": "dig",
+      "speak": {
+        "learn": "This is a dig.",
+        "quiz": "Which one is the dig?",
+        "success": [
+          "Well done. This is the dig.",
+          "Perfect. This is the dig.",
+          "Exactly. This is the dig.",
+          "Yes. This is the dig."
+        ]
+      }
     },
     {
       "id": "win",
@@ -500,9 +932,27 @@
         "phoneme": "/audio/phoneme/i.mp3",
         "question": "/audio/question/i.mp3",
         "success": "/audio/success/i/win.mp3",
-        "error": "/audio/error/i.mp3"
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/win.mp3",
+        "quiz": "/audio/quiz/i/win.mp3",
+        "successes": [
+          "/audio/success/i/win-well-done.mp3",
+          "/audio/success/i/win-perfect.mp3",
+          "/audio/success/i/win-exactly.mp3",
+          "/audio/success/i/win-yes.mp3"
+        ]
       },
-      "speakWord": "win"
+      "speakWord": "win",
+      "speak": {
+        "learn": "This is a win.",
+        "quiz": "Which one is the win?",
+        "success": [
+          "Well done. This is the win.",
+          "Perfect. This is the win.",
+          "Exactly. This is the win.",
+          "Yes. This is the win."
+        ]
+      }
     },
     {
       "id": "lip",
@@ -520,9 +970,27 @@
         "phoneme": "/audio/phoneme/i.mp3",
         "question": "/audio/question/i.mp3",
         "success": "/audio/success/i/lip.mp3",
-        "error": "/audio/error/i.mp3"
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/lip.mp3",
+        "quiz": "/audio/quiz/i/lip.mp3",
+        "successes": [
+          "/audio/success/i/lip-well-done.mp3",
+          "/audio/success/i/lip-perfect.mp3",
+          "/audio/success/i/lip-exactly.mp3",
+          "/audio/success/i/lip-yes.mp3"
+        ]
       },
-      "speakWord": "lip"
+      "speakWord": "lip",
+      "speak": {
+        "learn": "This is a lip.",
+        "quiz": "Which one is the lip?",
+        "success": [
+          "Well done. This is the lip.",
+          "Perfect. This is the lip.",
+          "Exactly. This is the lip.",
+          "Yes. This is the lip."
+        ]
+      }
     },
     {
       "id": "kid",
@@ -540,9 +1008,27 @@
         "phoneme": "/audio/phoneme/i.mp3",
         "question": "/audio/question/i.mp3",
         "success": "/audio/success/i/kid.mp3",
-        "error": "/audio/error/i.mp3"
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/kid.mp3",
+        "quiz": "/audio/quiz/i/kid.mp3",
+        "successes": [
+          "/audio/success/i/kid-well-done.mp3",
+          "/audio/success/i/kid-perfect.mp3",
+          "/audio/success/i/kid-exactly.mp3",
+          "/audio/success/i/kid-yes.mp3"
+        ]
       },
-      "speakWord": "kid"
+      "speakWord": "kid",
+      "speak": {
+        "learn": "This is a kid.",
+        "quiz": "Which one is the kid?",
+        "success": [
+          "Well done. This is the kid.",
+          "Perfect. This is the kid.",
+          "Exactly. This is the kid.",
+          "Yes. This is the kid."
+        ]
+      }
     },
     {
       "id": "pin",
@@ -560,9 +1046,27 @@
         "phoneme": "/audio/phoneme/i.mp3",
         "question": "/audio/question/i.mp3",
         "success": "/audio/success/i/pin.mp3",
-        "error": "/audio/error/i.mp3"
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/pin.mp3",
+        "quiz": "/audio/quiz/i/pin.mp3",
+        "successes": [
+          "/audio/success/i/pin-well-done.mp3",
+          "/audio/success/i/pin-perfect.mp3",
+          "/audio/success/i/pin-exactly.mp3",
+          "/audio/success/i/pin-yes.mp3"
+        ]
       },
-      "speakWord": "pin"
+      "speakWord": "pin",
+      "speak": {
+        "learn": "This is a pin.",
+        "quiz": "Which one is the pin?",
+        "success": [
+          "Well done. This is the pin.",
+          "Perfect. This is the pin.",
+          "Exactly. This is the pin.",
+          "Yes. This is the pin."
+        ]
+      }
     },
     {
       "id": "six",
@@ -580,9 +1084,27 @@
         "phoneme": "/audio/phoneme/i.mp3",
         "question": "/audio/question/i.mp3",
         "success": "/audio/success/i/six.mp3",
-        "error": "/audio/error/i.mp3"
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/six.mp3",
+        "quiz": "/audio/quiz/i/six.mp3",
+        "successes": [
+          "/audio/success/i/six-well-done.mp3",
+          "/audio/success/i/six-perfect.mp3",
+          "/audio/success/i/six-exactly.mp3",
+          "/audio/success/i/six-yes.mp3"
+        ]
       },
-      "speakWord": "six"
+      "speakWord": "six",
+      "speak": {
+        "learn": "This is a six.",
+        "quiz": "Which one is the six?",
+        "success": [
+          "Well done. This is the six.",
+          "Perfect. This is the six.",
+          "Exactly. This is the six.",
+          "Yes. This is the six."
+        ]
+      }
     },
     {
       "id": "mix",
@@ -600,9 +1122,27 @@
         "phoneme": "/audio/phoneme/i.mp3",
         "question": "/audio/question/i.mp3",
         "success": "/audio/success/i/mix.mp3",
-        "error": "/audio/error/i.mp3"
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/mix.mp3",
+        "quiz": "/audio/quiz/i/mix.mp3",
+        "successes": [
+          "/audio/success/i/mix-well-done.mp3",
+          "/audio/success/i/mix-perfect.mp3",
+          "/audio/success/i/mix-exactly.mp3",
+          "/audio/success/i/mix-yes.mp3"
+        ]
       },
-      "speakWord": "mix"
+      "speakWord": "mix",
+      "speak": {
+        "learn": "This is a mix.",
+        "quiz": "Which one is the mix?",
+        "success": [
+          "Well done. This is the mix.",
+          "Perfect. This is the mix.",
+          "Exactly. This is the mix.",
+          "Yes. This is the mix."
+        ]
+      }
     }
   ],
   "o": [
@@ -622,9 +1162,27 @@
         "phoneme": "/audio/phoneme/o.mp3",
         "question": "/audio/question/o.mp3",
         "success": "/audio/success/o/hop.mp3",
-        "error": "/audio/error/o.mp3"
+        "error": "/audio/error/o.mp3",
+        "learn": "/audio/learn/o/hop.mp3",
+        "quiz": "/audio/quiz/o/hop.mp3",
+        "successes": [
+          "/audio/success/o/hop-well-done.mp3",
+          "/audio/success/o/hop-perfect.mp3",
+          "/audio/success/o/hop-exactly.mp3",
+          "/audio/success/o/hop-yes.mp3"
+        ]
       },
-      "speakWord": "hop"
+      "speakWord": "hop",
+      "speak": {
+        "learn": "This is a hop.",
+        "quiz": "Which one is the hop?",
+        "success": [
+          "Well done. This is the hop.",
+          "Perfect. This is the hop.",
+          "Exactly. This is the hop.",
+          "Yes. This is the hop."
+        ]
+      }
     },
     {
       "id": "top",
@@ -642,9 +1200,27 @@
         "phoneme": "/audio/phoneme/o.mp3",
         "question": "/audio/question/o.mp3",
         "success": "/audio/success/o/top.mp3",
-        "error": "/audio/error/o.mp3"
+        "error": "/audio/error/o.mp3",
+        "learn": "/audio/learn/o/top.mp3",
+        "quiz": "/audio/quiz/o/top.mp3",
+        "successes": [
+          "/audio/success/o/top-well-done.mp3",
+          "/audio/success/o/top-perfect.mp3",
+          "/audio/success/o/top-exactly.mp3",
+          "/audio/success/o/top-yes.mp3"
+        ]
       },
-      "speakWord": "top"
+      "speakWord": "top",
+      "speak": {
+        "learn": "This is a top.",
+        "quiz": "Which one is the top?",
+        "success": [
+          "Well done. This is the top.",
+          "Perfect. This is the top.",
+          "Exactly. This is the top.",
+          "Yes. This is the top."
+        ]
+      }
     },
     {
       "id": "dog",
@@ -662,9 +1238,27 @@
         "phoneme": "/audio/phoneme/o.mp3",
         "question": "/audio/question/o.mp3",
         "success": "/audio/success/o/dog.mp3",
-        "error": "/audio/error/o.mp3"
+        "error": "/audio/error/o.mp3",
+        "learn": "/audio/learn/o/dog.mp3",
+        "quiz": "/audio/quiz/o/dog.mp3",
+        "successes": [
+          "/audio/success/o/dog-well-done.mp3",
+          "/audio/success/o/dog-perfect.mp3",
+          "/audio/success/o/dog-exactly.mp3",
+          "/audio/success/o/dog-yes.mp3"
+        ]
       },
-      "speakWord": "dog"
+      "speakWord": "dog",
+      "speak": {
+        "learn": "This is a dog.",
+        "quiz": "Which one is the dog?",
+        "success": [
+          "Well done. This is the dog.",
+          "Perfect. This is the dog.",
+          "Exactly. This is the dog.",
+          "Yes. This is the dog."
+        ]
+      }
     },
     {
       "id": "log",
@@ -682,9 +1276,27 @@
         "phoneme": "/audio/phoneme/o.mp3",
         "question": "/audio/question/o.mp3",
         "success": "/audio/success/o/log.mp3",
-        "error": "/audio/error/o.mp3"
+        "error": "/audio/error/o.mp3",
+        "learn": "/audio/learn/o/log.mp3",
+        "quiz": "/audio/quiz/o/log.mp3",
+        "successes": [
+          "/audio/success/o/log-well-done.mp3",
+          "/audio/success/o/log-perfect.mp3",
+          "/audio/success/o/log-exactly.mp3",
+          "/audio/success/o/log-yes.mp3"
+        ]
       },
-      "speakWord": "log"
+      "speakWord": "log",
+      "speak": {
+        "learn": "This is a log.",
+        "quiz": "Which one is the log?",
+        "success": [
+          "Well done. This is the log.",
+          "Perfect. This is the log.",
+          "Exactly. This is the log.",
+          "Yes. This is the log."
+        ]
+      }
     },
     {
       "id": "hot",
@@ -702,9 +1314,27 @@
         "phoneme": "/audio/phoneme/o.mp3",
         "question": "/audio/question/o.mp3",
         "success": "/audio/success/o/hot.mp3",
-        "error": "/audio/error/o.mp3"
+        "error": "/audio/error/o.mp3",
+        "learn": "/audio/learn/o/hot.mp3",
+        "quiz": "/audio/quiz/o/hot.mp3",
+        "successes": [
+          "/audio/success/o/hot-well-done.mp3",
+          "/audio/success/o/hot-perfect.mp3",
+          "/audio/success/o/hot-exactly.mp3",
+          "/audio/success/o/hot-yes.mp3"
+        ]
       },
-      "speakWord": "hot"
+      "speakWord": "hot",
+      "speak": {
+        "learn": "This is a hot.",
+        "quiz": "Which one is the hot?",
+        "success": [
+          "Well done. This is the hot.",
+          "Perfect. This is the hot.",
+          "Exactly. This is the hot.",
+          "Yes. This is the hot."
+        ]
+      }
     },
     {
       "id": "pot",
@@ -722,9 +1352,27 @@
         "phoneme": "/audio/phoneme/o.mp3",
         "question": "/audio/question/o.mp3",
         "success": "/audio/success/o/pot.mp3",
-        "error": "/audio/error/o.mp3"
+        "error": "/audio/error/o.mp3",
+        "learn": "/audio/learn/o/pot.mp3",
+        "quiz": "/audio/quiz/o/pot.mp3",
+        "successes": [
+          "/audio/success/o/pot-well-done.mp3",
+          "/audio/success/o/pot-perfect.mp3",
+          "/audio/success/o/pot-exactly.mp3",
+          "/audio/success/o/pot-yes.mp3"
+        ]
       },
-      "speakWord": "pot"
+      "speakWord": "pot",
+      "speak": {
+        "learn": "This is a pot.",
+        "quiz": "Which one is the pot?",
+        "success": [
+          "Well done. This is the pot.",
+          "Perfect. This is the pot.",
+          "Exactly. This is the pot.",
+          "Yes. This is the pot."
+        ]
+      }
     },
     {
       "id": "box",
@@ -742,9 +1390,27 @@
         "phoneme": "/audio/phoneme/o.mp3",
         "question": "/audio/question/o.mp3",
         "success": "/audio/success/o/box.mp3",
-        "error": "/audio/error/o.mp3"
+        "error": "/audio/error/o.mp3",
+        "learn": "/audio/learn/o/box.mp3",
+        "quiz": "/audio/quiz/o/box.mp3",
+        "successes": [
+          "/audio/success/o/box-well-done.mp3",
+          "/audio/success/o/box-perfect.mp3",
+          "/audio/success/o/box-exactly.mp3",
+          "/audio/success/o/box-yes.mp3"
+        ]
       },
-      "speakWord": "box"
+      "speakWord": "box",
+      "speak": {
+        "learn": "This is a box.",
+        "quiz": "Which one is the box?",
+        "success": [
+          "Well done. This is the box.",
+          "Perfect. This is the box.",
+          "Exactly. This is the box.",
+          "Yes. This is the box."
+        ]
+      }
     },
     {
       "id": "fox",
@@ -762,9 +1428,27 @@
         "phoneme": "/audio/phoneme/o.mp3",
         "question": "/audio/question/o.mp3",
         "success": "/audio/success/o/fox.mp3",
-        "error": "/audio/error/o.mp3"
+        "error": "/audio/error/o.mp3",
+        "learn": "/audio/learn/o/fox.mp3",
+        "quiz": "/audio/quiz/o/fox.mp3",
+        "successes": [
+          "/audio/success/o/fox-well-done.mp3",
+          "/audio/success/o/fox-perfect.mp3",
+          "/audio/success/o/fox-exactly.mp3",
+          "/audio/success/o/fox-yes.mp3"
+        ]
       },
-      "speakWord": "fox"
+      "speakWord": "fox",
+      "speak": {
+        "learn": "This is a fox.",
+        "quiz": "Which one is the fox?",
+        "success": [
+          "Well done. This is the fox.",
+          "Perfect. This is the fox.",
+          "Exactly. This is the fox.",
+          "Yes. This is the fox."
+        ]
+      }
     },
     {
       "id": "mop",
@@ -782,9 +1466,27 @@
         "phoneme": "/audio/phoneme/o.mp3",
         "question": "/audio/question/o.mp3",
         "success": "/audio/success/o/mop.mp3",
-        "error": "/audio/error/o.mp3"
+        "error": "/audio/error/o.mp3",
+        "learn": "/audio/learn/o/mop.mp3",
+        "quiz": "/audio/quiz/o/mop.mp3",
+        "successes": [
+          "/audio/success/o/mop-well-done.mp3",
+          "/audio/success/o/mop-perfect.mp3",
+          "/audio/success/o/mop-exactly.mp3",
+          "/audio/success/o/mop-yes.mp3"
+        ]
       },
-      "speakWord": "mop"
+      "speakWord": "mop",
+      "speak": {
+        "learn": "This is a mop.",
+        "quiz": "Which one is the mop?",
+        "success": [
+          "Well done. This is the mop.",
+          "Perfect. This is the mop.",
+          "Exactly. This is the mop.",
+          "Yes. This is the mop."
+        ]
+      }
     },
     {
       "id": "job",
@@ -802,9 +1504,27 @@
         "phoneme": "/audio/phoneme/o.mp3",
         "question": "/audio/question/o.mp3",
         "success": "/audio/success/o/job.mp3",
-        "error": "/audio/error/o.mp3"
+        "error": "/audio/error/o.mp3",
+        "learn": "/audio/learn/o/job.mp3",
+        "quiz": "/audio/quiz/o/job.mp3",
+        "successes": [
+          "/audio/success/o/job-well-done.mp3",
+          "/audio/success/o/job-perfect.mp3",
+          "/audio/success/o/job-exactly.mp3",
+          "/audio/success/o/job-yes.mp3"
+        ]
       },
-      "speakWord": "job"
+      "speakWord": "job",
+      "speak": {
+        "learn": "This is a job.",
+        "quiz": "Which one is the job?",
+        "success": [
+          "Well done. This is the job.",
+          "Perfect. This is the job.",
+          "Exactly. This is the job.",
+          "Yes. This is the job."
+        ]
+      }
     }
   ],
   "u": [
@@ -824,9 +1544,27 @@
         "phoneme": "/audio/phoneme/u.mp3",
         "question": "/audio/question/u.mp3",
         "success": "/audio/success/u/sun.mp3",
-        "error": "/audio/error/u.mp3"
+        "error": "/audio/error/u.mp3",
+        "learn": "/audio/learn/u/sun.mp3",
+        "quiz": "/audio/quiz/u/sun.mp3",
+        "successes": [
+          "/audio/success/u/sun-well-done.mp3",
+          "/audio/success/u/sun-perfect.mp3",
+          "/audio/success/u/sun-exactly.mp3",
+          "/audio/success/u/sun-yes.mp3"
+        ]
       },
-      "speakWord": "sun"
+      "speakWord": "sun",
+      "speak": {
+        "learn": "This is a sun.",
+        "quiz": "Which one is the sun?",
+        "success": [
+          "Well done. This is the sun.",
+          "Perfect. This is the sun.",
+          "Exactly. This is the sun.",
+          "Yes. This is the sun."
+        ]
+      }
     },
     {
       "id": "run",
@@ -844,9 +1582,27 @@
         "phoneme": "/audio/phoneme/u.mp3",
         "question": "/audio/question/u.mp3",
         "success": "/audio/success/u/run.mp3",
-        "error": "/audio/error/u.mp3"
+        "error": "/audio/error/u.mp3",
+        "learn": "/audio/learn/u/run.mp3",
+        "quiz": "/audio/quiz/u/run.mp3",
+        "successes": [
+          "/audio/success/u/run-well-done.mp3",
+          "/audio/success/u/run-perfect.mp3",
+          "/audio/success/u/run-exactly.mp3",
+          "/audio/success/u/run-yes.mp3"
+        ]
       },
-      "speakWord": "run"
+      "speakWord": "run",
+      "speak": {
+        "learn": "This is a run.",
+        "quiz": "Which one is the run?",
+        "success": [
+          "Well done. This is the run.",
+          "Perfect. This is the run.",
+          "Exactly. This is the run.",
+          "Yes. This is the run."
+        ]
+      }
     },
     {
       "id": "bun",
@@ -864,9 +1620,27 @@
         "phoneme": "/audio/phoneme/u.mp3",
         "question": "/audio/question/u.mp3",
         "success": "/audio/success/u/bun.mp3",
-        "error": "/audio/error/u.mp3"
+        "error": "/audio/error/u.mp3",
+        "learn": "/audio/learn/u/bun.mp3",
+        "quiz": "/audio/quiz/u/bun.mp3",
+        "successes": [
+          "/audio/success/u/bun-well-done.mp3",
+          "/audio/success/u/bun-perfect.mp3",
+          "/audio/success/u/bun-exactly.mp3",
+          "/audio/success/u/bun-yes.mp3"
+        ]
       },
-      "speakWord": "bun"
+      "speakWord": "bun",
+      "speak": {
+        "learn": "This is a bun.",
+        "quiz": "Which one is the bun?",
+        "success": [
+          "Well done. This is the bun.",
+          "Perfect. This is the bun.",
+          "Exactly. This is the bun.",
+          "Yes. This is the bun."
+        ]
+      }
     },
     {
       "id": "cup",
@@ -884,9 +1658,27 @@
         "phoneme": "/audio/phoneme/u.mp3",
         "question": "/audio/question/u.mp3",
         "success": "/audio/success/u/cup.mp3",
-        "error": "/audio/error/u.mp3"
+        "error": "/audio/error/u.mp3",
+        "learn": "/audio/learn/u/cup.mp3",
+        "quiz": "/audio/quiz/u/cup.mp3",
+        "successes": [
+          "/audio/success/u/cup-well-done.mp3",
+          "/audio/success/u/cup-perfect.mp3",
+          "/audio/success/u/cup-exactly.mp3",
+          "/audio/success/u/cup-yes.mp3"
+        ]
       },
-      "speakWord": "cup"
+      "speakWord": "cup",
+      "speak": {
+        "learn": "This is a cup.",
+        "quiz": "Which one is the cup?",
+        "success": [
+          "Well done. This is the cup.",
+          "Perfect. This is the cup.",
+          "Exactly. This is the cup.",
+          "Yes. This is the cup."
+        ]
+      }
     },
     {
       "id": "bus",
@@ -904,9 +1696,27 @@
         "phoneme": "/audio/phoneme/u.mp3",
         "question": "/audio/question/u.mp3",
         "success": "/audio/success/u/bus.mp3",
-        "error": "/audio/error/u.mp3"
+        "error": "/audio/error/u.mp3",
+        "learn": "/audio/learn/u/bus.mp3",
+        "quiz": "/audio/quiz/u/bus.mp3",
+        "successes": [
+          "/audio/success/u/bus-well-done.mp3",
+          "/audio/success/u/bus-perfect.mp3",
+          "/audio/success/u/bus-exactly.mp3",
+          "/audio/success/u/bus-yes.mp3"
+        ]
       },
-      "speakWord": "bus"
+      "speakWord": "bus",
+      "speak": {
+        "learn": "This is a bus.",
+        "quiz": "Which one is the bus?",
+        "success": [
+          "Well done. This is the bus.",
+          "Perfect. This is the bus.",
+          "Exactly. This is the bus.",
+          "Yes. This is the bus."
+        ]
+      }
     },
     {
       "id": "hug",
@@ -924,9 +1734,27 @@
         "phoneme": "/audio/phoneme/u.mp3",
         "question": "/audio/question/u.mp3",
         "success": "/audio/success/u/hug.mp3",
-        "error": "/audio/error/u.mp3"
+        "error": "/audio/error/u.mp3",
+        "learn": "/audio/learn/u/hug.mp3",
+        "quiz": "/audio/quiz/u/hug.mp3",
+        "successes": [
+          "/audio/success/u/hug-well-done.mp3",
+          "/audio/success/u/hug-perfect.mp3",
+          "/audio/success/u/hug-exactly.mp3",
+          "/audio/success/u/hug-yes.mp3"
+        ]
       },
-      "speakWord": "hug"
+      "speakWord": "hug",
+      "speak": {
+        "learn": "This is a hug.",
+        "quiz": "Which one is the hug?",
+        "success": [
+          "Well done. This is the hug.",
+          "Perfect. This is the hug.",
+          "Exactly. This is the hug.",
+          "Yes. This is the hug."
+        ]
+      }
     },
     {
       "id": "mud",
@@ -944,9 +1772,27 @@
         "phoneme": "/audio/phoneme/u.mp3",
         "question": "/audio/question/u.mp3",
         "success": "/audio/success/u/mud.mp3",
-        "error": "/audio/error/u.mp3"
+        "error": "/audio/error/u.mp3",
+        "learn": "/audio/learn/u/mud.mp3",
+        "quiz": "/audio/quiz/u/mud.mp3",
+        "successes": [
+          "/audio/success/u/mud-well-done.mp3",
+          "/audio/success/u/mud-perfect.mp3",
+          "/audio/success/u/mud-exactly.mp3",
+          "/audio/success/u/mud-yes.mp3"
+        ]
       },
-      "speakWord": "mud"
+      "speakWord": "mud",
+      "speak": {
+        "learn": "This is a mud.",
+        "quiz": "Which one is the mud?",
+        "success": [
+          "Well done. This is the mud.",
+          "Perfect. This is the mud.",
+          "Exactly. This is the mud.",
+          "Yes. This is the mud."
+        ]
+      }
     },
     {
       "id": "tub",
@@ -964,9 +1810,27 @@
         "phoneme": "/audio/phoneme/u.mp3",
         "question": "/audio/question/u.mp3",
         "success": "/audio/success/u/tub.mp3",
-        "error": "/audio/error/u.mp3"
+        "error": "/audio/error/u.mp3",
+        "learn": "/audio/learn/u/tub.mp3",
+        "quiz": "/audio/quiz/u/tub.mp3",
+        "successes": [
+          "/audio/success/u/tub-well-done.mp3",
+          "/audio/success/u/tub-perfect.mp3",
+          "/audio/success/u/tub-exactly.mp3",
+          "/audio/success/u/tub-yes.mp3"
+        ]
       },
-      "speakWord": "tub"
+      "speakWord": "tub",
+      "speak": {
+        "learn": "This is a tub.",
+        "quiz": "Which one is the tub?",
+        "success": [
+          "Well done. This is the tub.",
+          "Perfect. This is the tub.",
+          "Exactly. This is the tub.",
+          "Yes. This is the tub."
+        ]
+      }
     },
     {
       "id": "gum",
@@ -984,9 +1848,27 @@
         "phoneme": "/audio/phoneme/u.mp3",
         "question": "/audio/question/u.mp3",
         "success": "/audio/success/u/gum.mp3",
-        "error": "/audio/error/u.mp3"
+        "error": "/audio/error/u.mp3",
+        "learn": "/audio/learn/u/gum.mp3",
+        "quiz": "/audio/quiz/u/gum.mp3",
+        "successes": [
+          "/audio/success/u/gum-well-done.mp3",
+          "/audio/success/u/gum-perfect.mp3",
+          "/audio/success/u/gum-exactly.mp3",
+          "/audio/success/u/gum-yes.mp3"
+        ]
       },
-      "speakWord": "gum"
+      "speakWord": "gum",
+      "speak": {
+        "learn": "This is a gum.",
+        "quiz": "Which one is the gum?",
+        "success": [
+          "Well done. This is the gum.",
+          "Perfect. This is the gum.",
+          "Exactly. This is the gum.",
+          "Yes. This is the gum."
+        ]
+      }
     },
     {
       "id": "pup",
@@ -1004,9 +1886,27 @@
         "phoneme": "/audio/phoneme/u.mp3",
         "question": "/audio/question/u.mp3",
         "success": "/audio/success/u/pup.mp3",
-        "error": "/audio/error/u.mp3"
+        "error": "/audio/error/u.mp3",
+        "learn": "/audio/learn/u/pup.mp3",
+        "quiz": "/audio/quiz/u/pup.mp3",
+        "successes": [
+          "/audio/success/u/pup-well-done.mp3",
+          "/audio/success/u/pup-perfect.mp3",
+          "/audio/success/u/pup-exactly.mp3",
+          "/audio/success/u/pup-yes.mp3"
+        ]
       },
-      "speakWord": "pup"
+      "speakWord": "pup",
+      "speak": {
+        "learn": "This is a pup.",
+        "quiz": "Which one is the pup?",
+        "success": [
+          "Well done. This is the pup.",
+          "Perfect. This is the pup.",
+          "Exactly. This is the pup.",
+          "Yes. This is the pup."
+        ]
+      }
     }
   ]
 }

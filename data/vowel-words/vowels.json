@@ -6,7 +6,11 @@
     "label": "Short A",
     "example": "cat",
     "image": "/images/vowels/a.svg",
+    "audio": {
+      "welcome": "/audio/welcome/a.mp3"
+    },
     "speak": {
+      "welcome": "Welcome to A vowel practice. Let's learn 10 A vowel words.",
       "phoneme": "a as in apple",
       "question": "Which word has the short a sound?"
     }
@@ -18,7 +22,11 @@
     "label": "Short E",
     "example": "bed",
     "image": "/images/vowels/e.svg",
+    "audio": {
+      "welcome": "/audio/welcome/e.mp3"
+    },
     "speak": {
+      "welcome": "Welcome to E vowel practice. Let's learn 10 E vowel words.",
       "phoneme": "e as in elephant",
       "question": "Which word has the short e sound?"
     }
@@ -30,7 +38,11 @@
     "label": "Short I",
     "example": "sit",
     "image": "/images/vowels/i.svg",
+    "audio": {
+      "welcome": "/audio/welcome/i.mp3"
+    },
     "speak": {
+      "welcome": "Welcome to I vowel practice. Let's learn 10 I vowel words.",
       "phoneme": "i as in igloo",
       "question": "Which word has the short i sound?"
     }
@@ -42,7 +54,11 @@
     "label": "Short O",
     "example": "hop",
     "image": "/images/vowels/o.svg",
+    "audio": {
+      "welcome": "/audio/welcome/o.mp3"
+    },
     "speak": {
+      "welcome": "Welcome to O vowel practice. Let's learn 10 O vowel words.",
       "phoneme": "o as in octopus",
       "question": "Which word has the short o sound?"
     }
@@ -54,7 +70,11 @@
     "label": "Short U",
     "example": "sun",
     "image": "/images/vowels/u.svg",
+    "audio": {
+      "welcome": "/audio/welcome/u.mp3"
+    },
     "speak": {
+      "welcome": "Welcome to U vowel practice. Let's learn 10 U vowel words.",
       "phoneme": "u as in umbrella",
       "question": "Which word has the short u sound?"
     }

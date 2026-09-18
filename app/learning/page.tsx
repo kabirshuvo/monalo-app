@@ -6,7 +6,7 @@ import ActivityTracker from '@/components/points/ActivityTracker'
 export const metadata: Metadata = {
   title: 'Eco Penguin · MonAlo',
   description:
-    'Eco Penguin — kids early reading: letter sounds, pictures, vowels, digraphs, and spelling',
+    'Eco Penguin — kids early reading: letter sounds, blending, pictures, vowels, digraphs, and spelling',
 }
 
 const GAMES: LearningGameCard[] = [
@@ -15,8 +15,26 @@ const GAMES: LearningGameCard[] = [
     title: 'Letter sounds',
     blurb: 'S for sun — hear the word, then copy the sound. Built for kids learning English.',
     href: '/learning/letter-sounds',
-    accent: 'from-lime-400 to-emerald-500',
+    accent: 'from-sky-300 to-blue-700',
     badge: 'Sounds',
+    live: true,
+  },
+  {
+    id: 'balloon-letters',
+    title: 'Balloon letters',
+    blurb: 'Hear a letter, then tap the matching balloon as it floats up.',
+    href: '/learning/balloon-letters',
+    accent: 'from-pink-300 to-sky-500',
+    badge: 'Catch',
+    live: true,
+  },
+  {
+    id: 'blend-the-word',
+    title: 'Blend the word',
+    blurb: 'Hear c, a, t, then the word. Tap the picture that matches.',
+    href: '/learning/blend-the-word',
+    accent: 'from-cyan-300 to-cyan-600',
+    badge: 'Blend',
     live: true,
   },
   {
@@ -24,7 +42,7 @@ const GAMES: LearningGameCard[] = [
     title: 'Explore',
     blurb: 'Tap pictures, hear names, then play Which Is listening games.',
     href: '/learning/ecopenguin',
-    accent: 'from-teal-400 to-emerald-500',
+    accent: 'from-emerald-300 to-teal-600',
     badge: 'Pictures',
     live: true,
   },
@@ -33,7 +51,7 @@ const GAMES: LearningGameCard[] = [
     title: 'Vowel Words',
     blurb: 'Short A E I O U — learn CVC words, then listen for the vowel.',
     href: '/learning/vowel-words',
-    accent: 'from-violet-400 to-fuchsia-500',
+    accent: 'from-amber-200 to-amber-600',
     badge: 'Vowels',
     live: true,
   },
@@ -42,7 +60,7 @@ const GAMES: LearningGameCard[] = [
     title: 'Digraphs',
     blurb: 'sh, ch, th, wh — hear the team letters and pick the word.',
     href: '/learning/digraphs',
-    accent: 'from-amber-400 to-orange-500',
+    accent: 'from-orange-300 to-orange-700',
     badge: 'Teams',
     live: true,
   },
@@ -51,7 +69,7 @@ const GAMES: LearningGameCard[] = [
     title: 'Build the word',
     blurb: 'Hear a word, then tap letters to spell it yourself.',
     href: '/learning/build-the-word',
-    accent: 'from-sky-400 to-indigo-500',
+    accent: 'from-rose-300 to-red-700',
     badge: 'Spell',
     live: true,
   },

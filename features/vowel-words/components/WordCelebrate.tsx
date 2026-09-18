@@ -60,9 +60,14 @@ export default function WordCelebrate({
   useEffect(() => {
     if (!showConfetti) return
     stopVowelWordsAudio()
-    playVowelWordsAudio(word.audio.success, { fallbackText: `Great! ${word.speakWord}` })
+    const choices = word.audio.successes.length > 0 ? word.audio.successes : [word.audio.success]
+    const lines = word.speak.success.length > 0 ? word.speak.success : [`Well done. This is the ${word.speakWord}.`]
+    const index = Math.floor(Math.random() * choices.length)
+    playVowelWordsAudio(choices[index] ?? choices[0], {
+      fallbackText: lines[index] ?? lines[0],
+    })
     return () => stopVowelWordsAudio()
-  }, [showConfetti, word.audio.success, word.speakWord])
+  }, [showConfetti, word.audio.success, word.audio.successes, word.speak.success, word.speakWord])
 
   useEffect(() => {
     if (!showConfetti) return
@@ -109,12 +114,12 @@ export default function WordCelebrate({
         </div>
       )}
       {pointsAwarded !== null && (
-        <p className="rounded-full bg-gradient-to-r from-amber-200 to-yellow-200 px-5 py-2 text-sm font-extrabold text-amber-950 shadow-sm">
+        <p className="rounded-full bg-gradient-to-r from-amber-200 to-yellow-200 px-5 py-2 text-sm font-extrabold text-[#fafaf9] shadow-sm">
           +{pointsAwarded} points!
         </p>
       )}
       {alreadyMastered && (
-        <p className="rounded-full bg-violet-100 px-5 py-2 text-sm font-extrabold text-violet-900 shadow-sm">
+        <p className="rounded-full bg-violet-400/20 px-5 py-2 text-sm font-extrabold text-amber-200 shadow-sm">
           You&apos;ve got this one!
         </p>
       )}
@@ -126,17 +131,17 @@ export default function WordCelebrate({
           sizes="320px"
           priority
         />
-        <p className="mt-3 text-xs font-bold uppercase tracking-widest text-fuchsia-700">
+        <p className="mt-3 text-xs font-bold uppercase tracking-widest text-amber-300">
           Great job!
         </p>
-        <h2 className="mt-3 text-4xl font-extrabold tracking-wide text-violet-950 sm:text-5xl">
+        <h2 className="mt-3 text-4xl font-extrabold tracking-wide text-[#fafaf9] sm:text-5xl">
           <VowelHighlight graphemes={word.graphemes} vowelLetter={vowel.letter} />
         </h2>
-        <p className="mt-2 text-sm text-violet-800/80">
+        <p className="mt-2 text-sm text-[#d6d3d1]">
           Short {vowel.letter} · {vowel.phoneme}
         </p>
       </div>
-      <p className="text-sm font-bold text-violet-800">Back to the listening game…</p>
+      <p className="text-sm font-bold text-amber-200">Back to the listening game…</p>
     </div>
   )
 }

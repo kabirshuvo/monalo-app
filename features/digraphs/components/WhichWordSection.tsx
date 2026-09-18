@@ -82,8 +82,8 @@ export default function WhichWordSection({
 
       <div className="mb-4 flex flex-col items-center gap-3">
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className={`${digraphTheme.pill} bg-orange-100 text-orange-900`}>Play</span>
-          <h3 className="text-lg font-extrabold text-amber-950 sm:text-xl">
+          <span className={`${digraphTheme.pill} bg-orange-400/20 text-orange-200`}>Play</span>
+          <h3 className="text-lg font-extrabold text-[#fafaf9] sm:text-xl">
             Which word has {digraph.phoneme}?
           </h3>
         </div>
@@ -111,16 +111,16 @@ export default function WhichWordSection({
 
         {showWord && targetMeta ? (
           <span
-            className={`rounded-2xl bg-gradient-to-r ${accent} px-4 py-1.5 text-lg font-extrabold text-white shadow-sm sm:text-xl`}
+            className={`rounded-2xl bg-gradient-to-r ${accent} px-4 py-1.5 text-lg font-extrabold text-[#fafaf9] shadow-sm sm:text-xl`}
           >
             <DigraphHighlight
               graphemes={targetMeta.graphemes}
               digraph={digraph.digraph}
-              className="text-white"
+              className="text-[#fafaf9]"
             />
           </span>
         ) : (
-          <p className="text-sm font-semibold text-amber-800/80">
+          <p className="text-sm font-semibold text-[#d6d3d1]">
             Listen for the digraph, then tap the matching word
           </p>
         )}
@@ -150,7 +150,7 @@ export default function WhichWordSection({
                   ? 'animate-pulse border-rose-400 bg-rose-50'
                   : isWrong
                     ? 'border-rose-200 bg-rose-50/70 opacity-50'
-                    : 'border-transparent bg-amber-50/80 hover:border-amber-400 hover:shadow-md'
+                    : 'border-transparent bg-[#fafaf9]/10 hover:border-orange-400/70 hover:shadow-md'
               }`}
             >
               <DigraphPicture
@@ -165,7 +165,7 @@ export default function WhichWordSection({
           )
         })}
       </div>
-      <p className="mt-4 text-center text-xs font-medium text-amber-800/75 sm:text-sm">
+      <p className="mt-4 text-center text-xs font-medium text-orange-200/75 sm:text-sm">
         Wrong answers stay dimmed so you can try again
       </p>
     </section>

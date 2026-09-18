@@ -14,8 +14,8 @@ export default function LetterSoundsError({
   return (
     <div className={letterSoundsTheme.shell}>
       <div className="mx-auto flex min-h-[50vh] max-w-lg flex-col items-center justify-center gap-4 px-4 py-16 text-center">
-        <h2 className="text-2xl font-extrabold text-emerald-950">Something went wrong</h2>
-        <p className="text-sm text-emerald-800/85">
+        <h2 className="text-2xl font-extrabold text-[#fafaf9]">Something went wrong</h2>
+        <p className="text-sm text-[#d6d3d1]">
           Letter sounds hit a snag. Try again or head back to Eco Penguin.
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">

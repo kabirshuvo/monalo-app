@@ -41,13 +41,13 @@ export default async function EcoPenguinCategoryPage({ params, searchParams }: P
           <p className="text-4xl" aria-hidden>
             🐧
           </p>
-          <p className="text-lg font-extrabold text-sky-950">No words here yet</p>
-          <p className="text-sm text-sky-800/80">Try another category from the hub.</p>
+          <p className="text-lg font-extrabold text-[#fafaf9]">No words here yet</p>
+          <p className="text-sm text-[#d6d3d1]">Try another category from the hub.</p>
         </div>
       ) : (
         <Suspense
           fallback={
-            <p className={`${ecoTheme.cardSoft} py-12 text-center font-semibold text-sky-800`}>
+            <p className={`${ecoTheme.cardSoft} py-12 text-center font-semibold text-[#d6d3d1]`}>
               Loading game…
             </p>
           }

@@ -7,8 +7,8 @@ export default function EcoPenguinLoading() {
         <p className="animate-eco-pop text-5xl" aria-hidden>
           🐧
         </p>
-        <p className="text-lg font-extrabold text-sky-950">Loading Explore…</p>
-        <p className="text-sm text-sky-800/80">Getting your words ready</p>
+        <p className="text-lg font-extrabold text-[#fafaf9]">Loading Explore…</p>
+        <p className="text-sm text-[#d6d3d1]">Getting your words ready</p>
       </div>
     </div>
   )

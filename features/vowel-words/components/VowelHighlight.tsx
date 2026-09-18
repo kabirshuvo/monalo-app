@@ -19,7 +19,7 @@ export function VowelHighlight({
             key={`${g}-${i}`}
             className={
               isVowel
-                ? 'mx-0.5 rounded-lg bg-gradient-to-b from-amber-300 to-orange-400 px-1.5 text-white shadow-sm'
+                ? 'mx-0.5 rounded-lg bg-gradient-to-b from-amber-300 to-orange-400 px-1.5 text-[#fafaf9] shadow-sm'
                 : 'text-inherit'
             }
           >

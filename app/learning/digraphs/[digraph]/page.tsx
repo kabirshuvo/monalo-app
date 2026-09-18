@@ -34,13 +34,13 @@ export default async function DigraphSessionPage({ params, searchParams }: PageP
     <DigraphsShell title={digraph.label} backHref={DIGRAPHS_BASE_PATH}>
       {words.length === 0 ? (
         <div className={`${digraphTheme.cardSoft} space-y-2 py-12 text-center`}>
-          <p className="text-lg font-extrabold text-amber-950">No words yet</p>
-          <p className="text-sm text-amber-800/80">Try another digraph from the hub.</p>
+          <p className="text-lg font-extrabold text-[#fafaf9]">No words yet</p>
+          <p className="text-sm text-[#d6d3d1]">Try another digraph from the hub.</p>
         </div>
       ) : (
         <Suspense
           fallback={
-            <p className={`${digraphTheme.cardSoft} py-12 text-center font-semibold text-amber-800`}>
+            <p className={`${digraphTheme.cardSoft} py-12 text-center font-semibold text-orange-200`}>
               Loading game…
             </p>
           }

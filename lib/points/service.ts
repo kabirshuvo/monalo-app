@@ -9,6 +9,8 @@ import {
   pointsForDigraphsCorrect,
   pointsForBuildWordCorrect,
   pointsForLetterSoundsCorrect,
+  pointsForBlendWordCorrect,
+  pointsForBalloonLettersCorrect,
   pointsFromBlogMinutes,
   pointsFromLearningMinutes,
   pointsFromPurchaseTaka,
@@ -494,6 +496,82 @@ export async function getLetterSoundsMastery(userId: string): Promise<LetterSoun
     const ref = event.referenceId
     if (!ref) continue
     const letterId = ref.slice('letter-sounds:'.length)
+    if (letterId) masteredKeys.push(letterId)
+  }
+  return { masteredKeys }
+}
+
+/** Award points for a first-time correct blend-the-word answer. */
+export async function awardBlendWordCorrect(
+  userId: string,
+  wordId: string,
+  word: string
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForBlendWordCorrect(),
+    description: `Blend the word: ${word}`,
+    referenceId: `blend-word:${wordId}`,
+  })
+}
+
+export type BlendWordMastery = {
+  masteredKeys: string[]
+}
+
+export async function getBlendWordMastery(userId: string): Promise<BlendWordMastery> {
+  const events = await prisma.pointEvent.findMany({
+    where: {
+      userId,
+      category: 'LEARNING',
+      referenceId: { startsWith: 'blend-word:' },
+    },
+    select: { referenceId: true },
+  })
+
+  const masteredKeys: string[] = []
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const wordId = ref.slice('blend-word:'.length)
+    if (wordId) masteredKeys.push(wordId)
+  }
+  return { masteredKeys }
+}
+
+/** Award points for a first-time correct balloon-letters catch. */
+export async function awardBalloonLettersCorrect(
+  userId: string,
+  letterId: string,
+  letter: string
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForBalloonLettersCorrect(),
+    description: `Balloon letters: ${letter}`,
+    referenceId: `balloon-letters:${letterId}`,
+  })
+}
+
+export type BalloonLettersMastery = {
+  masteredKeys: string[]
+}
+
+export async function getBalloonLettersMastery(userId: string): Promise<BalloonLettersMastery> {
+  const events = await prisma.pointEvent.findMany({
+    where: {
+      userId,
+      category: 'LEARNING',
+      referenceId: { startsWith: 'balloon-letters:' },
+    },
+    select: { referenceId: true },
+  })
+
+  const masteredKeys: string[] = []
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const letterId = ref.slice('balloon-letters:'.length)
     if (letterId) masteredKeys.push(letterId)
   }
   return { masteredKeys }

@@ -34,13 +34,13 @@ export default async function VowelSessionPage({ params, searchParams }: PagePro
     <VowelWordsShell title={vowel.label} backHref={VOWEL_WORDS_BASE_PATH}>
       {words.length === 0 ? (
         <div className={`${vowelTheme.cardSoft} space-y-2 py-12 text-center`}>
-          <p className="text-lg font-extrabold text-violet-950">No words yet</p>
-          <p className="text-sm text-violet-800/80">Try another vowel from the hub.</p>
+          <p className="text-lg font-extrabold text-[#fafaf9]">No words yet</p>
+          <p className="text-sm text-[#d6d3d1]">Try another vowel from the hub.</p>
         </div>
       ) : (
         <Suspense
           fallback={
-            <p className={`${vowelTheme.cardSoft} py-12 text-center font-semibold text-violet-800`}>
+            <p className={`${vowelTheme.cardSoft} py-12 text-center font-semibold text-amber-200`}>
               Loading game…
             </p>
           }
