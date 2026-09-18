@@ -40,28 +40,32 @@ export async function POST(request: Request) {
     const progress = computePhonicsProgress(mastery.masteredKeys)
 
     let stickerAwarded = false
+    let alreadyHadSticker = false
     let stickerPoints = 0
     let stickerId: string | null = null
     let stickerLabel: string | null = null
     let stickerEmoji: string | null = null
     let nextGroupId: PhonicsGroupId | null = null
     let completedGroupId: PhonicsGroupId | null = null
+    let groupComplete = false
 
     const groupId = letter.group
     if (isPhonicsGroupId(groupId) && isGroupComplete(groupId, mastery.masteredKeys)) {
+      groupComplete = true
+      completedGroupId = groupId
       const sticker = getStickerForGroup(groupId)
       if (sticker) {
         const gift = await awardPhonicsGroupSticker(session.user.id, sticker.id, sticker.label)
         stickerAwarded = gift.awarded
-        stickerPoints = gift.points
+        alreadyHadSticker = !gift.awarded
+        stickerPoints = gift.awarded ? gift.points : 0
         stickerId = sticker.id
         stickerLabel = sticker.label
         stickerEmoji = sticker.emoji
-        completedGroupId = groupId
-        const after = computePhonicsProgress(mastery.masteredKeys)
-        nextGroupId =
-          after.unlockedGroupIds.find((id) => !after.completedGroupIds.includes(id)) ?? null
       }
+      const after = computePhonicsProgress(mastery.masteredKeys)
+      nextGroupId =
+        after.unlockedGroupIds.find((id) => !after.completedGroupIds.includes(id)) ?? null
     }
 
     const breakdown = await getPointsBreakdown(session.user.id)
@@ -76,7 +80,9 @@ export async function POST(request: Request) {
       alreadyMastered: !result.awarded,
       breakdown,
       progress,
+      groupComplete,
       stickerAwarded,
+      alreadyHadSticker,
       stickerPoints,
       stickerId,
       stickerLabel,

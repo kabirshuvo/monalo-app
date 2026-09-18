@@ -4,12 +4,15 @@ export const ECO_PENGUIN_APP_NAME = 'Eco Penguin'
 
 export type LearningGameId =
   | 'letter-sounds'
+  | 'which-sound'
   | 'balloon-letters'
   | 'blend-the-word'
+  | 'segment-the-word'
   | 'ecopenguin'
   | 'vowel-words'
   | 'digraphs'
   | 'build-the-word'
+  | 'read-a-story'
 
 export type LearningGameCard = {
   id: LearningGameId
@@ -19,6 +22,6 @@ export type LearningGameCard = {
   accent: string
   badge: string
   live: boolean
-  /** Soft path order 1–7 on the hub. */
+  /** Soft path order on the hub. */
   step: number
 }

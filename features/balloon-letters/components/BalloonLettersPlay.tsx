@@ -59,6 +59,8 @@ type StickerGift = {
   sticker: PhonicsSticker
   points: number
   nextGroupId: PhonicsGroupId | null
+  /** Fresh gift vs set already cleared earlier */
+  fresh: boolean
 }
 
 function shuffle<T>(items: T[]): T[] {
@@ -128,6 +130,9 @@ export default function BalloonLettersPlay({
   )
 
   const groupLetterIds = PHONICS_GROUP_LETTER_IDS[activeGroupId]
+  const caughtInSet = groupLetterIds.filter((id) => mastered.has(id)).length
+  const setTotal = groupLetterIds.length
+  const setRemaining = Math.max(0, setTotal - caughtInSet)
 
   const pickNext = useCallback(
     (excludeId?: string) => {
@@ -293,11 +298,43 @@ export default function BalloonLettersPlay({
     const nextHeard = heard.includes(target.id) ? heard : [...heard, target.id]
     setHeard(nextHeard)
 
+    const alreadyCompleteBefore = computePhonicsProgress(mastered).completedGroupIds.includes(
+      activeGroupId
+    )
+    const masteredNow = new Set(mastered)
+    masteredNow.add(target.id)
+    const localProgress = computePhonicsProgress(masteredNow)
+    const justFinishedSet =
+      !alreadyCompleteBefore && localProgress.completedGroupIds.includes(activeGroupId)
+
+    const showSetComplete = (
+      sticker: PhonicsSticker,
+      nextGroupId: PhonicsGroupId | null,
+      points: number,
+      fresh: boolean
+    ) => {
+      window.setTimeout(() => {
+        setStickerGift({ sticker, points, nextGroupId, fresh })
+        setGuideOverride({
+          tipId: `sticker-${sticker.id}-${fresh ? 'new' : 'again'}`,
+          message: fresh
+            ? nextGroupId
+              ? `You earned the ${sticker.label}! Next set unlocked: ${groupLabel(nextGroupId)}.`
+              : `You earned the ${sticker.label}! You finished every letter set.`
+            : nextGroupId
+              ? `Set complete! Next up: ${groupLabel(nextGroupId)}.`
+              : `Set complete! You finished every letter set.`,
+        })
+      }, 900)
+    }
+
     void api
       .post<{
         awarded?: boolean
         points?: number
+        groupComplete?: boolean
         stickerAwarded?: boolean
+        alreadyHadSticker?: boolean
         stickerPoints?: number
         stickerId?: string | null
         stickerLabel?: string | null
@@ -314,57 +351,29 @@ export default function BalloonLettersPlay({
           return { ...prev, points: null, already: true }
         })
 
-        if (res.stickerAwarded && res.stickerId) {
+        const finishedSet = justFinishedSet || Boolean(res.stickerAwarded)
+        if (finishedSet) {
           const catalog = getStickerForGroup(activeGroupId)
           const sticker: PhonicsSticker = catalog ?? {
             groupId: activeGroupId,
-            id: res.stickerId,
-            label: res.stickerLabel ?? 'Sticker',
+            id: res.stickerId ?? activeGroupId,
+            label: res.stickerLabel ?? `${groupLabel(activeGroupId)} sticker`,
             emoji: res.stickerEmoji ?? '🎁',
-            referenceId: `sticker:${res.stickerId}`,
+            referenceId: `sticker:${res.stickerId ?? activeGroupId}`,
           }
           const rawNext = res.nextGroupId
           const nextGroupId: PhonicsGroupId | null =
-            rawNext && isPhonicsGroupId(rawNext) ? rawNext : null
-          window.setTimeout(() => {
-            setStickerGift({
-              sticker,
-              points: res.stickerPoints ?? 5,
-              nextGroupId,
-            })
-            setGuideOverride({
-              tipId: `sticker-${sticker.id}`,
-              message: nextGroupId
-                ? `You earned the ${sticker.label}! Next set unlocked: ${groupLabel(nextGroupId)}.`
-                : `You earned the ${sticker.label}! You finished every letter set.`,
-            })
-          }, 900)
-          return
-        }
-
-        const masteredNow = new Set(mastered)
-        masteredNow.add(target.id)
-        const progress = computePhonicsProgress(masteredNow)
-        const groupDone = progress.completedGroupIds.includes(activeGroupId)
-        if (groupDone && !res.stickerAwarded) {
-          // Already had sticker — advance after short celebrate
-          window.setTimeout(() => {
-            const nextId =
-              (res.nextGroupId as PhonicsGroupId | null) ??
-              progress.unlockedGroupIds.find((id) => !progress.completedGroupIds.includes(id)) ??
-              null
-            if (nextId && nextId !== activeGroupId) {
-              const pool = letters.filter((letter) => letter.group === nextId)
-              setActiveGroupId(nextId)
-              setWin(null)
-              const first = pool.find((letter) => !masteredNow.has(letter.id)) ?? pool[0]
-              if (first) ask(first, pool)
-            } else {
-              setWin(null)
-              const again = pickNext(target.id)
-              if (again) ask(again, groupLetters)
-            }
-          }, 2200)
+            rawNext && isPhonicsGroupId(rawNext)
+              ? rawNext
+              : localProgress.unlockedGroupIds.find(
+                  (id) => !localProgress.completedGroupIds.includes(id)
+                ) ?? null
+          showSetComplete(
+            sticker,
+            nextGroupId,
+            res.stickerAwarded ? (res.stickerPoints ?? 5) : 0,
+            Boolean(res.stickerAwarded)
+          )
           return
         }
 
@@ -374,6 +383,17 @@ export default function BalloonLettersPlay({
         }, 2200)
       })
       .catch(() => {
+        if (justFinishedSet) {
+          const catalog = getStickerForGroup(activeGroupId)
+          if (catalog) {
+            const nextGroupId =
+              localProgress.unlockedGroupIds.find(
+                (id) => !localProgress.completedGroupIds.includes(id)
+              ) ?? null
+            showSetComplete(catalog, nextGroupId, 0, false)
+            return
+          }
+        }
         const next = pickNext(target.id)
         window.setTimeout(() => {
           if (next) ask(next, groupLetters)
@@ -400,13 +420,19 @@ export default function BalloonLettersPlay({
               <p className="text-5xl" aria-hidden>
                 🐧🎁{stickerGift.sticker.emoji}
               </p>
-              <p className="text-sm font-bold uppercase tracking-widest text-amber-300">Sticker gift</p>
-              <h2 className="text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">
-                {stickerGift.sticker.label}
-              </h2>
-              <p className="mx-auto w-fit rounded-full bg-amber-400/20 px-5 py-2 text-sm font-extrabold text-[#fafaf9]">
-                +{stickerGift.points} points!
+              <p className="text-sm font-bold uppercase tracking-widest text-amber-300">
+                {stickerGift.fresh ? 'Sticker gift' : 'Set complete'}
               </p>
+              <h2 className="text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">
+                {stickerGift.fresh ? stickerGift.sticker.label : `${groupLabel(activeGroupId)} done!`}
+              </h2>
+              {stickerGift.fresh && stickerGift.points > 0 ? (
+                <p className="mx-auto w-fit rounded-full bg-amber-400/20 px-5 py-2 text-sm font-extrabold text-[#fafaf9]">
+                  +{stickerGift.points} points!
+                </p>
+              ) : (
+                <p className="text-sm font-bold text-amber-200">{stickerGift.sticker.label}</p>
+              )}
               {stickerGift.nextGroupId ? (
                 <p className="text-sm font-bold text-sky-300">
                   Next set unlocked: {groupLabel(stickerGift.nextGroupId)}
@@ -438,7 +464,13 @@ export default function BalloonLettersPlay({
                 </p>
               )}
               <p className="text-5xl font-black text-[#fafaf9]">{win.letter.letter}</p>
-              <p className="text-sm font-bold text-sky-300">Next letter…</p>
+              <p className="text-sm font-bold text-sky-300">
+                {setRemaining <= 1 && !mastered.has(win.letter.id)
+                  ? 'Last letter for this set…'
+                  : setRemaining === 0
+                    ? 'Set complete…'
+                    : 'Next letter…'}
+              </p>
             </div>
           ) : (
             <>
@@ -447,7 +479,12 @@ export default function BalloonLettersPlay({
                 Tap the letter you hear
               </h2>
               <p className="text-xs font-bold uppercase tracking-widest text-sky-400">
-                Set · {groupLabel(activeGroupId)}
+                Set · {groupLabel(activeGroupId)} · {caughtInSet}/{setTotal}
+              </p>
+              <p className="text-sm font-semibold text-[#d6d3d1]">
+                {setRemaining > 0
+                  ? `Catch ${setRemaining} more letter${setRemaining === 1 ? '' : 's'} for a sticker`
+                  : 'Set ready — keep catching!'}
               </p>
               <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1" aria-label="Set progress">
                 {groupLetterIds.map((id) => {

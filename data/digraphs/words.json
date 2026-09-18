@@ -202,6 +202,27 @@
         "error": "/audio/error/sh.mp3"
       },
       "speakWord": "wish"
+    },
+    {
+      "id": "flash",
+      "word": "flash",
+      "slug": "flash",
+      "digraph": "sh",
+      "graphemes": [
+        "f",
+        "l",
+        "a",
+        "sh"
+      ],
+      "image": "/images/words/sh/flash.webp",
+      "audio": {
+        "word": "/audio/word/sh/flash.mp3",
+        "phoneme": "/audio/phoneme/sh.mp3",
+        "question": "/audio/question/sh.mp3",
+        "success": "/audio/success/sh/flash.mp3",
+        "error": "/audio/error/sh.mp3"
+      },
+      "speakWord": "flash"
     }
   ],
   "ch": [
@@ -408,6 +429,27 @@
         "error": "/audio/error/ch.mp3"
       },
       "speakWord": "chill"
+    },
+    {
+      "id": "bench",
+      "word": "bench",
+      "slug": "bench",
+      "digraph": "ch",
+      "graphemes": [
+        "b",
+        "e",
+        "n",
+        "ch"
+      ],
+      "image": "/images/words/ch/bench.webp",
+      "audio": {
+        "word": "/audio/word/ch/bench.mp3",
+        "phoneme": "/audio/phoneme/ch.mp3",
+        "question": "/audio/question/ch.mp3",
+        "success": "/audio/success/ch/bench.mp3",
+        "error": "/audio/error/ch.mp3"
+      },
+      "speakWord": "bench"
     }
   ],
   "th": [

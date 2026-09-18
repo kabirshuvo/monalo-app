@@ -12,6 +12,9 @@ import {
   pointsForBlendWordCorrect,
   pointsForBalloonLettersCorrect,
   pointsForPhonicsGroupSticker,
+  pointsForSegmentWordCorrect,
+  pointsForWhichSoundCorrect,
+  pointsForReadStoryComplete,
   pointsFromBlogMinutes,
   pointsFromLearningMinutes,
   pointsFromPurchaseTaka,
@@ -614,4 +617,88 @@ export async function getEcoPenguinStickers(userId: string): Promise<EcoPenguinS
     if (id) earnedIds.push(id)
   }
   return { earnedIds }
+}
+
+export async function awardSegmentWordCorrect(
+  userId: string,
+  wordId: string,
+  word: string
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForSegmentWordCorrect(),
+    description: `Segment the word: ${word}`,
+    referenceId: `segment-word:${wordId}`,
+  })
+}
+
+export async function getSegmentWordMastery(userId: string): Promise<{ masteredKeys: string[] }> {
+  const events = await prisma.pointEvent.findMany({
+    where: { userId, category: 'LEARNING', referenceId: { startsWith: 'segment-word:' } },
+    select: { referenceId: true },
+  })
+  const masteredKeys: string[] = []
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const id = ref.slice('segment-word:'.length)
+    if (id) masteredKeys.push(id)
+  }
+  return { masteredKeys }
+}
+
+export async function awardWhichSoundCorrect(
+  userId: string,
+  letterId: string,
+  letter: string
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForWhichSoundCorrect(),
+    description: `Which sound: ${letter}`,
+    referenceId: `which-sound:${letterId}`,
+  })
+}
+
+export async function getWhichSoundMastery(userId: string): Promise<{ masteredKeys: string[] }> {
+  const events = await prisma.pointEvent.findMany({
+    where: { userId, category: 'LEARNING', referenceId: { startsWith: 'which-sound:' } },
+    select: { referenceId: true },
+  })
+  const masteredKeys: string[] = []
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const id = ref.slice('which-sound:'.length)
+    if (id) masteredKeys.push(id)
+  }
+  return { masteredKeys }
+}
+
+export async function awardReadStoryComplete(
+  userId: string,
+  storyId: string,
+  title: string
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForReadStoryComplete(),
+    description: `Read a story: ${title}`,
+    referenceId: `read-story:${storyId}`,
+  })
+}
+
+export async function getReadStoryMastery(userId: string): Promise<{ completedIds: string[] }> {
+  const events = await prisma.pointEvent.findMany({
+    where: { userId, category: 'LEARNING', referenceId: { startsWith: 'read-story:' } },
+    select: { referenceId: true },
+  })
+  const completedIds: string[] = []
+  for (const event of events) {
+    const ref = event.referenceId
+    if (!ref) continue
+    const id = ref.slice('read-story:'.length)
+    if (id) completedIds.push(id)
+  }
+  return { completedIds }
 }

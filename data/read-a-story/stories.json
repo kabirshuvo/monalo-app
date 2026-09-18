@@ -1,0 +1,26 @@
+[
+  {
+    "id": "sat-pip",
+    "title": "Pip sat",
+    "requiredGroup": "satpin",
+    "pages": [
+      { "text": "Pip sat.", "words": ["Pip", "sat"] },
+      { "text": "Pip sat in a pit.", "words": ["Pip", "sat", "in", "a", "pit"] },
+      { "text": "A pin is in the pit.", "words": ["A", "pin", "is", "in", "the", "pit"] },
+      { "text": "Pip taps the pin.", "words": ["Pip", "taps", "the", "pin"] },
+      { "text": "Pip sits. The end.", "words": ["Pip", "sits", "The", "end"] }
+    ]
+  },
+  {
+    "id": "mad-cat",
+    "title": "The mad cat",
+    "requiredGroup": "mdgock",
+    "pages": [
+      { "text": "A cat sat on a mat.", "words": ["A", "cat", "sat", "on", "a", "mat"] },
+      { "text": "The cat is mad.", "words": ["The", "cat", "is", "mad"] },
+      { "text": "Dad taps the cat.", "words": ["Dad", "taps", "the", "cat"] },
+      { "text": "The cat is not mad.", "words": ["The", "cat", "is", "not", "mad"] },
+      { "text": "The cat naps. The end.", "words": ["The", "cat", "naps", "The", "end"] }
+    ]
+  }
+]

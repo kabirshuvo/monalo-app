@@ -77,4 +77,6 @@ export const planetBtn = {
     'rounded-2xl bg-gradient-to-r from-rose-400 to-red-700 px-5 py-2.5 text-sm font-bold text-[#fafaf9] shadow-md shadow-red-900/40 transition hover:from-rose-300 hover:to-red-600 disabled:opacity-40',
   sun:
     'rounded-2xl bg-gradient-to-r from-amber-300 to-orange-500 px-5 py-2.5 text-sm font-bold text-[#0c0a09] shadow-md shadow-amber-900/40 transition hover:from-amber-200 hover:to-orange-400 disabled:opacity-40',
+  violet:
+    'rounded-2xl bg-gradient-to-r from-violet-300 to-violet-600 px-5 py-2.5 text-sm font-bold text-[#fafaf9] shadow-md shadow-violet-900/40 transition hover:from-violet-200 hover:to-violet-500 disabled:opacity-40',
 } as const

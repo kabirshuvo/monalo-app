@@ -379,6 +379,196 @@
           "Yes. This is the mad."
         ]
       }
+    },
+    {
+      "id": "a-cap",
+      "word": "cap",
+      "slug": "cap",
+      "pattern": "cvc",
+      "graphemes": [
+        "c",
+        "a",
+        "p"
+      ],
+      "image": "/images/a/cap.webp",
+      "audio": {
+        "word": "/audio/word/a/cap.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/cap.mp3",
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/cap.mp3",
+        "quiz": "/audio/quiz/a/cap.mp3",
+        "successes": [
+          "/audio/success/a/cap-well-done.mp3",
+          "/audio/success/a/cap-perfect.mp3",
+          "/audio/success/a/cap-exactly.mp3",
+          "/audio/success/a/cap-yes.mp3"
+        ]
+      },
+      "speakWord": "cap",
+      "speak": {
+        "learn": "This is a cap.",
+        "quiz": "Which one is the cap?",
+        "success": [
+          "Well done. This is the cap.",
+          "Perfect. This is the cap.",
+          "Exactly. This is the cap.",
+          "Yes. This is the cap."
+        ]
+      }
+    },
+    {
+      "id": "a-man",
+      "word": "man",
+      "slug": "man",
+      "pattern": "cvc",
+      "graphemes": [
+        "m",
+        "a",
+        "n"
+      ],
+      "image": "/images/a/man.webp",
+      "audio": {
+        "word": "/audio/word/a/man.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/man.mp3",
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/man.mp3",
+        "quiz": "/audio/quiz/a/man.mp3",
+        "successes": [
+          "/audio/success/a/man-well-done.mp3",
+          "/audio/success/a/man-perfect.mp3",
+          "/audio/success/a/man-exactly.mp3",
+          "/audio/success/a/man-yes.mp3"
+        ]
+      },
+      "speakWord": "man",
+      "speak": {
+        "learn": "This is a man.",
+        "quiz": "Which one is the man?",
+        "success": [
+          "Well done. This is the man.",
+          "Perfect. This is the man.",
+          "Exactly. This is the man.",
+          "Yes. This is the man."
+        ]
+      }
+    },
+    {
+      "id": "a-sat",
+      "word": "sat",
+      "slug": "sat",
+      "pattern": "cvc",
+      "graphemes": [
+        "s",
+        "a",
+        "t"
+      ],
+      "image": "/images/a/sat.webp",
+      "audio": {
+        "word": "/audio/word/a/sat.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/sat.mp3",
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/sat.mp3",
+        "quiz": "/audio/quiz/a/sat.mp3",
+        "successes": [
+          "/audio/success/a/sat-well-done.mp3",
+          "/audio/success/a/sat-perfect.mp3",
+          "/audio/success/a/sat-exactly.mp3",
+          "/audio/success/a/sat-yes.mp3"
+        ]
+      },
+      "speakWord": "sat",
+      "speak": {
+        "learn": "This is a sat.",
+        "quiz": "Which one is the sat?",
+        "success": [
+          "Well done. This is the sat.",
+          "Perfect. This is the sat.",
+          "Exactly. This is the sat.",
+          "Yes. This is the sat."
+        ]
+      }
+    },
+    {
+      "id": "a-nap",
+      "word": "nap",
+      "slug": "nap",
+      "pattern": "cvc",
+      "graphemes": [
+        "n",
+        "a",
+        "p"
+      ],
+      "image": "/images/a/nap.webp",
+      "audio": {
+        "word": "/audio/word/a/nap.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/nap.mp3",
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/nap.mp3",
+        "quiz": "/audio/quiz/a/nap.mp3",
+        "successes": [
+          "/audio/success/a/nap-well-done.mp3",
+          "/audio/success/a/nap-perfect.mp3",
+          "/audio/success/a/nap-exactly.mp3",
+          "/audio/success/a/nap-yes.mp3"
+        ]
+      },
+      "speakWord": "nap",
+      "speak": {
+        "learn": "This is a nap.",
+        "quiz": "Which one is the nap?",
+        "success": [
+          "Well done. This is the nap.",
+          "Perfect. This is the nap.",
+          "Exactly. This is the nap.",
+          "Yes. This is the nap."
+        ]
+      }
+    },
+    {
+      "id": "a-pat",
+      "word": "pat",
+      "slug": "pat",
+      "pattern": "cvc",
+      "graphemes": [
+        "p",
+        "a",
+        "t"
+      ],
+      "image": "/images/a/pat.webp",
+      "audio": {
+        "word": "/audio/word/a/pat.mp3",
+        "phoneme": "/audio/phoneme/a.mp3",
+        "question": "/audio/question/a.mp3",
+        "success": "/audio/success/a/pat.mp3",
+        "error": "/audio/error/a.mp3",
+        "learn": "/audio/learn/a/pat.mp3",
+        "quiz": "/audio/quiz/a/pat.mp3",
+        "successes": [
+          "/audio/success/a/pat-well-done.mp3",
+          "/audio/success/a/pat-perfect.mp3",
+          "/audio/success/a/pat-exactly.mp3",
+          "/audio/success/a/pat-yes.mp3"
+        ]
+      },
+      "speakWord": "pat",
+      "speak": {
+        "learn": "This is a pat.",
+        "quiz": "Which one is the pat?",
+        "success": [
+          "Well done. This is the pat.",
+          "Perfect. This is the pat.",
+          "Exactly. This is the pat.",
+          "Yes. This is the pat."
+        ]
+      }
     }
   ],
   "e": [
@@ -1141,6 +1331,158 @@
           "Perfect. This is the mix.",
           "Exactly. This is the mix.",
           "Yes. This is the mix."
+        ]
+      }
+    },
+    {
+      "id": "i-fin",
+      "word": "fin",
+      "slug": "fin",
+      "pattern": "cvc",
+      "graphemes": [
+        "f",
+        "i",
+        "n"
+      ],
+      "image": "/images/i/fin.webp",
+      "audio": {
+        "word": "/audio/word/i/fin.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/fin.mp3",
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/fin.mp3",
+        "quiz": "/audio/quiz/i/fin.mp3",
+        "successes": [
+          "/audio/success/i/fin-well-done.mp3",
+          "/audio/success/i/fin-perfect.mp3",
+          "/audio/success/i/fin-exactly.mp3",
+          "/audio/success/i/fin-yes.mp3"
+        ]
+      },
+      "speakWord": "fin",
+      "speak": {
+        "learn": "This is a fin.",
+        "quiz": "Which one is the fin?",
+        "success": [
+          "Well done. This is the fin.",
+          "Perfect. This is the fin.",
+          "Exactly. This is the fin.",
+          "Yes. This is the fin."
+        ]
+      }
+    },
+    {
+      "id": "i-tip",
+      "word": "tip",
+      "slug": "tip",
+      "pattern": "cvc",
+      "graphemes": [
+        "t",
+        "i",
+        "p"
+      ],
+      "image": "/images/i/tip.webp",
+      "audio": {
+        "word": "/audio/word/i/tip.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/tip.mp3",
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/tip.mp3",
+        "quiz": "/audio/quiz/i/tip.mp3",
+        "successes": [
+          "/audio/success/i/tip-well-done.mp3",
+          "/audio/success/i/tip-perfect.mp3",
+          "/audio/success/i/tip-exactly.mp3",
+          "/audio/success/i/tip-yes.mp3"
+        ]
+      },
+      "speakWord": "tip",
+      "speak": {
+        "learn": "This is a tip.",
+        "quiz": "Which one is the tip?",
+        "success": [
+          "Well done. This is the tip.",
+          "Perfect. This is the tip.",
+          "Exactly. This is the tip.",
+          "Yes. This is the tip."
+        ]
+      }
+    },
+    {
+      "id": "i-pit",
+      "word": "pit",
+      "slug": "pit",
+      "pattern": "cvc",
+      "graphemes": [
+        "p",
+        "i",
+        "t"
+      ],
+      "image": "/images/i/pit.webp",
+      "audio": {
+        "word": "/audio/word/i/pit.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/pit.mp3",
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/pit.mp3",
+        "quiz": "/audio/quiz/i/pit.mp3",
+        "successes": [
+          "/audio/success/i/pit-well-done.mp3",
+          "/audio/success/i/pit-perfect.mp3",
+          "/audio/success/i/pit-exactly.mp3",
+          "/audio/success/i/pit-yes.mp3"
+        ]
+      },
+      "speakWord": "pit",
+      "speak": {
+        "learn": "This is a pit.",
+        "quiz": "Which one is the pit?",
+        "success": [
+          "Well done. This is the pit.",
+          "Perfect. This is the pit.",
+          "Exactly. This is the pit.",
+          "Yes. This is the pit."
+        ]
+      }
+    },
+    {
+      "id": "i-tin",
+      "word": "tin",
+      "slug": "tin",
+      "pattern": "cvc",
+      "graphemes": [
+        "t",
+        "i",
+        "n"
+      ],
+      "image": "/images/i/tin.webp",
+      "audio": {
+        "word": "/audio/word/i/tin.mp3",
+        "phoneme": "/audio/phoneme/i.mp3",
+        "question": "/audio/question/i.mp3",
+        "success": "/audio/success/i/tin.mp3",
+        "error": "/audio/error/i.mp3",
+        "learn": "/audio/learn/i/tin.mp3",
+        "quiz": "/audio/quiz/i/tin.mp3",
+        "successes": [
+          "/audio/success/i/tin-well-done.mp3",
+          "/audio/success/i/tin-perfect.mp3",
+          "/audio/success/i/tin-exactly.mp3",
+          "/audio/success/i/tin-yes.mp3"
+        ]
+      },
+      "speakWord": "tin",
+      "speak": {
+        "learn": "This is a tin.",
+        "quiz": "Which one is the tin?",
+        "success": [
+          "Well done. This is the tin.",
+          "Perfect. This is the tin.",
+          "Exactly. This is the tin.",
+          "Yes. This is the tin."
         ]
       }
     }

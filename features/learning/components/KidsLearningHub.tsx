@@ -11,6 +11,12 @@ import { BALLOON_LETTERS_BASE_PATH } from '@/lib/balloon-letters/constants'
 import { readBalloonLettersSession } from '@/lib/balloon-letters/session'
 import { LETTER_SOUNDS_BASE_PATH, LETTER_SOUNDS_QUIZ_PATH } from '@/lib/letter-sounds/constants'
 import { readLetterSoundsSession } from '@/lib/letter-sounds/session'
+import { WHICH_SOUND_BASE_PATH } from '@/lib/which-sound/constants'
+import { readWhichSoundSession } from '@/lib/which-sound/session'
+import { SEGMENT_WORD_BASE_PATH } from '@/lib/segment-the-word/constants'
+import { readSegmentWordSession } from '@/lib/segment-the-word/session'
+import { READ_STORY_BASE_PATH } from '@/lib/read-a-story/constants'
+import { readReadStorySession } from '@/lib/read-a-story/session'
 import { VOWEL_WORDS_BASE_PATH } from '@/lib/vowel-words/constants'
 import { DIGRAPHS_BASE_PATH } from '@/lib/digraphs/constants'
 import { readDigraphsSession } from '@/lib/digraphs/session'
@@ -72,6 +78,15 @@ export default function KidsLearningHub({
         href: BALLOON_LETTERS_BASE_PATH,
       })
     }
+    const which = readWhichSoundSession()
+    if (which) {
+      items.push({
+        id: 'which',
+        label: `Which sound? · ${which.letter}`,
+        detail: 'Which picture starts with that sound?',
+        href: WHICH_SOUND_BASE_PATH,
+      })
+    }
     const blend = readBlendWordSession()
     if (blend) {
       items.push({
@@ -79,6 +94,24 @@ export default function KidsLearningHub({
         label: `Blend the word · ${blend.word}`,
         detail: 'Hear the sounds, tap the picture',
         href: BLEND_WORD_BASE_PATH,
+      })
+    }
+    const segment = readSegmentWordSession()
+    if (segment) {
+      items.push({
+        id: 'segment',
+        label: `Segment · ${segment.word}`,
+        detail: 'Hear the word, tap the sounds',
+        href: SEGMENT_WORD_BASE_PATH,
+      })
+    }
+    const story = readReadStorySession()
+    if (story) {
+      items.push({
+        id: 'story',
+        label: `Story · ${story.storyId}`,
+        detail: `Page ${story.page}`,
+        href: READ_STORY_BASE_PATH,
       })
     }
     const eco = readEcoPenguinSession()
@@ -147,7 +180,7 @@ export default function KidsLearningHub({
             Welcome to {ECO_PENGUIN_APP_NAME}
           </h2>
           <p className={`mx-auto mt-3 max-w-lg text-sm leading-relaxed sm:text-base ${planetTextMuted}`}>
-            Sounds → Balloons → Blend → Explore → Vowels → Digraphs → Build. Play a little each day.
+            Sounds → Which? → Balloons → Blend → Segment → Explore → … → Story. Play a little each day.
           </p>
           {!signedIn && (
             <p className="mx-auto mt-4 max-w-md rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm font-semibold text-amber-100">
@@ -250,11 +283,17 @@ export default function KidsLearningHub({
             <Link href={LETTER_SOUNDS_BASE_PATH} className="hover:text-[#fafaf9]">
               Sounds
             </Link>
+            <Link href={WHICH_SOUND_BASE_PATH} className="hover:text-[#fafaf9]">
+              Which?
+            </Link>
             <Link href={BALLOON_LETTERS_BASE_PATH} className="hover:text-[#fafaf9]">
               Balloons
             </Link>
             <Link href={BLEND_WORD_BASE_PATH} className="hover:text-[#fafaf9]">
               Blend
+            </Link>
+            <Link href={SEGMENT_WORD_BASE_PATH} className="hover:text-[#fafaf9]">
+              Segment
             </Link>
             <Link href={ECO_PENGUIN_BASE_PATH} className="hover:text-[#fafaf9]">
               Explore
@@ -267,6 +306,9 @@ export default function KidsLearningHub({
             </Link>
             <Link href={BUILD_WORD_BASE_PATH} className="hover:text-[#fafaf9]">
               Build
+            </Link>
+            <Link href={READ_STORY_BASE_PATH} className="hover:text-[#fafaf9]">
+              Story
             </Link>
             <Link href="/dashboard/learning" className="hover:text-[#fafaf9]">
               Courses

@@ -6,11 +6,14 @@ export type GuideRoom =
   | 'hub'
   | 'balloon-letters'
   | 'letter-sounds'
+  | 'which-sound'
   | 'blend-the-word'
+  | 'segment-the-word'
   | 'ecopenguin'
   | 'vowel-words'
   | 'digraphs'
   | 'build-the-word'
+  | 'read-a-story'
 
 export type GuideOverride = {
   tipId: string
@@ -20,7 +23,7 @@ export type GuideOverride = {
 const TIPS: Record<GuideRoom, { tipId: string; message: string }> = {
   hub: {
     tipId: 'hub-welcome',
-    message: 'Hi! I am Eco Penguin. Start with Letter sounds, then catch balloons to earn stickers.',
+    message: 'Hi! I am Eco Penguin. Start with Letter sounds, then Which sound?, then catch balloons.',
   },
   'balloon-letters': {
     tipId: 'balloon-listen',
@@ -30,9 +33,17 @@ const TIPS: Record<GuideRoom, { tipId: string; message: string }> = {
     tipId: 'letter-sounds-tap',
     message: 'Tap a letter to hear the word and the sound. Locked sets open after Balloon stickers.',
   },
+  'which-sound': {
+    tipId: 'which-sound-pick',
+    message: 'Hear the sound, then tap the picture that starts with it.',
+  },
   'blend-the-word': {
     tipId: 'blend-listen',
     message: 'Hear each sound, then the whole word. Tap the picture that matches.',
+  },
+  'segment-the-word': {
+    tipId: 'segment-tap',
+    message: 'Hear the whole word, then tap the sounds in order — like Blend, but backwards!',
   },
   ecopenguin: {
     tipId: 'eco-explore',
@@ -49,6 +60,10 @@ const TIPS: Record<GuideRoom, { tipId: string; message: string }> = {
   'build-the-word': {
     tipId: 'build-spell',
     message: 'Hear the word, then tap letters to spell it yourself.',
+  },
+  'read-a-story': {
+    tipId: 'story-tap',
+    message: 'Tap any word to hear it. You can read this story with the letters you know!',
   },
 }
 

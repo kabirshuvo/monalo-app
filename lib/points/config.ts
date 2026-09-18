@@ -25,6 +25,12 @@ export const POINTS_CONFIG = {
   balloonLettersCorrect: 2,
   /** Bonus points for completing a phonics group (sticker gift) */
   phonicsGroupSticker: 5,
+  /** Segment the word */
+  segmentWordCorrect: 2,
+  /** Which sound? */
+  whichSoundCorrect: 2,
+  /** Finish a decodable story */
+  readStoryComplete: 5,
 } as const
 
 export function pointsFromPurchaseTaka(taka: number): number {
@@ -80,6 +86,18 @@ export function pointsForBalloonLettersCorrect(): number {
 
 export function pointsForPhonicsGroupSticker(): number {
   return POINTS_CONFIG.phonicsGroupSticker
+}
+
+export function pointsForSegmentWordCorrect(): number {
+  return POINTS_CONFIG.segmentWordCorrect
+}
+
+export function pointsForWhichSoundCorrect(): number {
+  return POINTS_CONFIG.whichSoundCorrect
+}
+
+export function pointsForReadStoryComplete(): number {
+  return POINTS_CONFIG.readStoryComplete
 }
 
 export function levelFromTotalPoints(totalPoints: number): number {

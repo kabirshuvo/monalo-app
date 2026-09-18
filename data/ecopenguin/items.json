@@ -3057,5 +3057,165 @@
         "warning": "/audio/error/nuts/w-pistachio-nuts.mp3"
       }
     }
+  ],
+  "pets": [
+    {
+      "id": 9001,
+      "name": "Dog",
+      "image": "/images/animals/dog.webp",
+      "description": "Dogs are domesticated mammals known for their loyalty and companionship.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/dog.mp3",
+        "question": "/audio/which/animals/q-dog.mp3",
+        "success": "/audio/correct/animals/c-dog.mp3",
+        "error": "/audio/error/animals/n-dog.mp3",
+        "warning": "/audio/error/animals/w-dog.mp3"
+      }
+    },
+    {
+      "id": 9002,
+      "name": "Cat",
+      "image": "/images/animals/cat.webp",
+      "description": "Cats are small domesticated mammals known for their agility.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/cat.mp3",
+        "question": "/audio/which/animals/q-cat.mp3",
+        "success": "/audio/correct/animals/c-cat.mp3",
+        "error": "/audio/error/animals/n-cat.mp3",
+        "warning": "/audio/error/animals/w-cat.mp3"
+      }
+    },
+    {
+      "id": 9003,
+      "name": "Mouse",
+      "image": "/images/animals/mouse.webp",
+      "description": "Mice are small rodents with a pointed snout and long tail.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/mouse.mp3",
+        "question": "/audio/which/animals/q-mouse.mp3",
+        "success": "/audio/correct/animals/c-mouse.mp3",
+        "error": "/audio/error/animals/n-mouse.mp3",
+        "warning": "/audio/error/animals/w-mouse.mp3"
+      }
+    },
+    {
+      "id": 9004,
+      "name": "Rabbit",
+      "image": "/images/animals/rabbit.webp",
+      "description": "Rabbits are small mammals known for their long ears and quick reproduction.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/rabbit.mp3",
+        "question": "/audio/which/animals/q-rabbit.mp3",
+        "success": "/audio/correct/animals/c-rabbit.mp3",
+        "error": "/audio/error/animals/n-rabbit.mp3",
+        "warning": "/audio/error/animals/w-rabbit.mp3"
+      }
+    },
+    {
+      "id": 9005,
+      "name": "Pig",
+      "image": "/images/animals/pig.webp",
+      "description": "Pigs are domesticated animals known for their intelligence and adaptability.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/pig.mp3",
+        "question": "/audio/which/animals/q-pig.mp3",
+        "success": "/audio/correct/animals/c-pig.mp3",
+        "error": "/audio/error/animals/n-pig.mp3",
+        "warning": "/audio/error/animals/w-pig.mp3"
+      }
+    },
+    {
+      "id": 9006,
+      "name": "Horse",
+      "image": "/images/animals/horse.webp",
+      "description": "Horses are strong animals often used for riding and transport.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/horse.mp3",
+        "question": "/audio/which/animals/q-horse.mp3",
+        "success": "/audio/correct/animals/c-horse.mp3",
+        "error": "/audio/error/animals/n-horse.mp3",
+        "warning": "/audio/error/animals/w-horse.mp3"
+      }
+    }
+  ],
+  "farm": [
+    {
+      "id": 9101,
+      "name": "Cow",
+      "image": "/images/animals/cow.webp",
+      "description": "Cows are domesticated mammals raised for milk and meat.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/cow.mp3",
+        "question": "/audio/which/animals/q-cow.mp3",
+        "success": "/audio/correct/animals/c-cow.mp3",
+        "error": "/audio/error/animals/n-cow.mp3",
+        "warning": "/audio/error/animals/w-cow.mp3"
+      }
+    },
+    {
+      "id": 9102,
+      "name": "Horse",
+      "image": "/images/animals/horse.webp",
+      "description": "Horses are strong animals often used for riding and transport.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/horse.mp3",
+        "question": "/audio/which/animals/q-horse.mp3",
+        "success": "/audio/correct/animals/c-horse.mp3",
+        "error": "/audio/error/animals/n-horse.mp3",
+        "warning": "/audio/error/animals/w-horse.mp3"
+      }
+    },
+    {
+      "id": 9103,
+      "name": "Pig",
+      "image": "/images/animals/pig.webp",
+      "description": "Pigs are domesticated animals known for their intelligence and adaptability.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/pig.mp3",
+        "question": "/audio/which/animals/q-pig.mp3",
+        "success": "/audio/correct/animals/c-pig.mp3",
+        "error": "/audio/error/animals/n-pig.mp3",
+        "warning": "/audio/error/animals/w-pig.mp3"
+      }
+    },
+    {
+      "id": 9104,
+      "name": "Rabbit",
+      "image": "/images/animals/rabbit.webp",
+      "description": "Rabbits are small mammals known for their long ears and quick reproduction.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/rabbit.mp3",
+        "question": "/audio/which/animals/q-rabbit.mp3",
+        "success": "/audio/correct/animals/c-rabbit.mp3",
+        "error": "/audio/error/animals/n-rabbit.mp3",
+        "warning": "/audio/error/animals/w-rabbit.mp3"
+      }
+    },
+    {
+      "id": 9105,
+      "name": "Dog",
+      "image": "/images/animals/dog.webp",
+      "description": "Dogs are domesticated mammals known for their loyalty and companionship.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/dog.mp3",
+        "question": "/audio/which/animals/q-dog.mp3",
+        "success": "/audio/correct/animals/c-dog.mp3",
+        "error": "/audio/error/animals/n-dog.mp3",
+        "warning": "/audio/error/animals/w-dog.mp3"
+      }
+    },
+    {
+      "id": 9106,
+      "name": "Cat",
+      "image": "/images/animals/cat.webp",
+      "description": "Cats are small domesticated mammals known for their agility.",
+      "audio": {
+        "itemAudio": "/audio/this/animals/cat.mp3",
+        "question": "/audio/which/animals/q-cat.mp3",
+        "success": "/audio/correct/animals/c-cat.mp3",
+        "error": "/audio/error/animals/n-cat.mp3",
+        "warning": "/audio/error/animals/w-cat.mp3"
+      }
+    }
   ]
 }
