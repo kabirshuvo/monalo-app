@@ -10,6 +10,7 @@ import {
 import api from '@/lib/api'
 import { writeSegmentWordSession } from '@/lib/segment-the-word/session'
 import type { BlendWord } from '@/lib/blend-the-word/types'
+import PhonicsLockedEmpty from '@/features/learning/components/PhonicsLockedEmpty'
 
 type Props = {
   words: BlendWord[]
@@ -104,6 +105,17 @@ export default function SegmentWordPlay({
         if (next) ask(next)
       }, 2000)
     }
+  }
+
+  if (words.length === 0) {
+    return (
+      <PhonicsLockedEmpty
+        title="Earn your SATPIN star first"
+        detail="Catch every s a t p i n balloon to unlock segment packs. Stickers open the next words."
+        cardClassName={segmentWordTheme.card}
+        btnClassName={segmentWordTheme.btnPrimary}
+      />
+    )
   }
 
   if (!target) {

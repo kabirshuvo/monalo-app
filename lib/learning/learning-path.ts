@@ -47,6 +47,17 @@ export function unlockedLetterIds(progress: PhonicsProgress): Set<string> {
   return ids
 }
 
+/** Letters from sticker-completed balloon groups only (packs open after the gift). */
+export function completedLetterIds(progress: PhonicsProgress): Set<string> {
+  const ids = new Set<string>()
+  for (const groupId of progress.completedGroupIds) {
+    for (const letter of PHONICS_GROUP_LETTER_IDS[groupId as PhonicsGroupId]) {
+      ids.add(letter)
+    }
+  }
+  return ids
+}
+
 export function wordFitsUnlockedLetters(
   graphemes: string[],
   unlocked: Set<string>
@@ -86,7 +97,7 @@ export function recommendNextRoom(
     return {
       id: 'blend-the-word',
       title: 'Blend the word',
-      detail: 'SATPIN unlocked — hear the sounds, tap the picture.',
+      detail: 'SATPIN star earned — blend packs are open.',
       href: BLEND_WORD_BASE_PATH,
     }
   }

@@ -568,5 +568,100 @@
       "sounds": "/audio/sounds/leg.mp3",
       "word": "/audio/word/e/leg.mp3"
     }
+  },
+  {
+    "id": "hen",
+    "word": "hen",
+    "vowelId": "e",
+    "graphemes": [
+      "h",
+      "e",
+      "n"
+    ],
+    "image": "/images/e/hen.webp",
+    "speak": {
+      "sounds": "h, e, n",
+      "word": "hen"
+    },
+    "audio": {
+      "sounds": "/audio/sounds/hen.mp3",
+      "word": "/audio/word/e/hen.mp3"
+    }
+  },
+  {
+    "id": "pen",
+    "word": "pen",
+    "vowelId": "e",
+    "graphemes": [
+      "p",
+      "e",
+      "n"
+    ],
+    "image": "/images/e/pen.webp",
+    "speak": {
+      "sounds": "p, e, n",
+      "word": "pen"
+    },
+    "audio": {
+      "sounds": "/audio/sounds/pen.mp3",
+      "word": "/audio/word/e/pen.mp3"
+    }
+  },
+  {
+    "id": "hug",
+    "word": "hug",
+    "vowelId": "u",
+    "graphemes": [
+      "h",
+      "u",
+      "g"
+    ],
+    "image": "/images/u/hug.webp",
+    "speak": {
+      "sounds": "h, u, g",
+      "word": "hug"
+    },
+    "audio": {
+      "sounds": "/audio/sounds/hug.mp3",
+      "word": "/audio/word/u/hug.mp3"
+    }
+  },
+  {
+    "id": "bus",
+    "word": "bus",
+    "vowelId": "u",
+    "graphemes": [
+      "b",
+      "u",
+      "s"
+    ],
+    "image": "/images/u/bus.webp",
+    "speak": {
+      "sounds": "b, u, s",
+      "word": "bus"
+    },
+    "audio": {
+      "sounds": "/audio/sounds/bus.mp3",
+      "word": "/audio/word/u/bus.mp3"
+    }
+  },
+  {
+    "id": "run",
+    "word": "run",
+    "vowelId": "u",
+    "graphemes": [
+      "r",
+      "u",
+      "n"
+    ],
+    "image": "/images/u/run.webp",
+    "speak": {
+      "sounds": "r, u, n",
+      "word": "run"
+    },
+    "audio": {
+      "sounds": "/audio/sounds/run.mp3",
+      "word": "/audio/word/u/run.mp3"
+    }
   }
 ]

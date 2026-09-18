@@ -6,11 +6,12 @@ export async function getDecodableStories(): Promise<DecodableStory[]> {
   return storiesData as DecodableStory[]
 }
 
+/** Stories unlock only after the matching balloon group sticker is earned. */
 export async function getUnlockedStories(masteredBalloonKeys: string[]): Promise<DecodableStory[]> {
   const progress = computePhonicsProgress(masteredBalloonKeys)
-  const unlocked = new Set(progress.unlockedGroupIds)
+  const completed = new Set(progress.completedGroupIds)
   const all = await getDecodableStories()
-  return all.filter((story) => unlocked.has(story.requiredGroup as PhonicsGroupId))
+  return all.filter((story) => completed.has(story.requiredGroup as PhonicsGroupId))
 }
 
 export async function getStoryById(id: string): Promise<DecodableStory | null> {

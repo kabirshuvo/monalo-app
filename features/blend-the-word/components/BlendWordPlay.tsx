@@ -12,6 +12,7 @@ import api from '@/lib/api'
 import { BLEND_WORD_CHOICES } from '@/lib/blend-the-word/constants'
 import { writeBlendWordSession } from '@/lib/blend-the-word/session'
 import type { BlendWord } from '@/lib/blend-the-word/types'
+import PhonicsLockedEmpty from '@/features/learning/components/PhonicsLockedEmpty'
 
 type Props = {
   words: BlendWord[]
@@ -126,6 +127,17 @@ export default function BlendWordPlay({
     window.setTimeout(() => {
       if (next) ask(next)
     }, 2200)
+  }
+
+  if (words.length === 0) {
+    return (
+      <PhonicsLockedEmpty
+        title="Earn your SATPIN star first"
+        detail="Catch every s a t p i n balloon to unlock blend packs. Stickers open the next words."
+        cardClassName={blendWordTheme.card}
+        btnClassName={blendWordTheme.btnPrimary}
+      />
+    )
   }
 
   if (!target) {

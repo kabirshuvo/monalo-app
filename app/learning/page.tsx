@@ -4,6 +4,7 @@ import type { LearningGameCard } from '@/lib/learning/kids-hub'
 import { LEARNING_PATH_STEPS, recommendNextRoom } from '@/lib/learning/learning-path'
 import ActivityTracker from '@/components/points/ActivityTracker'
 import { auth } from '@/lib/auth-server'
+import { getEcoPenguinParentProgress } from '@/lib/learning/eco-penguin-progress'
 import { getBalloonLettersMastery, getEcoPenguinStickers } from '@/lib/points/service'
 
 export const metadata: Metadata = {
@@ -51,7 +52,7 @@ const GAMES: LearningGameCard[] = [
   {
     id: 'blend-the-word',
     title: 'Blend the word',
-    blurb: 'Hear c, a, t, then the word. Packs match your letter sets.',
+    blurb: 'Hear c, a, t, then the word. Packs open after Balloon stickers.',
     href: '/learning/blend-the-word',
     accent: 'from-cyan-300 to-cyan-600',
     badge: 'Blend',
@@ -111,7 +112,7 @@ const GAMES: LearningGameCard[] = [
   {
     id: 'read-a-story',
     title: 'Read a story',
-    blurb: 'Short decodable stories — tap any word to hear it.',
+    blurb: 'Short decodable stories — unlock with Balloon stickers.',
     href: '/learning/read-a-story',
     accent: 'from-amber-300 to-orange-500',
     badge: 'Story',
@@ -124,13 +125,16 @@ export default async function KidsLearningPage() {
   const session = await auth()
   let earnedStickerIds: string[] = []
   let masteredBalloonKeys: string[] = []
+  let parentProgress = null
   if (session?.user?.id) {
-    const [stickers, balloons] = await Promise.all([
+    const [stickers, balloons, progress] = await Promise.all([
       getEcoPenguinStickers(session.user.id),
       getBalloonLettersMastery(session.user.id),
+      getEcoPenguinParentProgress(session.user.id),
     ])
     earnedStickerIds = stickers.earnedIds
     masteredBalloonKeys = balloons.masteredKeys
+    parentProgress = progress
   }
 
   const nextForYou = recommendNextRoom(masteredBalloonKeys, earnedStickerIds)
@@ -143,6 +147,7 @@ export default async function KidsLearningPage() {
         earnedStickerIds={earnedStickerIds}
         nextForYou={nextForYou}
         signedIn={Boolean(session?.user?.id)}
+        parentProgress={parentProgress}
       />
     </>
   )

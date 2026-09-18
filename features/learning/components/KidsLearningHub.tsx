@@ -34,7 +34,9 @@ import {
   planetTextMuted,
 } from '@/lib/learning/planet-theme'
 import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
+import EcoPenguinProgressCard from '@/features/learning/components/EcoPenguinProgressCard'
 import EcoPenguinStickerStrip from '@/features/learning/components/EcoPenguinStickerStrip'
+import type { EcoPenguinParentProgress } from '@/lib/learning/eco-penguin-progress'
 
 type ContinueItem = {
   id: string
@@ -48,6 +50,7 @@ type Props = {
   earnedStickerIds?: string[]
   nextForYou: NextForYou
   signedIn?: boolean
+  parentProgress?: EcoPenguinParentProgress | null
 }
 
 export default function KidsLearningHub({
@@ -55,6 +58,7 @@ export default function KidsLearningHub({
   earnedStickerIds = [],
   nextForYou,
   signedIn = false,
+  parentProgress = null,
 }: Props) {
   const [continues, setContinues] = useState<ContinueItem[]>([])
 
@@ -231,6 +235,8 @@ export default function KidsLearningHub({
         )}
 
         <EcoPenguinStickerStrip earnedIds={earnedStickerIds} />
+
+        {parentProgress && <EcoPenguinProgressCard progress={parentProgress} variant="hub" />}
 
         <section className="space-y-4">
           <h3 className={`text-center text-sm font-bold uppercase tracking-widest ${planetTextDim}`}>

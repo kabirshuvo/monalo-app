@@ -4,11 +4,52 @@
     "title": "Pip sat",
     "requiredGroup": "satpin",
     "pages": [
-      { "text": "Pip sat.", "words": ["Pip", "sat"] },
-      { "text": "Pip sat in a pit.", "words": ["Pip", "sat", "in", "a", "pit"] },
-      { "text": "A pin is in the pit.", "words": ["A", "pin", "is", "in", "the", "pit"] },
-      { "text": "Pip taps the pin.", "words": ["Pip", "taps", "the", "pin"] },
-      { "text": "Pip sits. The end.", "words": ["Pip", "sits", "The", "end"] }
+      {
+        "text": "Pip sat.",
+        "words": [
+          "Pip",
+          "sat"
+        ]
+      },
+      {
+        "text": "Pip sat in a pit.",
+        "words": [
+          "Pip",
+          "sat",
+          "in",
+          "a",
+          "pit"
+        ]
+      },
+      {
+        "text": "A pin is in the pit.",
+        "words": [
+          "A",
+          "pin",
+          "is",
+          "in",
+          "the",
+          "pit"
+        ]
+      },
+      {
+        "text": "Pip taps the pin.",
+        "words": [
+          "Pip",
+          "taps",
+          "the",
+          "pin"
+        ]
+      },
+      {
+        "text": "Pip sits. The end.",
+        "words": [
+          "Pip",
+          "sits",
+          "The",
+          "end"
+        ]
+      }
     ]
   },
   {
@@ -16,11 +57,159 @@
     "title": "The mad cat",
     "requiredGroup": "mdgock",
     "pages": [
-      { "text": "A cat sat on a mat.", "words": ["A", "cat", "sat", "on", "a", "mat"] },
-      { "text": "The cat is mad.", "words": ["The", "cat", "is", "mad"] },
-      { "text": "Dad taps the cat.", "words": ["Dad", "taps", "the", "cat"] },
-      { "text": "The cat is not mad.", "words": ["The", "cat", "is", "not", "mad"] },
-      { "text": "The cat naps. The end.", "words": ["The", "cat", "naps", "The", "end"] }
+      {
+        "text": "A cat sat on a mat.",
+        "words": [
+          "A",
+          "cat",
+          "sat",
+          "on",
+          "a",
+          "mat"
+        ]
+      },
+      {
+        "text": "The cat is mad.",
+        "words": [
+          "The",
+          "cat",
+          "is",
+          "mad"
+        ]
+      },
+      {
+        "text": "Dad taps the cat.",
+        "words": [
+          "Dad",
+          "taps",
+          "the",
+          "cat"
+        ]
+      },
+      {
+        "text": "The cat is not mad.",
+        "words": [
+          "The",
+          "cat",
+          "is",
+          "not",
+          "mad"
+        ]
+      },
+      {
+        "text": "The cat naps. The end.",
+        "words": [
+          "The",
+          "cat",
+          "naps",
+          "The",
+          "end"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "red-hen",
+    "title": "The red hen",
+    "requiredGroup": "eurhbf",
+    "pages": [
+      {
+        "text": "A red hen.",
+        "words": [
+          "A",
+          "red",
+          "hen"
+        ]
+      },
+      {
+        "text": "The hen has a pen.",
+        "words": [
+          "The",
+          "hen",
+          "has",
+          "a",
+          "pen"
+        ]
+      },
+      {
+        "text": "The hen can run.",
+        "words": [
+          "The",
+          "hen",
+          "can",
+          "run"
+        ]
+      },
+      {
+        "text": "Hug the hen.",
+        "words": [
+          "Hug",
+          "the",
+          "hen"
+        ]
+      },
+      {
+        "text": "The hen is fed. The end.",
+        "words": [
+          "The",
+          "hen",
+          "is",
+          "fed",
+          "The",
+          "end"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "yes-van",
+    "title": "Yes, a van",
+    "requiredGroup": "rest",
+    "pages": [
+      {
+        "text": "Yes! A van.",
+        "words": [
+          "Yes",
+          "A",
+          "van"
+        ]
+      },
+      {
+        "text": "The van is big.",
+        "words": [
+          "The",
+          "van",
+          "is",
+          "big"
+        ]
+      },
+      {
+        "text": "Jim can jump in.",
+        "words": [
+          "Jim",
+          "can",
+          "jump",
+          "in"
+        ]
+      },
+      {
+        "text": "We zip in the van.",
+        "words": [
+          "We",
+          "zip",
+          "in",
+          "the",
+          "van"
+        ]
+      },
+      {
+        "text": "Yes. The end.",
+        "words": [
+          "Yes",
+          "The",
+          "end"
+        ]
+      }
     ]
   }
 ]

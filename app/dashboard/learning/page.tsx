@@ -8,7 +8,9 @@ import Button from '@/components/ui/Button'
 import CourseProgress from '@/components/courses/CourseProgress'
 import ActivityTracker from '@/components/points/ActivityTracker'
 import { getEnrolledCoursesForUser } from '@/lib/learning/enrolled'
+import { getEcoPenguinParentProgress } from '@/lib/learning/eco-penguin-progress'
 import { getUserAvatarFromSession } from '@/lib/auth/user-avatar'
+import EcoPenguinProgressCard from '@/features/learning/components/EcoPenguinProgressCard'
 
 export const metadata = {
   title: 'My Learning - MonAlo',
@@ -30,6 +32,7 @@ export default async function LearnerDashboardPage() {
 
   const userId = session.user.id
   const enrolledCourses = userId ? await getEnrolledCoursesForUser(userId) : []
+  const ecoProgress = userId ? await getEcoPenguinParentProgress(userId) : null
 
   const inProgressCount = enrolledCourses.filter((c) => c.completedLessons < c.totalLessons).length
   const completedCount = enrolledCourses.filter((c) => c.completedLessons === c.totalLessons).length
@@ -50,17 +53,22 @@ export default async function LearnerDashboardPage() {
         </div>
 
         <Card className="mb-12 border-violet-200 bg-gradient-to-r from-sky-50 via-violet-50 to-amber-50">
-          <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-6">
-            <div>
-              <p className="text-2xl mb-1" aria-hidden>🐧</p>
-              <h2 className="text-lg font-semibold text-violet-900">Eco Penguin</h2>
-              <p className="text-sm text-violet-800/80 mt-1">
-                Explore pictures, vowels, digraphs, and spelling — one kids learning app.
-              </p>
+          <CardContent className="space-y-6 py-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <p className="text-2xl mb-1" aria-hidden>
+                  🐧
+                </p>
+                <h2 className="text-lg font-semibold text-violet-900">Eco Penguin</h2>
+                <p className="text-sm text-violet-800/80 mt-1">
+                  Early reading path — stickers unlock the next packs and stories.
+                </p>
+              </div>
+              <Link href="/learning">
+                <Button>Open Eco Penguin</Button>
+              </Link>
             </div>
-            <Link href="/learning">
-              <Button>Open Eco Penguin</Button>
-            </Link>
+            {ecoProgress && <EcoPenguinProgressCard progress={ecoProgress} variant="dashboard" />}
           </CardContent>
         </Card>
 

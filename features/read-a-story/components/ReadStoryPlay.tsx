@@ -8,6 +8,7 @@ import api from '@/lib/api'
 import { READ_STORY_BASE_PATH } from '@/lib/read-a-story/constants'
 import { writeReadStorySession } from '@/lib/read-a-story/session'
 import type { DecodableStory } from '@/lib/read-a-story/types'
+import PhonicsLockedEmpty from '@/features/learning/components/PhonicsLockedEmpty'
 
 type Props = {
   stories: DecodableStory[]
@@ -30,9 +31,12 @@ export default function ReadStoryPlay({ stories, completedIds = [] }: Props) {
 
   if (!story) {
     return (
-      <p className={`${readStoryTheme.card} py-12 text-center font-semibold text-[#d6d3d1]`}>
-        Finish more Balloon letter sets to unlock stories.
-      </p>
+      <PhonicsLockedEmpty
+        title="Stories unlock with stickers"
+        detail="Finish a Balloon letter set to earn a sticker, then come back to read a short decodable story."
+        cardClassName={readStoryTheme.card}
+        btnClassName={readStoryTheme.btnPrimary}
+      />
     )
   }
 
