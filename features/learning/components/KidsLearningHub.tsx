@@ -17,6 +17,16 @@ import { SEGMENT_WORD_BASE_PATH } from '@/lib/segment-the-word/constants'
 import { readSegmentWordSession } from '@/lib/segment-the-word/session'
 import { READ_STORY_BASE_PATH } from '@/lib/read-a-story/constants'
 import { readReadStorySession } from '@/lib/read-a-story/session'
+import { NURSERY_RHYME_BASE_PATH } from '@/lib/nursery-rhyme/constants'
+import { readNurseryRhymeSession } from '@/lib/nursery-rhyme/session'
+import { SIGHT_WORDS_BASE_PATH } from '@/lib/sight-words/constants'
+import { readSightWordsSession } from '@/lib/sight-words/session'
+import { CONSONANT_BLENDS_BASE_PATH } from '@/lib/consonant-blends/constants'
+import { readConsonantBlendsSession } from '@/lib/consonant-blends/session'
+import { SAY_IT_BASE_PATH } from '@/lib/say-it/constants'
+import { readSayItSession } from '@/lib/say-it/session'
+import { WRITE_IT_BASE_PATH } from '@/lib/write-it/constants'
+import { readWriteItSession } from '@/lib/write-it/session'
 import { VOWEL_WORDS_BASE_PATH } from '@/lib/vowel-words/constants'
 import { DIGRAPHS_BASE_PATH } from '@/lib/digraphs/constants'
 import { readDigraphsSession } from '@/lib/digraphs/session'
@@ -64,6 +74,33 @@ export default function KidsLearningHub({
 
   useEffect(() => {
     const items: ContinueItem[] = []
+    const rhyme = readNurseryRhymeSession()
+    if (rhyme) {
+      items.push({
+        id: 'rhyme',
+        label: `Rhyme time · ${rhyme.setId}`,
+        detail: 'Tap the two pictures that rhyme',
+        href: NURSERY_RHYME_BASE_PATH,
+      })
+    }
+    const sayIt = readSayItSession()
+    if (sayIt) {
+      items.push({
+        id: 'say-it',
+        label: `Say it · ${sayIt.label}`,
+        detail: 'Listen, say it out loud',
+        href: SAY_IT_BASE_PATH,
+      })
+    }
+    const writeIt = readWriteItSession()
+    if (writeIt) {
+      items.push({
+        id: 'write-it',
+        label: `Write it · ${writeIt.label}`,
+        detail: writeIt.mode === 'trace' ? 'Trace a letter' : 'Build a sentence',
+        href: WRITE_IT_BASE_PATH,
+      })
+    }
     const letters = readLetterSoundsSession()
     if (letters) {
       items.push({
@@ -109,6 +146,15 @@ export default function KidsLearningHub({
         href: SEGMENT_WORD_BASE_PATH,
       })
     }
+    const sight = readSightWordsSession()
+    if (sight) {
+      items.push({
+        id: 'sight',
+        label: `Sight words · ${sight.word}`,
+        detail: 'Hear the word, tap it',
+        href: SIGHT_WORDS_BASE_PATH,
+      })
+    }
     const story = readReadStorySession()
     if (story) {
       items.push({
@@ -143,6 +189,15 @@ export default function KidsLearningHub({
         label: `Digraphs · ${dig.digraphLabel}`,
         detail: `Page ${dig.page} · ${dig.mode === 'play' ? 'Play' : 'Learn'}`,
         href: `${DIGRAPHS_BASE_PATH}/${dig.digraphId}?page=${dig.page}&mode=${dig.mode}`,
+      })
+    }
+    const consonant = readConsonantBlendsSession()
+    if (consonant) {
+      items.push({
+        id: 'consonant-blends',
+        label: `Consonant blends · ${consonant.word}`,
+        detail: 'Hear the blend, tap the picture',
+        href: CONSONANT_BLENDS_BASE_PATH,
       })
     }
     const build = readBuildWordSession()
@@ -184,15 +239,45 @@ export default function KidsLearningHub({
             Welcome to {ECO_PENGUIN_APP_NAME}
           </h2>
           <p className={`mx-auto mt-3 max-w-lg text-sm leading-relaxed sm:text-base ${planetTextMuted}`}>
-            Sounds → Which? → Balloons → Blend → Segment → Explore → … → Story. Play a little each day.
+            Stage 1 ESL program — listening, phonics, sight words, and short stories. Mapped to
+            Cambridge Early Years / Primary Stage 1 goals (not certified).
           </p>
           {!signedIn && (
-            <p className="mx-auto mt-4 max-w-md rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm font-semibold text-amber-100">
-              Play free —{' '}
-              <Link href="/login?callbackUrl=/learning" className="underline hover:text-[#fafaf9]">
-                sign in
+            <div className="mx-auto mt-6 max-w-lg space-y-3">
+              <p className="rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm font-semibold text-amber-100">
+                Try free without an account —{' '}
+                <Link href="/login?callbackUrl=/learning" className="underline hover:text-[#fafaf9]">
+                  sign in
+                </Link>{' '}
+                to keep stickers and unlock the full path.
+              </p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Link
+                  href={NURSERY_RHYME_BASE_PATH}
+                  className={`${planetCard} border-cyan-400/40 bg-gradient-to-br from-cyan-400/15 to-transparent p-5 transition hover:-translate-y-0.5`}
+                >
+                  <p className="text-xs font-bold uppercase tracking-widest text-cyan-300">Try free</p>
+                  <p className="mt-1 text-lg font-extrabold text-[#fafaf9]">Rhyme time</p>
+                  <p className={`mt-1 text-sm ${planetTextMuted}`}>Tap the pictures that rhyme</p>
+                </Link>
+                <Link
+                  href={LETTER_SOUNDS_BASE_PATH}
+                  className={`${planetCard} border-sky-400/40 bg-gradient-to-br from-sky-400/15 to-transparent p-5 transition hover:-translate-y-0.5`}
+                >
+                  <p className="text-xs font-bold uppercase tracking-widest text-sky-300">Try free</p>
+                  <p className="mt-1 text-lg font-extrabold text-[#fafaf9]">Letter sounds</p>
+                  <p className={`mt-1 text-sm ${planetTextMuted}`}>SATPIN letters — S A T P I N</p>
+                </Link>
+              </div>
+            </div>
+          )}
+          {signedIn && (
+            <p className="mx-auto mt-4 max-w-md rounded-2xl border border-sky-400/30 bg-sky-400/10 px-4 py-3 text-sm font-semibold text-sky-100">
+              Teacher with one phone?{' '}
+              <Link href="/classroom" className="underline hover:text-[#fafaf9]">
+                Classroom Mode
               </Link>{' '}
-              to keep stickers and unlocks.
+              tracks each kid separately.
             </p>
           )}
         </section>
@@ -261,13 +346,27 @@ export default function KidsLearningHub({
                   >
                     {game.badge}
                   </div>
+                  {game.cambridgeChip && (
+                    <span className="inline-flex rounded-full border border-[#fafaf9]/20 bg-[#0c0a09]/40 px-2.5 py-1 text-[10px] font-bold tracking-wide text-sky-200 sm:text-xs">
+                      {game.cambridgeChip}
+                    </span>
+                  )}
                 </div>
                 <h4 className="mt-3 text-xl font-extrabold text-[#fafaf9]">{game.title}</h4>
                 <p className={`mt-2 text-sm leading-relaxed ${planetTextMuted}`}>{game.blurb}</p>
                 {game.live ? (
-                  <Link href={game.href} className={`${planetBtn.sun} mt-4 inline-flex`}>
-                    Open →
-                  </Link>
+                  signedIn || game.id === 'nursery-rhyme' || game.id === 'letter-sounds' ? (
+                    <Link href={game.href} className={`${planetBtn.sun} mt-4 inline-flex`}>
+                      {signedIn ? 'Open →' : 'Try free →'}
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/login?callbackUrl=${encodeURIComponent(game.href)}`}
+                      className={`${planetBtnSecondary} mt-4 inline-flex`}
+                    >
+                      Sign in to open →
+                    </Link>
+                  )
                 ) : (
                   <p className={`mt-4 text-sm font-bold ${planetTextDim}`}>Coming soon</p>
                 )}
@@ -286,6 +385,12 @@ export default function KidsLearningHub({
             </p>
           </div>
           <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold text-sky-200">
+            <Link href={NURSERY_RHYME_BASE_PATH} className="hover:text-[#fafaf9]">
+              Rhyme
+            </Link>
+            <Link href={SAY_IT_BASE_PATH} className="hover:text-[#fafaf9]">
+              Say it
+            </Link>
             <Link href={LETTER_SOUNDS_BASE_PATH} className="hover:text-[#fafaf9]">
               Sounds
             </Link>
@@ -301,6 +406,12 @@ export default function KidsLearningHub({
             <Link href={SEGMENT_WORD_BASE_PATH} className="hover:text-[#fafaf9]">
               Segment
             </Link>
+            <Link href={SIGHT_WORDS_BASE_PATH} className="hover:text-[#fafaf9]">
+              Sight
+            </Link>
+            <Link href={WRITE_IT_BASE_PATH} className="hover:text-[#fafaf9]">
+              Write
+            </Link>
             <Link href={ECO_PENGUIN_BASE_PATH} className="hover:text-[#fafaf9]">
               Explore
             </Link>
@@ -309,6 +420,9 @@ export default function KidsLearningHub({
             </Link>
             <Link href={DIGRAPHS_BASE_PATH} className="hover:text-[#fafaf9]">
               Digraphs
+            </Link>
+            <Link href={CONSONANT_BLENDS_BASE_PATH} className="hover:text-[#fafaf9]">
+              Blends
             </Link>
             <Link href={BUILD_WORD_BASE_PATH} className="hover:text-[#fafaf9]">
               Build

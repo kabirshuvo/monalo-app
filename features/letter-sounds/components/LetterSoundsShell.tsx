@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { letterSoundsTheme } from '@/features/letter-sounds/letter-sounds-theme'
 import { LETTER_SOUNDS_BASE_PATH, LETTER_SOUNDS_QUIZ_PATH } from '@/lib/letter-sounds/constants'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
+import { CAMBRIDGE_ESL_STAGES } from '@/lib/learning/cambridge-esl'
 import { planetFooter } from '@/lib/learning/planet-theme'
 import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
 
@@ -18,6 +19,7 @@ export default function LetterSoundsShell({
   title,
   backHref = LEARNING_HUB_PATH,
 }: Props) {
+  const stage = CAMBRIDGE_ESL_STAGES.letters
   return (
     <div className={letterSoundsTheme.shell}>
       <EcoPenguinGuide room="letter-sounds" />
@@ -35,6 +37,9 @@ export default function LetterSoundsShell({
             </Link>
           </div>
           <nav className="flex shrink-0 items-center gap-2 text-sm">
+            <span className="hidden rounded-full bg-sky-400/20 px-2.5 py-1 text-xs font-bold text-sky-200 sm:inline">
+              {stage.chip}
+            </span>
             <Link href={LEARNING_HUB_PATH} className="font-semibold text-sky-300 hover:underline">
               {ECO_PENGUIN_APP_NAME}
             </Link>
@@ -49,6 +54,7 @@ export default function LetterSoundsShell({
         {title && (
           <div className="border-t border-[#fafaf9]/15 bg-sky-950/40 px-4 py-3 text-center">
             <h1 className="text-lg font-extrabold text-[#fafaf9] sm:text-xl">{title}</h1>
+            <p className="mt-1 text-xs text-sky-200/80">{stage.parent}</p>
           </div>
         )}
       </header>

@@ -8,8 +8,7 @@ export const HOME_SURFACE_HEROES: HomeSurfaceHeroProps[] = [
       'Read articles from MonAlo writers — learning tips, craft notes, and school news. Earn points while you read.',
     href: '/blog',
     cta: 'Read the blog',
-    emoji: '✍️',
-    gradient: 'from-violet-50/80 to-indigo-50/60 dark:from-violet-950/40 dark:to-indigo-950/30',
+    planet: 'saturn',
   },
   {
     eyebrow: 'Craft shop',
@@ -20,8 +19,7 @@ export const HOME_SURFACE_HEROES: HomeSurfaceHeroProps[] = [
     cta: 'Browse the shop',
     secondaryHref: '/shop?category=gypsum-pottery',
     secondaryCta: 'Gypsum pottery',
-    emoji: '🏺',
-    gradient: 'from-amber-50/90 to-orange-50/70 dark:from-amber-950/35 dark:to-orange-950/25',
+    planet: 'mars',
   },
   {
     eyebrow: 'Gallery',
@@ -30,8 +28,7 @@ export const HOME_SURFACE_HEROES: HomeSurfaceHeroProps[] = [
       'Watercolors, acrylics, and original pieces by Monalo artists. Collect work that helps keep creative programs alive.',
     href: '/gallery',
     cta: 'View gallery',
-    emoji: '🎨',
-    gradient: 'from-rose-50/80 to-pink-50/60 dark:from-rose-950/35 dark:to-pink-950/25',
+    planet: 'venus',
   },
   {
     eyebrow: 'Team',
@@ -40,8 +37,7 @@ export const HOME_SURFACE_HEROES: HomeSurfaceHeroProps[] = [
       'Software, design, video, and personal-assistant services from the Monalo team — client revenue flows back to the school.',
     href: '/team',
     cta: 'Meet the team',
-    emoji: '🤝',
-    gradient: 'from-emerald-50/80 to-teal-50/60 dark:from-emerald-950/35 dark:to-teal-950/25',
+    planet: 'jupiter',
   },
   {
     eyebrow: 'Learn',
@@ -52,7 +48,6 @@ export const HOME_SURFACE_HEROES: HomeSurfaceHeroProps[] = [
     cta: 'Explore courses',
     secondaryHref: '/learning',
     secondaryCta: 'Eco Penguin',
-    emoji: '📚',
-    gradient: 'from-sky-50/80 to-blue-50/60 dark:from-sky-950/35 dark:to-blue-950/25',
+    planet: 'earth',
   },
 ]

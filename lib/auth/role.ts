@@ -303,6 +303,15 @@ export const rolePermissions: Record<RoleType, string[]> = {
     'view:blog',
     'view:products',
   ],
+  [ROLES.TEACHER]: [
+    'track:progress',
+    'manage:classroom',
+    'view:courses',
+    'view:lessons',
+    'enroll:course',
+    'view:blog',
+    'view:products',
+  ],
   [ROLES.SPONSOR]: [
     'donate:projects',
     'view:blog',

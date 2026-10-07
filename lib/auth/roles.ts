@@ -27,6 +27,7 @@ export const ROLES = {
   DONOR: 'DONOR' as const,
   GUARDIAN: 'GUARDIAN' as const,
   SPONSOR: 'SPONSOR' as const,
+  TEACHER: 'TEACHER' as const,
   BROWSER: 'BROWSER' as const,
 } as const
 
@@ -66,6 +67,7 @@ export const ROLE_DESCRIPTIONS: Record<RoleType, string> = {
   [ROLES.DONOR]: 'Donor - Support the school',
   [ROLES.GUARDIAN]: 'Guardian - Support and follow a learner',
   [ROLES.SPONSOR]: 'Sponsor - Fund learning opportunities',
+  [ROLES.TEACHER]: 'Teacher - Classroom Mode for many kids on one phone',
   [ROLES.BROWSER]: 'Visitor - Browse public content',
 }
 
@@ -134,7 +136,10 @@ export const ROLE_REQUIREMENTS: Record<string, RoleType[]> = {
   '/dashboard/seller/artworks': [ROLES.SELLER, ROLES.ADMIN],
   '/dashboard/admin/artworks': [ROLES.ADMIN],
 
-  '/dashboard/learning': [ROLES.LEARNER, ROLES.ADMIN],
+  '/dashboard/learning': [ROLES.LEARNER, ROLES.TEACHER, ROLES.ADMIN],
+  '/classroom': [ROLES.TEACHER, ROLES.LEARNER, ROLES.ADMIN, ROLES.GUARDIAN],
+  '/classroom/board': [ROLES.TEACHER, ROLES.LEARNER, ROLES.ADMIN, ROLES.GUARDIAN],
+  '/classroom/switch': [ROLES.TEACHER, ROLES.LEARNER, ROLES.ADMIN, ROLES.GUARDIAN],
   
   // ==========================================
   // FUTURE ROUTES - Templates for new routes
@@ -308,6 +313,16 @@ export const PERMISSIONS: Record<RoleType, string[]> = {
     'view_course',
     'view_blog',
     'browse_products',
+  ],
+
+  [ROLES.TEACHER]: [
+    'view_progress',
+    'manage_classroom',
+    'view_course',
+    'view_blog',
+    'browse_products',
+    'enroll_course',
+    'complete_lesson',
   ],
 
   [ROLES.SPONSOR]: [

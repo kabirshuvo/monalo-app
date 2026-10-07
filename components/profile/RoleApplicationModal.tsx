@@ -100,7 +100,7 @@ export default function RoleApplicationModal({
         </p>
 
         {currentRole && currentRole !== 'BROWSER' && (
-          <p className="rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-800">
+          <p className="rounded-xl bg-sky-500/10 px-3 py-2 text-sm text-sky-900 dark:text-sky-100">
             Your current role: <strong>{currentRole}</strong>
           </p>
         )}
@@ -113,7 +113,7 @@ export default function RoleApplicationModal({
                 key={option.role}
                 className={`flex cursor-pointer gap-4 rounded-xl border p-4 transition-colors ${
                   checked
-                    ? 'border-blue-500 bg-blue-50/70 ring-1 ring-blue-500'
+                    ? 'border-[var(--sun)] bg-[var(--surface-hover)] ring-1 ring-[var(--sun)]'
                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
               >

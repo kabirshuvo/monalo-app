@@ -22,6 +22,7 @@ export default async function DashboardPage() {
     ADMIN: '/dashboard/admin',
     WRITER: '/dashboard/writer',
     LEARNER: '/dashboard/learning',
+    TEACHER: '/classroom',
     CUSTOMER: '/dashboard/customer',
     SELLER: '/dashboard/seller',
     DONOR: '/home',

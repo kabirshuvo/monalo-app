@@ -43,11 +43,11 @@ export default function Textarea({
           aria-describedby={error ? `${textareaId}-error` : helperText ? `${textareaId}-helper` : undefined}
           maxLength={maxLength}
           value={value}
-          className={`w-full px-4 py-2.5 text-gray-900 bg-white border rounded-lg transition-all duration-200 resize-y min-h-[100px]
+          className={`w-full px-4 py-2.5 text-content bg-surface border rounded-xl transition-all duration-200 resize-y min-h-[100px]
             placeholder:text-gray-400
             ${error 
-              ? 'border-red-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-red-50' 
-              : 'border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400'
+              ? 'border-rose-500/60 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 bg-rose-500/5' 
+              : 'border-gray-300 focus:ring-2 focus:ring-[var(--sun)] focus:border-[var(--sun)] hover:border-gray-400'
             }
             disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed disabled:border-gray-200
             ${className}`}

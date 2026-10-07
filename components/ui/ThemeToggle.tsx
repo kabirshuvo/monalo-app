@@ -78,8 +78,7 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
     return (
       <div
         className={[
-          'inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 dark:border-zinc-800',
-          'bg-white dark:bg-zinc-950',
+          'inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--orbit-line-strong)]',
           className,
         ].join(' ')}
         aria-hidden="true"
@@ -99,14 +98,14 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
         type="button"
         onClick={() => pick(value)}
         className={[
-          'w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors text-left',
-          'hover:bg-gray-100 dark:hover:bg-zinc-900',
-          active ? 'bg-gray-100 dark:bg-zinc-900 text-gray-900 dark:text-zinc-50' : 'text-gray-700 dark:text-zinc-200',
+          'w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-colors text-left',
+          'hover:bg-[var(--surface-hover)]',
+          active ? 'bg-[var(--surface-hover)] text-content' : 'text-content-secondary',
         ].join(' ')}
       >
         <ItemIcon className="h-4 w-4" />
         <span className="flex-1">{label}</span>
-        {active && <span className="text-xs text-gray-500 dark:text-zinc-400">Selected</span>}
+        {active && <span className="text-xs text-content-muted">Selected</span>}
       </button>
     )
   }
@@ -119,11 +118,10 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
         aria-haspopup="menu"
         aria-expanded={open}
         className={[
-          'inline-flex items-center justify-center rounded-lg border border-gray-200 dark:border-zinc-800',
-          'bg-white dark:bg-zinc-950 text-gray-800 dark:text-zinc-100',
-          'hover:bg-gray-50 dark:hover:bg-zinc-900 transition-colors',
+          'inline-flex items-center justify-center rounded-full border border-[var(--orbit-line-strong)]',
+          'text-content hover:bg-[var(--surface-hover)] transition-colors',
           'h-9 w-9',
-          'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-400 focus:ring-offset-white dark:focus:ring-offset-zinc-950',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sun)]',
         ].join(' ')}
         title="Theme"
       >
@@ -134,14 +132,13 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
         <div
           role="menu"
           className={[
-            'absolute right-0 mt-2 w-44 rounded-lg border',
-            'border-gray-200 dark:border-zinc-800',
-            'bg-white dark:bg-zinc-950 shadow-lg p-1 z-50',
+            'absolute right-0 z-50 mt-2 w-48 rounded-2xl border border-[var(--orbit-line)]',
+            'cosmos-glass p-1 shadow-2xl shadow-black/30',
           ].join(' ')}
         >
           {item('system', 'System', MonitorIcon)}
-          {item('light', 'Light', SunIcon)}
-          {item('dark', 'Dark', MoonIcon)}
+          {item('light', 'Daybreak', SunIcon)}
+          {item('dark', 'Night', MoonIcon)}
         </div>
       )}
     </div>

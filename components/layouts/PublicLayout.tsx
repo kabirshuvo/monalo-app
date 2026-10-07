@@ -12,6 +12,10 @@ import TotalPointsBadge from '@/components/nav/TotalPointsBadge'
 import CartNavLink from '@/components/shop/CartNavLink'
 import SignInNavButton from '@/components/auth/SignInNavButton'
 import StartTodayButton from '@/components/landing/StartTodayButton'
+import SunMark from '@/components/cosmos/SunMark'
+import PlanetOrb from '@/components/cosmos/PlanetOrb'
+import CosmosFooter from '@/components/cosmos/CosmosFooter'
+import { planetForPath } from '@/lib/cosmos/planets'
 
 export interface PublicLayoutProps {
   children: React.ReactNode
@@ -76,6 +80,8 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
   const navPath =
     onBlogHost && (currentPath === '/blog' || currentPath.startsWith('/blog/')) ? '/' : currentPath
   const logoHref = status === 'authenticated' ? '/home' : '/'
+  // Each page wears its planet's colours (Courses → Earth, Shop → Mars, …)
+  const pageTone = planetForPath(navPath === '/' ? '' : navPath)?.id ?? 'sun'
 
   // Diagnostic helpers (development only)
   const _devUserEmail = (session as any)?.user?.email ?? null
@@ -178,7 +184,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     if (status === 'loading' || signingOut) {
       if (status === 'loading') {
         return variant === 'desktop' ? (
-          <div className="hidden md:flex items-center">
+          <div className="hidden xl:flex items-center">
             <InlineLoading />
           </div>
         ) : (
@@ -192,26 +198,26 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
       // Authenticated UI
       if (variant === 'desktop') {
         return (
-          <div className="hidden md:flex items-center gap-3 relative">
+          <div className="hidden xl:flex items-center gap-3 relative">
             <TotalPointsBadge />
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               aria-haspopup="true"
               aria-expanded={menuOpen}
-              className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="flex items-center gap-3 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sun)]"
             >
-              <div className="w-9 h-9 rounded-full bg-purple-100 dark:bg-purple-950 flex items-center justify-center">
-                <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--orbit-line-strong)] bg-[var(--surface)]">
+                <span className="font-serif text-base text-content">
                   {String(((session as any)?.user?.name || (session as any)?.user?.email || '')).charAt(0).toUpperCase()}
                 </span>
               </div>
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-12 w-48 bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-md shadow-lg py-1 z-50">
-                <Link href={getDashboardPath((session as any)?.user?.role)} className="block px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900">Dashboard</Link>
-                <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900">Profile</Link>
-                <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900">Sign out</button>
+              <div className="absolute right-0 top-full z-50 mt-3 w-52 overflow-hidden rounded-2xl border border-[var(--orbit-line)] cosmos-glass py-1 shadow-2xl shadow-black/30">
+                <Link href={getDashboardPath((session as any)?.user?.role)} className="block px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content">Dashboard</Link>
+                <Link href="/profile" className="block px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content">Profile</Link>
+                <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content">Sign out</button>
               </div>
             )}
           </div>
@@ -239,7 +245,7 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
     // Unauthenticated UI — no sign-out; Sign in + Start today trigger auth
     if (variant === 'desktop') {
       return (
-        <div className="hidden md:flex items-center gap-3 relative">
+        <div className="hidden xl:flex items-center gap-3 relative">
           <SignInNavButton />
           <StartTodayButton size="sm" />
         </div>
@@ -257,44 +263,37 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
   return (
     // TEMP DIAGNOSTIC: force remount when `status` changes to verify
     // whether remounting fixes navbar staleness. Remove when debugging is done.
-    <div key={status} className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)]">
+    <div
+      key={status}
+      data-tone={pageTone}
+      className={`min-h-screen flex flex-col text-[var(--foreground)] ${pageTone ? 'tone-wash' : ''}`}
+    >
       {/* Header */}
-      <header className="bg-surface border-b border-subtle sticky top-0 z-40">
+      <header className="cosmos-glass sticky top-0 z-40 border-b border-[var(--orbit-line)]">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link
               href={blogHome ? '/' : logoHref}
-              className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-zinc-50 hover:text-gray-700 dark:hover:text-zinc-200 transition-colors"
+              className="flex items-center gap-2.5 text-content transition-opacity hover:opacity-85"
+              aria-label="MonAlo, home"
             >
-              <svg className="w-8 h-8 text-gray-900 dark:text-zinc-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
-              <span>MonAlo</span>
+              <SunMark className="h-9 w-9" />
+              <span className="font-serif text-[1.4rem] font-medium tracking-tight">MonAlo</span>
             </Link>
 
             {/* Desktop Navigation */}
             {!isLanding && (
-              <div className="hidden md:flex items-center gap-1">
+              <div className="hidden xl:flex items-center gap-0.5">
               {navigationItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
-                    ${navPath === item.href
-                      ? 'text-purple-700 bg-purple-50 dark:text-zinc-50 dark:bg-zinc-900'
-                      : 'text-gray-700 dark:text-zinc-200 hover:text-gray-900 dark:hover:text-zinc-50 hover:bg-gray-100 dark:hover:bg-zinc-900'
-                    }`}
-                >
-                  {item.label}
-                </Link>
+                <NavItem key={item.href} href={item.href} label={item.label} active={navPath === item.href} />
               ))}
               </div>
             )}
 
             {/* Theme + Auth (desktop) */}
             {!isLanding && (
-              <div className="hidden md:flex items-center gap-3">
+              <div className="hidden xl:flex items-center gap-2">
                 <CartNavLink />
                 <ThemeToggle />
                 <AuthControls variant="desktop" />
@@ -303,12 +302,12 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
 
             {/* Mobile menu button */}
             {!isLanding && (
-              <div className="md:hidden flex items-center gap-2">
+              <div className="xl:hidden flex items-center gap-2">
                 <CartNavLink />
                 <ThemeToggle />
                 <button
                   type="button"
-                  className="p-2 rounded-md text-gray-700 dark:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-colors"
+                  className="rounded-full p-2 text-content-secondary transition-colors hover:bg-[var(--surface-hover)] hover:text-content"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                   aria-expanded={mobileMenuOpen}
                   aria-label="Toggle navigation menu"
@@ -327,23 +326,19 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
 
           {/* Mobile Navigation */}
           {!isLanding && mobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-gray-200">
+            <div className="xl:hidden border-t border-[var(--orbit-line)] py-4">
               <div className="flex flex-col gap-2">
                 {navigationItems.map((item) => (
-                  <Link
+                  <NavItem
                     key={item.href}
                     href={item.href}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
-                      ${navPath === item.href
-                        ? 'text-purple-700 bg-purple-50 dark:text-zinc-50 dark:bg-zinc-900'
-                        : 'text-gray-700 dark:text-zinc-200 hover:text-gray-900 dark:hover:text-zinc-50 hover:bg-gray-100 dark:hover:bg-zinc-900'
-                      }`}
+                    label={item.label}
+                    active={navPath === item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
+                    block
+                  />
                 ))}
-                <div className="pt-4 border-t border-gray-200 mt-2 flex flex-col gap-2">
+                <div className="mt-2 flex flex-col gap-2 border-t border-[var(--orbit-line)] pt-4">
                   <AuthControls variant="mobile" />
                 </div>
               </div>
@@ -357,51 +352,38 @@ export default function PublicLayout({ children, currentPath = '' }: PublicLayou
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-surface border-t border-subtle mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Brand */}
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-2 text-xl font-semibold text-gray-900 mb-4">
-                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-                <span>MonAlo</span>
-              </div>
-              <p className="text-gray-600 text-sm max-w-md">
-                Light of the mind. Illuminating your path to knowledge through learning, creating, and growing together.
-              </p>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Explore</h3>
-              <ul className="space-y-2">
-                <li><Link href="/courses" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Learn</Link></li>
-                <li><Link href="/learning" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Eco Penguin</Link></li>
-                <li><Link href="/shop" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Craft shop</Link></li>
-                <li><Link href="/gallery" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Gallery</Link></li>
-                <li><Link href="/team" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Team services</Link></li>
-                <li><Link href="/blog" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Blog</Link></li>
-              </ul>
-            </div>
-
-            {/* Company */}
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Company</h3>
-              <ul className="space-y-2">
-                <li><Link href="/about" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">About</Link></li>
-                <li><Link href="/contact" className="text-gray-600 hover:text-blue-600 text-sm transition-colors">Contact</Link></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-500">
-            <p>&copy; {new Date().getFullYear()} MonAlo. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <CosmosFooter />
     </div>
+  )
+}
+
+function NavItem({
+  href,
+  label,
+  active,
+  onClick,
+  block = false,
+}: {
+  href: string
+  label: string
+  active: boolean
+  onClick?: () => void
+  block?: boolean
+}) {
+  const planet = planetForPath(href === '/' ? '' : href)
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      aria-current={active ? 'page' : undefined}
+      className={`${block ? 'flex' : 'inline-flex'} items-center gap-2 whitespace-nowrap rounded-full px-3 py-2 text-sm transition-colors ${
+        active
+          ? 'bg-[var(--tone-soft)] text-content ring-1 ring-[var(--tone-line)]'
+          : 'text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content'
+      }`}
+    >
+      {planet ? <PlanetOrb planet={planet} size={9} /> : null}
+      {label}
+    </Link>
   )
 }

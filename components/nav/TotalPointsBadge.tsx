@@ -14,15 +14,14 @@ export default function TotalPointsBadge({ className = '' }: { className?: strin
     <Link
       href="/profile"
       className={[
-        'inline-flex items-center gap-1.5 rounded-lg border border-purple-200 dark:border-purple-900',
-        'bg-purple-50 dark:bg-purple-950/40 px-3 py-1.5 text-sm font-medium',
-        'text-purple-800 dark:text-purple-200',
-        'hover:bg-purple-100 dark:hover:bg-purple-950/70 transition-colors',
+        'inline-flex items-center gap-1.5 rounded-full border border-[var(--orbit-line-strong)]',
+        'px-3 py-1.5 text-sm font-bold text-content',
+        'hover:bg-[var(--surface-hover)] transition-colors',
         className,
       ].join(' ')}
       title="View your points"
     >
-      <span aria-hidden="true">★</span>
+      <span aria-hidden="true" className="text-[var(--sun)]">★</span>
       <span>{points.toLocaleString()} points</span>
     </Link>
   )

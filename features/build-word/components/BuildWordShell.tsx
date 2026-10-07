@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { buildWordTheme } from '@/features/build-word/build-word-theme'
 import { BUILD_WORD_BASE_PATH } from '@/lib/build-word/session'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
+import { CAMBRIDGE_ESL_STAGES } from '@/lib/learning/cambridge-esl'
 import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
 import { planetFooter } from '@/lib/learning/planet-theme'
 import { VOWEL_WORDS_BASE_PATH } from '@/lib/vowel-words/constants'
@@ -20,6 +21,7 @@ export default function BuildWordShell({
   title,
   backHref = LEARNING_HUB_PATH,
 }: Props) {
+  const stage = CAMBRIDGE_ESL_STAGES['stage1-phonics']
   return (
     <div className={buildWordTheme.shell}>
       <EcoPenguinGuide room="build-the-word" />
@@ -34,6 +36,9 @@ export default function BuildWordShell({
             </Link>
           </div>
           <nav className="flex shrink-0 items-center gap-2 text-sm">
+            <span className="hidden rounded-full bg-rose-400/20 px-2.5 py-1 text-xs font-bold text-rose-200 sm:inline">
+              {stage.chip}
+            </span>
             <Link href={LEARNING_HUB_PATH} className="font-semibold text-rose-300 hover:underline">
               {ECO_PENGUIN_APP_NAME}
             </Link>
@@ -48,6 +53,7 @@ export default function BuildWordShell({
         {title && (
           <div className="border-t border-[#fafaf9]/15 bg-rose-950/30 px-4 py-3 text-center">
             <h1 className="text-lg font-extrabold text-[#fafaf9]">{title}</h1>
+            <p className="mt-1 text-xs text-rose-200/80">{stage.parent}</p>
           </div>
         )}
       </header>

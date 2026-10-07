@@ -218,12 +218,180 @@ async function generateBlendWord() {
   console.log(`Blend the word audio done: ${ok} created, ${skip} skipped`)
 }
 
+async function generateNurseryRhyme() {
+  const baseDir = path.join(ROOT, 'public', 'nursery-rhyme')
+  const sets = JSON.parse(readFileSync(path.join(ROOT, 'data/nursery-rhyme/sets.json'), 'utf8'))
+  let ok = 0
+  let skip = 0
+
+  for (const set of sets) {
+    const rel = `/audio/sets/${set.id}.mp3`
+    const result = await synth(set.speak, audioPath(baseDir, rel), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[nursery-rhyme] ${set.id}: ${result}`)
+  }
+
+  for (const [name, text] of [
+    ['success.mp3', 'Great! They rhyme.'],
+    ['error.mp3', 'Try again.'],
+  ]) {
+    const result = await synth(text, path.join(baseDir, 'audio', name), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[nursery-rhyme] ${name}: ${result}`)
+  }
+
+  console.log(`Nursery rhyme audio done: ${ok} created, ${skip} skipped`)
+}
+
+async function generateConsonantBlends() {
+  const baseDir = path.join(ROOT, 'public', 'consonant-blends')
+  const words = JSON.parse(readFileSync(path.join(ROOT, 'data/consonant-blends/words.json'), 'utf8'))
+  let ok = 0
+  let skip = 0
+
+  /** One clip per unique blend string (e.g. "b l") */
+  const blendDone = new Set()
+  for (const w of words) {
+    const blendKey = w.blend
+    const blendRel = `/audio/blend/${blendKey}.mp3`
+    const blendOut = audioPath(baseDir, blendRel)
+    if (!blendDone.has(blendKey)) {
+      const result = await synth(w.speak.blend, blendOut, slowTts)
+      if (result === 'ok') ok++
+      else if (result === 'skip') skip++
+      console.log(`[consonant-blends] blend ${blendKey}: ${result}`)
+      blendDone.add(blendKey)
+    }
+
+    const wordRel = `/audio/word/${w.word}.mp3`
+    const wordOut = audioPath(baseDir, wordRel)
+    // Keep digraphs brush if already pointed there in JSON — still generate local copy for consistency
+    const result = await synth(w.speak.word, wordOut, slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[consonant-blends] word ${w.word}: ${result}`)
+  }
+
+  console.log(`Consonant blends audio done: ${ok} created, ${skip} skipped`)
+}
+
+async function generateSayIt() {
+  const baseDir = path.join(ROOT, 'public', 'say-it')
+  const prompts = JSON.parse(readFileSync(path.join(ROOT, 'data/say-it/prompts.json'), 'utf8'))
+  let ok = 0
+  let skip = 0
+
+  for (const p of prompts) {
+    const rel = `/audio/prompts/${p.id}.mp3`
+    const result = await synth(p.speak, audioPath(baseDir, rel), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[say-it] ${p.id}: ${result}`)
+  }
+
+  for (const [name, text] of [
+    ['success.mp3', 'Great speaking!'],
+    ['error.mp3', 'Try again.'],
+  ]) {
+    const result = await synth(text, path.join(baseDir, 'audio', name), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[say-it] ${name}: ${result}`)
+  }
+
+  console.log(`Say it audio done: ${ok} created, ${skip} skipped`)
+}
+
+async function generateSightWords() {
+  const baseDir = path.join(ROOT, 'public', 'sight-words')
+  const words = JSON.parse(readFileSync(path.join(ROOT, 'data/sight-words/words.json'), 'utf8'))
+  const sentences = JSON.parse(
+    readFileSync(path.join(ROOT, 'data/sight-words/sentences.json'), 'utf8')
+  )
+  let ok = 0
+  let skip = 0
+
+  for (const w of words) {
+    const rel = `/audio/words/${w.id}.mp3`
+    const result = await synth(w.speak, audioPath(baseDir, rel), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[sight-words] word ${w.id}: ${result}`)
+  }
+
+  for (const s of sentences) {
+    const rel = `/audio/sentences/${s.id}.mp3`
+    const result = await synth(s.speak, audioPath(baseDir, rel), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[sight-words] sentence ${s.id}: ${result}`)
+  }
+
+  for (const [name, text] of [
+    ['success.mp3', 'Great reading!'],
+    ['error.mp3', 'Try again.'],
+  ]) {
+    const result = await synth(text, path.join(baseDir, 'audio', name), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[sight-words] ${name}: ${result}`)
+  }
+
+  console.log(`Sight words audio done: ${ok} created, ${skip} skipped`)
+}
+
+async function generateWriteIt() {
+  const baseDir = path.join(ROOT, 'public', 'write-it')
+  const letters = JSON.parse(readFileSync(path.join(ROOT, 'data/write-it/letters.json'), 'utf8'))
+  const sentences = JSON.parse(
+    readFileSync(path.join(ROOT, 'data/write-it/sentences.json'), 'utf8')
+  )
+  let ok = 0
+  let skip = 0
+
+  for (const L of letters) {
+    const rel = `/audio/letters/${L.id}.mp3`
+    // Spell letter name clearly for kids (e.g. "sss" sound vs letter name — use speak field)
+    const result = await synth(L.speak, audioPath(baseDir, rel), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[write-it] letter ${L.id}: ${result}`)
+  }
+
+  for (const s of sentences) {
+    const rel = `/audio/sentences/${s.id}.mp3`
+    const result = await synth(s.speak, audioPath(baseDir, rel), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[write-it] sentence ${s.id}: ${result}`)
+  }
+
+  for (const [name, text] of [
+    ['success.mp3', 'Great writing!'],
+    ['error.mp3', 'Try again.'],
+  ]) {
+    const result = await synth(text, path.join(baseDir, 'audio', name), slowTts)
+    if (result === 'ok') ok++
+    else if (result === 'skip') skip++
+    console.log(`[write-it] ${name}: ${result}`)
+  }
+
+  console.log(`Write it audio done: ${ok} created, ${skip} skipped`)
+}
+
 const run = async () => {
   if (TARGET === 'all') {
     await generateDigraphs()
     await generateVowelWords()
     await generateLetterSounds()
     await generateBlendWord()
+    await generateNurseryRhyme()
+    await generateConsonantBlends()
+    await generateSayIt()
+    await generateSightWords()
+    await generateWriteIt()
   } else if (TARGET === 'digraphs') {
     await generateDigraphs()
   } else if (TARGET === 'vowel-words') {
@@ -232,9 +400,24 @@ const run = async () => {
     await generateLetterSounds()
   } else if (TARGET === 'blend-the-word') {
     await generateBlendWord()
+  } else if (TARGET === 'nursery-rhyme') {
+    await generateNurseryRhyme()
+  } else if (TARGET === 'consonant-blends') {
+    await generateConsonantBlends()
+  } else if (TARGET === 'say-it') {
+    await generateSayIt()
+  } else if (TARGET === 'sight-words') {
+    await generateSightWords()
+  } else if (TARGET === 'write-it') {
+    await generateWriteIt()
+  } else if (TARGET === 'missing') {
+    await generateConsonantBlends()
+    await generateSayIt()
+    await generateSightWords()
+    await generateWriteIt()
   } else {
     console.error(
-      'Usage: node scripts/generate-learning-audio.mjs [digraphs|vowel-words|letter-sounds|blend-the-word|all] [--force]'
+      'Usage: node scripts/generate-learning-audio.mjs [digraphs|vowel-words|letter-sounds|blend-the-word|nursery-rhyme|consonant-blends|say-it|sight-words|write-it|missing|all] [--force]'
     )
     process.exit(1)
   }

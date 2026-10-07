@@ -3,15 +3,20 @@ export const LEARNING_HUB_PATH = '/learning'
 export const ECO_PENGUIN_APP_NAME = 'Eco Penguin'
 
 export type LearningGameId =
+  | 'nursery-rhyme'
+  | 'say-it'
   | 'letter-sounds'
   | 'which-sound'
   | 'balloon-letters'
   | 'blend-the-word'
   | 'segment-the-word'
+  | 'sight-words'
   | 'ecopenguin'
   | 'vowel-words'
   | 'digraphs'
+  | 'consonant-blends'
   | 'build-the-word'
+  | 'write-it'
   | 'read-a-story'
 
 export type LearningGameCard = {
@@ -24,4 +29,6 @@ export type LearningGameCard = {
   live: boolean
   /** Soft path order on the hub. */
   step: number
+  /** Cambridge ESL stage chip for parents/teachers */
+  cambridgeChip: string
 }

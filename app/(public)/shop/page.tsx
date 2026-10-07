@@ -62,7 +62,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       .map((p) => toProduct({ ...p, category: p.category as ShopCategoryId }))
 
     return (
-      <PublicLayout>
+      <PublicLayout currentPath="/shop">
         <main className="mx-auto max-w-6xl px-4 py-10 sm:py-12">
           <ShopHero counts={counts} />
 
@@ -112,7 +112,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   })).filter((shelf) => shelf.products.length > 0)
 
   return (
-    <PublicLayout>
+    <PublicLayout currentPath="/shop">
       <main className="mx-auto max-w-6xl px-4 py-10 sm:py-12">
         <ShopHero counts={counts} />
 
@@ -152,7 +152,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                       </div>
                       <Link
                         href={`/shop?category=${category.slug}`}
-                        className="rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm transition hover:bg-white"
+                        className="rounded-full border border-[var(--orbit-line-strong)] px-4 py-2 text-sm font-bold text-content transition hover:bg-[var(--surface-hover)]"
                       >
                         View all ({products.length})
                       </Link>

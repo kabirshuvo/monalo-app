@@ -8,7 +8,7 @@ export default function HomePageSections() {
       <SoftReveal
         as="section"
         variant="scale"
-        className="relative overflow-hidden rounded-3xl bg-[#0c0a09] px-6 py-14 text-[#fafaf9] sm:px-10 sm:py-16"
+        className="cosmos-panel relative overflow-hidden rounded-[2.5rem] px-6 py-14 sm:px-10 sm:py-16"
       >
         <div
           className="gallery-ambient-breathe pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_0%,rgba(251,191,36,0.18),transparent_55%),radial-gradient(ellipse_at_85%_90%,rgba(56,189,248,0.12),transparent_50%)]"
@@ -180,7 +180,7 @@ export default function HomePageSections() {
         <SoftReveal
           delay={140}
           variant="scale"
-          className="relative min-h-[16rem] overflow-hidden rounded-3xl bg-[#0c0a09]"
+          className="relative min-h-[16rem] overflow-hidden rounded-3xl cosmos-panel"
         >
           <div
             className="gallery-ambient-breathe absolute inset-0 bg-[radial-gradient(ellipse_at_30%_40%,rgba(251,191,36,0.22),transparent_55%)]"

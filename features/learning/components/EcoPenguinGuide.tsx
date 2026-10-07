@@ -4,14 +4,19 @@ import { useEffect, useState } from 'react'
 
 export type GuideRoom =
   | 'hub'
+  | 'nursery-rhyme'
+  | 'say-it'
   | 'balloon-letters'
   | 'letter-sounds'
   | 'which-sound'
   | 'blend-the-word'
   | 'segment-the-word'
+  | 'sight-words'
+  | 'write-it'
   | 'ecopenguin'
   | 'vowel-words'
   | 'digraphs'
+  | 'consonant-blends'
   | 'build-the-word'
   | 'read-a-story'
 
@@ -23,7 +28,17 @@ export type GuideOverride = {
 const TIPS: Record<GuideRoom, { tipId: string; message: string }> = {
   hub: {
     tipId: 'hub-welcome',
-    message: 'Hi! I am Eco Penguin. Start with Letter sounds, then Which sound?, then catch balloons.',
+    message:
+      'Hi! I am Eco Penguin. Start with Rhyme time and Say it, then Letter sounds and balloons.',
+  },
+  'nursery-rhyme': {
+    tipId: 'nursery-rhyme-tap',
+    message: 'Listen to the words, then tap the two pictures that rhyme!',
+  },
+  'say-it': {
+    tipId: 'say-it-speak',
+    message:
+      'Hear the word, then tap Speak and say it into the mic — watch the tuner! Or tap “I said it” if the mic is busy.',
   },
   'balloon-letters': {
     tipId: 'balloon-listen',
@@ -45,6 +60,14 @@ const TIPS: Record<GuideRoom, { tipId: string; message: string }> = {
     tipId: 'segment-tap',
     message: 'Hear the whole word, then tap the sounds in order — like Blend, but backwards!',
   },
+  'sight-words': {
+    tipId: 'sight-words-tap',
+    message: 'These little words appear a lot — hear the word, then tap it.',
+  },
+  'write-it': {
+    tipId: 'write-it-tiles',
+    message: 'Watch the pink path, then finger-trace on the letter. Stay on the shape — scribbling off the letter won’t pass!',
+  },
   ecopenguin: {
     tipId: 'eco-explore',
     message: 'Explore pictures with me — listen, learn the name, then play Which Is.',
@@ -56,6 +79,10 @@ const TIPS: Record<GuideRoom, { tipId: string; message: string }> = {
   digraphs: {
     tipId: 'digraph-teams',
     message: 'Two letters, one sound — sh, ch, th, wh. Listen and pick the word.',
+  },
+  'consonant-blends': {
+    tipId: 'consonant-blends-tap',
+    message: 'Hear the blend like st or fr, then the word. Tap the matching picture.',
   },
   'build-the-word': {
     tipId: 'build-spell',

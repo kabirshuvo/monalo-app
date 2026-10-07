@@ -1,5 +1,6 @@
 import type { PointCategory } from '@prisma/client'
 import { prisma } from '@/lib/db'
+import { classroomReferenceId, stripClassroomReferenceId } from '@/lib/classroom/constants'
 import {
   badgeFromTotalPoints,
   levelFromTotalPoints,
@@ -15,10 +16,51 @@ import {
   pointsForSegmentWordCorrect,
   pointsForWhichSoundCorrect,
   pointsForReadStoryComplete,
+  pointsForSightWordsCorrect,
+  pointsForNurseryRhymeCorrect,
+  pointsForConsonantBlendsCorrect,
+  pointsForSayItCorrect,
+  pointsForWriteItCorrect,
   pointsFromBlogMinutes,
   pointsFromLearningMinutes,
   pointsFromPurchaseTaka,
 } from '@/lib/points/config'
+
+export type LearnerScope = { learnerProfileId?: string }
+
+/** Load LEARNING events for a user or classroom learner; returns stripped referenceIds. */
+async function learningReferenceIds(
+  userId: string,
+  prefix: string,
+  scope?: LearnerScope
+): Promise<string[]> {
+  const learnerProfileId = scope?.learnerProfileId
+  const events = learnerProfileId
+    ? await prisma.pointEvent.findMany({
+        where: { learnerProfileId, category: 'LEARNING' },
+        select: { referenceId: true },
+      })
+    : await prisma.pointEvent.findMany({
+        where: {
+          userId,
+          category: 'LEARNING',
+          learnerProfileId: null,
+          referenceId: { startsWith: prefix },
+        },
+        select: { referenceId: true },
+      })
+
+  const out: string[] = []
+  for (const event of events) {
+    if (!event.referenceId) continue
+    const ref = stripClassroomReferenceId(event.referenceId)
+    if (!ref.startsWith(prefix)) continue
+    const id = ref.slice(prefix.length)
+    if (id) out.push(id)
+  }
+  return out
+}
+
 
 export type PointsBreakdown = {
   totalPoints: number
@@ -61,20 +103,26 @@ export async function awardPoints(
     points: number
     description: string
     referenceId?: string
+    learnerProfileId?: string
   }
 ): Promise<{ awarded: boolean; points: number }> {
   if (input.points <= 0) {
     return { awarded: false, points: 0 }
   }
 
+  const referenceId =
+    input.learnerProfileId && input.referenceId
+      ? classroomReferenceId(input.learnerProfileId, input.referenceId)
+      : input.referenceId
+
   try {
-    if (input.referenceId) {
+    if (referenceId) {
       const existing = await prisma.pointEvent.findUnique({
         where: {
           userId_category_referenceId: {
             userId,
             category: input.category,
-            referenceId: input.referenceId,
+            referenceId,
           },
         },
       })
@@ -87,12 +135,14 @@ export async function awardPoints(
       await tx.pointEvent.create({
         data: {
           userId,
+          learnerProfileId: input.learnerProfileId ?? null,
           category: input.category,
           points: input.points,
           description: input.description,
-          referenceId: input.referenceId ?? null,
+          referenceId: referenceId ?? null,
         },
       })
+      // Classroom kid points still count on teacher account totals (school pilot simplicity)
       await tx.user.update({
         where: { id: userId },
         data: { totalPoints: { increment: input.points } },
@@ -196,7 +246,8 @@ export async function awardEcoPenguinCorrect(
   userId: string,
   categorySlug: string,
   itemSlug: string,
-  itemName: string
+  itemName: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   const pts = pointsForEcoPenguinCorrect()
   return awardPoints(userId, {
@@ -204,6 +255,7 @@ export async function awardEcoPenguinCorrect(
     points: pts,
     description: `Eco Penguin: ${itemName}`,
     referenceId: `ecopenguin:${categorySlug}:${itemSlug}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
@@ -287,32 +339,23 @@ export type EcoPenguinMastery = {
   byCategory: Record<string, number>
 }
 
-export async function getEcoPenguinMastery(userId: string): Promise<EcoPenguinMastery> {
-  const events = await prisma.pointEvent.findMany({
-    where: {
-      userId,
-      category: 'LEARNING',
-      referenceId: { startsWith: 'ecopenguin:' },
-    },
-    select: { referenceId: true },
-  })
-
+export async function getEcoPenguinMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<EcoPenguinMastery> {
+  const ids = await learningReferenceIds(userId, 'ecopenguin:', scope)
   const masteredKeys: string[] = []
   const byCategory: Record<string, number> = {}
-
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const parts = ref.split(':')
-    if (parts.length < 3 || parts[0] !== 'ecopenguin') continue
-    const categorySlug = parts[1]
-    const itemSlug = parts.slice(2).join(':')
+  for (const rest of ids) {
+    const parts = rest.split(':')
+    if (parts.length < 2) continue
+    const categorySlug = parts[0]
+    const itemSlug = parts.slice(1).join(':')
     if (!categorySlug || !itemSlug) continue
     const key = `${categorySlug}:${itemSlug}`
     masteredKeys.push(key)
     byCategory[categorySlug] = (byCategory[categorySlug] ?? 0) + 1
   }
-
   return { masteredKeys, byCategory }
 }
 
@@ -321,7 +364,8 @@ export async function awardVowelWordsCorrect(
   userId: string,
   vowelId: string,
   wordSlug: string,
-  word: string
+  word: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   const pts = pointsForVowelWordsCorrect()
   return awardPoints(userId, {
@@ -329,6 +373,7 @@ export async function awardVowelWordsCorrect(
     points: pts,
     description: `Vowel Words: ${word}`,
     referenceId: `vowel-words:${vowelId}:${wordSlug}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
@@ -338,32 +383,22 @@ export type VowelWordsMastery = {
   byVowel: Record<string, number>
 }
 
-export async function getVowelWordsMastery(userId: string): Promise<VowelWordsMastery> {
-  const events = await prisma.pointEvent.findMany({
-    where: {
-      userId,
-      category: 'LEARNING',
-      referenceId: { startsWith: 'vowel-words:' },
-    },
-    select: { referenceId: true },
-  })
-
+export async function getVowelWordsMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<VowelWordsMastery> {
+  const ids = await learningReferenceIds(userId, 'vowel-words:', scope)
   const masteredKeys: string[] = []
   const byVowel: Record<string, number> = {}
-
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const parts = ref.split(':')
-    if (parts.length < 3 || parts[0] !== 'vowel-words') continue
-    const vowelId = parts[1]
-    const wordSlug = parts.slice(2).join(':')
+  for (const rest of ids) {
+    const parts = rest.split(':')
+    if (parts.length < 2) continue
+    const vowelId = parts[0]
+    const wordSlug = parts.slice(1).join(':')
     if (!vowelId || !wordSlug) continue
-    const key = `${vowelId}:${wordSlug}`
-    masteredKeys.push(key)
+    masteredKeys.push(`${vowelId}:${wordSlug}`)
     byVowel[vowelId] = (byVowel[vowelId] ?? 0) + 1
   }
-
   return { masteredKeys, byVowel }
 }
 
@@ -372,7 +407,8 @@ export async function awardDigraphsCorrect(
   userId: string,
   digraphId: string,
   wordSlug: string,
-  word: string
+  word: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   const pts = pointsForDigraphsCorrect()
   return awardPoints(userId, {
@@ -380,6 +416,7 @@ export async function awardDigraphsCorrect(
     points: pts,
     description: `Digraphs: ${word}`,
     referenceId: `digraphs:${digraphId}:${wordSlug}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
@@ -389,32 +426,22 @@ export type DigraphsMastery = {
   byDigraph: Record<string, number>
 }
 
-export async function getDigraphsMastery(userId: string): Promise<DigraphsMastery> {
-  const events = await prisma.pointEvent.findMany({
-    where: {
-      userId,
-      category: 'LEARNING',
-      referenceId: { startsWith: 'digraphs:' },
-    },
-    select: { referenceId: true },
-  })
-
+export async function getDigraphsMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<DigraphsMastery> {
+  const ids = await learningReferenceIds(userId, 'digraphs:', scope)
   const masteredKeys: string[] = []
   const byDigraph: Record<string, number> = {}
-
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const parts = ref.split(':')
-    if (parts.length < 3 || parts[0] !== 'digraphs') continue
-    const digraphId = parts[1]
-    const wordSlug = parts.slice(2).join(':')
+  for (const rest of ids) {
+    const parts = rest.split(':')
+    if (parts.length < 2) continue
+    const digraphId = parts[0]
+    const wordSlug = parts.slice(1).join(':')
     if (!digraphId || !wordSlug) continue
-    const key = `${digraphId}:${wordSlug}`
-    masteredKeys.push(key)
+    masteredKeys.push(`${digraphId}:${wordSlug}`)
     byDigraph[digraphId] = (byDigraph[digraphId] ?? 0) + 1
   }
-
   return { masteredKeys, byDigraph }
 }
 
@@ -423,7 +450,8 @@ export async function awardBuildWordCorrect(
   userId: string,
   vowelId: string,
   wordSlug: string,
-  word: string
+  word: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   const pts = pointsForBuildWordCorrect()
   return awardPoints(userId, {
@@ -431,6 +459,7 @@ export async function awardBuildWordCorrect(
     points: pts,
     description: `Build the word: ${word}`,
     referenceId: `build-word:${vowelId}:${wordSlug}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
@@ -439,31 +468,22 @@ export type BuildWordMastery = {
   byVowel: Record<string, number>
 }
 
-export async function getBuildWordMastery(userId: string): Promise<BuildWordMastery> {
-  const events = await prisma.pointEvent.findMany({
-    where: {
-      userId,
-      category: 'LEARNING',
-      referenceId: { startsWith: 'build-word:' },
-    },
-    select: { referenceId: true },
-  })
-
+export async function getBuildWordMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<BuildWordMastery> {
+  const ids = await learningReferenceIds(userId, 'build-word:', scope)
   const masteredKeys: string[] = []
   const byVowel: Record<string, number> = {}
-
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const parts = ref.split(':')
-    if (parts.length < 3 || parts[0] !== 'build-word') continue
-    const vowelId = parts[1]
-    const wordSlug = parts.slice(2).join(':')
+  for (const rest of ids) {
+    const parts = rest.split(':')
+    if (parts.length < 2) continue
+    const vowelId = parts[0]
+    const wordSlug = parts.slice(1).join(':')
     if (!vowelId || !wordSlug) continue
     masteredKeys.push(`${vowelId}:${wordSlug}`)
     byVowel[vowelId] = (byVowel[vowelId] ?? 0) + 1
   }
-
   return { masteredKeys, byVowel }
 }
 
@@ -471,13 +491,15 @@ export async function getBuildWordMastery(userId: string): Promise<BuildWordMast
 export async function awardLetterSoundsCorrect(
   userId: string,
   letterId: string,
-  keyword: string
+  keyword: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   return awardPoints(userId, {
     category: 'LEARNING',
     points: pointsForLetterSoundsCorrect(),
     description: `Letter sounds: ${keyword}`,
     referenceId: `letter-sounds:${letterId}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
@@ -485,23 +507,11 @@ export type LetterSoundsMastery = {
   masteredKeys: string[]
 }
 
-export async function getLetterSoundsMastery(userId: string): Promise<LetterSoundsMastery> {
-  const events = await prisma.pointEvent.findMany({
-    where: {
-      userId,
-      category: 'LEARNING',
-      referenceId: { startsWith: 'letter-sounds:' },
-    },
-    select: { referenceId: true },
-  })
-
-  const masteredKeys: string[] = []
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const letterId = ref.slice('letter-sounds:'.length)
-    if (letterId) masteredKeys.push(letterId)
-  }
+export async function getLetterSoundsMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<LetterSoundsMastery> {
+  const masteredKeys = await learningReferenceIds(userId, 'letter-sounds:', scope)
   return { masteredKeys }
 }
 
@@ -509,13 +519,15 @@ export async function getLetterSoundsMastery(userId: string): Promise<LetterSoun
 export async function awardBlendWordCorrect(
   userId: string,
   wordId: string,
-  word: string
+  word: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   return awardPoints(userId, {
     category: 'LEARNING',
     points: pointsForBlendWordCorrect(),
     description: `Blend the word: ${word}`,
     referenceId: `blend-word:${wordId}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
@@ -523,23 +535,11 @@ export type BlendWordMastery = {
   masteredKeys: string[]
 }
 
-export async function getBlendWordMastery(userId: string): Promise<BlendWordMastery> {
-  const events = await prisma.pointEvent.findMany({
-    where: {
-      userId,
-      category: 'LEARNING',
-      referenceId: { startsWith: 'blend-word:' },
-    },
-    select: { referenceId: true },
-  })
-
-  const masteredKeys: string[] = []
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const wordId = ref.slice('blend-word:'.length)
-    if (wordId) masteredKeys.push(wordId)
-  }
+export async function getBlendWordMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<BlendWordMastery> {
+  const masteredKeys = await learningReferenceIds(userId, 'blend-word:', scope)
   return { masteredKeys }
 }
 
@@ -547,13 +547,15 @@ export async function getBlendWordMastery(userId: string): Promise<BlendWordMast
 export async function awardBalloonLettersCorrect(
   userId: string,
   letterId: string,
-  letter: string
+  letter: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   return awardPoints(userId, {
     category: 'LEARNING',
     points: pointsForBalloonLettersCorrect(),
     description: `Balloon letters: ${letter}`,
     referenceId: `balloon-letters:${letterId}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
@@ -561,23 +563,11 @@ export type BalloonLettersMastery = {
   masteredKeys: string[]
 }
 
-export async function getBalloonLettersMastery(userId: string): Promise<BalloonLettersMastery> {
-  const events = await prisma.pointEvent.findMany({
-    where: {
-      userId,
-      category: 'LEARNING',
-      referenceId: { startsWith: 'balloon-letters:' },
-    },
-    select: { referenceId: true },
-  })
-
-  const masteredKeys: string[] = []
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const letterId = ref.slice('balloon-letters:'.length)
-    if (letterId) masteredKeys.push(letterId)
-  }
+export async function getBalloonLettersMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<BalloonLettersMastery> {
+  const masteredKeys = await learningReferenceIds(userId, 'balloon-letters:', scope)
   return { masteredKeys }
 }
 
@@ -585,13 +575,15 @@ export async function getBalloonLettersMastery(userId: string): Promise<BalloonL
 export async function awardPhonicsGroupSticker(
   userId: string,
   groupId: string,
-  label: string
+  label: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   return awardPoints(userId, {
     category: 'LEARNING',
     points: pointsForPhonicsGroupSticker(),
     description: `Sticker gift: ${label}`,
     referenceId: `sticker:${groupId}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
@@ -599,106 +591,194 @@ export type EcoPenguinStickerState = {
   earnedIds: string[]
 }
 
-export async function getEcoPenguinStickers(userId: string): Promise<EcoPenguinStickerState> {
-  const events = await prisma.pointEvent.findMany({
-    where: {
-      userId,
-      category: 'LEARNING',
-      referenceId: { startsWith: 'sticker:' },
-    },
-    select: { referenceId: true },
-  })
-
-  const earnedIds: string[] = []
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const id = ref.slice('sticker:'.length)
-    if (id) earnedIds.push(id)
-  }
+export async function getEcoPenguinStickers(
+  userId: string,
+  scope?: LearnerScope
+): Promise<EcoPenguinStickerState> {
+  const earnedIds = await learningReferenceIds(userId, 'sticker:', scope)
   return { earnedIds }
 }
 
 export async function awardSegmentWordCorrect(
   userId: string,
   wordId: string,
-  word: string
+  word: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   return awardPoints(userId, {
     category: 'LEARNING',
     points: pointsForSegmentWordCorrect(),
     description: `Segment the word: ${word}`,
     referenceId: `segment-word:${wordId}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
-export async function getSegmentWordMastery(userId: string): Promise<{ masteredKeys: string[] }> {
-  const events = await prisma.pointEvent.findMany({
-    where: { userId, category: 'LEARNING', referenceId: { startsWith: 'segment-word:' } },
-    select: { referenceId: true },
-  })
-  const masteredKeys: string[] = []
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const id = ref.slice('segment-word:'.length)
-    if (id) masteredKeys.push(id)
-  }
+export async function getSegmentWordMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<{ masteredKeys: string[] }> {
+  const masteredKeys = await learningReferenceIds(userId, 'segment-word:', scope)
   return { masteredKeys }
 }
 
 export async function awardWhichSoundCorrect(
   userId: string,
   letterId: string,
-  letter: string
+  letter: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   return awardPoints(userId, {
     category: 'LEARNING',
     points: pointsForWhichSoundCorrect(),
     description: `Which sound: ${letter}`,
     referenceId: `which-sound:${letterId}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
-export async function getWhichSoundMastery(userId: string): Promise<{ masteredKeys: string[] }> {
-  const events = await prisma.pointEvent.findMany({
-    where: { userId, category: 'LEARNING', referenceId: { startsWith: 'which-sound:' } },
-    select: { referenceId: true },
-  })
-  const masteredKeys: string[] = []
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const id = ref.slice('which-sound:'.length)
-    if (id) masteredKeys.push(id)
-  }
+export async function getWhichSoundMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<{ masteredKeys: string[] }> {
+  const masteredKeys = await learningReferenceIds(userId, 'which-sound:', scope)
   return { masteredKeys }
 }
 
 export async function awardReadStoryComplete(
   userId: string,
   storyId: string,
-  title: string
+  title: string,
+  scope?: LearnerScope
 ): Promise<{ awarded: boolean; points: number }> {
   return awardPoints(userId, {
     category: 'LEARNING',
     points: pointsForReadStoryComplete(),
     description: `Read a story: ${title}`,
     referenceId: `read-story:${storyId}`,
+    learnerProfileId: scope?.learnerProfileId,
   })
 }
 
-export async function getReadStoryMastery(userId: string): Promise<{ completedIds: string[] }> {
-  const events = await prisma.pointEvent.findMany({
-    where: { userId, category: 'LEARNING', referenceId: { startsWith: 'read-story:' } },
-    select: { referenceId: true },
-  })
-  const completedIds: string[] = []
-  for (const event of events) {
-    const ref = event.referenceId
-    if (!ref) continue
-    const id = ref.slice('read-story:'.length)
-    if (id) completedIds.push(id)
-  }
+export async function getReadStoryMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<{ completedIds: string[] }> {
+  const completedIds = await learningReferenceIds(userId, 'read-story:', scope)
   return { completedIds }
+}
+
+export async function awardSightWordsCorrect(
+  userId: string,
+  wordId: string,
+  word: string,
+  scope?: LearnerScope
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForSightWordsCorrect(),
+    description: `Sight word: ${word}`,
+    referenceId: `sight-word:${wordId}`,
+    learnerProfileId: scope?.learnerProfileId,
+  })
+}
+
+export async function getSightWordsMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<{ masteredKeys: string[] }> {
+  const masteredKeys = await learningReferenceIds(userId, 'sight-word:', scope)
+  return { masteredKeys }
+}
+
+export async function awardNurseryRhymeCorrect(
+  userId: string,
+  setId: string,
+  label: string,
+  scope?: LearnerScope
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForNurseryRhymeCorrect(),
+    description: `Rhyme: ${label}`,
+    referenceId: `nursery-rhyme:${setId}`,
+    learnerProfileId: scope?.learnerProfileId,
+  })
+}
+
+export async function getNurseryRhymeMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<{ masteredKeys: string[] }> {
+  const masteredKeys = await learningReferenceIds(userId, 'nursery-rhyme:', scope)
+  return { masteredKeys }
+}
+
+export async function awardConsonantBlendsCorrect(
+  userId: string,
+  wordId: string,
+  word: string,
+  scope?: LearnerScope
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForConsonantBlendsCorrect(),
+    description: `Consonant blend: ${word}`,
+    referenceId: `consonant-blend:${wordId}`,
+    learnerProfileId: scope?.learnerProfileId,
+  })
+}
+
+export async function getConsonantBlendsMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<{ masteredKeys: string[] }> {
+  const masteredKeys = await learningReferenceIds(userId, 'consonant-blend:', scope)
+  return { masteredKeys }
+}
+
+export async function awardSayItCorrect(
+  userId: string,
+  promptId: string,
+  label: string,
+  scope?: LearnerScope
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForSayItCorrect(),
+    description: `Say it: ${label}`,
+    referenceId: `say-it:${promptId}`,
+    learnerProfileId: scope?.learnerProfileId,
+  })
+}
+
+export async function getSayItMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<{ masteredKeys: string[] }> {
+  const masteredKeys = await learningReferenceIds(userId, 'say-it:', scope)
+  return { masteredKeys }
+}
+
+export async function awardWriteItCorrect(
+  userId: string,
+  itemKey: string,
+  label: string,
+  scope?: LearnerScope
+): Promise<{ awarded: boolean; points: number }> {
+  return awardPoints(userId, {
+    category: 'LEARNING',
+    points: pointsForWriteItCorrect(),
+    description: label,
+    referenceId: `write-it:${itemKey}`,
+    learnerProfileId: scope?.learnerProfileId,
+  })
+}
+
+export async function getWriteItMastery(
+  userId: string,
+  scope?: LearnerScope
+): Promise<{ masteredKeys: string[] }> {
+  const masteredKeys = await learningReferenceIds(userId, 'write-it:', scope)
+  return { masteredKeys }
 }

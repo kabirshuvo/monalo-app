@@ -70,10 +70,10 @@ function ToastContainer({ toasts, onRemove }: { toasts: Toast[]; onRemove: (id: 
 
 function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
   const styles = {
-    success: 'bg-green-50 border-green-200 text-green-800',
-    error: 'bg-red-50 border-red-200 text-red-800',
-    info: 'bg-blue-50 border-blue-200 text-blue-800',
-    warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
+    success: 'bg-surface border-emerald-500/45 text-emerald-900 dark:text-emerald-100',
+    error: 'bg-surface border-rose-500/45 text-rose-900 dark:text-rose-100',
+    info: 'bg-surface border-sky-500/45 text-sky-900 dark:text-sky-100',
+    warning: 'bg-surface border-amber-500/45 text-amber-900 dark:text-amber-100',
   }
   
   const icons = {

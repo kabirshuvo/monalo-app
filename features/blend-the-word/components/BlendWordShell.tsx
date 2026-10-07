@@ -5,6 +5,7 @@ import { blendWordTheme } from '@/features/blend-the-word/blend-word-theme'
 import { BLEND_WORD_BASE_PATH } from '@/lib/blend-the-word/constants'
 import { LETTER_SOUNDS_BASE_PATH } from '@/lib/letter-sounds/constants'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
+import { CAMBRIDGE_ESL_STAGES } from '@/lib/learning/cambridge-esl'
 import { planetFooter } from '@/lib/learning/planet-theme'
 import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
 
@@ -19,6 +20,7 @@ export default function BlendWordShell({
   title,
   backHref = LEARNING_HUB_PATH,
 }: Props) {
+  const stage = CAMBRIDGE_ESL_STAGES['stage1-phonics']
   return (
     <div className={blendWordTheme.shell}>
       <EcoPenguinGuide room="blend-the-word" />
@@ -33,6 +35,9 @@ export default function BlendWordShell({
             </Link>
           </div>
           <nav className="flex shrink-0 items-center gap-2 text-sm">
+            <span className="hidden rounded-full bg-cyan-400/20 px-2.5 py-1 text-xs font-bold text-cyan-200 sm:inline">
+              {stage.chip}
+            </span>
             <Link href={LEARNING_HUB_PATH} className="font-semibold text-cyan-300 hover:underline">
               {ECO_PENGUIN_APP_NAME}
             </Link>
@@ -47,6 +52,7 @@ export default function BlendWordShell({
         {title && (
           <div className="border-t border-[#fafaf9]/15 bg-cyan-950/40 px-4 py-3 text-center">
             <h1 className="text-lg font-extrabold text-[#fafaf9] sm:text-xl">{title}</h1>
+            <p className="mt-1 text-xs text-cyan-200/80">{stage.parent}</p>
           </div>
         )}
       </header>

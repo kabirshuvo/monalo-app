@@ -5,6 +5,7 @@ import Button from '../ui/Button'
 import { clientSignOut } from '@/lib/auth/client-sign-out'
 import { logEvent } from '@/lib/analytics'
 import AvatarVisual from '@/components/profile/AvatarVisual'
+import SunMark from '@/components/cosmos/SunMark'
 
 export interface DashboardLayoutProps {
   children: React.ReactNode
@@ -210,9 +211,9 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen text-foreground">
       {/* Top Bar */}
-      <header className="bg-surface border-b border-subtle fixed top-0 left-0 right-0 z-30">
+      <header className="cosmos-glass fixed left-0 right-0 top-0 z-30 border-b border-[var(--orbit-line)]">
         <div className="flex items-center justify-between h-16 px-4 lg:px-6">
           {/* Mobile menu button */}
           <button
@@ -228,11 +229,9 @@ export default function DashboardLayout({
           </button>
 
           {/* Logo */}
-          <Link href="/home" className="flex items-center gap-2 text-lg font-semibold text-gray-900">
-            <svg className="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-            </svg>
-            <span className="hidden sm:inline">MonAlo</span>
+          <Link href="/home" className="flex items-center gap-2.5 text-content" aria-label="MonAlo, school home">
+            <SunMark className="h-8 w-8" />
+            <span className="hidden font-serif text-xl font-medium tracking-tight sm:inline">MonAlo</span>
           </Link>
 
           {/* User menu */}
@@ -267,11 +266,11 @@ export default function DashboardLayout({
               </button>
 
               {menuOpen && (
-                <div className="absolute right-0 top-12 w-40 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-40">
-                  <Link href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Dashboard</Link>
-                  <Link href="/learning" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Eco Penguin</Link>
-                  <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
-                  <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Settings</Link>
+                <div className="absolute right-0 top-12 z-40 w-44 overflow-hidden rounded-2xl border border-[var(--orbit-line)] cosmos-glass py-1 shadow-2xl shadow-black/30">
+                  <Link href="/dashboard" className="block px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content">Dashboard</Link>
+                  <Link href="/learning" className="block px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content">Eco Penguin</Link>
+                  <Link href="/profile" className="block px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content">Profile</Link>
+                  <Link href="/settings" className="block px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content">Settings</Link>
                   <button
                     onClick={async () => {
                       // compute duration
@@ -287,7 +286,7 @@ export default function DashboardLayout({
                       } catch {}
                       clientSignOut()
                     }}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    className="w-full text-left px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content"
                   >
                     Logout
                   </button>
@@ -300,7 +299,7 @@ export default function DashboardLayout({
 
       <div className="flex pt-16">
         {/* Sidebar - Desktop */}
-        <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 bg-surface border-r border-subtle overflow-y-auto">
+        <aside className="hidden lg:block fixed left-0 top-16 bottom-0 w-64 border-r border-[var(--orbit-line)] bg-[var(--surface-muted)] overflow-y-auto">
           <nav className="p-4" aria-label="Dashboard navigation">
             <ul className="space-y-1">
               {filteredNavItems.map((item) => {
@@ -309,10 +308,10 @@ export default function DashboardLayout({
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                        ${isActive 
-                          ? 'bg-blue-50 text-blue-600' 
-                          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-full text-sm font-medium transition-colors
+                        ${isActive
+                          ? 'bg-[var(--surface-hover)] text-content ring-1 ring-[var(--orbit-line-strong)] [&>svg]:text-[var(--sun)]'
+                          : 'text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content'
                         }`}
                       aria-current={isActive ? 'page' : undefined}
                     >
@@ -334,7 +333,7 @@ export default function DashboardLayout({
               onClick={() => setSidebarOpen(false)}
               aria-hidden="true"
             />
-            <aside className="lg:hidden fixed left-0 top-16 bottom-0 w-64 bg-surface border-r border-subtle z-40 overflow-y-auto">
+            <aside className="lg:hidden fixed left-0 top-16 bottom-0 w-64 border-r border-[var(--orbit-line)] bg-[var(--surface-muted)] z-40 overflow-y-auto">
               <nav className="p-4" aria-label="Dashboard navigation">
                 <ul className="space-y-1">
                   {filteredNavItems.map((item) => {
@@ -343,10 +342,10 @@ export default function DashboardLayout({
                       <li key={item.href}>
                         <Link
                           href={item.href}
-                          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+                          className={`flex items-center gap-3 px-3 py-2.5 rounded-full text-sm font-medium transition-colors
                             ${isActive 
-                              ? 'bg-blue-50 text-blue-600' 
-                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                              ? 'bg-[var(--surface-hover)] text-content ring-1 ring-[var(--orbit-line-strong)] [&>svg]:text-[var(--sun)]'
+                              : 'text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content'
                             }`}
                           onClick={() => setSidebarOpen(false)}
                           aria-current={isActive ? 'page' : undefined}

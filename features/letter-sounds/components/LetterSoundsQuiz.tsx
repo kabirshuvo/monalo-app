@@ -12,6 +12,8 @@ import api from '@/lib/api'
 import { LETTER_SOUNDS_BASE_PATH } from '@/lib/letter-sounds/constants'
 import { writeLetterSoundsSession } from '@/lib/letter-sounds/session'
 import type { LetterSound } from '@/lib/letter-sounds/types'
+import { bumpGuestWin } from '@/lib/learning/guest-try'
+import GuestConvertNudge from '@/features/learning/components/GuestConvertNudge'
 
 type Props = {
   letters: LetterSound[]
@@ -19,6 +21,7 @@ type Props = {
   questionAudio: string
   successAudio: string
   errorAudio: string
+  guest?: boolean
 }
 
 type Win = {
@@ -33,8 +36,10 @@ export default function LetterSoundsQuiz({
   questionAudio,
   successAudio,
   errorAudio,
+  guest = false,
 }: Props) {
   const [heard, setHeard] = useState<string[]>([])
+  const [guestWins, setGuestWins] = useState(0)
   const [target, setTarget] = useState<LetterSound | null>(null)
   const [wrongId, setWrongId] = useState<string | null>(null)
   const [win, setWin] = useState<Win | null>(null)
@@ -89,6 +94,7 @@ export default function LetterSoundsQuiz({
     setWrongId(null)
     setWin({ letter: target, points: 2, already: false })
     playVowelWordsAudio(successAudio, { fallbackText: `Great! ${target.keyword}` })
+    if (guest) setGuestWins(bumpGuestWin())
     void api
       .post<{ awarded?: boolean; points?: number }>('/api/learning/letter-sounds/celebrate', {
         letterId: target.id,
@@ -118,6 +124,7 @@ export default function LetterSoundsQuiz({
 
   return (
     <div className="space-y-6">
+      {guest ? <GuestConvertNudge refreshKey={guestWins} /> : null}
       <section className={`${letterSoundsTheme.card} space-y-4 p-6 text-center sm:p-8`}>
         {win ? (
           <>

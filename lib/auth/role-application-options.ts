@@ -7,6 +7,7 @@ export const APPLIABLE_ROLES = [
   ROLES.DONOR,
   ROLES.SELLER,
   ROLES.WRITER,
+  ROLES.TEACHER,
 ] as const
 
 export type AppliableRole = (typeof APPLIABLE_ROLES)[number]
@@ -54,6 +55,13 @@ export const ROLE_APPLICATION_OPTIONS: RoleApplicationOption[] = [
     description:
       'Publish articles, shape courses, and inspire learners through the writer studio.',
   },
+  {
+    role: ROLES.TEACHER,
+    heading: 'Teacher',
+    subheading: 'One phone, many kids — Classroom Mode',
+    description:
+      'Create a class roster, switch who is playing on your phone, and track each child’s Eco Penguin progress.',
+  },
 ]
 
 /** Roles an admin may assign directly (excludes default visitor role). */
@@ -66,6 +74,7 @@ export const ADMIN_ASSIGNABLE_ROLES = [
   ROLES.DONOR,
   ROLES.GUARDIAN,
   ROLES.SPONSOR,
+  ROLES.TEACHER,
 ] as const satisfies readonly RoleType[]
 
 export function isAppliableRole(value: string): value is AppliableRole {

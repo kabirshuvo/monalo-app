@@ -115,7 +115,7 @@ export default function AvatarPicker({ value, onChange, displayName }: AvatarPic
                   onClick={() => selectPreset(preset)}
                   className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
                     isSelected
-                      ? 'border-blue-500 bg-blue-50 shadow-sm'
+                      ? 'border-[var(--sun)] bg-[var(--surface-hover)] shadow-sm'
                       : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50'
                   }`}
                   title={preset.tagline}

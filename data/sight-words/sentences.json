@@ -1,0 +1,92 @@
+[
+  {
+    "id": "i-can-see-cat",
+    "sightId": "see",
+    "text": "I can see a cat.",
+    "speak": "I can see a cat",
+    "words": ["I", "can", "see", "a", "cat"],
+    "blankIndex": 2,
+    "choices": ["see", "look", "go"]
+  },
+  {
+    "id": "the-cat-is",
+    "sightId": "is",
+    "text": "The cat is big.",
+    "speak": "The cat is big",
+    "words": ["The", "cat", "is", "big"],
+    "blankIndex": 2,
+    "choices": ["is", "am", "are"]
+  },
+  {
+    "id": "we-look-at",
+    "sightId": "look",
+    "text": "We look at the dog.",
+    "speak": "We look at the dog",
+    "words": ["We", "look", "at", "the", "dog"],
+    "blankIndex": 1,
+    "choices": ["look", "like", "come"]
+  },
+  {
+    "id": "i-like-it",
+    "sightId": "like",
+    "text": "I like it.",
+    "speak": "I like it",
+    "words": ["I", "like", "it"],
+    "blankIndex": 1,
+    "choices": ["like", "look", "see"]
+  },
+  {
+    "id": "come-and-see",
+    "sightId": "come",
+    "text": "Come and see.",
+    "speak": "Come and see",
+    "words": ["Come", "and", "see"],
+    "blankIndex": 0,
+    "choices": ["Come", "Go", "Look"]
+  },
+  {
+    "id": "he-can-go",
+    "sightId": "can",
+    "text": "He can go.",
+    "speak": "He can go",
+    "words": ["He", "can", "go"],
+    "blankIndex": 1,
+    "choices": ["can", "has", "said"]
+  },
+  {
+    "id": "she-has-a",
+    "sightId": "has",
+    "text": "She has a pen.",
+    "speak": "She has a pen",
+    "words": ["She", "has", "a", "pen"],
+    "blankIndex": 1,
+    "choices": ["has", "have", "is"]
+  },
+  {
+    "id": "look-at-me",
+    "sightId": "me",
+    "text": "Look at me.",
+    "speak": "Look at me",
+    "words": ["Look", "at", "me"],
+    "blankIndex": 2,
+    "choices": ["me", "my", "we"]
+  },
+  {
+    "id": "this-is-my",
+    "sightId": "this",
+    "text": "This is my hat.",
+    "speak": "This is my hat",
+    "words": ["This", "is", "my", "hat"],
+    "blankIndex": 0,
+    "choices": ["This", "That", "Here"]
+  },
+  {
+    "id": "yes-i-am",
+    "sightId": "yes",
+    "text": "Yes, I am.",
+    "speak": "Yes I am",
+    "words": ["Yes", "I", "am"],
+    "blankIndex": 0,
+    "choices": ["Yes", "No", "Go"]
+  }
+]

@@ -31,6 +31,16 @@ export const POINTS_CONFIG = {
   whichSoundCorrect: 2,
   /** Finish a decodable story */
   readStoryComplete: 5,
+  /** Sight words */
+  sightWordsCorrect: 2,
+  /** Nursery rhyme pair */
+  nurseryRhymeCorrect: 2,
+  /** Adjacent consonant blends */
+  consonantBlendsCorrect: 2,
+  /** Listen-and-repeat speaking (honor system) */
+  sayItCorrect: 2,
+  /** Early writing — sentence tiles / letter trace */
+  writeItCorrect: 2,
 } as const
 
 export function pointsFromPurchaseTaka(taka: number): number {
@@ -98,6 +108,26 @@ export function pointsForWhichSoundCorrect(): number {
 
 export function pointsForReadStoryComplete(): number {
   return POINTS_CONFIG.readStoryComplete
+}
+
+export function pointsForSightWordsCorrect(): number {
+  return POINTS_CONFIG.sightWordsCorrect
+}
+
+export function pointsForNurseryRhymeCorrect(): number {
+  return POINTS_CONFIG.nurseryRhymeCorrect
+}
+
+export function pointsForConsonantBlendsCorrect(): number {
+  return POINTS_CONFIG.consonantBlendsCorrect
+}
+
+export function pointsForSayItCorrect(): number {
+  return POINTS_CONFIG.sayItCorrect
+}
+
+export function pointsForWriteItCorrect(): number {
+  return POINTS_CONFIG.writeItCorrect
 }
 
 export function levelFromTotalPoints(totalPoints: number): number {

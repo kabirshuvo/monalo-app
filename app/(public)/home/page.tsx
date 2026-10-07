@@ -8,6 +8,7 @@ import WelcomeDetectorClient from './WelcomeDetectorClient'
 import { SoftReveal } from '@/components/motion/SoftReveal'
 import { RouteLoader } from '@/components/ui/LoadingState'
 import { HOME_SURFACE_HEROES } from '@/lib/home/surface-heroes'
+import PageHero from '@/components/cosmos/PageHero'
 
 export default function HomePage() {
   return (
@@ -17,53 +18,36 @@ export default function HomePage() {
           <WelcomeDetectorClient />
         </Suspense>
 
-        {/* School hero */}
-        <SoftReveal
-          as="section"
-          variant="scale"
-          lines
-          className="bg-amber-50/90 px-4 py-32 dark:bg-amber-950/20 sm:py-40 lg:py-48"
+        {/* The sun of the system */}
+        <PageHero
+          planet="sun"
+          title="Monalo School"
+          description="An online school kept alight by craft, art, courses and a freelance team. Every purchase and project helps students learn."
         >
-          <div className="mx-auto max-w-2xl space-y-6 text-center">
-            <h1 className="text-5xl font-light leading-tight tracking-tight text-content sm:text-6xl lg:text-7xl">
-              Monalo School
-            </h1>
-            <p className="text-lg font-normal leading-relaxed text-content-secondary sm:text-xl">
-              An online school supported by craft, art, courses, and a freelancing team — every
-              purchase and project helps students learn.
-            </p>
-          </div>
-          <div className="mx-auto flex max-w-2xl flex-wrap justify-center gap-4 pt-8">
-            <Link href="/learning">
-              <Button variant="primary" size="lg" className="gallery-soft-cta px-8">
-                Eco Penguin
-              </Button>
-            </Link>
-            <Link href="/courses">
-              <Button variant="secondary" size="lg" className="gallery-soft-cta">
-                Explore courses
-              </Button>
-            </Link>
-            <Link href="/shop">
-              <Button variant="ghost" size="lg" className="gallery-soft-cta">
-                Craft shop
-              </Button>
-            </Link>
-          </div>
-        </SoftReveal>
+          <Link href="/learning">
+            <Button variant="primary" size="lg">
+              Open Eco Penguin
+            </Button>
+          </Link>
+          <Link href="/courses">
+            <Button variant="secondary" size="lg">
+              Explore courses
+            </Button>
+          </Link>
+        </PageHero>
 
         <HomePageSections />
 
         {/* Surface heroes — blog, shop, gallery, team, learn */}
         {HOME_SURFACE_HEROES.map((hero, index) => (
-          <HomeSurfaceHero key={hero.href} {...hero} revealDelay={index * 40} />
+          <HomeSurfaceHero key={hero.href} {...hero} revealDelay={index * 40} reverse={index % 2 === 1} />
         ))}
 
         {/* Closing CTA */}
         <SoftReveal
           as="section"
           variant="up"
-          className="bg-surface-muted px-4 py-24 sm:py-32 lg:py-40"
+          className="border-t border-[var(--orbit-line)] px-4 py-24 sm:py-32"
         >
           <div className="mx-auto max-w-3xl space-y-8 text-center">
             <div className="space-y-4">
@@ -75,17 +59,17 @@ export default function HomePage() {
             </div>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/learning">
-                <Button variant="primary" size="lg" className="gallery-soft-cta">
+                <Button variant="primary" size="lg">
                   Open Eco Penguin
                 </Button>
               </Link>
               <Link href="/register">
-                <Button variant="secondary" size="lg" className="gallery-soft-cta">
+                <Button variant="secondary" size="lg">
                   Start today
                 </Button>
               </Link>
               <Link href="/about">
-                <Button variant="ghost" size="lg" className="gallery-soft-cta">
+                <Button variant="ghost" size="lg">
                   About MonAlo
                 </Button>
               </Link>

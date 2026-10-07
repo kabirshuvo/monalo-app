@@ -9,6 +9,7 @@ import {
 import { digraphTheme } from '@/features/digraphs/digraph-theme'
 import { DIGRAPHS_BASE_PATH } from '@/lib/digraphs/constants'
 import { ECO_PENGUIN_APP_NAME, LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
+import { CAMBRIDGE_ESL_STAGES } from '@/lib/learning/cambridge-esl'
 import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
 import { planetFooter } from '@/lib/learning/planet-theme'
 import { LETTER_SOUNDS_BASE_PATH } from '@/lib/letter-sounds/constants'
@@ -23,6 +24,7 @@ type Props = {
 function ShellChrome({ children, title, backHref }: Props) {
   useStopDigraphsAudioOnUnmount()
   const { muted, toggleMute } = useDigraphsUi()
+  const stage = CAMBRIDGE_ESL_STAGES['stage1-phonics']
 
   return (
     <div className={digraphTheme.shell}>
@@ -57,6 +59,9 @@ function ShellChrome({ children, title, backHref }: Props) {
             >
               {muted ? '🔇' : '🔊'}
             </button>
+            <span className="hidden rounded-full bg-orange-400/20 px-2.5 py-1 text-xs font-bold text-orange-200 sm:inline">
+              {stage.chip}
+            </span>
             <Link
               href={LEARNING_HUB_PATH}
               className="rounded-xl px-2 py-1.5 font-semibold text-orange-200 hover:bg-[#292524] sm:px-3"

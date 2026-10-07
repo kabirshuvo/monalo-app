@@ -1,81 +1,108 @@
-
 @import "tailwindcss";
 
 /* Tailwind v4: make `dark:` respond to `.dark` class (next-themes). */
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * MonAlo readable text system — warm stone palette, softer than pure black/white.
- * Existing `text-gray-*`, `bg-gray-*`, and `text-blue-*` utilities pick these up via @theme.
+ * MonAlo cosmos — "light of the mind".
+ * The school is the sun; every part of the site is a planet in its orbit.
+ *
+ * Two skies share one token set:
+ *   .dark  → Night: deep indigo sky, starlight text, sun-gold accent.
+ *   :root  → Daybreak: pale lavender morning, indigo ink, the same sun.
+ *
+ * Existing `text-gray-*`, `bg-gray-*`, `zinc-*`, `purple-*` and `blue-*` utilities are
+ * remapped below, so older pages pick up the new sky without per-file edits.
  */
 :root {
   color-scheme: light;
 
-  --background: #fafaf9;
-  --foreground: #292524;
+  --background: #f6f4fb;
+  --foreground: #1b1f45;
   --surface: #ffffff;
-  --surface-muted: #f5f5f4;
-  --surface-hover: #f5f5f4;
-  --border-subtle: #e7e5e4;
-  --border-strong: #d6d3d1;
+  --surface-muted: #efecf7;
+  --surface-hover: #eae6f5;
+  --border-subtle: #e1dcee;
+  --border-strong: #cac3de;
 
-  --text-primary: #292524;
-  --text-secondary: #44403c;
-  --text-tertiary: #57534e;
-  --text-muted: #78716c;
-  --text-link: #1d4ed8;
-  --text-link-hover: #1e40af;
+  --text-primary: #1b1f45;
+  --text-secondary: #33386a;
+  --text-tertiary: #4a4f7e;
+  --text-muted: #676b93;
+  --text-link: #4a47c9;
+  --text-link-hover: #3a37a8;
 
-  /* Remapped Tailwind gray scale (light mode) */
-  --gray-50: #fafaf9;
-  --gray-100: #f5f5f4;
-  --gray-200: #e7e5e4;
-  --gray-300: #d6d3d1;
-  --gray-400: #a8a29e;
-  --gray-500: #78716c;
-  --gray-600: #57534e;
-  --gray-700: #44403c;
-  --gray-800: #292524;
-  --gray-900: #1c1917;
+  /* Cosmos accents */
+  --sun: #f2a93b;
+  --sun-bright: #ffc56b;
+  --sun-ink: #2a1a00;
+  --nebula: #6b5ce0;
+  --orbit-line: rgba(27, 31, 69, 0.13);
+  --orbit-line-strong: rgba(27, 31, 69, 0.28);
+  --star: rgba(58, 55, 168, 0.32);
+  --glass: rgba(246, 244, 251, 0.78);
+  --panel-night: #141a44;
 
-  --blue-600: #2563eb;
-  --blue-700: #1d4ed8;
+  /* Remapped Tailwind gray scale (Daybreak) */
+  --gray-50: #f6f4fb;
+  --gray-100: #efecf7;
+  --gray-200: #e1dcee;
+  --gray-300: #cac3de;
+  --gray-400: #a39dbf;
+  --gray-500: #767a9e;
+  --gray-600: #555a85;
+  --gray-700: #3d4270;
+  --gray-800: #262b57;
+  --gray-900: #1b1f45;
+
+  --blue-600: #4a47c9;
+  --blue-700: #3a37a8;
   --white: #ffffff;
 }
 
 .dark {
   color-scheme: dark;
 
-  --background: #0c0a09;
-  --foreground: #f5f5f4;
-  --surface: #1c1917;
-  --surface-muted: #141110;
-  --surface-hover: #292524;
-  --border-subtle: #292524;
-  --border-strong: #44403c;
+  --background: #0b1030;
+  --foreground: #f3efe4;
+  --surface: #141a44;
+  --surface-muted: #10153a;
+  --surface-hover: #1c2354;
+  --border-subtle: #252c5e;
+  --border-strong: #343c73;
 
-  --text-primary: #f5f5f4;
-  --text-secondary: #e7e5e4;
-  --text-tertiary: #d6d3d1;
-  --text-muted: #a8a29e;
-  --text-link: #93c5fd;
-  --text-link-hover: #bfdbfe;
+  --text-primary: #f3efe4;
+  --text-secondary: #d9d6e6;
+  --text-tertiary: #bdbbd3;
+  --text-muted: #9a9cbc;
+  --text-link: #b4bcff;
+  --text-link-hover: #d3d8ff;
 
-  /* In dark mode, lower gray numbers = lighter text for readability */
-  --gray-50: #0c0a09;
-  --gray-100: #1c1917;
-  --gray-200: #292524;
-  --gray-300: #44403c;
-  --gray-400: #57534e;
-  --gray-500: #78716c;
-  --gray-600: #a8a29e;
-  --gray-700: #d6d3d1;
-  --gray-800: #e7e5e4;
-  --gray-900: #f5f5f4;
+  --sun: #ffb547;
+  --sun-bright: #ffcb75;
+  --sun-ink: #2a1a00;
+  --nebula: #8c7cf0;
+  --orbit-line: rgba(243, 239, 228, 0.12);
+  --orbit-line-strong: rgba(243, 239, 228, 0.3);
+  --star: rgba(255, 252, 240, 0.85);
+  --glass: rgba(11, 16, 48, 0.72);
+  --panel-night: #10153a;
 
-  --blue-600: #93c5fd;
-  --blue-700: #bfdbfe;
-  --white: #1c1917;
+  /* In dark mode, lower gray numbers = deeper sky, higher = starlight text */
+  --gray-50: #0b1030;
+  --gray-100: #141a44;
+  --gray-200: #1f2656;
+  --gray-300: #343c73;
+  --gray-400: #4b5389;
+  --gray-500: #6e75a0;
+  --gray-600: #9a9cbc;
+  --gray-700: #bdbbd3;
+  --gray-800: #d9d6e6;
+  --gray-900: #f3efe4;
+
+  --blue-600: #b4bcff;
+  --blue-700: #d3d8ff;
+  --white: #141a44;
 }
 
 @theme inline {
@@ -89,6 +116,10 @@
   --color-content-secondary: var(--text-secondary);
   --color-content-muted: var(--text-muted);
   --color-content-link: var(--text-link);
+  --color-sun: var(--sun);
+  --color-sun-bright: var(--sun-bright);
+  --color-sun-ink: var(--sun-ink);
+  --color-nebula: var(--nebula);
 
   --color-gray-50: var(--gray-50);
   --color-gray-100: var(--gray-100);
@@ -105,8 +136,39 @@
   --color-blue-700: var(--blue-700);
   --color-white: var(--white);
 
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-display);
   --font-mono: var(--font-geist-mono);
+}
+
+/*
+ * Night-sky ramps. `zinc-*` is used almost only inside `dark:` variants across the app,
+ * so it becomes the indigo night ramp. `purple-*` becomes nebula violet.
+ */
+@theme {
+  --color-zinc-50: #f6f5fa;
+  --color-zinc-100: #ecebf4;
+  --color-zinc-200: #d9d6e6;
+  --color-zinc-300: #bdbbd3;
+  --color-zinc-400: #9a9cbc;
+  --color-zinc-500: #6e75a0;
+  --color-zinc-600: #4b5389;
+  --color-zinc-700: #343c73;
+  --color-zinc-800: #252c5e;
+  --color-zinc-900: #141a44;
+  --color-zinc-950: #0b1030;
+
+  --color-purple-50: #f1eeff;
+  --color-purple-100: #e3deff;
+  --color-purple-200: #cbc2ff;
+  --color-purple-300: #ada0fa;
+  --color-purple-400: #9081f0;
+  --color-purple-500: #7563e3;
+  --color-purple-600: #5f4ccb;
+  --color-purple-700: #4c3ba8;
+  --color-purple-800: #3a2d82;
+  --color-purple-900: #2b2160;
+  --color-purple-950: #1a1440;
 }
 
 @layer base {
@@ -117,7 +179,7 @@
   body {
     background: var(--background);
     color: var(--foreground);
-    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -131,7 +193,14 @@
   h5,
   h6 {
     color: var(--text-primary);
-    line-height: 1.25;
+    line-height: 1.2;
+  }
+
+  h1,
+  h2 {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-optical-sizing: auto;
+    letter-spacing: -0.015em;
   }
 
   p {
@@ -147,8 +216,13 @@
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--text-link) 22%, transparent);
+    background: color-mix(in srgb, var(--sun) 35%, transparent);
     color: var(--text-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent, var(--sun));
+    outline-offset: 3px;
   }
 }
 
@@ -610,5 +684,483 @@
       #c4b5fd 72%,
       #a8a29e 100%
     );
+  }
+}
+
+/* ==========================================================================
+ * Cosmos — sitewide sky, planets and orbits
+ * ========================================================================== */
+
+/* Fixed sky behind every page. Night: starlight + a faint nebula.
+   Daybreak: the same star chart printed in pale indigo, with a warm dawn glow. */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::before {
+  background-image:
+    radial-gradient(1.2px 1.2px at 12% 18%, var(--star), transparent 70%),
+    radial-gradient(1px 1px at 27% 72%, var(--star), transparent 70%),
+    radial-gradient(1.4px 1.4px at 44% 33%, var(--star), transparent 70%),
+    radial-gradient(1px 1px at 63% 81%, var(--star), transparent 70%),
+    radial-gradient(1.2px 1.2px at 78% 12%, var(--star), transparent 70%),
+    radial-gradient(1px 1px at 91% 54%, var(--star), transparent 70%),
+    radial-gradient(1px 1px at 6% 91%, var(--star), transparent 70%),
+    radial-gradient(1.3px 1.3px at 55% 6%, var(--star), transparent 70%);
+  background-size: 340px 340px;
+  opacity: 0.55;
+}
+
+body::after {
+  background-image:
+    radial-gradient(1.6px 1.6px at 22% 40%, var(--star), transparent 70%),
+    radial-gradient(1px 1px at 70% 22%, var(--star), transparent 70%),
+    radial-gradient(1.8px 1.8px at 86% 78%, var(--star), transparent 70%),
+    radial-gradient(1px 1px at 38% 88%, var(--star), transparent 70%),
+    radial-gradient(ellipse 70% 45% at 85% -5%, color-mix(in srgb, var(--nebula) 22%, transparent), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 0% 100%, color-mix(in srgb, var(--sun) 10%, transparent), transparent 70%);
+  background-size:
+    520px 520px, 520px 520px, 520px 520px, 520px 520px,
+    100% 100%, 100% 100%;
+  animation: cosmos-twinkle 9s ease-in-out infinite alternate;
+}
+
+:root:not(.dark) body::before {
+  opacity: 0.35;
+}
+
+:root:not(.dark) body::after {
+  background-image:
+    radial-gradient(1.6px 1.6px at 22% 40%, var(--star), transparent 70%),
+    radial-gradient(1px 1px at 70% 22%, var(--star), transparent 70%),
+    radial-gradient(1.8px 1.8px at 86% 78%, var(--star), transparent 70%),
+    radial-gradient(1px 1px at 38% 88%, var(--star), transparent 70%),
+    radial-gradient(ellipse 70% 45% at 85% -5%, rgba(107, 92, 224, 0.12), transparent 70%),
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(255, 197, 107, 0.22), transparent 70%);
+}
+
+@keyframes cosmos-twinkle {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Translucent "glass" chrome — header, menus, floating readouts */
+@utility cosmos-glass {
+  background-color: var(--glass);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+/* A panel of night sky that stays dark in both themes (feature blocks) */
+@utility cosmos-panel {
+  background-color: var(--panel-night);
+  color: #f3efe4;
+  background-image:
+    radial-gradient(1.2px 1.2px at 14% 24%, rgba(255, 252, 240, 0.8), transparent 70%),
+    radial-gradient(1px 1px at 68% 18%, rgba(255, 252, 240, 0.7), transparent 70%),
+    radial-gradient(1.4px 1.4px at 84% 66%, rgba(255, 252, 240, 0.75), transparent 70%),
+    radial-gradient(1px 1px at 33% 82%, rgba(255, 252, 240, 0.6), transparent 70%),
+    radial-gradient(ellipse 60% 80% at 100% 0%, rgba(140, 124, 240, 0.28), transparent 70%),
+    radial-gradient(ellipse 50% 70% at 0% 100%, rgba(255, 181, 71, 0.16), transparent 70%);
+  background-size: 260px 260px, 260px 260px, 260px 260px, 260px 260px, 100% 100%, 100% 100%;
+}
+
+@utility orbit-line {
+  border-color: var(--orbit-line);
+}
+
+/* ---------- Planet orbs ---------- */
+.planet-orb {
+  --s: 24px;
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 9999px;
+  background: radial-gradient(circle at 32% 30%, var(--p-light) 0%, var(--p-base) 46%, var(--p-dark) 100%);
+  box-shadow:
+    inset calc(var(--s) * -0.16) calc(var(--s) * -0.12) calc(var(--s) * 0.28) rgba(5, 8, 30, 0.55),
+    inset calc(var(--s) * 0.06) calc(var(--s) * 0.05) calc(var(--s) * 0.12) rgba(255, 255, 255, 0.25),
+    0 0 calc(var(--s) * 0.45) color-mix(in srgb, var(--p-base) 45%, transparent);
+}
+
+.planet-orb::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--p-texture, none);
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+}
+
+/* Saturn's ring, tilted; the front half overlaps the body */
+.planet-orb[data-ring='true']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--s) * 1.85);
+  height: calc(var(--s) * 0.5);
+  transform: translate(-50%, -50%) rotate(-18deg);
+  border-radius: 9999px;
+  border: calc(var(--s) * 0.07) solid rgba(240, 222, 170, 0.75);
+  box-shadow: 0 0 calc(var(--s) * 0.15) rgba(240, 222, 170, 0.35);
+}
+
+.planet-orb[data-sun='true'] {
+  background: radial-gradient(circle at 40% 36%, #fffbea 0%, #ffd46b 30%, #ffb547 58%, #f08a24 100%);
+  box-shadow:
+    0 0 min(calc(var(--s) * 0.35), 40px) rgba(255, 196, 92, 0.75),
+    0 0 min(calc(var(--s) * 0.9), 90px) rgba(255, 170, 60, 0.38),
+    0 0 min(calc(var(--s) * 1.8), 150px) rgba(255, 150, 40, 0.16),
+    inset calc(var(--s) * -0.06) calc(var(--s) * -0.08) calc(var(--s) * 0.18) rgba(170, 70, 0, 0.3);
+}
+
+/* ---------- Solar system (landing) ---------- */
+.solar {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.solar-orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--d);
+  height: var(--d);
+  margin-left: calc(var(--d) / -2);
+  margin-top: calc(var(--d) / -2);
+  border-radius: 9999px;
+  border: 1px solid var(--orbit-line);
+  transition: border-color 0.4s ease;
+  animation: solar-spin var(--period) linear infinite;
+  animation-delay: calc(var(--period) * var(--phase) * -1);
+  pointer-events: none;
+}
+
+.solar-orbit[data-active='true'] {
+  border-color: color-mix(in srgb, var(--p-base) 70%, transparent);
+}
+
+.solar-carrier {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+
+.solar-upright {
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: solar-spin var(--period) linear infinite reverse;
+  animation-delay: calc(var(--period) * var(--phase) * -1);
+}
+
+.solar-body {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 9999px;
+  pointer-events: auto;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.solar-body:hover,
+.solar-body:focus-visible,
+.solar-body[data-active='true'] {
+  transform: translate(-50%, -50%) scale(1.22);
+}
+
+.solar-body:focus-visible .planet-orb {
+  outline: 2px solid var(--sun);
+  outline-offset: 4px;
+}
+
+.solar-tag {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 4px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.72rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.solar-body[data-active='true'] .solar-tag,
+.solar-body:hover .solar-tag {
+  color: var(--text-primary);
+}
+
+/* Earth's label sits outside its moon's path */
+.solar-body[data-moon-host='true'] .solar-tag {
+  top: calc(50% + 4.6cqw);
+}
+
+/* Moon: a small orbit centred on Earth */
+.solar-moon-orbit {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--md);
+  height: var(--md);
+  margin-left: calc(var(--md) / -2);
+  margin-top: calc(var(--md) / -2);
+  border-radius: 9999px;
+  border: 1px dashed var(--orbit-line);
+  animation: solar-spin var(--period) linear infinite;
+  animation-delay: calc(var(--period) * var(--phase) * -1);
+  pointer-events: none;
+}
+
+.solar-sun {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  outline: none;
+}
+
+.solar-sun:focus-visible .planet-orb {
+  outline: 2px solid var(--sun);
+  outline-offset: 6px;
+}
+
+/* Everything holds still while a body is pointed at, so it's easy to click */
+.solar[data-paused='true'] .solar-orbit,
+.solar[data-paused='true'] .solar-upright,
+.solar[data-paused='true'] .solar-moon-orbit {
+  animation-play-state: paused;
+}
+
+@keyframes solar-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@container (max-width: 520px) {
+  .solar-tag {
+    display: none;
+  }
+}
+
+/* ---------- Page hero arcs (inner pages) ---------- */
+.hero-arc {
+  position: absolute;
+  border-radius: 9999px;
+  border: 1px solid var(--orbit-line);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after {
+    animation: none !important;
+  }
+
+  .solar-orbit,
+  .solar-upright,
+  .solar-moon-orbit {
+    animation-play-state: paused !important;
+  }
+
+  .solar-body {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+ * Planet tones — each page wears the colours of its planet.
+ * PublicLayout sets data-tone from the route; home sections set their own.
+ * --t-light / --t-base / --t-dark are the raw planet colours; everything
+ * else (buttons, links, glow, illustrations) derives from them.
+ * ========================================================================== */
+:root {
+  --accent: var(--sun);
+  --accent-bright: var(--sun-bright);
+  --accent-ink: var(--sun-ink);
+}
+
+[data-tone] {
+  /* Raw colours are set per planet below */
+  --accent: var(--t-base);
+  --accent-bright: var(--t-light);
+  --accent-ink: var(--t-ink, #1b1405);
+
+  /* Readable accent text: deep shade in Daybreak, light shade at Night */
+  --tone-text: color-mix(in srgb, var(--t-dark) 82%, #1b1f45);
+  --tone-text-strong: color-mix(in srgb, var(--t-dark) 65%, #1b1f45);
+  --tone-soft: color-mix(in srgb, var(--t-base) 12%, transparent);
+  --tone-line: color-mix(in srgb, var(--t-base) 38%, transparent);
+
+  /* Existing utilities pick up the page colour */
+  --text-link: var(--tone-text);
+  --text-link-hover: var(--tone-text-strong);
+  --blue-600: var(--tone-text);
+  --blue-700: var(--tone-text-strong);
+  --color-purple-300: var(--tone-text);
+  --color-purple-700: var(--tone-text);
+  --color-sky-700: var(--tone-text);
+  --color-sky-300: var(--tone-text);
+
+  /* Illustration palette */
+  --il-light: var(--t-light);
+  --il-base: var(--t-base);
+  --il-dark: var(--t-dark);
+  --il-paper: #fffaf0;
+  --il-ink: #1b1f45;
+  --il-line: #1b1f45;
+  --il-disc: color-mix(in srgb, var(--t-base) 24%, transparent);
+}
+
+.dark [data-tone],
+[data-tone].dark {
+  --tone-text: var(--t-light);
+  --tone-text-strong: color-mix(in srgb, var(--t-light) 70%, #ffffff);
+  --tone-soft: color-mix(in srgb, var(--t-base) 14%, transparent);
+  --il-paper: #f6f1e4;
+  --il-line: #f6f1e4;
+  --il-disc: color-mix(in srgb, var(--t-base) 14%, transparent);
+}
+
+[data-tone='sun'] {
+  --t-light: #ffd98a;
+  --t-base: #ffb547;
+  --t-dark: #a85d0a;
+}
+[data-tone='mercury'] {
+  --t-light: #e6e2da;
+  --t-base: #b3aca2;
+  --t-dark: #57514a;
+}
+[data-tone='venus'] {
+  --t-light: #fff0b8;
+  --t-base: #f0d26a;
+  --t-dark: #7d600c;
+}
+[data-tone='earth'] {
+  --t-light: #a9dcff;
+  --t-base: #4cb0ee;
+  --t-dark: #124f84;
+  --t-ink: #021b30;
+  --il-leaf: #4bb36b;
+  --il-leaf-dark: #2c7a45;
+}
+[data-tone='moon'] {
+  --t-light: #f4f1ea;
+  --t-base: #cfcbc2;
+  --t-dark: #66625b;
+}
+[data-tone='mars'] {
+  --t-light: #ffbfa3;
+  --t-base: #ec7448;
+  --t-dark: #8e2a14;
+  --t-ink: #2a0a02;
+}
+[data-tone='jupiter'] {
+  --t-light: #f6cba6;
+  --t-base: #d0885a;
+  --t-dark: #74391a;
+  --t-ink: #241004;
+}
+[data-tone='saturn'] {
+  --t-light: #efe4c6;
+  --t-base: #d4c093;
+  --t-dark: #66532a;
+}
+[data-tone='uranus'] {
+  --t-light: #c4f7f2;
+  --t-base: #72d6ce;
+  --t-dark: #1d6a73;
+  --t-ink: #032624;
+}
+[data-tone='neptune'] {
+  --t-light: #c9d4ff;
+  --t-base: #8aa0ff;
+  --t-dark: #23339a;
+  --t-ink: #070c33;
+}
+
+/* The page's colour, felt as a soft glow from the top right */
+.tone-wash {
+  background-image:
+    radial-gradient(ellipse 55% 45% at 92% 0%, var(--tone-soft), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 0% 30%, color-mix(in srgb, var(--t-base, var(--sun)) 6%, transparent), transparent 70%);
+}
+
+/* ---------- Page illustrations ---------- */
+.page-illustration {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.il-float {
+  animation: il-float 7s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.il-flicker {
+  animation: il-flicker 2.4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+@keyframes il-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes il-flicker {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  40% {
+    transform: scale(0.94, 1.06);
+  }
+  70% {
+    transform: scale(1.04, 0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .il-float,
+  .il-flicker {
+    animation: none !important;
   }
 }

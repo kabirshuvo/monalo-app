@@ -1,0 +1,145 @@
+[
+  {
+    "id": "cat-hat",
+    "prompt": "Which two rhyme?",
+    "speak": "cat, hat",
+    "matchIds": ["cat", "hat"],
+    "choices": [
+      { "id": "cat", "label": "cat", "image": "/images/a/cat.webp" },
+      { "id": "hat", "label": "hat", "image": "/images/a/hat.webp" },
+      { "id": "sun", "label": "sun", "image": "/images/u/sun.webp" }
+    ]
+  },
+  {
+    "id": "sun-run",
+    "prompt": "Which two rhyme?",
+    "speak": "sun, run",
+    "matchIds": ["sun", "run"],
+    "choices": [
+      { "id": "sun", "label": "sun", "image": "/images/u/sun.webp" },
+      { "id": "run", "label": "run", "image": "/images/u/run.webp" },
+      { "id": "cat", "label": "cat", "image": "/images/a/cat.webp" }
+    ]
+  },
+  {
+    "id": "hen-pen",
+    "prompt": "Which two rhyme?",
+    "speak": "hen, pen",
+    "matchIds": ["hen", "pen"],
+    "choices": [
+      { "id": "hen", "label": "hen", "image": "/images/e/hen.webp" },
+      { "id": "pen", "label": "pen", "image": "/images/e/pen.webp" },
+      { "id": "dog", "label": "dog", "image": "/images/o/dog.webp" }
+    ]
+  },
+  {
+    "id": "bed-red",
+    "prompt": "Which two rhyme?",
+    "speak": "bed, red",
+    "matchIds": ["bed", "red"],
+    "choices": [
+      { "id": "bed", "label": "bed", "image": "/images/e/bed.webp" },
+      { "id": "red", "label": "red", "image": "/images/e/red.webp" },
+      { "id": "bus", "label": "bus", "image": "/images/u/bus.webp" }
+    ]
+  },
+  {
+    "id": "hop-mop",
+    "prompt": "Which two rhyme?",
+    "speak": "hop, mop",
+    "matchIds": ["hop", "mop"],
+    "choices": [
+      { "id": "hop", "label": "hop", "image": "/images/o/hop.webp" },
+      { "id": "mop", "label": "mop", "image": "/images/o/mop.webp" },
+      { "id": "van", "label": "van", "image": "/images/a/van.webp" }
+    ]
+  },
+  {
+    "id": "pan-van",
+    "prompt": "Which two rhyme?",
+    "speak": "pan, van",
+    "matchIds": ["pan", "van"],
+    "choices": [
+      { "id": "pan", "label": "pan", "image": "/images/a/pan.webp" },
+      { "id": "van", "label": "van", "image": "/images/a/van.webp" },
+      { "id": "dog", "label": "dog", "image": "/images/o/dog.webp" }
+    ]
+  },
+  {
+    "id": "jet-net",
+    "prompt": "Which two rhyme?",
+    "speak": "jet, net",
+    "matchIds": ["jet", "net"],
+    "choices": [
+      { "id": "jet", "label": "jet", "image": "/images/e/jet.webp" },
+      { "id": "net", "label": "net", "image": "/images/e/net.webp" },
+      { "id": "cup", "label": "cup", "image": "/images/u/cup.webp" }
+    ]
+  },
+    {
+      "id": "bun-sun",
+      "prompt": "Which two rhyme?",
+      "speak": "bun, sun",
+      "matchIds": ["bun", "sun"],
+      "choices": [
+        { "id": "bun", "label": "bun", "image": "/images/u/bun.webp" },
+        { "id": "sun", "label": "sun", "image": "/images/u/sun.webp" },
+        { "id": "hat", "label": "hat", "image": "/images/a/hat.webp" }
+      ]
+    },
+    {
+      "id": "pig-dig",
+      "prompt": "Which two rhyme?",
+      "speak": "pig, dig",
+      "matchIds": ["pig", "dig"],
+      "choices": [
+        { "id": "pig", "label": "pig", "image": "/images/i/pig.webp" },
+        { "id": "dig", "label": "dig", "image": "/images/i/dig.webp" },
+        { "id": "cup", "label": "cup", "image": "/images/u/cup.webp" }
+      ]
+    },
+    {
+      "id": "map-tap",
+      "prompt": "Which two rhyme?",
+      "speak": "map, tap",
+      "matchIds": ["map", "tap"],
+      "choices": [
+        { "id": "map", "label": "map", "image": "/images/a/map.webp" },
+        { "id": "tap", "label": "tap", "image": "/images/a/tap.webp" },
+        { "id": "dog", "label": "dog", "image": "/images/o/dog.webp" }
+      ]
+    },
+    {
+      "id": "fox-box",
+      "prompt": "Which two rhyme?",
+      "speak": "fox, box",
+      "matchIds": ["fox", "box"],
+      "choices": [
+        { "id": "fox", "label": "fox", "image": "/images/o/fox.webp" },
+        { "id": "box", "label": "box", "image": "/images/o/box.webp" },
+        { "id": "sun", "label": "sun", "image": "/images/u/sun.webp" }
+      ]
+    },
+    {
+      "id": "cup-pup",
+      "prompt": "Which two rhyme?",
+      "speak": "cup, pup",
+      "matchIds": ["cup", "pup"],
+      "choices": [
+        { "id": "cup", "label": "cup", "image": "/images/u/cup.webp" },
+        { "id": "pup", "label": "pup", "image": "/images/u/pup.webp" },
+        { "id": "hat", "label": "hat", "image": "/images/a/hat.webp" }
+      ]
+    },
+    {
+      "id": "mix-six",
+      "prompt": "Which two rhyme?",
+      "speak": "mix, six",
+      "matchIds": ["mix", "six"],
+      "choices": [
+        { "id": "mix", "label": "mix", "image": "/images/i/mix.webp" },
+        { "id": "six", "label": "six", "image": "/images/i/six.webp" },
+        { "id": "dog", "label": "dog", "image": "/images/o/dog.webp" }
+      ]
+    }
+  ]

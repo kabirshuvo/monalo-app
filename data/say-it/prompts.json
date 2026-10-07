@@ -1,0 +1,114 @@
+[
+  {
+    "id": "hello",
+    "label": "Hello",
+    "speak": "Hello",
+    "kind": "word",
+    "image": null
+  },
+  {
+    "id": "cat",
+    "label": "cat",
+    "speak": "cat",
+    "kind": "word",
+    "image": "/images/a/cat.webp"
+  },
+  {
+    "id": "dog",
+    "label": "dog",
+    "speak": "dog",
+    "kind": "word",
+    "image": "/images/o/dog.webp"
+  },
+  {
+    "id": "sun",
+    "label": "sun",
+    "speak": "sun",
+    "kind": "word",
+    "image": "/images/u/sun.webp"
+  },
+  {
+    "id": "hat",
+    "label": "hat",
+    "speak": "hat",
+    "kind": "word",
+    "image": "/images/a/hat.webp"
+  },
+  {
+    "id": "i-can-see",
+    "label": "I can see",
+    "speak": "I can see",
+    "kind": "phrase",
+    "image": null
+  },
+  {
+    "id": "look-at-me",
+    "label": "Look at me",
+    "speak": "Look at me",
+    "kind": "phrase",
+    "image": null
+  },
+  {
+    "id": "come-here",
+    "label": "Come here",
+    "speak": "Come here",
+    "kind": "phrase",
+    "image": null
+  },
+  {
+    "id": "yes",
+    "label": "Yes",
+    "speak": "Yes",
+    "kind": "word",
+    "image": null
+  },
+  {
+    "id": "no",
+    "label": "No",
+    "speak": "No",
+    "kind": "word",
+    "image": null
+  },
+  {
+    "id": "thank-you",
+    "label": "Thank you",
+    "speak": "Thank you",
+    "kind": "phrase",
+    "image": null
+  },
+  {
+    "id": "my-name",
+    "label": "My name is…",
+    "speak": "My name is",
+    "kind": "phrase",
+    "image": null
+  },
+  {
+    "id": "red",
+    "label": "red",
+    "speak": "red",
+    "kind": "word",
+    "image": "/images/e/red.webp"
+  },
+  {
+    "id": "big-bus",
+    "label": "a big bus",
+    "speak": "a big bus",
+    "kind": "phrase",
+    "image": "/images/u/bus.webp"
+  },
+  {
+    "id": "pig",
+    "label": "pig",
+    "speak": "pig",
+    "kind": "word",
+    "image": "/images/i/pig.webp"
+  },
+  {
+    "id": "good-morning",
+    "label": "Good morning",
+    "speak": "Good morning",
+    "kind": "phrase",
+    "image": null
+  }
+]

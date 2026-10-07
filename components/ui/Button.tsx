@@ -18,19 +18,20 @@ export default function Button({
   disabled,
   ...props 
 }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2'
+  const baseStyles = 'inline-flex items-center justify-center gap-2 font-bold rounded-full transition-[background-color,border-color,color,box-shadow,transform] duration-200 active:translate-y-px disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]'
   
   const variants = {
-    primary: 'bg-purple-500 text-white hover:bg-purple-600 active:bg-purple-700 focus:ring-purple-400 shadow-sm',
-    secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300 focus:ring-gray-400 border border-gray-200',
-    ghost: 'text-gray-700 hover:bg-gray-100 active:bg-gray-200 focus:ring-gray-300',
-    destructive: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus:ring-red-500 shadow-sm'
+    // Sunlight: the one warm colour in the sky is reserved for the main action
+    primary: 'bg-[var(--accent)] text-[var(--accent-ink)] hover:bg-[var(--accent-bright)] shadow-[0_0_24px_color-mix(in_srgb,var(--accent)_35%,transparent)]',
+    secondary: 'bg-transparent text-content border border-[var(--orbit-line-strong)] hover:bg-[var(--surface-hover)]',
+    ghost: 'text-content-secondary hover:text-content hover:bg-[var(--surface-hover)]',
+    destructive: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 shadow-sm'
   }
   
   const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg'
+    sm: 'px-4 py-1.5 text-sm',
+    md: 'px-5 py-2.5 text-base',
+    lg: 'px-7 py-3.5 text-lg'
   }
   
   return (

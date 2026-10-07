@@ -5,13 +5,15 @@ import { getLetterSounds } from '@/lib/letter-sounds/data'
 import { computePhonicsProgress } from '@/lib/learning/phonics-progress'
 import { auth } from '@/lib/auth-server'
 import { getBalloonLettersMastery } from '@/lib/points/service'
+import { resolveLearnerScope } from '@/lib/classroom/celebrate-scope'
 
 export default async function BalloonLettersPage() {
   const all = await getLetterSounds()
   const session = await auth()
   let masteredKeys: string[] = []
   if (session?.user?.id) {
-    const mastery = await getBalloonLettersMastery(session.user.id)
+    const scope = await resolveLearnerScope(session.user.id)
+    const mastery = await getBalloonLettersMastery(session.user.id, scope)
     masteredKeys = mastery.masteredKeys
   }
   const progress = computePhonicsProgress(masteredKeys)

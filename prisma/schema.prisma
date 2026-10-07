@@ -45,6 +45,7 @@ model User {
   pointEvents              PointEvent[]          @relation("UserPointEvents")
   blogReactions            BlogReaction[]        @relation("UserBlogReactions")
   roleApplications         RoleApplication[]     @relation("UserRoleApplications")
+  classrooms               Classroom[]           @relation("TeacherClassrooms")
 
   @@map("users")
   @@index([email])
@@ -406,20 +407,56 @@ enum PointCategory {
 }
 
 model PointEvent {
-  id          String        @id @default(cuid()) @map("id")
-  userId      String        @map("user_id")
-  category    PointCategory @map("category")
-  points      Int           @map("points")
-  description String?       @db.VarChar(255) @map("description")
-  referenceId String?       @db.VarChar(128) @map("reference_id")
-  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp()
+  id               String        @id @default(cuid()) @map("id")
+  userId           String        @map("user_id")
+  /** When set, mastery belongs to a classroom learner (teacher userId owns the row). */
+  learnerProfileId String?       @map("learner_profile_id")
+  category         PointCategory @map("category")
+  points           Int           @map("points")
+  description      String?       @db.VarChar(255) @map("description")
+  referenceId      String?       @db.VarChar(191) @map("reference_id")
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamp()
 
-  user User @relation("UserPointEvents", fields: [userId], references: [id], onDelete: Cascade)
+  user           User            @relation("UserPointEvents", fields: [userId], references: [id], onDelete: Cascade)
+  learnerProfile LearnerProfile? @relation("LearnerPointEvents", fields: [learnerProfileId], references: [id], onDelete: Cascade)
 
   @@unique([userId, category, referenceId])
   @@index([userId, createdAt])
+  @@index([learnerProfileId, category])
   @@index([category])
   @@map("point_events")
+}
+
+model Classroom {
+  id         String   @id @default(cuid()) @map("id")
+  teacherId  String   @map("teacher_id")
+  name       String   @db.VarChar(120) @map("name")
+  schoolName String?  @db.VarChar(160) @map("school_name")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp()
+
+  teacher  User             @relation("TeacherClassrooms", fields: [teacherId], references: [id], onDelete: Cascade)
+  learners LearnerProfile[] @relation("ClassroomLearners")
+
+  @@index([teacherId])
+  @@map("classrooms")
+}
+
+model LearnerProfile {
+  id          String   @id @default(cuid()) @map("id")
+  classroomId String   @map("classroom_id")
+  displayName String   @db.VarChar(80) @map("display_name")
+  avatarKey   String   @default("penguin") @db.VarChar(32) @map("avatar_key")
+  rollNo      String?  @db.VarChar(32) @map("roll_no")
+  active      Boolean  @default(true) @map("active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
+
+  classroom   Classroom    @relation("ClassroomLearners", fields: [classroomId], references: [id], onDelete: Cascade)
+  pointEvents PointEvent[] @relation("LearnerPointEvents")
+
+  @@index([classroomId])
+  @@map("learner_profiles")
 }
 
 enum ProductStatus {
@@ -469,6 +506,7 @@ enum Role {
   DONOR
   GUARDIAN
   SPONSOR
+  TEACHER
   BROWSER
 }
 

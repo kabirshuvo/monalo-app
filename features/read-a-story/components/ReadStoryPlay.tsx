@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { readStoryTheme } from '@/features/read-a-story/read-story-theme'
 import { playVowelWordsAudio, stopVowelWordsAudio } from '@/features/vowel-words/hooks/vowelWordsAudioManager'
+import WordPicture from '@/features/vowel-words/components/WordPicture'
 import api from '@/lib/api'
 import { READ_STORY_BASE_PATH } from '@/lib/read-a-story/constants'
 import { writeReadStorySession } from '@/lib/read-a-story/session'
@@ -44,7 +45,7 @@ export default function ReadStoryPlay({ stories, completedIds = [] }: Props) {
   const isLast = page >= story.pages.length - 1
 
   const speakWord = (word: string) => {
-    playVowelWordsAudio('', { fallbackText: word.replace(/[^a-zA-Z]/g, '') || word })
+    playVowelWordsAudio('', { fallbackText: word.replace(/[^a-zA-Z']/g, '') || word })
   }
 
   const nextPage = () => {
@@ -110,6 +111,17 @@ export default function ReadStoryPlay({ stories, completedIds = [] }: Props) {
         <p className="text-sm font-bold uppercase tracking-widest text-amber-300">
           {story.title} · page {page + 1}/{story.pages.length}
         </p>
+        {pageData.image ? (
+          <div className="mx-auto w-full max-w-xs">
+            <WordPicture
+              src={pageData.image}
+              word={pageData.words[0] ?? story.title}
+              alt={pageData.text}
+              className="aspect-square w-full rounded-3xl"
+              sizes="(max-width: 640px) 80vw, 320px"
+            />
+          </div>
+        ) : null}
         <p className="text-3xl font-extrabold leading-relaxed text-[#fafaf9] sm:text-4xl">
           {pageData.words.map((word, i) => (
             <button

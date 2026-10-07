@@ -10,7 +10,7 @@ export default function CartNavLink() {
   return (
     <Link
       href="/checkout"
-      className="relative inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-zinc-900"
+      className="relative inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-content-secondary transition-colors hover:bg-[var(--surface-hover)] hover:text-content"
       aria-label={count > 0 ? `Cart, ${count} items` : 'Cart'}
     >
       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -23,7 +23,7 @@ export default function CartNavLink() {
       </svg>
       <span className="hidden sm:inline">Cart</span>
       {count > 0 && (
-        <span className="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-bold text-white">
+        <span className="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-[var(--sun)] px-1 text-[10px] font-bold text-[var(--sun-ink)]">
           {count > 99 ? '99+' : count}
         </span>
       )}

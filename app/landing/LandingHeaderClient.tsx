@@ -12,6 +12,8 @@ import Button from '@/components/ui/Button'
 import TotalPointsBadge from '@/components/nav/TotalPointsBadge'
 import SignInNavButton from '@/components/auth/SignInNavButton'
 import StartTodayButton from '@/components/landing/StartTodayButton'
+import SunMark from '@/components/cosmos/SunMark'
+import PlanetOrb from '@/components/cosmos/PlanetOrb'
 
 function AuthNavPlaceholder() {
   return (
@@ -72,28 +74,23 @@ export default function LandingHeaderClient() {
   }, [menuOpen])
 
   return (
-    <header className="relative z-20 px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
+    <header className="sticky top-0 z-30 border-b border-[var(--orbit-line)] cosmos-glass px-4 py-3 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
         <Link
           href="/"
-          className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-zinc-50 hover:text-gray-700 dark:hover:text-zinc-200 transition-colors"
+          className="flex items-center gap-2.5 text-content transition-opacity hover:opacity-85"
+          aria-label="MonAlo, home"
         >
-          <svg className="w-8 h-8 text-gray-900 dark:text-zinc-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-            />
-          </svg>
-          <span>MonAlo</span>
+          <SunMark className="h-9 w-9" />
+          <span className="font-serif text-[1.45rem] font-medium tracking-tight">MonAlo</span>
         </Link>
 
         <div className="flex items-center gap-3">
           <Link
             href="/learning"
-            className="hidden rounded-full bg-sky-50 px-3 py-1.5 text-sm font-semibold text-sky-900 hover:bg-sky-100 sm:inline-flex dark:bg-sky-950/50 dark:text-sky-100 dark:hover:bg-sky-900/60"
+            className="hidden items-center gap-2 rounded-full border border-[var(--orbit-line)] py-1.5 pl-1.5 pr-3.5 text-sm font-bold text-content-secondary transition-colors hover:border-[var(--orbit-line-strong)] hover:text-content sm:inline-flex"
           >
+            <PlanetOrb planet="moon" size={16} />
             Eco Penguin
           </Link>
           <ThemeToggle />
@@ -115,7 +112,7 @@ export default function LandingHeaderClient() {
                   onClick={() => setMenuOpen((s) => !s)}
                   aria-haspopup="true"
                   aria-expanded={menuOpen}
-                  className="flex items-center rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  className="flex items-center rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--sun)]"
                 >
                   <AvatarVisual
                     value={getUserAvatarFromSession(session)}
@@ -125,31 +122,31 @@ export default function LandingHeaderClient() {
                 </button>
 
                 {menuOpen && (
-                  <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-md shadow-lg py-1 z-50">
+                  <div className="absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded-2xl border border-[var(--orbit-line)] cosmos-glass py-1 shadow-2xl shadow-black/30">
                     <Link
                       href="/profile"
                       onClick={() => setMenuOpen(false)}
-                      className="block px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900"
+                      className="block px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content"
                     >
                       Profile
                     </Link>
                     <Link
                       href="/dashboard"
                       onClick={() => setMenuOpen(false)}
-                      className="block px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900"
+                      className="block px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content"
                     >
                       Dashboard
                     </Link>
                     <Link
                       href="/learning"
                       onClick={() => setMenuOpen(false)}
-                      className="block px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900"
+                      className="block px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content"
                     >
                       Eco Penguin
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-900"
+                      className="w-full text-left px-4 py-2 text-sm text-content-secondary hover:bg-[var(--surface-hover)] hover:text-content"
                     >
                       Sign out
                     </button>

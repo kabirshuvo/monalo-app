@@ -49,6 +49,25 @@
           "The",
           "end"
         ]
+      },
+      {
+        "text": "I can see Pip.",
+        "words": [
+          "I",
+          "can",
+          "see",
+          "Pip"
+        ]
+      },
+      {
+        "text": "I like Pip. The end.",
+        "words": [
+          "I",
+          "like",
+          "Pip",
+          "The",
+          "end"
+        ]
       }
     ]
   },
@@ -105,6 +124,81 @@
           "The",
           "end"
         ]
+      },
+      {
+        "text": "We look at the cat.",
+        "words": [
+          "We",
+          "look",
+          "at",
+          "the",
+          "cat"
+        ]
+      },
+      {
+        "text": "We like the cat. The end.",
+        "words": [
+          "We",
+          "like",
+          "the",
+          "cat",
+          "The",
+          "end"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "i-can-see",
+    "title": "I can see",
+    "requiredGroup": "satpin",
+    "pages": [
+      {
+        "text": "I can see.",
+        "words": ["I", "can", "see"]
+      },
+      {
+        "text": "I can see a pin.",
+        "words": ["I", "can", "see", "a", "pin"]
+      },
+      {
+        "text": "I can see a tin.",
+        "words": ["I", "can", "see", "a", "tin"]
+      },
+      {
+        "text": "Look at the tin.",
+        "words": ["Look", "at", "the", "tin"]
+      },
+      {
+        "text": "I like it. The end.",
+        "words": ["I", "like", "it", "The", "end"]
+      }
+    ]
+  },
+  {
+    "id": "we-look",
+    "title": "We look",
+    "requiredGroup": "mdgock",
+    "pages": [
+      {
+        "text": "We look.",
+        "words": ["We", "look"]
+      },
+      {
+        "text": "We look at a dog.",
+        "words": ["We", "look", "at", "a", "dog"]
+      },
+      {
+        "text": "The dog is big.",
+        "words": ["The", "dog", "is", "big"]
+      },
+      {
+        "text": "Come and see the dog.",
+        "words": ["Come", "and", "see", "the", "dog"]
+      },
+      {
+        "text": "We like the dog. The end.",
+        "words": ["We", "like", "the", "dog", "The", "end"]
       }
     ]
   },
@@ -149,6 +243,10 @@
         ]
       },
       {
+        "text": "I can see the hen.",
+        "words": ["I", "can", "see", "the", "hen"]
+      },
+      {
         "text": "The hen is fed. The end.",
         "words": [
           "The",
@@ -158,6 +256,33 @@
           "The",
           "end"
         ]
+      }
+    ]
+  },
+  {
+    "id": "frog-stop",
+    "title": "Stop, frog",
+    "requiredGroup": "eurhbf",
+    "pages": [
+      {
+        "text": "A frog.",
+        "words": ["A", "frog"]
+      },
+      {
+        "text": "The frog can hop.",
+        "words": ["The", "frog", "can", "hop"]
+      },
+      {
+        "text": "Stop, frog!",
+        "words": ["Stop", "frog"]
+      },
+      {
+        "text": "I can see the frog.",
+        "words": ["I", "can", "see", "the", "frog"]
+      },
+      {
+        "text": "We like the frog. The end.",
+        "words": ["We", "like", "the", "frog", "The", "end"]
       }
     ]
   },
@@ -203,12 +328,271 @@
         ]
       },
       {
+        "text": "Come and look.",
+        "words": ["Come", "and", "look"]
+      },
+      {
         "text": "Yes. The end.",
         "words": [
           "Yes",
           "The",
           "end"
         ]
+      }
+    ]
+  },
+  {
+    "id": "look-here",
+    "title": "Look here",
+    "requiredGroup": "satpin",
+    "pages": [
+      {
+        "text": "Look here.",
+        "words": ["Look", "here"]
+      },
+      {
+        "text": "I can see a pin.",
+        "words": ["I", "can", "see", "a", "pin"]
+      },
+      {
+        "text": "This is my pin.",
+        "words": ["This", "is", "my", "pin"]
+      },
+      {
+        "text": "I like my pin.",
+        "words": ["I", "like", "my", "pin"]
+      },
+      {
+        "text": "Yes. The end.",
+        "words": ["Yes", "The", "end"]
+      }
+    ]
+  },
+  {
+    "id": "tap-sit",
+    "title": "Tap and sit",
+    "requiredGroup": "satpin",
+    "pages": [
+      {
+        "text": "Tap. Tap.",
+        "words": ["Tap", "Tap"],
+        "image": "/vowel-words/images/a/tap.webp"
+      },
+      {
+        "text": "Sit on a mat.",
+        "words": ["Sit", "on", "a", "mat"],
+        "image": "/vowel-words/images/i/sit.webp"
+      },
+      {
+        "text": "I can sit.",
+        "words": ["I", "can", "sit"]
+      },
+      {
+        "text": "Pat can sit. The end.",
+        "words": ["Pat", "can", "sit", "The", "end"],
+        "image": "/vowel-words/images/a/pat.webp"
+      }
+    ]
+  },
+  {
+    "id": "a-pin-tin",
+    "title": "A pin in a tin",
+    "requiredGroup": "satpin",
+    "pages": [
+      {
+        "text": "A pin.",
+        "words": ["A", "pin"],
+        "image": "/vowel-words/images/i/pin.webp"
+      },
+      {
+        "text": "The pin is in a tin.",
+        "words": ["The", "pin", "is", "in", "a", "tin"],
+        "image": "/vowel-words/images/i/tin.webp"
+      },
+      {
+        "text": "I can see the tin.",
+        "words": ["I", "can", "see", "the", "tin"]
+      },
+      {
+        "text": "Yes. The end.",
+        "words": ["Yes", "The", "end"]
+      }
+    ]
+  },
+  {
+    "id": "mad-dog",
+    "title": "The mad dog",
+    "requiredGroup": "mdgock",
+    "pages": [
+      {
+        "text": "A dog.",
+        "words": ["A", "dog"],
+        "image": "/vowel-words/images/o/dog.webp"
+      },
+      {
+        "text": "The dog is mad.",
+        "words": ["The", "dog", "is", "mad"],
+        "image": "/vowel-words/images/a/mad.webp"
+      },
+      {
+        "text": "The dog can dig.",
+        "words": ["The", "dog", "can", "dig"],
+        "image": "/vowel-words/images/i/dig.webp"
+      },
+      {
+        "text": "I like the dog. The end.",
+        "words": ["I", "like", "the", "dog", "The", "end"]
+      }
+    ]
+  },
+  {
+    "id": "mop-and-pot",
+    "title": "Mop and pot",
+    "requiredGroup": "mdgock",
+    "pages": [
+      {
+        "text": "A mop.",
+        "words": ["A", "mop"],
+        "image": "/vowel-words/images/o/mop.webp"
+      },
+      {
+        "text": "A pot.",
+        "words": ["A", "pot"],
+        "image": "/vowel-words/images/o/pot.webp"
+      },
+      {
+        "text": "I can mop the pot.",
+        "words": ["I", "can", "mop", "the", "pot"]
+      },
+      {
+        "text": "Come and look. The end.",
+        "words": ["Come", "and", "look", "The", "end"]
+      }
+    ]
+  },
+  {
+    "id": "big-bug",
+    "title": "A big bug",
+    "requiredGroup": "eurhbf",
+    "pages": [
+      {
+        "text": "A big bug.",
+        "words": ["A", "big", "bug"],
+        "image": "/vowel-words/images/i/big.webp"
+      },
+      {
+        "text": "The bug can hop.",
+        "words": ["The", "bug", "can", "hop"],
+        "image": "/vowel-words/images/o/hop.webp"
+      },
+      {
+        "text": "I can see the bug.",
+        "words": ["I", "can", "see", "the", "bug"]
+      },
+      {
+        "text": "We like the bug. The end.",
+        "words": ["We", "like", "the", "bug", "The", "end"]
+      }
+    ]
+  },
+  {
+    "id": "red-bus",
+    "title": "The red bus",
+    "requiredGroup": "eurhbf",
+    "pages": [
+      {
+        "text": "A red bus.",
+        "words": ["A", "red", "bus"],
+        "image": "/vowel-words/images/u/bus.webp"
+      },
+      {
+        "text": "The bus is big.",
+        "words": ["The", "bus", "is", "big"]
+      },
+      {
+        "text": "We hop in the bus.",
+        "words": ["We", "hop", "in", "the", "bus"],
+        "image": "/vowel-words/images/o/hop.webp"
+      },
+      {
+        "text": "I like the bus. The end.",
+        "words": ["I", "like", "the", "bus", "The", "end"]
+      }
+    ]
+  },
+  {
+    "id": "fox-in-box",
+    "title": "Fox in a box",
+    "requiredGroup": "rest",
+    "pages": [
+      {
+        "text": "A fox.",
+        "words": ["A", "fox"],
+        "image": "/vowel-words/images/o/fox.webp"
+      },
+      {
+        "text": "The fox is in a box.",
+        "words": ["The", "fox", "is", "in", "a", "box"],
+        "image": "/vowel-words/images/o/box.webp"
+      },
+      {
+        "text": "Look at the fox.",
+        "words": ["Look", "at", "the", "fox"]
+      },
+      {
+        "text": "Yes. The end.",
+        "words": ["Yes", "The", "end"]
+      }
+    ]
+  },
+  {
+    "id": "jump-and-run",
+    "title": "Jump and run",
+    "requiredGroup": "rest",
+    "pages": [
+      {
+        "text": "Jim can jump.",
+        "words": ["Jim", "can", "jump"],
+        "image": "/consonant-blends/images/blends/jump.webp"
+      },
+      {
+        "text": "Jim can run.",
+        "words": ["Jim", "can", "run"],
+        "image": "/vowel-words/images/u/run.webp"
+      },
+      {
+        "text": "Come and jump.",
+        "words": ["Come", "and", "jump"]
+      },
+      {
+        "text": "We like to run. The end.",
+        "words": ["We", "like", "to", "run", "The", "end"]
+      }
+    ]
+  },
+  {
+    "id": "stop-the-frog",
+    "title": "Stop the frog",
+    "requiredGroup": "eurhbf",
+    "pages": [
+      {
+        "text": "A frog can hop.",
+        "words": ["A", "frog", "can", "hop"],
+        "image": "/consonant-blends/images/blends/frog.webp"
+      },
+      {
+        "text": "Stop, frog!",
+        "words": ["Stop", "frog"],
+        "image": "/consonant-blends/images/blends/stop.webp"
+      },
+      {
+        "text": "The frog can sit.",
+        "words": ["The", "frog", "can", "sit"],
+        "image": "/vowel-words/images/i/sit.webp"
+      },
+      {
+        "text": "I can see the frog. The end.",
+        "words": ["I", "can", "see", "the", "frog", "The", "end"]
       }
     ]
   }

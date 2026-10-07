@@ -1,0 +1,14 @@
+[
+  { "id": "s", "letter": "s", "speak": "s", "group": "satpin" },
+  { "id": "a", "letter": "a", "speak": "a", "group": "satpin" },
+  { "id": "t", "letter": "t", "speak": "t", "group": "satpin" },
+  { "id": "p", "letter": "p", "speak": "p", "group": "satpin" },
+  { "id": "i", "letter": "i", "speak": "i", "group": "satpin" },
+  { "id": "n", "letter": "n", "speak": "n", "group": "satpin" },
+  { "id": "m", "letter": "m", "speak": "m", "group": "mdgock" },
+  { "id": "d", "letter": "d", "speak": "d", "group": "mdgock" },
+  { "id": "o", "letter": "o", "speak": "o", "group": "mdgock" },
+  { "id": "c", "letter": "c", "speak": "c", "group": "mdgock" },
+  { "id": "k", "letter": "k", "speak": "k", "group": "mdgock" },
+  { "id": "g", "letter": "g", "speak": "g", "group": "mdgock" }
+]

@@ -1,0 +1,548 @@
+[
+  {
+    "id": "st-stop",
+    "blend": "st",
+    "word": "stop",
+    "pack": 1,
+    "graphemes": [
+      "s",
+      "t",
+      "o",
+      "p"
+    ],
+    "image": "/images/blends/stop.webp",
+    "speak": {
+      "blend": "s t",
+      "word": "stop"
+    },
+    "audio": {
+      "blend": "/audio/blend/st.mp3",
+      "word": "/audio/word/stop.mp3"
+    }
+  },
+  {
+    "id": "fr-frog",
+    "blend": "fr",
+    "word": "frog",
+    "pack": 1,
+    "graphemes": [
+      "f",
+      "r",
+      "o",
+      "g"
+    ],
+    "image": "/images/blends/frog.webp",
+    "speak": {
+      "blend": "f r",
+      "word": "frog"
+    },
+    "audio": {
+      "blend": "/audio/blend/fr.mp3",
+      "word": "/audio/word/frog.mp3"
+    }
+  },
+  {
+    "id": "fl-flag",
+    "blend": "fl",
+    "word": "flag",
+    "pack": 1,
+    "graphemes": [
+      "f",
+      "l",
+      "a",
+      "g"
+    ],
+    "image": "/images/blends/flag.webp",
+    "speak": {
+      "blend": "f l",
+      "word": "flag"
+    },
+    "audio": {
+      "blend": "/audio/blend/fl.mp3",
+      "word": "/audio/word/flag.mp3"
+    }
+  },
+  {
+    "id": "cr-crab",
+    "blend": "cr",
+    "word": "crab",
+    "pack": 1,
+    "graphemes": [
+      "c",
+      "r",
+      "a",
+      "b"
+    ],
+    "image": "/images/blends/crab.webp",
+    "speak": {
+      "blend": "c r",
+      "word": "crab"
+    },
+    "audio": {
+      "blend": "/audio/blend/cr.mp3",
+      "word": "/audio/word/crab.mp3"
+    }
+  },
+  {
+    "id": "nd-hand",
+    "blend": "nd",
+    "word": "hand",
+    "pack": 1,
+    "graphemes": [
+      "h",
+      "a",
+      "n",
+      "d"
+    ],
+    "image": "/images/blends/hand.webp",
+    "speak": {
+      "blend": "n d",
+      "word": "hand"
+    },
+    "audio": {
+      "blend": "/audio/blend/nd.mp3",
+      "word": "/audio/word/hand.mp3"
+    }
+  },
+  {
+    "id": "mp-jump",
+    "blend": "mp",
+    "word": "jump",
+    "pack": 1,
+    "graphemes": [
+      "j",
+      "u",
+      "m",
+      "p"
+    ],
+    "image": "/images/blends/jump.webp",
+    "speak": {
+      "blend": "m p",
+      "word": "jump"
+    },
+    "audio": {
+      "blend": "/audio/blend/mp.mp3",
+      "word": "/audio/word/jump.mp3"
+    }
+  },
+  {
+    "id": "st-nest",
+    "blend": "st",
+    "word": "nest",
+    "pack": 1,
+    "graphemes": [
+      "n",
+      "e",
+      "s",
+      "t"
+    ],
+    "image": "/images/blends/nest.webp",
+    "speak": {
+      "blend": "s t",
+      "word": "nest"
+    },
+    "audio": {
+      "blend": "/audio/blend/st.mp3",
+      "word": "/audio/word/nest.mp3"
+    }
+  },
+  {
+    "id": "dr-drum",
+    "blend": "dr",
+    "word": "drum",
+    "pack": 1,
+    "graphemes": [
+      "d",
+      "r",
+      "u",
+      "m"
+    ],
+    "image": "/images/blends/drum.webp",
+    "speak": {
+      "blend": "d r",
+      "word": "drum"
+    },
+    "audio": {
+      "blend": "/audio/blend/dr.mp3",
+      "word": "/audio/word/drum.mp3"
+    }
+  },
+  {
+    "id": "bl-block",
+    "blend": "bl",
+    "word": "block",
+    "pack": 2,
+    "graphemes": [
+      "b",
+      "l",
+      "o",
+      "ck"
+    ],
+    "image": "/ecopenguin/images/fun-things/building-blocks.webp",
+    "speak": {
+      "blend": "b l",
+      "word": "block"
+    },
+    "audio": {
+      "blend": "/audio/blend/bl.mp3",
+      "word": "/audio/word/block.mp3"
+    }
+  },
+  {
+    "id": "br-brush",
+    "blend": "br",
+    "word": "brush",
+    "pack": 2,
+    "graphemes": [
+      "b",
+      "r",
+      "u",
+      "sh"
+    ],
+    "image": "/digraphs/images/words/sh/brush.webp",
+    "speak": {
+      "blend": "b r",
+      "word": "brush"
+    },
+    "audio": {
+      "blend": "/audio/blend/br.mp3",
+      "word": "/audio/word/brush.mp3"
+    }
+  },
+  {
+    "id": "tr-train",
+    "blend": "tr",
+    "word": "train",
+    "pack": 2,
+    "graphemes": [
+      "t",
+      "r",
+      "ai",
+      "n"
+    ],
+    "image": "/ecopenguin/images/transport/train.webp",
+    "speak": {
+      "blend": "t r",
+      "word": "train"
+    },
+    "audio": {
+      "blend": "/audio/blend/tr.mp3",
+      "word": "/audio/word/train.mp3"
+    }
+  },
+  {
+    "id": "tr-truck",
+    "blend": "tr",
+    "word": "truck",
+    "pack": 2,
+    "graphemes": [
+      "t",
+      "r",
+      "u",
+      "ck"
+    ],
+    "image": "/ecopenguin/images/toys/toy-truck.webp",
+    "speak": {
+      "blend": "t r",
+      "word": "truck"
+    },
+    "audio": {
+      "blend": "/audio/blend/tr.mp3",
+      "word": "/audio/word/truck.mp3"
+    }
+  },
+  {
+    "id": "sw-swim",
+    "blend": "sw",
+    "word": "swim",
+    "pack": 2,
+    "graphemes": [
+      "s",
+      "w",
+      "i",
+      "m"
+    ],
+    "image": "/ecopenguin/images/fun-activities/swimming.webp",
+    "speak": {
+      "blend": "s w",
+      "word": "swim"
+    },
+    "audio": {
+      "blend": "/audio/blend/sw.mp3",
+      "word": "/audio/word/swim.mp3"
+    }
+  },
+  {
+    "id": "sw-swing",
+    "blend": "sw",
+    "word": "swing",
+    "pack": 2,
+    "graphemes": [
+      "s",
+      "w",
+      "i",
+      "ng"
+    ],
+    "image": "/ecopenguin/images/fun-activities/swinging.webp",
+    "speak": {
+      "blend": "s w",
+      "word": "swing"
+    },
+    "audio": {
+      "blend": "/audio/blend/sw.mp3",
+      "word": "/audio/word/swing.mp3"
+    }
+  },
+  {
+    "id": "gr-grapes",
+    "blend": "gr",
+    "word": "grapes",
+    "pack": 2,
+    "graphemes": [
+      "g",
+      "r",
+      "a",
+      "pes"
+    ],
+    "image": "/ecopenguin/images/fruits/grapes.webp",
+    "speak": {
+      "blend": "g r",
+      "word": "grapes"
+    },
+    "audio": {
+      "blend": "/audio/blend/gr.mp3",
+      "word": "/audio/word/grapes.mp3"
+    }
+  },
+  {
+    "id": "pl-plane",
+    "blend": "pl",
+    "word": "plane",
+    "pack": 2,
+    "graphemes": [
+      "p",
+      "l",
+      "a",
+      "ne"
+    ],
+    "image": "/ecopenguin/images/transport/plane01.webp",
+    "speak": {
+      "blend": "p l",
+      "word": "plane"
+    },
+    "audio": {
+      "blend": "/audio/blend/pl.mp3",
+      "word": "/audio/word/plane.mp3"
+    }
+  },
+  {
+    "id": "gl-glad",
+    "blend": "gl",
+    "word": "glad",
+    "pack": 2,
+    "graphemes": [
+      "g",
+      "l",
+      "a",
+      "d"
+    ],
+    "image": "",
+    "speak": {
+      "blend": "g l",
+      "word": "glad"
+    },
+    "audio": {
+      "blend": "/audio/blend/gl.mp3",
+      "word": "/audio/word/glad.mp3"
+    }
+  },
+  {
+    "id": "cl-clap",
+    "blend": "cl",
+    "word": "clap",
+    "pack": 2,
+    "graphemes": [
+      "c",
+      "l",
+      "a",
+      "p"
+    ],
+    "image": "",
+    "speak": {
+      "blend": "c l",
+      "word": "clap"
+    },
+    "audio": {
+      "blend": "/audio/blend/cl.mp3",
+      "word": "/audio/word/clap.mp3"
+    }
+  },
+  {
+    "id": "sl-slip",
+    "blend": "sl",
+    "word": "slip",
+    "pack": 2,
+    "graphemes": [
+      "s",
+      "l",
+      "i",
+      "p"
+    ],
+    "image": "",
+    "speak": {
+      "blend": "s l",
+      "word": "slip"
+    },
+    "audio": {
+      "blend": "/audio/blend/sl.mp3",
+      "word": "/audio/word/slip.mp3"
+    }
+  },
+  {
+    "id": "sn-snap",
+    "blend": "sn",
+    "word": "snap",
+    "pack": 2,
+    "graphemes": [
+      "s",
+      "n",
+      "a",
+      "p"
+    ],
+    "image": "",
+    "speak": {
+      "blend": "s n",
+      "word": "snap"
+    },
+    "audio": {
+      "blend": "/audio/blend/sn.mp3",
+      "word": "/audio/word/snap.mp3"
+    }
+  },
+  {
+    "id": "sp-spin",
+    "blend": "sp",
+    "word": "spin",
+    "pack": 2,
+    "graphemes": [
+      "s",
+      "p",
+      "i",
+      "n"
+    ],
+    "image": "",
+    "speak": {
+      "blend": "s p",
+      "word": "spin"
+    },
+    "audio": {
+      "blend": "/audio/blend/sp.mp3",
+      "word": "/audio/word/spin.mp3"
+    }
+  },
+  {
+    "id": "sk-desk",
+    "blend": "sk",
+    "word": "desk",
+    "pack": 2,
+    "graphemes": [
+      "d",
+      "e",
+      "s",
+      "k"
+    ],
+    "image": "",
+    "speak": {
+      "blend": "s k",
+      "word": "desk"
+    },
+    "audio": {
+      "blend": "/audio/blend/sk.mp3",
+      "word": "/audio/word/desk.mp3"
+    }
+  },
+  {
+    "id": "nk-pink",
+    "blend": "nk",
+    "word": "pink",
+    "pack": 2,
+    "graphemes": [
+      "p",
+      "i",
+      "n",
+      "k"
+    ],
+    "image": "",
+    "speak": {
+      "blend": "n k",
+      "word": "pink"
+    },
+    "audio": {
+      "blend": "/audio/blend/nk.mp3",
+      "word": "/audio/word/pink.mp3"
+    }
+  },
+  {
+    "id": "nt-tent",
+    "blend": "nt",
+    "word": "tent",
+    "pack": 2,
+    "graphemes": [
+      "t",
+      "e",
+      "n",
+      "t"
+    ],
+    "image": "",
+    "speak": {
+      "blend": "n t",
+      "word": "tent"
+    },
+    "audio": {
+      "blend": "/audio/blend/nt.mp3",
+      "word": "/audio/word/tent.mp3"
+    }
+  },
+  {
+    "id": "lt-belt",
+    "blend": "lt",
+    "word": "belt",
+    "pack": 2,
+    "graphemes": [
+      "b",
+      "e",
+      "l",
+      "t"
+    ],
+    "image": "/ecopenguin/images/tools/tool-belt.webp",
+    "speak": {
+      "blend": "l t",
+      "word": "belt"
+    },
+    "audio": {
+      "blend": "/audio/blend/lt.mp3",
+      "word": "/audio/word/belt.mp3"
+    }
+  },
+  {
+    "id": "lf-golf",
+    "blend": "lf",
+    "word": "golf",
+    "pack": 2,
+    "graphemes": [
+      "g",
+      "o",
+      "l",
+      "f"
+    ],
+    "image": "",
+    "speak": {
+      "blend": "l f",
+      "word": "golf"
+    },
+    "audio": {
+      "blend": "/audio/blend/lf.mp3",
+      "word": "/audio/word/golf.mp3"
+    }
+  }
+]

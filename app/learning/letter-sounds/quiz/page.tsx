@@ -29,6 +29,7 @@ export default async function LetterSoundsQuizPage() {
       <LetterSoundsQuiz
         letters={letters}
         masteredKeys={masteredKeys}
+        guest={!session?.user?.id}
         questionAudio={resolveLetterSoundsAsset('/audio/question.mp3')}
         successAudio={resolveLetterSoundsAsset('/audio/success.mp3')}
         errorAudio={resolveLetterSoundsAsset('/audio/error.mp3')}

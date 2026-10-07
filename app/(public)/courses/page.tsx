@@ -4,6 +4,7 @@ import PublicLayout from '@/components/layouts/PublicLayout'
 import Link from 'next/link'
 import CourseCard, { type Course } from '@/components/courses/CourseCard'
 import EmptyState from '@/components/ui/EmptyState'
+import PageHero from '@/components/cosmos/PageHero'
 import { prisma } from '@/lib/db'
 import { auth } from '@/lib/auth-server'
 
@@ -75,21 +76,23 @@ export default async function CoursesPage() {
   })
 
   return (
-    <PublicLayout>
-      <main className="mx-auto max-w-6xl px-4 py-12">
-        <div className="mb-10 space-y-3">
-          <p className="text-sm font-semibold text-blue-600">Learn</p>
-          <h1 className="text-3xl font-bold text-gray-900">Courses for focused learning</h1>
-          <p className="text-gray-600 max-w-3xl">
-            Build skills at your own pace. Enrolled courses show your progress here. Younger readers
-            can start in{' '}
-            <Link href="/learning" className="font-semibold text-sky-700 hover:underline">
+    <PublicLayout currentPath="/courses">
+      <PageHero
+        planet="earth"
+        title="Courses for focused learning"
+        description={
+          <>
+            Build skills at your own pace; enrolled courses show your progress here. Younger readers
+            can start on Earth&apos;s moon,{' '}
+            <Link href="/learning" className="font-bold text-content-link hover:underline">
               Eco Penguin
             </Link>
             .
-          </p>
-        </div>
+          </>
+        }
+      />
 
+      <main className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
         {courses.length === 0 ? (
           <EmptyState
             variant="courses-learner"

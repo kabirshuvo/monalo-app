@@ -7,6 +7,7 @@ import {
   CATEGORY_ACCENT_CLASSES,
   type ShopCategory,
 } from '@/lib/shop/categories'
+import PageIllustration from '@/components/cosmos/PageIllustration'
 
 type CategoryCountMap = Partial<Record<string, number>>
 
@@ -28,40 +29,43 @@ export default function ShopHero({ counts }: ShopHeroProps) {
 
   return (
     <>
-      <section className="relative overflow-hidden rounded-3xl border border-subtle bg-surface shadow-sm">
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgba(37,99,235,0.14),_transparent_50%),radial-gradient(ellipse_at_bottom_right,_rgba(245,158,11,0.12),_transparent_45%)]"
-          aria-hidden
-        />
-        <div className="relative px-6 py-14 sm:px-10 sm:py-20 lg:px-14">
-          <p className="text-sm font-semibold uppercase tracking-wide text-blue-600">MonAlo Craft Shop</p>
-          <h1 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+      <section
+        data-tone="mars"
+        className="relative overflow-hidden rounded-[2.5rem] border border-[var(--tone-line)] bg-[var(--tone-soft)]"
+      >
+        <div className="relative grid items-center gap-8 px-6 py-12 sm:px-10 sm:py-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:px-14">
+          <PageIllustration
+            planet="mars"
+            className="order-first mx-auto w-full max-w-[18rem] sm:max-w-[22rem] lg:order-none lg:col-start-2 lg:row-start-1 lg:max-w-[26rem]"
+          />
+          <div className="lg:col-start-1 lg:row-start-1">
+          <h1 className="max-w-2xl text-[clamp(2.4rem,5vw,3.75rem)] font-normal leading-[1.05] tracking-[-0.02em] text-content">
             Handmade crafts that fund the school
           </h1>
-          <p className="mt-4 max-w-xl text-base text-gray-600 sm:text-lg">
-            Gypsum pottery, candles, wood, bamboo, books, and more — browse by category or scroll the
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-content-secondary">
+            Gypsum pottery, candles, wood, bamboo, books and more. Browse by category or wander the
             shelves below.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3 font-bold text-[var(--accent-ink)] transition-colors hover:bg-[var(--accent-bright)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
             >
-              <span aria-hidden>☰</span>
               Categories
               {typeof counts.all === 'number' ? (
-                <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-medium">
+                <span className="rounded-full bg-black/10 px-2 py-0.5 text-xs font-bold">
                   {counts.all} items
                 </span>
               ) : null}
             </button>
             <a
               href="#shop-shelves"
-              className="inline-flex items-center rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-800 transition hover:bg-gray-50"
+              className="inline-flex items-center rounded-full border border-[var(--orbit-line-strong)] px-6 py-3 font-bold text-content transition-colors hover:bg-[var(--surface-hover)]"
             >
               Browse shelves
             </a>
+          </div>
           </div>
         </div>
       </section>
@@ -85,7 +89,7 @@ export default function ShopHero({ counts }: ShopHeroProps) {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-800"
+            className="rounded-full p-2 text-content-muted transition hover:bg-[var(--surface-hover)] hover:text-content"
             aria-label="Close categories"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

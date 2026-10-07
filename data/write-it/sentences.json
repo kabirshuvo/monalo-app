@@ -1,0 +1,62 @@
+[
+  {
+    "id": "the-cat-sat",
+    "speak": "The cat sat.",
+    "words": ["The", "cat", "sat"],
+    "distractors": ["dog", "ran"]
+  },
+  {
+    "id": "i-can-see",
+    "speak": "I can see.",
+    "words": ["I", "can", "see"],
+    "distractors": ["look", "go"]
+  },
+  {
+    "id": "we-like-it",
+    "speak": "We like it.",
+    "words": ["We", "like", "it"],
+    "distractors": ["they", "him"]
+  },
+  {
+    "id": "a-big-pig",
+    "speak": "A big pig.",
+    "words": ["A", "big", "pig"],
+    "distractors": ["dog", "little"]
+  },
+  {
+    "id": "look-at-me",
+    "speak": "Look at me.",
+    "words": ["Look", "at", "me"],
+    "distractors": ["Come", "you"]
+  },
+  {
+    "id": "she-has-a-hat",
+    "speak": "She has a hat.",
+    "words": ["She", "has", "a", "hat"],
+    "distractors": ["He", "cap"]
+  },
+  {
+    "id": "the-dog-can-run",
+    "speak": "The dog can run.",
+    "words": ["The", "dog", "can", "run"],
+    "distractors": ["cat", "sit"]
+  },
+  {
+    "id": "come-and-see",
+    "speak": "Come and see.",
+    "words": ["Come", "and", "see"],
+    "distractors": ["Go", "look"]
+  },
+  {
+    "id": "i-like-my-pin",
+    "speak": "I like my pin.",
+    "words": ["I", "like", "my", "pin"],
+    "distractors": ["his", "pan"]
+  },
+  {
+    "id": "yes-i-am",
+    "speak": "Yes I am.",
+    "words": ["Yes", "I", "am"],
+    "distractors": ["No", "we"]
+  }
+]
