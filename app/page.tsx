@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import LandingHeaderClient from './landing/LandingHeaderClient'
 import LandingHeroClient from './landing/LandingHeroClient'
 import LandingPageSections from '@/components/landing/LandingPageSections'
+import ParentSections from '@/components/landing/ParentSections'
 import SessionResetOnSignOut from '@/components/auth/SessionResetOnSignOut'
 import CosmosFooter from '@/components/cosmos/CosmosFooter'
 
@@ -9,9 +10,9 @@ import CosmosFooter from '@/components/cosmos/CosmosFooter'
 export const dynamic = 'force-static'
 
 export const metadata = {
-  title: 'MonAlo — The whole school, in orbit',
+  title: 'Eco Penguin phonics for young readers | MonAlo',
   description:
-    'Monalo School is the sun; courses, Eco Penguin phonics, a craft shop, a gallery and a freelance team orbit it. Every planet you visit helps students learn.',
+    'Eco Penguin teaches young children to read through short, playful phonics games. Try it free, no account needed. Made by Monalo School.',
 }
 
 export default function LaunchPage() {
@@ -24,6 +25,7 @@ export default function LaunchPage() {
 
       <main className="flex-1">
         <LandingHeroClient />
+        <ParentSections />
         <LandingPageSections />
       </main>
 

@@ -2,7 +2,6 @@
 import Link from 'next/link'
 import { useAuthNav } from '@/lib/auth/use-auth-nav'
 import Button from '@/components/ui/Button'
-import StartTodayButton from '@/components/landing/StartTodayButton'
 import SolarSystem from '@/components/cosmos/SolarSystem'
 
 export default function LandingHeroClient() {
@@ -32,21 +31,27 @@ export default function LandingHeroClient() {
   ) : (
     <div className="max-w-xl">
       <h1 className="text-[clamp(2.6rem,6.2vw,4.75rem)] font-normal leading-[1.02] tracking-[-0.025em] text-content">
-        The whole school, in&nbsp;orbit.
+        Little readers start&nbsp;here.
       </h1>
       <p className="mt-6 text-lg leading-relaxed text-content-secondary sm:text-xl">
-        <em className="font-serif not-italic text-content">MonAlo</em> means light of the mind. The
-        school is the sun; around it turn courses, phonics games for young readers, a craft shop, a
-        gallery and a freelance team. Every planet you visit helps keep students learning.
+        Eco Penguin teaches phonics through short, playful games: letter sounds, blending and
+        stories. Made by Monalo School, so every little win also helps a student learn.
       </p>
       <div className="mt-8 flex flex-wrap items-center gap-3">
-        <StartTodayButton />
-        <Link href="/home">
+        <Link href="/learning/letter-sounds">
+          <Button variant="primary" size="lg">
+            Try Eco Penguin free
+          </Button>
+        </Link>
+        <Link href="/register">
           <Button variant="secondary" size="lg">
-            Visit the school
+            Create a free account
           </Button>
         </Link>
       </div>
+      <p className="mt-4 text-sm text-content-muted">
+        No account needed to try letter sounds and rhyme time.
+      </p>
     </div>
   )
 

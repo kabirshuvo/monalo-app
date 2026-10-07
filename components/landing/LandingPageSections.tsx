@@ -38,11 +38,11 @@ export default function LandingPageSections() {
       <section aria-labelledby="map-heading" className="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <h2 id="map-heading" className="text-4xl font-normal leading-tight text-content sm:text-5xl">
-            Ten places, one school
+            More from the school
           </h2>
           <p className="mt-5 max-w-md text-lg leading-relaxed text-content-secondary">
-            Listed by distance from the sun: from what the school is, out through everything that
-            keeps it going, to the edge where you join.
+            Eco Penguin is one part of Monalo School. Courses, a craft shop, a gallery and a
+            freelance team all send something back to the school, and each is a planet below.
           </p>
         </div>
 
@@ -139,21 +139,21 @@ export default function LandingPageSections() {
           Ready when you are.
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-content-secondary">
-          Make a free account to save progress and earn points, or simply look around the school
-          first. There&apos;s no rush.
+          Make a free account to save your child&apos;s stars and stickers, or try a room first and
+          decide later. There&apos;s no rush.
         </p>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/register"
             className="inline-flex items-center rounded-full bg-[var(--sun)] px-7 py-3.5 text-lg font-bold text-[var(--sun-ink)] shadow-[0_0_40px_rgba(255,181,71,0.35)] transition-colors hover:bg-[var(--sun-bright)]"
           >
-            Start today
+            Create a free account
           </Link>
           <Link
-            href="/home"
+            href="/learning/letter-sounds"
             className="inline-flex items-center rounded-full border border-[var(--orbit-line-strong)] px-7 py-3.5 text-lg text-content transition-colors hover:bg-[var(--surface-hover)]"
           >
-            Visit the school
+            Try Eco Penguin free
           </Link>
         </div>
 
