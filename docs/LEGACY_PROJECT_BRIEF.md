@@ -1,3 +1,5 @@
+> **Archived (January 2026).** Describes an earlier stack (NextAuth v4, Vercel, DB sessions). See the root README and `docs/ARCHITECTURE.md` for the current state.
+
 # Monalo App - Project Brief
 
 **Date**: January 11, 2026  

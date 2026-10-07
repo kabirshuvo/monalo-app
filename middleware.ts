@@ -7,6 +7,7 @@ import NextAuth from 'next-auth'
 import { NextResponse } from 'next/server'
 import authConfig from '@/auth.config'
 import { handleSiteRouting } from '@/lib/sites'
+import { isGuestTryPath } from '@/lib/learning/guest-try'
 
 const { auth } = NextAuth(authConfig)
 
@@ -15,10 +16,10 @@ export default auth((request) => {
 
   const needsAuth =
     pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/classroom') ||
     pathname === '/profile' ||
     pathname === '/settings' ||
-    pathname === '/learning' ||
-    pathname.startsWith('/learning/')
+    ((pathname === '/learning' || pathname.startsWith('/learning/')) && !isGuestTryPath(pathname))
 
   if (needsAuth && !request.auth?.user) {
     const loginUrl = new URL('/login', request.url)
@@ -32,11 +33,13 @@ export default auth((request) => {
   return NextResponse.next()
 })
 
+/**
+ * Run on every page/API request except framework internals and static files.
+ * Static assets are matched by extension (so new `public/<activity>/` folders need no change here).
+ * Next requires the matcher to be a literal, so keep the extension list inline.
+ */
 export const config = {
   matcher: [
-    '/dashboard/:path*',
-    '/learning',
-    '/learning/:path*',
-    '/((?!_next/static|_next/image|favicon.ico|api/media|ecopenguin|vowel-words|digraphs|letter-sounds|blend-the-word|which-sound|segment-the-word|read-a-story|balloon-letters|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp3|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api/media|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|mp3|wav|ogg|m4a|mp4|webm|json|js|css|txt|md|woff|woff2|map)$).*)',
   ],
 }

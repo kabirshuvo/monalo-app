@@ -164,7 +164,7 @@ export default async function MyNewDashboard() {
 ## Debugging
 
 ### Middleware Not Triggering
-- Check the matcher pattern includes your route: `/dashboard/:path*`
+- Check the matcher in `middleware.ts` does not exclude your route (it skips only `_next`, `api/media`, and static file extensions)
 - Middleware only runs on routes matching the pattern
 
 ### Token Not Found

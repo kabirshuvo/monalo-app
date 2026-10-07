@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth-server'
+import { resolveLearnerScope } from '@/lib/classroom/celebrate-scope'
 import { BALLOON_LETTERS_BASE_PATH } from '@/lib/balloon-letters/constants'
 import { LEARNING_HUB_PATH } from '@/lib/learning/kids-hub'
 import {
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+    const scope = await resolveLearnerScope(session.user.id)
     const body = await request.json().catch(() => ({}))
     const letterId = String(body.letterId ?? '').trim()
     if (!letterId) {
@@ -35,8 +37,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Letter not found' }, { status: 404 })
     }
 
-    const result = await awardBalloonLettersCorrect(session.user.id, letter.id, letter.letter)
-    const mastery = await getBalloonLettersMastery(session.user.id)
+    const result = await awardBalloonLettersCorrect(session.user.id, letter.id, letter.letter, scope)
+    const mastery = await getBalloonLettersMastery(session.user.id, scope)
     const progress = computePhonicsProgress(mastery.masteredKeys)
 
     let stickerAwarded = false
@@ -55,7 +57,7 @@ export async function POST(request: Request) {
       completedGroupId = groupId
       const sticker = getStickerForGroup(groupId)
       if (sticker) {
-        const gift = await awardPhonicsGroupSticker(session.user.id, sticker.id, sticker.label)
+        const gift = await awardPhonicsGroupSticker(session.user.id, sticker.id, sticker.label, scope)
         stickerAwarded = gift.awarded
         alreadyHadSticker = !gift.awarded
         stickerPoints = gift.awarded ? gift.points : 0
