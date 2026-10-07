@@ -10,15 +10,20 @@ export default async function LearningLayout({ children }: { children: React.Rea
   let hasClassroom = false
 
   if (session?.user?.id) {
-    const classroom = await getTeacherClassroom(session.user.id)
-    hasClassroom = Boolean(classroom)
-    const active = await getActiveLearnerForTeacher(session.user.id)
-    if (active) {
-      learner = {
-        id: active.id,
-        displayName: active.displayName,
-        avatarKey: active.avatarKey,
+    // Classroom chrome is optional: if the lookup fails, render the page without it.
+    try {
+      const classroom = await getTeacherClassroom(session.user.id)
+      hasClassroom = Boolean(classroom)
+      const active = await getActiveLearnerForTeacher(session.user.id)
+      if (active) {
+        learner = {
+          id: active.id,
+          displayName: active.displayName,
+          avatarKey: active.avatarKey,
+        }
       }
+    } catch (error) {
+      console.error('[learning layout] classroom lookup failed', error)
     }
   }
 

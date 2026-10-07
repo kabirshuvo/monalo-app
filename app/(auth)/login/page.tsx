@@ -47,11 +47,16 @@ function LoginForm() {
   }
 
   const callbackUrl = sanitizeAuthCallbackUrl(searchParams?.get('callbackUrl'))
+  const fromEcoPenguin = searchParams?.get('from') === 'ecopenguin'
 
   return (
     <AuthShell
-      title="Welcome back"
-      subtitle="Sign in with Google to continue learning and creating on MonAlo."
+      title={fromEcoPenguin ? 'Sign in to play Eco Penguin' : 'Welcome back'}
+      subtitle={
+        fromEcoPenguin
+          ? 'This room saves your stars and stickers, so we need to know who is playing.'
+          : 'Sign in with Google to continue learning and creating on MonAlo.'
+      }
       footer={
         <>
           New here?{' '}
@@ -79,6 +84,26 @@ function LoginForm() {
       <p className="mt-6 text-center text-xs leading-relaxed text-content-muted">
         By continuing, you agree to use MonAlo with the Google account you choose.
       </p>
+
+      {fromEcoPenguin ? (
+        <p className="mt-4 text-center text-sm text-content-muted">
+          Just looking?{' '}
+          <Link
+            href="/learning/letter-sounds"
+            className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
+          >
+            Try the free letter sounds
+          </Link>{' '}
+          or{' '}
+          <Link
+            href="/learning/nursery-rhyme"
+            className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
+          >
+            rhyme time
+          </Link>{' '}
+          first.
+        </p>
+      ) : null}
     </AuthShell>
   )
 }

@@ -6,24 +6,40 @@
 import NextAuth from 'next-auth'
 import { NextResponse } from 'next/server'
 import authConfig from '@/auth.config'
-import { handleSiteRouting } from '@/lib/sites'
+import {
+  ecoPenguinCanonicalRedirect,
+  getEcoPenguinOrigin,
+  handleSiteRouting,
+  resolveRoutedPathname,
+} from '@/lib/sites'
 import { isGuestTryPath } from '@/lib/learning/guest-try'
 
 const { auth } = NextAuth(authConfig)
 
 export default auth((request) => {
-  const pathname = request.nextUrl.pathname
+  const canonical = ecoPenguinCanonicalRedirect(request)
+  if (canonical) return canonical
+
+  // Gate on the path that will actually be served (ecopenguin.monalo.school/x → /learning/x).
+  const routedPath = resolveRoutedPathname(request)
 
   const needsAuth =
-    pathname.startsWith('/dashboard') ||
-    pathname.startsWith('/classroom') ||
-    pathname === '/profile' ||
-    pathname === '/settings' ||
-    ((pathname === '/learning' || pathname.startsWith('/learning/')) && !isGuestTryPath(pathname))
+    routedPath.startsWith('/dashboard') ||
+    routedPath.startsWith('/classroom') ||
+    routedPath === '/profile' ||
+    routedPath === '/settings' ||
+    ((routedPath === '/learning' || routedPath.startsWith('/learning/')) &&
+      !isGuestTryPath(routedPath))
 
   if (needsAuth && !request.auth?.user) {
-    const loginUrl = new URL('/login', request.url)
-    loginUrl.searchParams.set('callbackUrl', pathname)
+    const isEcoPenguin = routedPath === '/learning' || routedPath.startsWith('/learning/')
+    // OAuth state cookies are host-bound and Auth.js builds callbacks from AUTH_URL,
+    // so sign-in always happens on the main host; the session cookie is shared on .monalo.school.
+    const mainOrigin = isEcoPenguin && getEcoPenguinOrigin() ? process.env.NEXT_PUBLIC_APP_URL : null
+    const loginUrl = new URL('/login', mainOrigin || request.url)
+    // Use the routed path: after sign-in on the main host, /learning/x redirects to the Eco Penguin host.
+    loginUrl.searchParams.set('callbackUrl', `${routedPath}${request.nextUrl.search}`)
+    if (isEcoPenguin) loginUrl.searchParams.set('from', 'ecopenguin')
     return NextResponse.redirect(loginUrl)
   }
 

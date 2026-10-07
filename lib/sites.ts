@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export type MonaloSite = 'gallery' | 'shop' | 'learn' | 'blog' | 'team'
+export type MonaloSite = 'gallery' | 'shop' | 'learn' | 'blog' | 'team' | 'ecopenguin'
 
 type SiteConfig = {
   id: MonaloSite
@@ -41,6 +41,12 @@ export const SITE_CONFIGS: SiteConfig[] = [
     basePath: '/team',
     rootOnSubdomain: true,
   },
+  {
+    id: 'ecopenguin',
+    hosts: ['ecopenguin.monalo.school', 'ecopenguin.monalo.local', 'ecopenguin.localhost'],
+    basePath: '/learning',
+    rootOnSubdomain: true,
+  },
 ]
 
 /** Paths that must not be rewritten on a surface subdomain */
@@ -54,6 +60,11 @@ const SUBDOMAIN_PASS_THROUGH = new Set([
   'see-off',
   'reset-password',
   'forgot-password',
+  'classroom',
+  'profile',
+  'settings',
+  'verify-email',
+  'verify-request',
   'home',
   'about',
   'contact',
@@ -93,6 +104,56 @@ function rewritePath(site: SiteConfig, pathname: string): string | null {
   return `${site.basePath}${pathname}`
 }
 
+/** Pathname the app will actually serve after subdomain rewriting (used for auth gating). */
+export function resolveRoutedPathname(request: NextRequest): string {
+  const pathname = request.nextUrl.pathname
+  const site = resolveSite(request.headers.get('host') ?? '', request.nextUrl.searchParams)
+  if (!site) return pathname
+  return rewritePath(site, pathname) ?? pathname
+}
+
+const MAIN_HOSTS = new Set(['monalo.school', 'www.monalo.school'])
+const ECOPENGUIN_HOST_SUFFIX = 'ecopenguin.monalo.school'
+
+function isLearningPath(pathname: string): boolean {
+  return pathname === '/learning' || pathname.startsWith('/learning/')
+}
+
+function stripLearningPrefix(pathname: string): string {
+  return pathname.slice('/learning'.length) || '/'
+}
+
+/** Canonical Eco Penguin origin; redirects stay off until this is set (DNS must exist first). */
+export function getEcoPenguinOrigin(): string | null {
+  const raw = process.env.NEXT_PUBLIC_ECOPENGUIN_URL?.trim()
+  return raw ? raw.replace(/\/$/, '') : null
+}
+
+/**
+ * Canonical URLs for Eco Penguin:
+ * - monalo.school/learning/x       → ecopenguin.monalo.school/x
+ * - ecopenguin.monalo.school/learning/x → ecopenguin.monalo.school/x
+ */
+export function ecoPenguinCanonicalRedirect(request: NextRequest): NextResponse | null {
+  const origin = getEcoPenguinOrigin()
+  if (!origin) return null
+  if (request.method !== 'GET' && request.method !== 'HEAD') return null
+
+  const { pathname, search } = request.nextUrl
+  if (!isLearningPath(pathname)) return null
+
+  const hostname = (request.headers.get('host') ?? '').split(':')[0].toLowerCase()
+  if (MAIN_HOSTS.has(hostname)) {
+    return NextResponse.redirect(`${origin}${stripLearningPrefix(pathname)}${search}`, 307)
+  }
+  if (hostname === ECOPENGUIN_HOST_SUFFIX) {
+    const url = request.nextUrl.clone()
+    url.pathname = stripLearningPrefix(pathname)
+    return NextResponse.redirect(url, 307)
+  }
+  return null
+}
+
 /**
  * Rewrite surface subdomains to app routes (gallery.monalo.school/slug → /gallery/slug).
  */
@@ -124,6 +185,7 @@ export function getSitePublicUrl(site: MonaloSite): string {
     learn: process.env.NEXT_PUBLIC_LEARN_URL,
     blog: process.env.NEXT_PUBLIC_BLOG_URL,
     team: process.env.NEXT_PUBLIC_TEAM_URL,
+    ecopenguin: process.env.NEXT_PUBLIC_ECOPENGUIN_URL,
   }
   return envMap[site] || process.env.NEXT_PUBLIC_APP_URL || ''
 }

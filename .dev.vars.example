@@ -13,7 +13,10 @@ AUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=generate-with-openssl-rand-base64-32
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_GALLERY_URL=http://gallery.localhost:3000
+NEXT_PUBLIC_GALLERY_URL=
+# Eco Penguin canonical origin, e.g. https://ecopenguin.monalo.school.
+# Leave EMPTY until DNS + a Worker custom domain exist: setting it turns on the /learning redirects.
+NEXT_PUBLIC_ECOPENGUIN_URL=http://gallery.localhost:3000
 
 # Resend (email verification)
 RESEND_API_KEY=
