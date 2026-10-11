@@ -147,9 +147,9 @@ export function ecoPenguinCanonicalRedirect(request: NextRequest): NextResponse 
     return NextResponse.redirect(`${origin}${stripLearningPrefix(pathname)}${search}`, 307)
   }
   if (hostname === ECOPENGUIN_HOST_SUFFIX) {
-    const url = request.nextUrl.clone()
-    url.pathname = stripLearningPrefix(pathname)
-    return NextResponse.redirect(url, 307)
+    // Build from the explicit origin: on Workers, request.nextUrl carries the app's configured
+    // origin (monalo.school), not the host the visitor used.
+    return NextResponse.redirect(`${origin}${stripLearningPrefix(pathname)}${search}`, 307)
   }
   return null
 }
@@ -173,6 +173,11 @@ export function handleSiteRouting(request: NextRequest): NextResponse | null {
 
   const url = request.nextUrl.clone()
   url.pathname = rewritten
+  // On Workers, nextUrl's origin is the app's configured host, not the visitor's. A rewrite to a
+  // different host is treated as an external fetch, which re-enters the middleware on the main
+  // host. Pin the rewrite to the request's own Host so it stays an internal rewrite.
+  const requestHost = request.headers.get('host')
+  if (requestHost) url.host = requestHost
   const res = NextResponse.rewrite(url)
   res.headers.set('x-monalo-site', site.id)
   return res

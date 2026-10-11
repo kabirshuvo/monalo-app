@@ -35,6 +35,14 @@ describe('ecopenguin subdomain routing', () => {
     expect(res?.headers.get('x-middleware-rewrite')).toContain('/learning/sight-words')
   })
 
+  it('keeps the rewrite on the request host so it stays an internal rewrite', () => {
+    const res = handleSiteRouting(req('https://ecopenguin.monalo.school/sight-words?x=1'))
+    const target = new URL(res!.headers.get('x-middleware-rewrite')!)
+    expect(target.host).toBe('ecopenguin.monalo.school')
+    expect(target.pathname).toBe('/learning/sight-words')
+    expect(target.search).toBe('?x=1')
+  })
+
   it('does not touch the main host', () => {
     expect(resolveRoutedPathname(req('https://monalo.school/learning/digraphs'))).toBe(
       '/learning/digraphs'
