@@ -3,6 +3,7 @@ import KidsLearningHub from '@/features/learning/components/KidsLearningHub'
 import type { LearningGameCard } from '@/lib/learning/kids-hub'
 import { CAMBRIDGE_ESL_STAGES, CAMBRIDGE_ROOM_CHIPS } from '@/lib/learning/cambridge-esl'
 import { LEARNING_PATH_STEPS, recommendNextRoom } from '@/lib/learning/learning-path'
+import { computePhonicsProgress } from '@/lib/learning/phonics-progress'
 import ActivityTracker from '@/components/points/ActivityTracker'
 import { auth } from '@/lib/auth-server'
 import { getEcoPenguinParentProgress } from '@/lib/learning/eco-penguin-progress'
@@ -249,6 +250,7 @@ export default async function KidsLearningPage() {
         nextForYou={nextForYou}
         signedIn={Boolean(session?.user?.id)}
         parentProgress={parentProgress}
+        completedGroupIds={computePhonicsProgress(masteredBalloonKeys).completedGroupIds}
       />
     </>
   )

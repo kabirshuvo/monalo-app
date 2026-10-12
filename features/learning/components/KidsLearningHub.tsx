@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { readEcoPenguinSession } from '@/lib/ecopenguin/session'
 import { readVowelWordsSession } from '@/lib/vowel-words/session'
@@ -43,7 +43,10 @@ import {
   planetTextDim,
   planetTextMuted,
 } from '@/lib/learning/planet-theme'
-import EcoPenguinGuide from '@/features/learning/components/EcoPenguinGuide'
+import EcoPenguin from '@/features/learning/components/eco/EcoPenguin'
+import { useEcoVoice } from '@/features/learning/components/eco/useEcoVoice'
+import ecoLines from '@/data/eco-guide/lines.json'
+import { getRoomLock } from '@/lib/learning/room-locks'
 import EcoPenguinProgressCard from '@/features/learning/components/EcoPenguinProgressCard'
 import EcoPenguinStickerStrip from '@/features/learning/components/EcoPenguinStickerStrip'
 import type { EcoPenguinParentProgress } from '@/lib/learning/eco-penguin-progress'
@@ -61,7 +64,13 @@ type Props = {
   nextForYou: NextForYou
   signedIn?: boolean
   parentProgress?: EcoPenguinParentProgress | null
+  /** Sticker groups already earned (drives which rooms are still sleeping). */
+  completedGroupIds?: string[]
 }
+
+const LINES = ecoLines as Record<string, string>
+/** Rooms a signed-out visitor can try without an account. */
+const FREE_ROOMS = new Set(['nursery-rhyme', 'letter-sounds'])
 
 export default function KidsLearningHub({
   games,
@@ -69,8 +78,37 @@ export default function KidsLearningHub({
   nextForYou,
   signedIn = false,
   parentProgress = null,
+  completedGroupIds = [],
 }: Props) {
   const [continues, setContinues] = useState<ContinueItem[]>([])
+  const voice = useEcoVoice()
+  const introLine = signedIn && completedGroupIds.length > 0 ? 'welcome-back' : 'greeting'
+  const nextLineId = `next-${nextForYou.id}`
+  const introQueue = [introLine, nextLineId]
+  const [message, setMessage] = useState<{ ids: string[]; text: string }>({
+    ids: introQueue,
+    text: `${LINES[introLine]} ${LINES[nextLineId] ?? ''}`.trim(),
+  })
+  const [intro, setIntro] = useState(true)
+  const [explaining, setExplaining] = useState(false)
+
+  const say = (id: string, text?: string, explain = false) => {
+    setMessage({ ids: [id], text: text ?? LINES[id] ?? '' })
+    setExplaining(explain)
+    voice.play(id)
+  }
+
+  // Wave hello, then settle into pointing at the big button. Try to speak; browsers may block it
+  // until the first tap, in which case the "Hear Eco" button is offered.
+  useEffect(() => {
+    voice.play(introQueue)
+    const t = window.setTimeout(() => setIntro(false), 4000)
+    return () => window.clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const mood = voice.speaking ? 'talk' : intro ? 'wave' : explaining ? 'idle' : 'point'
+  const pathGames = useMemo(() => [...games].sort((a, b) => a.step - b.step), [games])
 
   useEffect(() => {
     const items: ContinueItem[] = []
@@ -214,93 +252,99 @@ export default function KidsLearningHub({
 
   return (
     <div className={`flex min-h-screen flex-col ${planetShell}`}>
-      <EcoPenguinGuide room="hub" />
       <header className={planetHeader}>
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-amber-300">MonAlo Kids</p>
-            <h1 className="flex items-center gap-2 text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">
-              <span aria-hidden>🐧</span>
-              {ECO_PENGUIN_APP_NAME}
-            </h1>
+            <h1 className="text-xl font-extrabold text-[#fafaf9] sm:text-3xl">{ECO_PENGUIN_APP_NAME}</h1>
           </div>
-          <Link href="/dashboard/learning" className={`${planetBtnSecondary} px-4 py-2`}>
-            My courses
-          </Link>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={voice.toggleMute}
+              aria-pressed={voice.muted}
+              className={`${planetBtnSecondary} whitespace-nowrap !px-3 !py-2 !text-xs sm:!text-sm`}
+            >
+              {voice.muted ? '🔇 Off' : '🔊 On'}
+            </button>
+            {!signedIn && (
+              <Link href="/login?from=ecopenguin&callbackUrl=/learning" className={`${planetBtnSecondary} whitespace-nowrap !px-3 !py-2 !text-xs sm:!text-sm`}>
+                Sign in
+              </Link>
+            )}
+          </div>
         </div>
       </header>
 
       <main className="mx-auto w-full max-w-5xl flex-1 space-y-10 px-4 py-8 sm:px-6 sm:py-12">
-        <section className={`${planetCard} p-6 text-center sm:p-10`}>
-          <p className="text-5xl" aria-hidden>
-            🐧
-          </p>
-          <h2 className="mt-3 text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">
-            Welcome to {ECO_PENGUIN_APP_NAME}
-          </h2>
-          <p className={`mx-auto mt-3 max-w-lg text-sm leading-relaxed sm:text-base ${planetTextMuted}`}>
-            Stage 1 ESL program — listening, phonics, sight words, and short stories. Mapped to
-            Cambridge Early Years / Primary Stage 1 goals (not certified).
-          </p>
-          {!signedIn && (
-            <div className="mx-auto mt-6 max-w-lg space-y-3">
-              <p className="rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm font-semibold text-amber-100">
-                Try free without an account —{' '}
-                <Link href="/login?callbackUrl=/learning" className="underline hover:text-[#fafaf9]">
-                  sign in
-                </Link>{' '}
-                to keep stickers and unlock the full path.
-              </p>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <Link
-                  href={NURSERY_RHYME_BASE_PATH}
-                  className={`${planetCard} border-cyan-400/40 bg-gradient-to-br from-cyan-400/15 to-transparent p-5 transition hover:-translate-y-0.5`}
-                >
-                  <p className="text-xs font-bold uppercase tracking-widest text-cyan-300">Try free</p>
-                  <p className="mt-1 text-lg font-extrabold text-[#fafaf9]">Rhyme time</p>
-                  <p className={`mt-1 text-sm ${planetTextMuted}`}>Tap the pictures that rhyme</p>
-                </Link>
-                <Link
-                  href={LETTER_SOUNDS_BASE_PATH}
-                  className={`${planetCard} border-sky-400/40 bg-gradient-to-br from-sky-400/15 to-transparent p-5 transition hover:-translate-y-0.5`}
-                >
-                  <p className="text-xs font-bold uppercase tracking-widest text-sky-300">Try free</p>
-                  <p className="mt-1 text-lg font-extrabold text-[#fafaf9]">Letter sounds</p>
-                  <p className={`mt-1 text-sm ${planetTextMuted}`}>SATPIN letters — S A T P I N</p>
-                </Link>
-              </div>
+        {/* Eco greets and points at the one next step */}
+        <section className={`${planetCard} p-6 sm:p-10`} aria-labelledby="eco-hello">
+          <div className="flex flex-col items-center gap-6 md:flex-row md:gap-10">
+            <div className="shrink-0">
+              <EcoPenguin
+                mood={mood}
+                speaking={voice.speaking}
+                tilting={explaining}
+                pointAngle={-70}
+                size={190}
+                title="Eco the penguin"
+              />
             </div>
-          )}
-          {signedIn && (
-            <p className="mx-auto mt-4 max-w-md rounded-2xl border border-sky-400/30 bg-sky-400/10 px-4 py-3 text-sm font-semibold text-sky-100">
-              Teacher with one phone?{' '}
-              <Link href="/classroom" className="underline hover:text-[#fafaf9]">
-                Classroom Mode
-              </Link>{' '}
-              tracks each kid separately.
-            </p>
-          )}
+            <div className="w-full flex-1 text-center md:text-left">
+              <h2 id="eco-hello" className="sr-only">
+                Eco the penguin says
+              </h2>
+              <div
+                role="status"
+                aria-live="polite"
+                className="relative rounded-3xl bg-[#fafaf9] px-5 py-4 text-left text-base font-bold leading-snug text-[#0c0a09] sm:text-lg"
+              >
+                <span
+                  aria-hidden
+                  className="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 bg-[#fafaf9] md:-left-2 md:top-1/2 md:-translate-y-1/2 md:translate-x-0"
+                />
+                {message.text}
+              </div>
+
+              <div className="mt-5 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center md:justify-start">
+                <Link
+                  href={nextForYou.href}
+                  onClick={() => voice.stop()}
+                  className={`${planetBtn.sun} inline-flex items-center justify-center !px-8 !py-4 !text-lg shadow-lg shadow-amber-500/30 ring-2 ring-amber-200/60 animate-pulse motion-reduce:animate-none`}
+                >
+                  Let&apos;s play: {nextForYou.title} →
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setExplaining(false)
+                    voice.play(message.ids, { force: true })
+                  }}
+                  className={`${planetBtnSecondary} !py-3`}
+                >
+                  {voice.blocked ? '🔊 Tap to hear Eco' : '🔊 Hear Eco again'}
+                </button>
+              </div>
+              <p className={`mt-3 text-sm ${planetTextMuted}`}>{nextForYou.detail}</p>
+              {!signedIn && (
+                <p className="mt-3 text-sm font-semibold text-amber-100">
+                  Rhyme time and Letter sounds are free to try.{' '}
+                  <Link href="/login?from=ecopenguin&callbackUrl=/learning" className="underline hover:text-[#fafaf9]">
+                    Sign in
+                  </Link>{' '}
+                  to keep your stickers.
+                </p>
+              )}
+            </div>
+          </div>
         </section>
 
-        <section className="space-y-3">
-          <h3 className={`text-center text-sm font-bold uppercase tracking-widest ${planetTextDim}`}>
-            Next for you
-          </h3>
-          <Link
-            href={nextForYou.href}
-            className={`${planetCard} block border-amber-400/40 bg-gradient-to-br from-amber-400/15 to-transparent p-6 transition hover:-translate-y-0.5 hover:border-amber-300/60 sm:p-8`}
-          >
-            <p className="text-xs font-bold uppercase tracking-widest text-amber-300">Recommended</p>
-            <p className="mt-2 text-2xl font-extrabold text-[#fafaf9]">{nextForYou.title}</p>
-            <p className={`mt-2 text-sm sm:text-base ${planetTextMuted}`}>{nextForYou.detail}</p>
-            <p className="mt-4 text-sm font-bold text-amber-300">Let&apos;s go →</p>
-          </Link>
-        </section>
+        <EcoPenguinStickerStrip earnedIds={earnedStickerIds} />
 
         {continues.length > 0 && (
           <section className="space-y-3">
             <h3 className={`text-center text-sm font-bold uppercase tracking-widest ${planetTextDim}`}>
-              Continue
+              Pick up where you left off
             </h3>
             <div className="grid gap-3 sm:grid-cols-2">
               {continues.map((item) => (
@@ -309,8 +353,7 @@ export default function KidsLearningHub({
                   href={item.href}
                   className={`${planetCard} p-5 transition hover:-translate-y-0.5 hover:bg-[#292524]`}
                 >
-                  <p className="text-xs font-bold uppercase tracking-wide text-sky-300">Pick up</p>
-                  <p className="mt-1 text-lg font-extrabold text-[#fafaf9]">{item.label}</p>
+                  <p className="text-lg font-extrabold text-[#fafaf9]">{item.label}</p>
                   <p className={`mt-1 text-sm ${planetTextMuted}`}>{item.detail}</p>
                   <p className="mt-3 text-sm font-bold text-amber-300">Continue →</p>
                 </Link>
@@ -319,61 +362,155 @@ export default function KidsLearningHub({
           </section>
         )}
 
-        <EcoPenguinStickerStrip earnedIds={earnedStickerIds} />
-
-        {parentProgress && <EcoPenguinProgressCard progress={parentProgress} variant="hub" />}
-
-        <section className="space-y-4">
-          <h3 className={`text-center text-sm font-bold uppercase tracking-widest ${planetTextDim}`}>
-            Choose a room
-          </h3>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {games.map((game) => (
-              <div
-                key={game.id}
-                className={`${planetCard} p-5 ${
-                  game.live ? 'hover:bg-[#292524]' : 'border-dashed opacity-90'
-                }`}
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  {typeof game.step === 'number' && (
-                    <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-full bg-[#fafaf9]/15 text-xs font-black text-[#fafaf9]">
-                      {game.step}
-                    </span>
-                  )}
-                  <div
-                    className={`inline-flex rounded-2xl bg-gradient-to-br ${game.accent} px-3 py-1 text-xs font-bold text-[#0c0a09]`}
-                  >
-                    {game.badge}
-                  </div>
-                  {game.cambridgeChip && (
-                    <span className="inline-flex rounded-full border border-[#fafaf9]/20 bg-[#0c0a09]/40 px-2.5 py-1 text-[10px] font-bold tracking-wide text-sky-200 sm:text-xs">
-                      {game.cambridgeChip}
-                    </span>
-                  )}
-                </div>
-                <h4 className="mt-3 text-xl font-extrabold text-[#fafaf9]">{game.title}</h4>
-                <p className={`mt-2 text-sm leading-relaxed ${planetTextMuted}`}>{game.blurb}</p>
-                {game.live ? (
-                  signedIn || game.id === 'nursery-rhyme' || game.id === 'letter-sounds' ? (
-                    <Link href={game.href} className={`${planetBtn.sun} mt-4 inline-flex`}>
-                      {signedIn ? 'Open →' : 'Try free →'}
-                    </Link>
-                  ) : (
-                    <Link
-                      href={`/login?callbackUrl=${encodeURIComponent(game.href)}`}
-                      className={`${planetBtnSecondary} mt-4 inline-flex`}
-                    >
-                      Sign in to open →
-                    </Link>
-                  )
-                ) : (
-                  <p className={`mt-4 text-sm font-bold ${planetTextDim}`}>Coming soon</p>
-                )}
-              </div>
-            ))}
+        {/* The path: one stone per room, in learning order */}
+        <section aria-labelledby="path-heading" className="space-y-5">
+          <div className="text-center">
+            <h3 id="path-heading" className="text-2xl font-extrabold text-[#fafaf9] sm:text-3xl">
+              Follow the path with Eco
+            </h3>
+            <button
+              type="button"
+              onClick={() => say('pick')}
+              className="mt-2 text-sm font-bold text-sky-300 hover:underline"
+            >
+              What should I pick?
+            </button>
           </div>
+          <ol className="mx-auto max-w-2xl">
+            {pathGames.map((game, i) => {
+              const lock = getRoomLock(game.id, completedGroupIds)
+              const needsSignIn = !signedIn && !FREE_ROOMS.has(game.id)
+              const isNext = game.id === nextForYou.id
+              const isLast = i === pathGames.length - 1
+              const stoneClass = lock || needsSignIn
+                ? 'border-[#fafaf9]/20 bg-[#292524] text-[#a8a29e]'
+                : `border-transparent bg-gradient-to-br ${game.accent} text-[#0c0a09]`
+              return (
+                <li key={game.id} className="relative grid grid-cols-[3.5rem_minmax(0,1fr)] gap-3 pb-4 sm:gap-4">
+                  {!isLast && (
+                    <span
+                      aria-hidden
+                      className="absolute bottom-0 left-7 top-14 -translate-x-1/2 border-l-2 border-dashed border-[#fafaf9]/20"
+                    />
+                  )}
+                  <span
+                    className={`relative z-10 flex h-14 w-14 items-center justify-center rounded-full border text-lg font-black ${stoneClass} ${
+                      isNext ? 'ring-4 ring-amber-300/70' : ''
+                    }`}
+                    aria-hidden
+                  >
+                    {lock || needsSignIn ? '🔒' : game.step}
+                  </span>
+                  <div
+                    className={`${planetCard} p-4 sm:p-5 ${
+                      isNext ? 'border-amber-300/60 bg-amber-300/10' : ''
+                    } ${lock || needsSignIn ? 'opacity-90' : ''}`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h4 className="text-lg font-extrabold text-[#fafaf9] sm:text-xl">{game.title}</h4>
+                        {isNext && (
+                          <p className="mt-0.5 text-xs font-bold uppercase tracking-widest text-amber-300">
+                            Eco says: start here
+                          </p>
+                        )}
+                      </div>
+                      {isNext && (
+                        <span className="-mt-2 shrink-0">
+                          <EcoPenguin mood="point" pointAngle={-75} size={56} title="Eco pointing here" />
+                        </span>
+                      )}
+                    </div>
+                    <p className={`mt-1.5 text-sm leading-relaxed ${planetTextMuted}`}>{game.blurb}</p>
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                      {lock ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => say(lock.lineId, lock.message, true)}
+                            className={`${planetBtnSecondary} !py-2`}
+                          >
+                            Why is it sleeping?
+                          </button>
+                          <Link href={BALLOON_LETTERS_BASE_PATH} className={`${planetBtn.sun} !py-2`}>
+                            Catch balloons
+                          </Link>
+                        </>
+                      ) : needsSignIn ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => say('signin', undefined, true)}
+                            className={`${planetBtnSecondary} !py-2`}
+                          >
+                            What does Eco say?
+                          </button>
+                          <Link
+                            href={`/login?from=ecopenguin&callbackUrl=${encodeURIComponent(game.href)}`}
+                            className={`${planetBtn.sun} !py-2`}
+                          >
+                            Sign in to open
+                          </Link>
+                        </>
+                      ) : game.live ? (
+                        <Link
+                          href={game.href}
+                          onClick={() => voice.stop()}
+                          className={`${planetBtn.sun} !py-2`}
+                        >
+                          {signedIn ? 'Play →' : 'Try free →'}
+                        </Link>
+                      ) : (
+                        <p className={`text-sm font-bold ${planetTextDim}`}>Coming soon</p>
+                      )}
+                    </div>
+                  </div>
+                </li>
+              )
+            })}
+          </ol>
         </section>
+
+        {/* Details parents care about, out of the child's way */}
+        <details className={`${planetCard} group p-5 sm:p-6`}>
+          <summary className="cursor-pointer list-none text-lg font-extrabold text-[#fafaf9] marker:content-none">
+            <span aria-hidden className="mr-2 inline-block transition group-open:rotate-90">
+              ▸
+            </span>
+            For grown-ups
+          </summary>
+          <div className="mt-4 space-y-5">
+            <p className={`text-sm leading-relaxed ${planetTextMuted}`}>
+              Eco Penguin is a Stage 1 ESL program: listening, phonics, sight words and short stories.
+              Mapped to Cambridge Early Years / Primary Stage 1 goals (not certified). Rooms open as your
+              child earns stickers in Balloon letters, so they always meet words they can already sound out.
+            </p>
+            {parentProgress && <EcoPenguinProgressCard progress={parentProgress} variant="hub" />}
+            {signedIn ? (
+              <p className="rounded-2xl border border-sky-400/30 bg-sky-400/10 px-4 py-3 text-sm font-semibold text-sky-100">
+                Teacher with one phone?{' '}
+                <Link href="/classroom" className="underline hover:text-[#fafaf9]">
+                  Classroom Mode
+                </Link>{' '}
+                tracks each kid separately.
+              </p>
+            ) : (
+              <p className={`text-sm ${planetTextMuted}`}>
+                <Link href="/login?from=ecopenguin&callbackUrl=/learning" className="font-bold text-sky-300 underline">
+                  Sign in
+                </Link>{' '}
+                to see your child&apos;s progress and keep their stickers.
+              </p>
+            )}
+            <ul className="grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
+              {pathGames.map((game) => (
+                <li key={game.id} className={planetTextMuted}>
+                  <span className="font-bold text-[#fafaf9]">{game.title}</span> · {game.cambridgeChip}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </details>
       </main>
 
       <footer className={planetFooter}>

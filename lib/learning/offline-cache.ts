@@ -15,6 +15,7 @@ export const OFFLINE_MEDIA_PREFIXES = [
   '/digraphs/',
   '/ecopenguin/',
   '/balloon-letters/',
+  '/eco-guide/',
 ] as const
 
 export function isOfflineMediaUrl(url: string): boolean {

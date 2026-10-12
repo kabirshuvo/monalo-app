@@ -10,6 +10,7 @@ const MEDIA_PREFIXES = [
   '/vowel-words/',
   '/digraphs/',
   '/ecopenguin/',
+  '/eco-guide/',
   '/balloon-letters/',
 ]
 
